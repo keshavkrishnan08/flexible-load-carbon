@@ -7,10 +7,14 @@ Deliverables for Team A1, Week 1. Builds on `FCL_Carbon_Paper.pdf`
 | File | What it is |
 |---|---|
 | `role1_carbon_theory.tex` | Main result document (Management-Science-grade theory). Compile with `pdflatex`. |
+| `role1_contract_theory.tex` | **Extension** — the optimal demand-response *contract*: existence/uniqueness/characterization (general F), N&S emission condition, the demand–supply correlation comparative static, and the regulator–utility mechanism. |
 | `gap_memo.md` | One-page memo: the general condition + where the fully general proof resists. |
 | `verify_exact.py` | **Adversarial exactness suite** — every analytical formula vs finite-differences of the profit integral. 15/15 PASS to 6–16 digits. |
 | `verify.py` | Closed-form + capacity-channel validation (no closed forms assumed). |
 | `validate_capacity_channel.py` | Fast shift-ratio sign-law sweep across Beta families. |
+| `validate_regime_crossing.py` | Regime-crossing + Hessian-definiteness scan. |
+| `verify_contract.py` | Optimal-contract optimality: 0/4000 pointwise, 0/21,600 feasible policies beat d*. |
+| `verify_correlation.py` | Correlation comparative static: carbon margin monotone in corr(D,S), sign-flips at zero. |
 
 ## Headline results
 1. **Uniform ground truth re-derived** (eqs 18–26) and verified to machine
@@ -50,3 +54,27 @@ pdflatex role1_carbon_theory.tex
   flat term, eq-24 factor-2). Their solver is the validation backend.
 - **Role 4** owns the companion Bitcoin (oligopoly) paper; the regime-stitching
   handoff (small-FCL / interior / full-coverage) is flagged in `gap_memo.md`.
+
+## Contracting extension (strictly A1 domain)
+`role1_contract_theory.tex` places the *contract itself* on general footing — the
+A1 mandate ("existence + full characterization of the optimal demand-response
+contract d*(x) under general distributions; N&S emission condition; correlation
+comparative static; principal-agent mechanism"):
+1. **Optimal contract, general F.** The unique optimal demand-response contract is
+   the renewable-first threshold rule `d*(x)=min{(K_F−x)_+, K_M}` — proven optimal
+   over the *full* space of state-contingent policies, any distribution
+   (0/21,600 feasible policies beat it numerically).
+2. **N&S emission condition.** Carbon falls *iff* condition (C). Emission
+   reduction is **not generic** — it needs real regularity (settles the mandate's
+   "mild vs restrictive" question: mild-but-real).
+3. **Correlation comparative static.** The shift ratio `g(x)=F_{K_R}/f = E[S|x̃=x]`
+   is the conditional renewable factor; carbon falls **iff demand and renewable
+   supply are sufficiently negatively correlated**. Decoupling: `K*_R>K°_R`
+   *always*, but only negative association turns it into carbon reduction.
+   Verified — net carbon saving monotone in corr(D,S), sign-flips at zero.
+4. **Regulator–utility mechanism.** The price-based program implements d* as the
+   agent's unique best response iff `R>c` (observable) and `β+p>R`; induced
+   computing demand pinned by the distribution-free cutoff `C_M/(R−c)`.
+
+Scope guard: no overlap with A2 (calibration), B1 (reliability/welfare/social-vs-
+private pricing), or B2 (flexibility continuum/storage/multi-grid).
