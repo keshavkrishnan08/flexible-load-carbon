@@ -1,0 +1,158 @@
+# Theory Hardening and Regimes (updated Role 4)
+
+Team A1, Role 4. This is the **updated** Role 4 task — the FCL-paper regime
+work Role 1 hands off ("stitch small-FCL / interior / full-coverage into one
+regime map; confirm the Hessian conditions that feed Assumption 1") plus the
+specific job of reconciling **Keshav's theory (Role 1)** with **the numerical
+model (Role 2)**, which disagreed on whether carbon falls.
+
+Notation is the FCL paper's (Role 1 / Role 2 shared): residual demand
+`x = D − K_R·S`; capacities `K_R` renewable, `K_F` fossil, `K_M` flexible
+computing load; costs `C_R, C_F, C_M`; `R` FCL revenue, `c` fossil variable
+cost, `p` retail price, `β` blackout penalty. Code: `regimes/`. Numerical
+backend: Role 2's solver, vendored unchanged in `regimes/fcl_backend/`.
+
+---
+
+## 0. The disagreement, in one line
+
+- **Role 1 (theory):** carbon falls — the capacity-substitution channel
+  (`K*_R > K°_R`) beats the utilization effect on a window of `C_R`.
+- **Role 2 (numerics):** across 210 scenarios carbon *never* falls, and the
+  with-FCL problem wants *infinite* renewable capacity (no finite optimum),
+  traced to Assumption 1.
+
+Both are correct. They evaluate the same program at different renewable
+buildout levels. The bridge is a single quantity, the **carbon crossover
+buildout** `K_R^cross`, derived below.
+
+---
+
+## 1. Boundedness hardening: Assumption 1 is necessary, not sufficient
+
+**Claim 1.** Under the uniform benchmark, with `K_F, K_M` re-optimized at each
+`K_R`, the with-FCL profit is an *affine* function of `K_R` (the paper's eq.-24
+knife-edge), with constant slope
+
+> `dΠ/dK_R |profile = C_R† − C_R`,  where
+> `C_R† = ½[ c + (R−C_M−c)²/(R−c) + (R−c−C_F−C_M)²/(β+p−R) ]`.
+
+Hence the with-FCL joint problem has a **finite optimum iff `C_R ≥ C_R†`**, and
+is **unbounded** (`K*_R → ∞` — Role 2's "infinite capacity") iff `C_R < C_R†`.
+
+*Verification.* Role 2's literal eq.-24 constant satisfies
+`eq24_constant = 2·(C_R† − C_R)` exactly — checked against their own
+`closed_form_uniform.eq24_constant` to 1e-12
+[`tests/test_thresholds.py::test_eq24_constant_equals_2_times_slope`]. Profit
+rises monotonically with the cap when `C_R < C_R†`
+[`tests/test_regimes.py::test_reconciliation_carbon_rises_then_falls`].
+
+**Why "Hessian conditions feed Assumption 1" needs care.** The *local* 3×3
+Hessian of `Π` is negative definite throughout the Assumption-1 region (checked
+by eigenvalues). So the unboundedness is **not** a local-curvature failure — it
+is a *corner-at-infinity*: after profiling out `K_F, K_M`, the reduced problem
+in `K_R` is flat (zero curvature, the knife-edge) with a constant positive
+slope. The correct hardened statement is therefore:
+
+> **Assumption 1 (regularity) does not by itself guarantee a finite optimum.**
+> A finite with-FCL optimum requires the additional condition `C_R ≥ C_R†`.
+
+This is exactly the gap between the two models: Role 1's analysis lives on the
+`C_R < C_R†` side (knife-edge, `K*_R → ∞`, where `K*_R > K°_R` is immediate);
+Role 2's solver needs a finite optimum and so must cap `K_R`.
+
+---
+
+## 2. The regime map (the "stitching")
+
+Two axes.
+
+**Boundedness axis (in `C_R`).** With `C_R° = C_F²/(2(β+p−c))` (the no-FCL
+analogue — below it even the benchmark wants infinite renewables):
+
+| range of `C_R` | no-FCL | with-FCL | meaning |
+|---|---|---|---|
+| `C_R < C_R°` | unbounded | unbounded | degenerate |
+| `C_R° ≤ C_R < C_R†` | finite | **unbounded** | **carbon-reduction regime** |
+| `C_R ≥ C_R†` | finite | finite | both interior |
+
+`C_R° < C_R†` always (the `R>c` shadow-value weight), so the middle band is
+nonempty [`test_thresholds.py::test_threshold_values`].
+
+**FCL-coverage axis (in `C_M`), Role 1's ordering** (verified
+`test_thresholds.py::test_C_M_thresholds_strictly_ordered`):
+
+> `C_M^fc = R−c−C_F  <  C̄_M = (R−c)·φ°  <  C̄_M^b = C̄_M + c·F(0;K°_R)`,
+> with `φ° = (β+p−c−C_F)/(β+p−c)`.
+
+`C_M ≥ C̄_M^b`: no adoption (`K_M = 0`). `C_M^fc < C_M < C̄_M^b`: interior /
+small-FCL. `C_M ≤ C_M^fc`: full coverage (fossil fully shadowed by FCL).
+
+`regimes/regime_map.py::classify` returns the cell for any parameter point;
+`run_regime_analysis.py` draws the `(C_R, C_M)` map.
+
+---
+
+## 3. The reconciliation theorem (carbon crossover)
+
+Fix a point in the carbon-reduction regime (`C_R° ≤ C_R < C_R†`). Define the
+**carbon crossover buildout** `K_R^cross` as the renewable capacity at which
+with-FCL fossil output equals the no-FCL benchmark.
+
+**Claim 2 (verified numerically through Role 2's solver).**
+1. For buildout `K_R < K_R^cross`, with-FCL carbon is *higher* than no-FCL —
+   the **utilization effect** (FCL draws power, some served by fossil)
+   dominates. This is Role 2's 0/210: their caps sat below `K_R^cross`.
+2. For `K_R > K_R^cross`, with-FCL carbon is *lower*, and `→ 0` as the fossil
+   plant is fully shadowed — the **capacity-substitution effect** dominates.
+   This is Role 1's claim.
+3. Since the unconstrained program (Claim 1) drives `K_R → ∞` here, the
+   program's *own* optimum sits far above `K_R^cross`, so the carbon reduction
+   is real — but invisible to any solver that caps `K_R` below `K_R^cross`.
+
+The carbon change at buildout `K_R` decomposes cleanly (Role 1's condition C):
+
+> `Δcarbon(K_R) = utilization effect (≥ 0)  +  capacity-substitution effect (≤ 0)`,
+
+with `K_R^cross` the point where the second overtakes the first
+[`reconcile.decompose`, `test_regimes.py::test_decomposition_signs`].
+
+*Worked instance* (`R=2, c=1, C_F=1, C_M=0.5, β=1, p=2, C_R=0.5, D̄=100`):
+`C_R°=0.25 < C_R=0.5 < C_R†=0.75`; no-FCL optimum `K_R≈41.4`, carbon `≈17.7`;
+`K_R^cross ≈ 159` (≈ 3.8× the no-FCL scale); profit rises monotonically with
+the cap (unbounded). See `reconciliation.png` / `.csv`.
+
+**Takeaway for the team.** The carbon-reduction claim is correct *as a
+statement about the program's optimum*, which builds renewables without bound
+in this regime. It is false *as a statement about any fixed, finite buildout
+near the no-FCL scale*. Whether the paper's claim is the one you want depends
+on whether `K_R^cross` (≈ 4× the no-FCL buildout here) is physically
+plausible — that is the real question to put to the authors, and it is now a
+computable number rather than a qualitative dispute.
+
+---
+
+## 4. Small-FCL boundary residual (Role 1's open item)
+
+Role 1 left "the exact small-FCL boundary `K*_M = K°_R` inside region (I)" to
+Role 4. In the small-FCL regime (`K_M < K_R`) the FCL FOC reads
+`(R−c)F(K_F−K_M;K_R) + c·F(−K_M;K_R) = C_M` (Lemma 1, eq. gM, with the
+`F(−K_M)` term live). The boundary where induced FCL capacity equals the
+no-FCL renewable level, `K*_M = K°_R`, is pinned by combining this with the
+distribution-free cutoffs (Lemma 2):
+`F(K_F*−K_M*;K_R*) = C_M/(R−c)` and `F(K_F*;K_R*) = (β+p−c−C_F−C_M)/(β+p−R)`.
+
+`regimes/regime_map.py` locates this boundary numerically (the
+`coverage_regime` transition); the **exact closed form for `K*_M(C_M)` along
+`K*_M = K°_R` under a general `F`** is the one piece still open and is flagged
+here rather than asserted — consistent with the team's "don't overclaim"
+norm. It is a finishing item, not a blocker for the reconciliation above.
+
+---
+
+## 5. What changed vs the original Role 4
+
+The original Role 4 (miner-side oligopoly on the *old* Bitcoin paper — eqs
+9–10, Appendix A) is in `miner_demand/` and stands on its own. This document
+and `regimes/` are the **updated** task on the *FCL* paper, addressing the
+Role 1 ↔ Role 2 disagreement directly. Both live in the repo; see `README.md`.

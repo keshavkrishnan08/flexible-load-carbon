@@ -1,18 +1,17 @@
 """
-Task 4: confirm the algebra numerically and produce the figures.
+Updated Role 4 entry point: the regime map + the theory-vs-numerics
+reconciliation.
 
 Outputs:
-  sim_induced_demand.png    induced demand d(P): full-grid eq.(10) vs
-                            partial-grid eq.(68) vs small-grid limit, with
-                            the d>=0-iff-P<=Po cutoff marked.
-  sim_revenue.png           revenue P*d(P): flat (exogenous) full grid vs
-                            concave hump peaking at nR/4 at P=Po/2 (the
-                            Task-3 break of exogeneity).
-  emissions_sweep.csv       does the adapted program (eq.69) cut emissions
-                            vs no-mining, swept over (C_R, d_floor)?
-  emissions_heatmap.png     the same grid, visually.
+  regime_map.png            (C_R, C_M) plane colored by boundedness regime,
+                            with the C_R_circ and C_R_dagger lines.
+  reconciliation.png        carbon and profit vs renewable buildout for a
+                            point in the carbon-reduction window: carbon
+                            rises then falls (crossover marked), profit
+                            rises without bound (unboundedness).
+  reconciliation.csv        the underlying buildout sweep.
 
-Usage: .venv/bin/python run_sims.py
+Usage: .venv/bin/python run_regime_analysis.py
 """
 import csv
 
@@ -22,112 +21,92 @@ import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from miner_demand.oligopoly import OligopolyParams, equilibrium_demand, miner_revenue
-from miner_demand.partial_grid import (
-    PartialGridParams, ingrid_demand, ingrid_revenue, revenue_peak,
-    small_grid_demand, small_grid_revenue,
-)
-from miner_demand.emissions import EmissionParams, compare
+from regimes.thresholds import Params, C_R_circ, C_R_dagger
+from regimes.regime_map import boundedness_regime, classify
+from regimes.reconcile import carbon_vs_buildout
 
-OLI = OligopolyParams(R=1000.0, n=5)
-PG = PartialGridParams(R=1000.0, n=5, m=500, Po=4.0)
+BASE = dict(R=2.0, c=1.0, CF=1.0, CM=0.5, beta=1.0, p=2.0, D_bar=100.0)
 
 
-def fig_induced_demand():
-    Ps = np.linspace(0.05, 6.0, 400)
-    full = [equilibrium_demand(OLI, P) for P in Ps]
-    partial = [ingrid_demand(PG, P) for P in Ps]
-    limit = [small_grid_demand(PG, P) for P in Ps]
+def regime_map_figure():
+    CRs = np.linspace(0.05, 1.2, 120)
+    CMs = np.linspace(0.05, 1.2, 120)
+    code = {"both_unbounded": 0, "withfcl_unbounded": 1, "both_finite": 2}
+    grid = np.full((len(CMs), len(CRs)), np.nan)
+    for i, CM in enumerate(CMs):
+        for j, CR in enumerate(CRs):
+            P = Params(CR=CR, CM=CM, **{k: v for k, v in BASE.items() if k != "CM"})
+            if not P.assumption1_holds():
+                continue
+            grid[i, j] = code[boundedness_regime(P)]
 
-    fig, ax = plt.subplots(figsize=(7, 4.5))
-    ax.plot(Ps, full, label="full grid, eq.(10):  d=(1-1/n)R/P", lw=2)
-    ax.plot(Ps, partial, label="partial grid, eq.(68)", lw=2)
-    ax.plot(Ps, limit, "--", label="small-grid limit (nR/Po)(1-P/Po)", lw=1.5)
-    ax.axvline(PG.Po, color="grey", ls=":", label="P = Po (demand hits 0)")
-    ax.axhline(0, color="k", lw=0.6)
-    ax.set_xlabel("electricity price charged to miners, P")
-    ax.set_ylabel("induced in-grid mining demand, d")
-    ax.set_ylim(-200, 4000)
-    ax.set_title("Task 1 & 3: any demand is inducible (full grid) but bounded once miners can leave")
-    ax.legend(fontsize=8)
+    fig, ax = plt.subplots(figsize=(7.5, 5))
+    cmap = matplotlib.colors.ListedColormap(["#d73027", "#4575b4", "#1a9850"])
+    im = ax.imshow(grid, origin="lower", aspect="auto", cmap=cmap, vmin=0, vmax=2,
+                   extent=[CRs[0], CRs[-1], CMs[0], CMs[-1]])
+    # reference C_R lines (use a representative CM for the dagger line)
+    Pref = Params(CR=0.5, **BASE)
+    ax.axvline(C_R_circ(Pref), color="k", ls=":", lw=1.3, label=f"C_R° = {C_R_circ(Pref):.2f} (no-FCL bound)")
+    ax.axvline(C_R_dagger(Pref), color="k", ls="--", lw=1.3, label=f"C_R† = {C_R_dagger(Pref):.2f} (with-FCL bound)")
+    ax.set_xlabel("renewable capital cost  C_R")
+    ax.set_ylabel("FCL capital cost  C_M")
+    ax.set_title("Boundedness regime map (white = Assumption 1 violated)\n"
+                 "red: both unbounded   blue: with-FCL unbounded (carbon-reduction regime)   green: both finite")
+    ax.legend(loc="upper right", fontsize=8)
     fig.tight_layout()
-    fig.savefig("sim_induced_demand.png", dpi=120)
-    print("wrote sim_induced_demand.png")
+    fig.savefig("regime_map.png", dpi=120)
+    print("wrote regime_map.png")
 
 
-def fig_revenue():
-    Ps = np.linspace(0.05, PG.Po, 400)
-    full_rev = [miner_revenue(OLI, P) for P in Ps]          # constant
-    partial_rev = [ingrid_revenue(PG, P) for P in Ps]
-    limit_rev = [small_grid_revenue(PG, P) for P in Ps]
-    P_star, rev_star = revenue_peak(PG)
+def reconciliation_figure():
+    P = Params(CR=0.5, **BASE)  # in the carbon-reduction window
+    out = carbon_vs_buildout(P)
+    caps = [r["K_R_cap"] for r in out["rows"]]
+    carbon = [r["carbon"] for r in out["rows"]]
+    profit = [r["profit"] for r in out["rows"]]
+    base_carbon = out["no_fcl"]["carbon"]
+    cross = out["carbon_crossover_cap"]
 
-    fig, ax = plt.subplots(figsize=(7, 4.5))
-    ax.plot(Ps, full_rev, label="full grid: P*d = (1-1/n)R  (exogenous, flat)", lw=2)
-    ax.plot(Ps, partial_rev, label="partial grid: P*d, eq.(68)", lw=2)
-    ax.plot(Ps, limit_rev, "--", label="small-grid limit: nR(P/Po)(1-P/Po)", lw=1.5)
-    ax.plot([P_star], [rev_star], "o", color="crimson",
-            label=f"peak nR/4={rev_star:.0f} at P=Po/2={P_star:.1f}")
-    ax.set_xlabel("electricity price charged to miners, P")
-    ax.set_ylabel("utility revenue from miners, P*d")
-    ax.set_title("Task 2 vs 3: revenue exogeneity (flat) holds full-grid, BREAKS in the partial grid")
-    ax.legend(fontsize=8)
-    fig.tight_layout()
-    fig.savefig("sim_revenue.png", dpi=120)
-    print("wrote sim_revenue.png")
-
-
-def emissions_sweep():
-    CR_values = np.geomspace(0.002, 0.2, 8)
-    d_floors = [0.0, 5.0, 20.0, 50.0]
-    rows = []
-    for CR in CR_values:
-        for df in d_floors:
-            emi = EmissionParams(D_bar=200.0, S_bar=0.5, c=0.10, C=CR,
-                                 R=1000.0, n=5, Po=4.0)
-            out = compare(emi, d_floor=df)
-            rows.append((CR, df, out["emission_no_mining"], out["emission_with_mining"],
-                         out["carbon_lower"], out["carbon_pct_change"]))
-
-    with open("emissions_sweep.csv", "w", newline="") as f:
+    with open("reconciliation.csv", "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["C_R", "d_floor", "emission_no_mining", "emission_with_mining",
-                    "carbon_lower", "carbon_pct_change"])
-        w.writerows(rows)
-    n_lower = sum(1 for r in rows if r[4])
-    print(f"wrote emissions_sweep.csv  ({n_lower}/{len(rows)} cells reduce carbon)")
+        w.writerow(["K_R_cap", "K_F", "K_M", "carbon", "carbon_minus_nofcl", "profit"])
+        for r in out["rows"]:
+            w.writerow([r["K_R_cap"], r["K_F"], r["K_M"], r["carbon"],
+                        r["carbon_minus_nofcl"], r["profit"]])
+    print("wrote reconciliation.csv")
 
-    grid = np.array([[r[5] for r in rows if r[0] == CR] for CR in CR_values])
-    fig, ax = plt.subplots(figsize=(7, 4.5))
-    im = ax.imshow(grid, aspect="auto", origin="lower", cmap="RdYlGn_r",
-                   vmin=-30, vmax=60)
-    ax.set_xticks(range(len(d_floors)))
-    ax.set_xticklabels([f"{d:.0f}" for d in d_floors])
-    ax.set_yticks(range(len(CR_values)))
-    ax.set_yticklabels([f"{v:.3f}" for v in CR_values])
-    ax.set_xlabel("mining floor d_floor (fossil-fed mining when short)")
-    ax.set_ylabel("renewable capital cost C_R")
-    ax.set_title("Carbon % change vs no-mining under adapted program eq.(69)\n(green<0 = emissions fall)")
-    fig.colorbar(im, ax=ax, label="carbon % change")
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.5))
+    ax1.plot(caps, carbon, "o-", label="with-FCL carbon")
+    ax1.axhline(base_carbon, color="grey", ls="--", label=f"no-FCL carbon = {base_carbon:.1f}")
+    if cross:
+        ax1.axvline(cross, color="crimson", ls=":", label=f"crossover ≈ {cross:.0f}")
+    ax1.set_xlabel("renewable buildout K_R (cap)")
+    ax1.set_ylabel("expected carbon (fossil output × c)")
+    ax1.set_title("Carbon: RISES at modest buildout (utilization, Role 2's 0/210),\nFALLS past the crossover (capacity channel, Role 1)")
+    ax1.legend(fontsize=8)
+
+    ax2.plot(caps, profit, "s-", color="seagreen")
+    ax2.set_xlabel("renewable buildout K_R (cap)")
+    ax2.set_ylabel("with-FCL profit at the cap")
+    ax2.set_title("Profit keeps rising with the cap →\nno finite optimum (C_R < C_R†): the 'infinite capacity'")
     fig.tight_layout()
-    fig.savefig("emissions_heatmap.png", dpi=120)
-    print("wrote emissions_heatmap.png")
-    return rows
+    fig.savefig("reconciliation.png", dpi=120)
+    print("wrote reconciliation.png")
 
 
 def main():
-    fig_induced_demand()
-    fig_revenue()
-    rows = emissions_sweep()
-
-    print("\n--- Summary ---")
-    print(f"Full-grid revenue (should be constant): "
-          f"{[round(miner_revenue(OLI, P), 4) for P in (0.5, 2.0, 50.0)]}")
-    P_star, rev_star = revenue_peak(PG)
-    print(f"Partial-grid revenue peak: nR/4 = {rev_star:.1f} at P = Po/2 = {P_star:.2f}")
-    best = min(rows, key=lambda r: r[5])
-    print(f"Best emissions cell: {best[5]:+.1f}% at C_R={best[0]:.3f}, d_floor={best[1]:.0f} "
-          f"({'reduces' if best[4] else 'does NOT reduce'} carbon)")
+    regime_map_figure()
+    reconciliation_figure()
+    P = Params(CR=0.5, **BASE)
+    info = classify(P)
+    print("\n--- Regime summary at C_R=0.5, C_M=0.5 ---")
+    print(f"C_R° = {info['C_R_circ']:.3f},  C_R† = {info['C_R_dagger']:.3f}")
+    print(f"boundedness: {info['boundedness_regime']}  (with-FCL wants infinite buildout)")
+    print(f"coverage: {info['coverage_regime']}")
+    print(f"carbon crossover buildout K_R ≈ {info['carbon_crossover_KR']:.1f} "
+          f"(no-FCL optimum K_R ≈ 41.4)")
+    print("\nReconciliation: Role 1 (carbon falls) and Role 2 (carbon never falls) are")
+    print("both correct — they evaluate the program below vs above this crossover.")
 
 
 if __name__ == "__main__":

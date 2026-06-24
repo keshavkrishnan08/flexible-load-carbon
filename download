@@ -1,0 +1,35 @@
+"""
+Shared fixtures. `oli` and `pg` are valid parameter sets for the full-grid
+oligopoly and the partial grid respectively; `emi` is a uniform-case
+emission setup. Values are picked to keep every regime non-degenerate
+(n >= 2; in the partial grid, P kept in (0, Po) so in-grid demand is
+positive, per Appendix A's d >= 0 iff P <= Po).
+"""
+import pytest
+
+from miner_demand.oligopoly import OligopolyParams
+from miner_demand.partial_grid import PartialGridParams
+from miner_demand.emissions import EmissionParams
+
+
+@pytest.fixture
+def oli():
+    p = OligopolyParams(R=1000.0, n=30)
+    p.check()
+    return p
+
+
+@pytest.fixture
+def pg():
+    p = PartialGridParams(R=1000.0, n=5, m=500, Po=4.0)
+    p.check()
+    return p
+
+
+@pytest.fixture
+def emi():
+    # D_bar, S_bar follow the paper's calibration spirit (Section 4): demand
+    # on [0, 200], capacity factor on [0, 0.5]. c, C chosen so the no-mining
+    # optimum is interior (renewable worth building but not infinitely).
+    return EmissionParams(D_bar=200.0, S_bar=0.5, c=0.10, C=0.02,
+                          R=1000.0, n=5, Po=4.0)

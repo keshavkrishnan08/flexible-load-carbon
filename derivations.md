@@ -1,140 +1,104 @@
-# Role 4 derivations: miner-side theory and demand-response inducement
+# CONTEXT.md — Team A1, Role 4 (Miner-Side Theory & Demand-Response Inducement)
 
-Team A1, Role 4. Built against `Bitcoin_Mining_for_Carbon_Emission_Reduction.txt`
-(Li, Ren, Bellos; the authored Feb 28 2026 draft). Every result below is
-also checked numerically in `miner_demand/` + `tests/` — the test name that
-guards each is noted in brackets.
+## Who / what
+- ASSIP research project. I am **Role 4** on **Team A1** (team of 4).
+- We are stress-testing an analytical model about whether Bitcoin mining /
+  flexible computing loads can *reduce* carbon emissions by financing
+  renewable capacity.
+- Role 4 job: nail the **miner-side foundation** the rest of the paper leans
+  on — prove the regulator can induce any mining quantity by price, prove
+  the revenue-exogeneity result that turns the utility's profit problem into
+  a cost-min problem, and work out what changes when the grid only serves
+  some of the miners. Then confirm all of it numerically.
 
-Notation follows the paper: `R` total dollar block reward in a period, `n`
-in-grid miners, `P` price charged to in-grid miners, `d = Σ_i d_i` aggregate
-in-grid mining demand, `m` out-of-grid miners at price `Po`.
+## Which paper (read this carefully)
+My tasks target the **old Bitcoin-mining paper**:
+"Bitcoin Mining (and maybe AI training) for Carbon Emission Reduction"
+(Li, Ren, Bellos; file: `Bitcoin_Mining_for_Carbon_Emission_Reduction.txt`,
+the authored Feb 28 2026 draft).
 
----
+> Note: Role 2 switched to the newer **FCL paper** because *its* tasks
+> (joint K_R/K_F/K_M capacities) live there. Mine do NOT: the FCL paper
+> abstracts the miner side into a reduced-form dispatch rule and does not
+> contain eqs 9–10 or Appendix A's 61–68. The miner oligopoly micro-
+> foundation only exists in this old paper, so Role 4 stays on it.
 
-## Lemma 1 (equilibrium mining demand, Task 1 / eqs 9–10)
+## The model in plain terms
+- `n` symmetric Bitcoin miners compete for a fixed dollar block reward `R`,
+  paying electricity price `P`. The regulator sets `P` (a demand-response
+  program); the utility builds renewable capacity `k` and serves all demand.
+- Mining is special: it can be dialed up/down instantly with no penalty, so
+  it can soak up renewable surplus and be curtailed at peak — acting as a
+  shock absorber that finances renewables and substitutes fossil backup.
 
-**Claim.** With `n ≥ 2` symmetric miners each solving eq. (9),
-`max_{d_i} R d_i/(d_i + Σ_{j≠i} d_j) − d_i P`, the unique interior Nash
-equilibrium has aggregate demand
+## My Role 4 tasks (verbatim from the A1 Week 1 Plan)
+1. **Prove price induces any mining quantity.** Section 3.4.1 (eqs 9–10)
+   gives `d = (n−1)/n · R/P`; prove the regulator can set `P` to hit any
+   target `d` in the oligopoly case and pin the conditions.
+2. **Prove the revenue-exogeneity result.** Show why `P·d` is independent of
+   the utility's decisions, which is what collapses profit-max into the
+   cost-min problem in Section 3.5, and where it breaks.
+3. **Push the partial-grid case.** Extend Appendix A (eqs 61–68, the `m > n`
+   limit) to see how inducement and exogeneity change and whether the main
+   result survives.
+4. **Sim the induced demand and the partial-grid limit.** Quick numerical
+   check to confirm the algebra.
 
-> **d = (1 − 1/n) · R / P.**   (eq. 10)
+## Key equations to target (verified against the .txt)
+- **Eq 9 (miner i):** `max R d_i/(d_i + Σ_{j≠i} d_j) − d_i P`.
+- **Eq 10 (equilibrium):** `d = (1 − 1/n) R / P`; inducement `P = (1−1/n)R/d`.
+- **Exogeneity:** `P d = (1 − 1/n) R` (constant ⇒ profit-max = cost-min).
+- **Eq 65 (partial-grid total):** `Σ_{M∪N} d = (m+n−1)R/(nP+mPo)`.
+- **Eq 68 (partial-grid in-grid):**
+  `d = n(m+n−1)R[mPo−(m−1)P]/(nP+mPo)²`.
+- **Small-grid limit (`m≫n`):** `d → (nR/Po)(1−P/Po)`,
+  `Pd → nR(P/Po)(1−P/Po)` — concave, peak `nR/4` at `P=Po/2`;
+  `d ≥ 0` iff `P ≤ Po`; usable inducement capped at `nR/(2Po)`.
+- **Eq 69 (adapted DR program):** clip surplus mining at `nR/(2Po)`.
 
-**Proof.** Write `D = Σ_j d_j`. Miner *i*'s payoff is `R d_i/D − d_i P`.
-Its derivative in `d_i` (holding rivals fixed, so `∂D/∂d_i = 1`) is
-`R (D − d_i)/D² − P`. The second derivative is `−2R(D − d_i)/D³ < 0` for
-`d_i < D`, so the payoff is strictly concave and the first-order condition
-is necessary and sufficient:
+## What "validate" means
+- The closed forms (eq 10, eq 68) must match an independent best-response /
+  FOC-system solve to the decimal.
+- `P·d` must be numerically constant in the full grid and provably non-
+  constant in the partial grid.
+- The small-grid limit, the `nR/4` revenue peak, and the `P ≤ Po` /
+  `nR/(2Po)` bounds must all check out.
 
-> `R (D − d_i)/D² = P.`   (the eq. between (9) and (10))
+## How I want Claude Code to work
+- **Explain changes before making them.** I'm a student and must understand
+  every line — being able to explain the code is the actual assignment.
+  Don't silently rewrite large chunks.
+- Re-derive each equation by hand from the .txt; don't just transcribe.
+  Trust the paper over my notes and tell me about any discrepancy.
+- Build incrementally: oligopoly (Tasks 1–2) → partial grid (Task 3) →
+  sims/figures (Task 4). Write validation as real `pytest` tests.
 
-By symmetry `d_i = d/n` and `D = d`, so `D − d_i = d(1 − 1/n)`. Substituting,
-`R d(1 − 1/n)/d² = P`, i.e. `R(1 − 1/n)/d = P`, giving `d = (1 − 1/n)R/P`. ∎
-
-**Corollary 1a (inducement).** The map `P ↦ d` is a continuous, strictly
-decreasing bijection from `(0, ∞)` onto `(0, ∞)`. Hence for any target
-`d* > 0` the regulator implements it with the unique price
-`P* = (1 − 1/n) R / d*`. This is the paper's "reverse-engineer the price to
-produce any pattern of mining demand."
-[`test_oligopoly.py::test_inducement_is_a_bijection`,
-`::test_closed_form_matches_best_response_iteration`]
-
-**Corollary 1b (participation).** In equilibrium each miner earns
-`R/n − P d_i = R/n − (1−1/n)R/n = R/n² ≥ 0`, independent of `P`. So no price
-in `(0, ∞)` drives a miner out, and the inducement of Cor. 1a is
-unconstrained by participation.
-[`test_oligopoly.py::test_participation_profit_nonnegative_and_price_free`]
-
----
-
-## Proposition 2 (revenue exogeneity ⇒ duality, Task 2)
-
-**Claim.** Utility revenue from miners is the constant
-
-> **P · d = (1 − 1/n) · R,**
-
-independent of `P` and of every utility decision (`k`, generation mix).
-Consequently the revenue term in the utility's profit problem (eq. 6) is a
-constant and profit-maximization collapses to the cost-minimization problem
-of Section 3.5.
-
-**Proof.** Multiply eq. (10) by `P`: `P d = (1 − 1/n)R`. `R` is fixed by
-Bitcoin's protocol and price (the `ξ` of eqs 6–7), and `n` is market
-structure; neither responds to the utility's choices, and `P` has cancelled.
-Substituting a constant into the `argmax` over `k` leaves the maximizer
-unchanged, so only the cost terms remain — the Section 3.5 problem. ∎
-
-**Where it breaks (the boundary, as the plan asks).**
-1. *Grid large enough to move the global game* — if the focal grid's price
-   shifts total hashrate or the Bitcoin price, `R` is no longer exogenous to
-   `P` and the cancellation fails. Exogeneity is a small-open-grid assumption.
-2. *Mobile miners* — Proposition 3 below: once miners can leave for `Po`,
-   `P d` is no longer constant.
-3. *Endogenous entry* — if `n` responds to `P`, the `(1 − 1/n)` factor moves.
-[`test_exogeneity.py` (all three tests)]
-
----
-
-## Proposition 3 (partial grid, Task 3 / Appendix A eqs 61–68)
-
-**Setup.** `n` in-grid miners pay `P`, `m` out-of-grid miners pay `Po`, all
-`n + m` split the same `R` (eqs 61–62).
-
-**Claim (eq. 68).** In-grid aggregate demand is
-
-> **d = n (m + n − 1) R · [m Po − (m − 1) P] / (n P + m Po)².**
-
-**Proof.** Summing all `n + m` FOCs gives `Σ_{M∪N} d_j = (m+n−1)R/(nP+mPo)`
-(eq. 65; call it `T`). Summing only the `n` in-grid FOCs gives
-`R[(n−1)Σ_N + nΣ_M]/T² = nP` (eq. 66). Write `Σ_M = T − Σ_N`, so the bracket
-is `nT − Σ_N`; then `R(nT − Σ_N)/T² = nP` gives
-`Σ_N = nT(1 − PT/R)`. Since `PT/R = P(m+n−1)/(nP+mPo)`,
-`1 − PT/R = [mPo − (m−1)P]/(nP+mPo)`, and substituting `T` yields the claim. ∎
-[`test_partial_grid.py::test_eq68_matches_two_price_best_response`,
-`::test_total_demand_eq65`]
-
-**Corollary 3a (small-grid limit, `m ≫ n`, `Po` fixed).**
-`d → (nR/Po)(1 − P/Po)` and `P d → nR (P/Po)(1 − P/Po)`.
-[`::test_small_grid_limit_is_approached`]
-
-**Corollary 3b (exogeneity breaks).** `P d` in Cor. 3a is a concave parabola
-in `P`, **not** a constant. It is maximized at `P = Po/2` with value
-`nR/4`. Hence:
-- the duality of Prop. 2 fails — profit-max ≠ cost-min in the partial grid;
-- demand is non-negative iff `P ≤ Po` (else miners leave);
-- the largest inducible demand is `nR/Po` (at `P → 0`), but a profit-seeking
-  grid never sets `P < Po/2`, so **usable** inducement is capped at
-  `d = nR/(2Po)`. This is exactly the clip in the adapted demand-response
-  program eq. (69).
-[`::test_revenue_peak_is_nR_over_4_at_Po_over_2`,
-`::test_demand_nonnegative_iff_price_below_Po`, `::test_inducement_bounds`,
-`::test_revenue_exogeneity_BREAKS_in_partial_grid`]
-
-**Remark (a small correction to flag).** The paper says `P d` is
-"approximately exogenous if `P` is not too far from `Po`." Numerically this
-holds only loosely near the revenue peak `Po/2`; as `P → Po` the in-grid
-demand collapses, so `P d` is in fact steeply varying in that tail. The
-"approximately exogenous" reading is safe around `Po/2`, not near `Po`
-itself. Worth confirming with the authors.
+## Files in this folder
+- `Bitcoin_Mining_for_Carbon_Emission_Reduction.txt` — THE paper, with
+  equations intact (the project markdown had them blanked out).
+- `miner_demand/` — the package. `tests/` — the checks. `derivations.md` —
+  the proofs. `run_sims.py` — figures + emissions probe. `README.md` — the
+  writeup of what's confirmed and what to sync with Role 1.
 
 ---
 
-## Proposition 4 (emissions under the adapted program — probe, for Role 1 sync)
+## UPDATE — Theory Hardening and Regimes (the updated Role 4 task)
 
-Under the uniform case (Section 3.6.2) with the adapted program eq. (69) and
-shortfall floor `d_floor`, fossil output is
-`fossil(D,S,k) = max(D − Sk, 0) + d_floor·1{Sk < D}` (surplus mining draws
-only renewables; the floor adds fossil-fed mining when short). A cost-
-minimizing utility picks `k` to minimize `c·E[fossil] + C·k`.
+Dhruv asked me to take the **updated Role 4 task**: "Theory Hardening and
+Regimes" on the **FCL paper** (not the old Bitcoin paper). Motivation: Keshav's
+theoretical model (Role 1) and the numerical model (Role 2) **disagree** on
+carbon — Role 1 proves carbon falls; Role 2 found it never does across 210
+scenarios and that the model wants infinite capacity (Assumption 1).
 
-**Numerical finding.** Across 756 parameter cells, emissions under the
-adapted program never fall below the no-mining benchmark. The reason is
-Prop. 3: in the partial grid the surplus-absorbing channel is *bounded*
-(`≤ nR/(2Po)`), so it cannot do the heavy lifting, while the only other
-lever — the fossil-fed floor — adds emissions directly and only weakly
-induces extra renewable capacity. **This does not contradict the paper:** the
-paper's Appendix-A reduction is derived from the grid's *profit* problem
-(eq. 70), not cost-minimization, precisely because Prop. 3 says cost-min is
-no longer valid here. So the faithful emissions test must couple this
-miner-side result to Role 1's regulator/profit optimization. Flagging for
-sync.
-[`test_emissions.py`, `run_sims.py` sweep → `emissions_sweep.csv`]
+My job (per Role 1's handoff): stitch the small-FCL / interior / full-coverage
+regimes into one map, confirm the Hessian/boundedness conditions that feed
+Assumption 1, resolve the small-FCL boundary `K*_M = K°_R`, and reconcile the
+two models. Deliverable: `regimes/` (+ vendored Role 2 solver as backend),
+`REGIME_HARDENING.md`, `run_regime_analysis.py`.
+
+Resolution: the with-FCL program is unbounded in `K_R` exactly when
+`C_R < C_R† = ½[c + (R−C_M−c)²/(R−c) + (R−c−C_F−C_M)²/(β+p−R)]`, which is the
+carbon-reduction window. Assumption 1 alone doesn't give a finite optimum;
+`C_R ≥ C_R†` is the missing condition. Carbon falls only once buildout exceeds
+a crossover `K_R^cross` — below it Role 2 is right (utilization effect), above
+it Role 1 is right (capacity channel). Both verified against Role 2's solver.

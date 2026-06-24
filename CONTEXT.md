@@ -1,81 +1,4654 @@
-# CONTEXT.md — Team A1, Role 4 (Miner-Side Theory & Demand-Response Inducement)
+Bitcoin Mining (and maybe AI training) for
+Carbon Emission Reduction
+Jiasun Li∗,
 
-## Who / what
-- ASSIP research project. I am **Role 4** on **Team A1** (team of 4).
-- We are stress-testing an analytical model about whether Bitcoin mining /
-  flexible computing loads can *reduce* carbon emissions by financing
-  renewable capacity.
-- Role 4 job: nail the **miner-side foundation** the rest of the paper leans
-  on — prove the regulator can induce any mining quantity by price, prove
-  the revenue-exogeneity result that turns the utility's profit problem into
-  a cost-min problem, and work out what changes when the grid only serves
-  some of the miners. Then confirm all of it numerically.
+Hang Ren,
 
-## Which paper (read this carefully)
-My tasks target the **old Bitcoin-mining paper**:
-"Bitcoin Mining (and maybe AI training) for Carbon Emission Reduction"
-(Li, Ren, Bellos; file: `Bitcoin_Mining_for_Carbon_Emission_Reduction.txt`,
-the authored Feb 28 2026 draft).
+Ioannis Bellos
 
-> Note: Role 2 switched to the newer **FCL paper** because *its* tasks
-> (joint K_R/K_F/K_M capacities) live there. Mine do NOT: the FCL paper
-> abstracts the miner side into a reduced-form dispatch rule and does not
-> contain eqs 9–10 or Appendix A's 61–68. The miner oligopoly micro-
-> foundation only exists in this old paper, so Role 4 stays on it.
+February 28, 2026
 
-## The model in plain terms
-- `n` symmetric Bitcoin miners compete for a fixed dollar block reward `R`,
-  paying electricity price `P`. The regulator sets `P` (a demand-response
-  program); the utility builds renewable capacity `k` and serves all demand.
-- Mining is special: it can be dialed up/down instantly with no penalty, so
-  it can soak up renewable surplus and be curtailed at peak — acting as a
-  shock absorber that finances renewables and substitutes fossil backup.
+Abstract
+Although Bitcoin mining consumes a huge amount of electricity, does it necessarily
+translate into increased carbon emissions? In an analytical contracting model featuring endogenous renewable energy adoption decisions, we show that with appropriate
+electricity price policies, the high electricity demand from Bitcoin mining may actually
+lower the total carbon emission in the entire economy. A key intuition is that, unlike
+most other electricity uses, the intensity of Bitcoin mining can be elastically dialed up
+or down in real time without disrupting later operations. Therefore, Bitcoin mining
+can be induced to replace fuel-based electricity generation as an effective shock absorber for the volatile electricity supply from renewable energy, while incentivizing and
+financing the capacity building of renewable energy plants. We characterize the conditions under which this carbon-emission-reduction effect is present. While our analysis
+focuses on Bitcoin mining, a similar insight may also apply (though less perfectly) to
+general energy-intensive and load-flexible business applications, such as AI-training.
 
-## My Role 4 tasks (verbatim from the A1 Week 1 Plan)
-1. **Prove price induces any mining quantity.** Section 3.4.1 (eqs 9–10)
-   gives `d = (n−1)/n · R/P`; prove the regulator can set `P` to hit any
-   target `d` in the oligopoly case and pin the conditions.
-2. **Prove the revenue-exogeneity result.** Show why `P·d` is independent of
-   the utility's decisions, which is what collapses profit-max into the
-   cost-min problem in Section 3.5, and where it breaks.
-3. **Push the partial-grid case.** Extend Appendix A (eqs 61–68, the `m > n`
-   limit) to see how inducement and exogeneity change and whether the main
-   result survives.
-4. **Sim the induced demand and the partial-grid limit.** Quick numerical
-   check to confirm the algebra.
+Keywords: AI, bitcoin, blockchain, carbon emissions, demand response, electricity pricing
+policy and regulation, mining, renewable energy, sustainability
+∗
 
-## Key equations to target (verified against the .txt)
-- **Eq 9 (miner i):** `max R d_i/(d_i + Σ_{j≠i} d_j) − d_i P`.
-- **Eq 10 (equilibrium):** `d = (1 − 1/n) R / P`; inducement `P = (1−1/n)R/d`.
-- **Exogeneity:** `P d = (1 − 1/n) R` (constant ⇒ profit-max = cost-min).
-- **Eq 65 (partial-grid total):** `Σ_{M∪N} d = (m+n−1)R/(nP+mPo)`.
-- **Eq 68 (partial-grid in-grid):**
-  `d = n(m+n−1)R[mPo−(m−1)P]/(nP+mPo)²`.
-- **Small-grid limit (`m≫n`):** `d → (nR/Po)(1−P/Po)`,
-  `Pd → nR(P/Po)(1−P/Po)` — concave, peak `nR/4` at `P=Po/2`;
-  `d ≥ 0` iff `P ≤ Po`; usable inducement capped at `nR/(2Po)`.
-- **Eq 69 (adapted DR program):** clip surplus mining at `nR/(2Po)`.
+jli29@gmu.edu. George Mason University, Costello College of Business. Li appreciates financial support from U.S. National Science Foundation (Award #2337338). Part of the work was completed during
+Li’s visit to Carnegie Mellon University and Yale University, whose hospitality is greatly appreciated.
 
-## What "validate" means
-- The closed forms (eq 10, eq 68) must match an independent best-response /
-  FOC-system solve to the decimal.
-- `P·d` must be numerically constant in the full grid and provably non-
-  constant in the partial grid.
-- The small-grid limit, the `nR/4` revenue peak, and the `P ≤ Po` /
-  `nR/(2Po)` bounds must all check out.
+1
 
-## How I want Claude Code to work
-- **Explain changes before making them.** I'm a student and must understand
-  every line — being able to explain the code is the actual assignment.
-  Don't silently rewrite large chunks.
-- Re-derive each equation by hand from the .txt; don't just transcribe.
-  Trust the paper over my notes and tell me about any discrepancy.
-- Build incrementally: oligopoly (Tasks 1–2) → partial grid (Task 3) →
-  sims/figures (Task 4). Write validation as real `pytest` tests.
+1
 
-## Files in this folder
-- `Bitcoin_Mining_for_Carbon_Emission_Reduction.txt` — THE paper, with
-  equations intact (the project markdown had them blanked out).
-- `miner_demand/` — the package. `tests/` — the checks. `derivations.md` —
-  the proofs. `run_sims.py` — figures + emissions probe. `README.md` — the
-  writeup of what's confirmed and what to sync with Role 1.
+Introduction
+
+Bitcoin mining, and more broadly, “proof-of-work” blockchain operations, have long been
+criticized for their high electricity consumption. Media headlines often compare Bitcoin
+mining’s energy use to that of a mid-sized country, such as Norway (Forbes, 2022). Some
+studies go even further, equating this electricity consumption directly to carbon emissions
+and environmental harm. For example, Mora, Rollins, Taladay, Kantar, Chock, Shimada and
+Franklin (2018) made the bold claim that Bitcoin mining alone could contribute to a 2◦ C rise
+in global temperatures, while some scholars brag about their policy report associating Bitcoin
+mining and carbon emission as a major reason that led to China’s ban of Bitcoin mining
+in September 2021.1 Given the recent political shifts, rising Bitcoin prices, and increasing
+adoption by governments and corporations—including recent initiatives for “strategic Bitcoin
+reserves” (U.S. Senator Lummis, 2024; The Washington Post, 2024) and the emergence of
+Bitcoin treasury companies (see e.g., an explanation and a list), the energy demand from
+Bitcoin mining is likely to grow further. All these forces make it even more urgent than ever
+to critically assess Bitcoin mining’s environmental impact.
+While it is indisputable that Bitcoin mining consumes vast amounts of electricity, determining whether this necessarily translates to higher carbon emissions or climate damage
+requires deeper analysis. If policymakers design appropriate incentives, Bitcoin mining could
+primarily use electricity from renewable sources or even stimulate investment in renewable
+energy infrastructure. Counterintuitively, this could reduce carbon emissions rather than
+increase them. Sporadic media reports on Bitcoin mining consuming a high percentage of
+“clean” energy (e.g., see Forbes, 2024 regarding Bitcoin miners adopting renewable energy
+in Texas) do suggest an empirical possibility of this desirable outcome. However, there are
+also counterarguments, including concerns that Bitcoin mining could destabilize power grids
+1
+
+Private communication. On China’s ban, see e.g. https://www.reuters.com/world/china/china-centralbank-vows-crackdown-cryptocurrency-trading-2021-09-24/.
+
+2
+
+Texas Tribune (2024). This ongoing debate highlights the urgent need for rigorous, neutral
+academic analysis—yet, formal studies remain scarce.
+To address this gap, our paper develops an analytical model to formally evaluate whether
+Bitcoin mining can reduce carbon emissions and, if so, what policy interventions might be
+necessary to facilitate this outcome. Specifically, we explore how electricity grid regulators
+can design demand response programs to stabilize the grid while minimizing carbon emissions. Our model demonstrates that increased electricity demand from Bitcoin mining may
+actually be able to reduce the total carbon emission in the entire economy. This effect is
+obtained by helping renewable energy sources scale effectively, and is possible when welldesigned electricity pricing policies, which we derive in this paper, are in place. Our model
+explicitly factors in and showcases how key characteristics of renewable energy and Bitcoin
+mining synergize with each other and lead to the realization of the above-mentioned carbon
+emission reduction effect.
+
+Renewable Energy Characteristics. Renewable energy generation is characterized by
+three key features: (1) high fixed costs, requiring significant upfront investment to build
+capacity (e.g., purchasing solar panels, constructing hydro dams, or installing wind turbines);
+(2) low or near-zero variable costs, as once the infrastructure is in place, generating electricity from renewable sources is virtually free; and (3) imperfect correlation between
+supply and demand, since renewable energy production tends to fluctuate due to factors
+such as nighttime for solar, seasonal variations for hydro, or intermittent as well as inconsistent wind patterns, and furthermore these supply fluctuations often do not align perfectly
+with household or industrial electricity demands.
+Because electricity must be consumed as soon as it is produced, this supply-demand
+mismatch presents a major challenge for renewable energy adoption.2 Fossil fuels, which
+2
+Although energy storage solutions like batteries and pumped storage exist, their current capacity remains
+negligible relative to total electricity generation. Storage costs also serve as an additional limit.
+
+3
+
+provide a controllable and predictable energy source, are often required to balance the grid,
+leading to continued carbon emissions. Additionally, the high fixed costs of renewable energy
+infrastructure make commercial viability difficult, especially when fossil fuels remain necessary to stabilize the electricity supply. These economic and operational constraints limit the
+widespread adoption of renewables despite their long-term environmental benefits.
+
+Bitcoin Mining Characteristics. Bitcoin mining effectively addresses both of the previously mentioned challenges due to its two key characteristics: (4) it consumes a large amount
+of electricity, creating substantial and predictable demand, and (5) it is memoryless,
+as it relies solely on brute-force hash operations and can be scaled up or down almost
+instantly by adjusting the number of active mining machines. This flexibility allows mining operations to endure disruptions at extremely high frequencies—mining chips, such as
+those in the Antminer S19 ASIC rig, operate at cycle times of approximately 10−15 seconds,
+making such adjustments seamless.
+The high electricity demand of Bitcoin mining helps renewable energy providers overcome
+the barrier of high fixed costs by ensuring a steady demand for electricity, particularly
+during periods of low household and industrial consumption. At the same time, its flexibility
+allows mining to be temporarily curtailed during peak demand periods, prioritizing essential
+electricity needs. This curtailment can be effectively managed through demand response
+programs that adjust electricity prices for miners based on real—time grid conditions—an
+approach already implemented by many power grids, such as ERCOT, the operator of the
+Texas electrical grid.
+In short, Bitcoin mining’s combination of large and flexible electricity demand supports
+renewable energy capacity expansion, substitutes fossil fuels in balancing supply and demand,
+and thus could ultimately reduces carbon emissions. Notably, this dual advantage is unique
+to Bitcoin mining. Other high-energy consumers, such as aluminum electrolysis or data
+
+4
+
+centers, cannot be easily shut down and restarted without incurring significant disruptions
+or lengthy warm-up periods. This makes Bitcoin mining a distinctively valuable tool in
+reducing carbon emissions and fostering a more sustainable energy future.3
+
+Modeling Approach. We develop an analytical model to formalize the reasoning outlined
+above. The model includes an arbitrary number of Bitcoin miners, a representative
+non-mining sector (households and industries with volatile electricity demand), and a
+profit-maximizing electricity utility with existing fuel-based electricity generation capacity and decides ex-ante the optimal level of renewable capacity to build and ex-post the
+optimal electricity generation mix, taking as given the regulator’s pricing policies.
+The model incorporates several key features: (1) stochastic energy demand from
+non-mining users, (2) stochastic renewable energy supply, modeled via a variable
+capacity factor (or utilization ratio to avoid energy industry jargon) given by the ratio of
+actual to theoretical maximum output, with total supply being the product of this factor and
+installed capacity, (3) costly but controllable fossil fuel generation as a backup source,
+(4) high fixed costs for renewable energy infrastructure, (5) divergent carbon emissions, with fossil fuels generating high emissions and renewables producing little to none,
+and (6) perfectly controllable Bitcoin mining demand, meaning mining operations
+can be adjusted in real-time without loss of efficiency; we prove that even with endogenous
+mining intensity, the grid can always induce an optimal level of Bitcoin mining through
+appropriately designed demand response programs that leverage miners’ profit-maximizing
+incentives.
+3
+
+Certain electricity-consuming yet time-insensitive tasks, such as AI model training, may enjoy similar
+traits with Bitcoin mining. Indeed, the technological similarity between the two can be gleaned from the
+fact that many Bitcoin miners have also expanded their business lines to include AI data centers with the
+rise of generative AI (e.g., the case of CleanSpark). In this sense, policy experiments with Bitcoin mining
+may also serve as a sandbox for AI in the future.
+
+5
+
+Key Insights and Intuition. Based on our model, we analyze the impact of Bitcoin
+mining on carbon emissions. First, we demonstrate that the introduction of Bitcoin mining
+consistently leads to higher investment in renewable energy capacity. Second, under fairly
+general conditions, we show that well-designed electricity pricing policies (demand response
+programs) can enable Bitcoin mining to reduce carbon emissions—an outcome that may
+initially seem counterintuitive. We also characterize the conditions under which this carbon
+reduction effect holds and demonstrate that the profit-maximizing utility operator earns
+higher profits under carbon-reducing pricing policies than in a scenario where Bitcoin mining
+is banned (like in China post September 2021). These findings validate the core intuition
+discussed earlier in the introduction.
+The key takeaway is that Bitcoin mining incentivizes greater renewable energy capacity,
+increasing the share of electricity demand met by renewables. When mining is curtailed during peak demand periods, reliance on fossil fuels decreases, leading to lower overall carbon
+emissions. However, an important nuance emerges: Bitcoin mining should not be excessively restricted. Charging miners prohibitively high electricity prices, even during supply
+shortages, could undermine the incentive to invest in renewable energy infrastructure.
+To restate the intuition differently, suppose the minimum renewable energy utilization
+ratio is strictly positive and the maximum electricity demand from non-mining users is finite.
+In that case, one can always build sufficiently large renewable capacity to ensure that even at
+its lowest output, renewables can meet peak non-mining electricity demand. Bitcoin mining
+can then fill the remaining gap, adjusting its consumption dynamically through demand
+response programs. In an ideal scenario, carbon emissions could approach zero, but in reality,
+two frictions may prevent this outcome: (1) periods of zero renewable energy output; when
+renewable generation drops to zero, fossil fuels must be used to meet electricity demand, (2)
+underinvestment in renewable capacity; while carbon reduction is a public benefit, the cost
+of expanding renewable capacity is borne privately by utility operators. This misalignment
+6
+
+can lead to suboptimal investment in renewables, increasing reliance on fossil fuels. Our
+results suggest that accommodating Bitcoin mining helps mitigate the second friction by
+making renewable energy investments more commercially viable.
+Overall, our study highlights an often-overlooked aspect of Bitcoin and blockchain technologies: their potentials in supporting the adoption of renewable energy and reducing carbon
+emissions. By creating a large yet flexible electricity demand, Bitcoin mining can help scale
+renewable energy infrastructure while balancing electricity grids. This effect is expected to
+be more valuable today as the shifting political landscape in the U.S. is poised to cut governmental subsidy to renewable capacity building and thus further increase its capital costs.
+Through the analysis in this paper, we provide fresh insights for policymakers, regulators,
+and industry stakeholders as they navigate the evolving energy landscape.4
+Finally, in ongoing work, we are working on calibrating all model parameters to actual
+market-level data; ultimately, this will allow us to quantify the magnitude of potential carbon
+reductions from Bitcoin mining. Preliminary results seem promising, as our model places
+little restrictions under which our key result holds.
+
+2
+
+Related Literature
+
+Our work contributes to the intersection of three distinct streams of literature; in particular,
+research on: i) Bitcoin mining, ii) demand response programs, and iii) renewable energy
+investments. While a comprehensive review of the extant research in these streams is beyond
+the scope of our paper, in what follows we provide a brief overview of the related research
+with the objective of shedding light on the relative positioning of our work.
+4
+
+Our contribution is unique in that traditional policy interventions such as using surplus energy only or
+adopting carbon credits cannot reduce carbon emission or incentivize green energy transition, as argued by
+Gill, Stinner and Tyrell (2024).
+
+7
+
+Research on Bitcoin Mining Bitcoin mining has attracted strong research interest from
+the academic and practitioner community, which has led to a significant body of knowledge.
+On the theory side, Biais, Bisiere, Bouvard and Casamatta (2019) model bitcoin mining
+as a coordination game and presents the possibility of multiple equilibria. Cong, He and
+Li (2021) studies the dynamics of mining pool formation and show that the rise of mining
+pools may lead to significant electricity consumption (though it does not talk about the
+source of electricity and thus not the implications on renewables). Prat and Walter (2021)
+propose a model that uses the exchange rate of Bitcoin against the US dollar to predict
+the computing power of Bitcoin’s network. Arnosti and Weinberg (2022) shows that bitcoin
+mining has a tendency toward significant centralization given even small initial differences
+in variable costs. Chatzigiannis, Baldimtsi, Griva and Li (2022) develops the optimal rule
+and a robo-advisor for miners to allocate computing power across mining pools, based on the
+insight in Cong, He and Li (2021). Bertucci, Bertucci, Lasry and Lions (2024) models bitcoin
+mining as a mean-field game. Goren and Spiegelman (2019); Fiat, Karlin, Koutsoupias and
+Papadimitriou (2019) studies electricity-minded mining strategies, while Noda, Okumura
+and Hashimoto (2020) analyze strategies under different difficulty adjustment algorithms.
+On the empirical side, the most related paper to ours is Halaburda and Yermack (2023),
+who study the operations and financial valuations of 13 cryptocurrency mining companies
+listed on the NASDAQ stock exchange and have facilities in North America. Their empirical
+finding largely supports the feasibility of the idea presented here: Specifically, they find
+that miners using Texas wind power are offline more than other miners, in a more erratic
+pattern. Their model shows that miners using sustainable energy may be more profitable
+than those using conventional sources, despite the shutdowns, as they benefit from extremely
+low prices when there is oversupply of sustainable energy (e.g., strong winds). The model
+also shows that it may be beneficial for the electric utility to offer miners compensation for
+curtailment of their activity when there is undersupply of energy (e.g. lack of wind), which
+8
+
+we also observe in our sample. This compensation further increases the profits of the miners.
+They find a negative and significant beta between crypto mining stocks and an index of
+electric utilities, suggesting that ownership of a crypto mining company might provide a
+useful channel for risk management in the electric power industry. Another related paper is
+Benetton, Compiani and Morse (2023), who document that cryptocurrency miners’ use of
+local electricity implies higher electricity prices for existing small businesses and households in
+Upstate New York. However, we note that the electricity market in that study does not seem
+to feature specifically-designed demand response programs, hence, the empirical findings do
+not lend themselves to an apples-to-apples comparison with our theoretical implications.
+Several industry reports also touch on the themes discussed in this paper. For example,
+Ibañez and Freier (2023) contain numerous verbal arguments on why Bitcoin mining may be
+environmentally friendly that echo the several key aspects of the current paper, although they
+do not distill an end-to-end theory. In a Bitcoin Policy Institute (2024) report, Margot Paez
+and Troy Cross document several data patterns observed consistent with Bitcoin mining’s
+flexible electricity demand. There is also extensive anecdotal evidence of grids using Bitcoin
+mining for absorbing surplus electricity, see for example a case in Pakistan.5
+The idea of using mining as a shock absorber is also grounded in empirical data and
+practices, as documented in both the academic literature and media coverage. Indeed, there
+are many examples of this aspect. Yaish and Zohar (2023) survey relevant anecdotes regarding two companies that designed ASICs specifically to be used as absorbers; see Layer1
+Technologies (2022) and Blockstream (2022). Also, back when mining was still legal in
+China, miners would act as de-facto absorbers, moving between regions when the wet season
+started and ended, due to the season’s impact on renewable energy production and costs; see
+Bitcoin.comNews (2019), decrypt (2020), and Cointelegraph (2020). In the United States,
+5
+There are even more such cases from the authors’ private communication with Bitcoin miners and mining
+machine manufacturers (who also conduct mining themselves as an inventory management practice).
+
+9
+
+miners have also been reported to adjust their operations to accommodate emergencies and
+special events, see for example media reports at CNBC (2022a) and Forbes (2021).
+From a technology perspective, since electrical equipment tends to be sensitive, mining
+ASICs needs to be designed so that they can be rapidly switched on and off (i.e., this is
+a design consideration rather than an artifact). This is indeed in line with the reality. In
+fact, miners have been reported to switch “at a minute’s notice” or “in real time” — see
+for example numerous mainstream news articles such as Bloomberg (2021), CNBC (2022b),
+and Forbes (2021). Also, see technical contents from BITMAIN Support (2022) and product manuals such as BITMAIN Support (2024) of mining equipment manufacturers. For
+completely different purposes, Yaish, Tochner and Zohar (2022) show that miners can repeatedly switch their machines on and off to manipulate mining difficulty in a way that can
+increase their profits: when block rewards are involved this can increase the average returns
+from mining, and when block rewards are low this can create interest rate arbitrage between
+lending pools (as some accrue interest per-block, and some accrue according to the time
+difference between blocks).
+
+Research on Demand Response Programs A stream of research has collectively explored various aspects of demand response programs in electricity markets, focusing on optimization, contract/pricing design, and long-term planning. Peura and Bunn (2015) examine how peak electricity producers set prices under uncertain demand, influencing market
+dynamics. Aı̈d, Possamaı̈ and Touzi (2022) analyze optimal demand response contracts,
+balancing incentives for both consumption reduction and responsiveness. Fattahi, Dasu and
+Ahmadi (2023) propose a scenario-based approach to optimize direct load control contracts,
+achieving cost savings for utilities, and Lohmann and Rebennack (2017) develop a longterm power generation expansion model that factors in short-term demand response. More
+recently, Agrawal and Yücel (2022) investigate the role of baseline adjustments in demand-
+
+10
+
+response programs, showing how different pricing structures impact customer behavior and
+emissions. The reader can also refer to detailed reviews of different sub-streams within this
+corpus of research. For instance, Vardakas, Zorba and Verikoukis (2014) provide a comprehensive review of demand response programs, classifying them by control mechanisms
+and optimization strategies whereas Mahmood, Javaid, Khan and Razzaq (2015) categorize load management techniques into incentive-based and dynamic pricing-based schemes,
+highlighting implementation challenges.
+Together, these studies highlight the importance of demand response programs in balancing electricity supply and demand, improving grid stability, and reducing costs and environmental impact. However, none of these papers examine how such programs can be used as a
+means of leveraging the role of Bitcoin mining to facilitate investment in renewable energy.
+
+Research on Renewable Energy Investments From a corporate finance perspective,
+Lanteri and Rampini (2025) analyze clean technology adoption by firms facing heterogeneous
+financing constraints. Their model predicts that financially constrained firms optimally invest in dirtier capital than unconstrained peers, a pattern confirmed in the commercial
+shipping industry. Instead of focusing on firms’ clean technology adoption decisions, our paper focuses on the utilities’ clean technology adoption decisions (in terms of renewal capacity
+build-ups).
+A growing body of research also examines how renewable energy investments are affected
+by pricing policies, subsidies, energy storage, and other operational considerations.
+Regarding pricing, Aflaki and Netessine (2017) analyze strategic investment in renewables, revealing that carbon pricing may sometimes discourage rather than encourage green
+energy adoption due to intermittency challenges. Kök, Shang and Yücel (2018) investigate how electricity pricing policies influence renewable investments and carbon emissions,
+showing that flat pricing can encourage solar energy adoption.
+
+11
+
+On the policy front, Alizamir, de Véricourt and Sun (2016) explore efficient feed-intariff policies to incentivize renewable energy adoption while mitigating strategic investment
+delays. Babich, Lobel and Yücel (2020) compare feed-in-tariffs and tax-rebate policies,
+identifying conditions under which each policy is more effective in promoting solar panel
+investments. Alizamir, Iravani and Yücel (2021) assess the effectiveness of wind energy
+subsidies, finding that investment subsidies are often preferable to production subsidies unless
+societal benefits from wind energy are exceptionally high.
+In terms of storage and operational considerations, Hu, Souza, Ferguson and Wang (2015)
+highlight the importance of data granularity regarding renewable yield and electricity demand in renewable energy capacity investment, emphasizing how intermittency and inaccurate demand estimation can lead to overinvestment. Kök, Shang and Yücel (2020) examine operational flexibility in energy investments, finding that renewable and flexible energy
+sources complement each other, whereas inflexible sources like nuclear act as substitutes.
+Kaps, Marinesi and Netessine (2023) analyze optimal renewable energy and storage investments, demonstrating that solar and storage can be strategic complements or substitutes
+depending on investment levels. Peng, Wu and Souza (2024) study the interplay between
+renewable generation, flexible power sources, and energy storage, showing how, depending
+on grid constraints, storage can complement or substitute renewables. Rana, Kaps and
+Netessine (2025) introduce a site selection metric for renewable projects, demonstrating that
+optimizing location choices can significantly increase revenues.
+
+Research on Contract Theory The optimal electricity pricing strategy studied in this
+paper also relates to the vast literature on contract theory (see e.g., Bolton and Dewatripont
+(2004) and Salanié (2005) for introduction), and especially the principal-agent problem (e.g.,
+Ross (1973), Grossman and Hart (1983)). While neither contract theory nor principal-agent
+problem is new to the literature, our application of it to the optimal electricity pricing for
+
+12
+
+carbon emission reduction is nevertheless novel. Therefore, the exact problem specification
+also significantly differs from traditional principal-agent problems. Furthermore, since there
+has not been a general method for solving the principal agent problem when both actions
+and outcomes are continuous and the first-order approach is not guaranteed to work, the
+method we plan to adopt to tackle the problem based on variational calculus is also expected
+to be novel to the literature. Planned extensions of our baseline model is also expected to
+touch on the literature on multi-agents (e.g., Holmström (1982); Green and Stokey (1983);
+Itoh (1991)) or multi-principals (e.g., Bernheim and Whinston (1986), Martimort and Stole
+(2009)).
+Together, all the existing studies surveyed above cover various economic, operational,
+and policy aspects of renewable energy investments. However, to our knowledge, this paper
+is the first to explore the role of Bitcoin mining for renewable energy investment and overall
+carbon reduction.
+
+3
+
+Model
+
+This section formalizes the key intuitions above in an analytical model.
+The model features a market for electricity, composing both a demand side and
+a supply side, within a given time period.6 The demand side consists of both “regular” electricity demand from households/industries and the electricity demand from
+profit-maximizing Bitcoin miners; The supply side consists of an environmentallyaware regulator (e.g., state or local public utilities commission, or PUCs), who stipulates
+the respective electricity prices charged to regular demand and Bitcoin miners, and a utility
+company, who decides on how much renewable capacity to install and operates to serve
+6
+
+The time period could be over months, years, or even decades. We are deliberately vague on the time
+period thanks to the flexibility of our model — more comments later.
+
+13
+
+electricity demand, taking the electricity pricing policies from the regulator as given.
+We now further lay out the key modeling ingredients for players mentioned above.
+
+3.1
+
+Key model ingredients
+
+The key model ingredients are given as follows:
+(1) stochastic “regular” electricity demand: we assume the quantity of demand for electricity from (non-Bitcoin mining related) household/industry needs within a representative
+period to follow D = D(D̃, p), where D̃ is a positive random variable, p is the (unit)
+electricity price charged to households/industries, and D(·, ·) is increasing in D̃ and
+non-increasing in p. For simplicity and without loss of generality, in subsequent analysis we will assume that D(D̃, p) = D̃.7 Therefore, the realized regular demand for
+electricity D is exogenously drawn from the random variable D̃:
+
+D ∼ D̃,
+
+(1)
+
+(2) stochastic renewable energy supply: for a given level of the renewable capacity k in
+place (which is determined by costly initial investment ex ante), the quantity of supply
+of renewable energy within a representative period is given by S = S(S̃, k), where S̃
+is a positive random variable with support in [0, 1] and S(·, ·) is increasing in both S̃
+and k. For simplicity and without loss of generality, we will assume S(S̃, k) = S̃k.
+Therefore, the realized supply of electricity from renewable sources S is given as
+
+S = S̃k.
+
+(2)
+
+In this specification, S̃ as a percentage number has a natural interpretation of being a
+7
+
+Other simplifying examples may have D = D̃ − λP where λ > 0 is the slope of a linear demand function.
+
+14
+
+stochastic utilization ratio of renewal energy capacity. In electricity parlance, this ratio
+is known as the capacity factor, defined as the ratio between actual electrical energy
+output over a given period of time and the theoretical maximum electrical energy
+output over that period.
+The variable cost of generating electricity from renewable energy is assumed to be zero.
+(3) costly but controllable electricity supply from fuel energy: we assume that grid has
+perfect control over the quantity of supply of fuel-based energy within a representative
+period. Assuming this quantity is Q, then the (variable) cost incurred would be
+
+c · Q,
+
+(3)
+
+where c > 0 captures the (unit) cost of fuels.
+(4) high fixed cost for renewable energy capacity building: We assume that it costs the
+grid
+C ·k
+
+(4)
+
+to build up the capacity of renewable energy production.
+(5) high (low) carbon emission from fuel (renewable) sources for electricity generation: we
+assume that the emission from any level of renewable energy production is 0, while the
+emission from Q fuel-based energy production is
+
+θ · Q.
+
+(5)
+
+Notice that the total emission is proportional to the variable cost incurred by the grid,
+and hence we will often equate the objective of emission reduction with variable cost
+reduction.
+15
+
+3.2
+
+Profit-maximizing utility company
+
+As mentioned earlier, there are two key decision makers in our model. The first key decision
+maker is a profit-maximizing utility company who decides ex ante on how much renewable
+capacity k to build and ex post how much electricity to provide to households/industries or
+(if present) Bitcoin miners. The second key decision maker is a regulator (e.g., state-level or
+regional-level public utilities commissions), who stipulates the price of electricity charged to
+households/industries or Bitcoin miners.8
+We assume that the regulator stipulates the utility company to charge a fixed price p > c
+to households/industries. Since p is higher than the variable cost of electricity generation
+(c in case of fuel-based electricity or 0 in case of renewable-based electricity), the utility
+company will always optimally satisfy all households/industry electricity demand.
+On the other hand, to bitcoin miners the regulator stipulates a demand response program
+so that the utility company charges a price of P (D̃, S̃ ·k, ξ) to Bitcoin miners for every unit of
+electricity. Here we use ξ to capture all external factors that may influences miners’ demand
+function for electricity. For example, ξ may include (1) Bitcoin price, (2) the level of mining
+fixed reward, which halves roughly every four years, and (3) the level of transaction fees paid
+to miners.9 ξ may also capture the option values of holding (and optimally deposing) mined
+bitcoins. We allow the electricity price charged to miners to be dependent on ξ in order to
+offset the impact of external factors on Bitcoin miner electricity demand, so that the utility
+company can induce a desirable amount of Bitcoin mining (and hence electricity usage)
+in accordance with only the imbalance between regular electricity demand and renewable
+8
+
+Exogenously set price is common in reality. For example, in some states, public service (utility) commissions fully regulate prices, and other states have a combination of unregulated prices (for generators)
+and regulated prices (for transmission and distribution) — see U.S. Energy Information Administration
+(2025b). Our model corresponds to a regulated market where the utility company vertically integrates power
+generation and transmission. Alternatively, the utility company can buy electricity from retail market at
+competitive price and transmit customers — we discuss this case in Section ??.
+9
+Transaction fees may be affected by transaction frequencies or the introduction of new features such as
+Bitcoin NFT protocols like Ordinal Theory Handbook (2025).
+
+16
+
+electricity supply (we will further elaborate on this point in the next paragraph). Under
+this setup, the utility company dynamically adjusts the price charged to bitcoin miners in
+real time. This assumption makes sense in practice because (1) almost all Bitcoin mining
+today is conducted at large mining farms operating in remote areas with distinct transition
+lines, and they do actively negotiate electricity price deals with the utility company, so that
+the utility company can can effectively price discriminate between households/industries and
+Bitcoin miners and work out complicated pricing schedules with miners in advance;10 (2)
+Bitcoin mining is a memoryless process, so that it can easily be turned on or off and could
+thus be responsive to price changes.
+For a given pricing strategy P (D̃, S̃k, ξ) regarding how the utility company charges electricity prices to miners, if we denote the miners’ electricity demand function to be d(P, ξ),
+then the utility company’s objective function will be given by
+n h
+
+
+n
+
+
+o
+io
+˜ 0 − Ck ,
+max E pD̃ + P (D̃, S̃k, ξ) · d P (D̃, S̃k, ξ), ξ − c · max D̃ + d P (D̃, S̃k, ξ), ξ − Sk,
+k
+
+(6)
+where pD̃ captures the utility company’s revenue from households/industries, P (D̃, S̃k, ξ) ·
+
+
+d P (D̃, S̃k, ξ), ξ captures the utility company’s revenue from Bitcoin miners, c · max{D̃ +
+
+
+d P (D̃, S̃k, ξ), ξ − S̃k, 0} captures the utility company’s cost for serving electricity demand,
+and Ck captures the utility company’s cost in building up renewable energy capacity. Then
+by allowing the price strategy P (D̃, S̃k, ξ) to be dependent on ξ, we will shown that it can
+
+
+be so designed that d P (D̃, S̃k, ξ), ξ is independent of ξ, that is, it is reasonable to write
+d(D̃, S̃k) only, which we will do for all subsequent analysis.
+10
+While it is less feasible to price discriminate against small mining rigs, they are negligible in the mining
+industry anyway.
+
+17
+
+3.3
+
+Environmentally-aware regulator
+
+We assume that the regulator is environmentally-aware — in that it aims to reduce total
+emission. Then with the understanding of the utility company’s profit-maximization problem
+(6), the regulator’s problem is given by (note the remark by end of the previous section):
+h
+n
+
+
+oi
+minP (·,·,·),p,k ED̃,S̃ θ · max D̃ + d P (D̃, S̃k, ξ), ξ − S̃k, 0 ,
+n h
+
+
+s.t. k ∈
+arg maxk E p · D̃ + P (D̃, S̃k, ξ) · d P (D̃, S̃k, ξ), ξ
+n
+
+
+o
+io
+−c · max D̃ + d P (D̃, S̃k, ξ), ξ − S̃k, 0 − Ck .
+
+(7)
+
+(8)
+
+In words, the regulator chooses the optimal electricity price to households/industries p, and
+the optimal demand response program (i.e., pricing policy) to Bitcoin miners P (·, ·, ·), in
+order to minimize emission (which is proportional to the total excess electricity demand over
+supply from renewal sources, or what is often called residual demand in the energy economics
+literature, if any), subject to the utility company’s optimal decision over renewable capacity
+k (recall that since we assume the regulator specify p > c, the utility company always serves
+all electricity demand — the only variable for the utility company to optimize over is k).
+Assuming that the regulator aims to reduce emission is innocuous, because it also coincides with other objectives typically assumed of public utility regulators. For example, if the
+regulator is concerned with grid resilience, it would aim to lower peak electricity demand,
+which will in turn be monotonic in the objective of (7).11 In other words, (7) captures the
+regulator’s objective even if one interprets it differently than we do here.
+Assuming the utility company can distinguish between mining and non-mining activities
+is also innocuous, because almost all Bitcoin mining today is done by large mining farms
+11
+
+Another way to see how the goals of stabilizing the grid and reducing carbon emissions coincide, even
+without consideration of renewables, is to notice that when a power plant adjust production in response to
+changing market conditions, it tends to reduce the overall efficiency of electricity generation, a phenomenon
+known as ramp costs (see e.g., Borrero, Gowrisankaran and Langer (2024)).
+
+18
+
+operating in remote areas that easily distinguish themselves from other electricity demands.
+In fact, currently most Bitcoin mining farms do have individual electricity supply contracts
+with the utility company. Assuming that the electricity price can be set in a region where
+miners are meaningfully elastic is also innocuous; indeed, it has been proven in, e.g., Texas,
+where electricity price adjustments have successfully induced miners to curtail operations
+during peak hours from time to time. Empirical studies such as Kawaguchi, Noda and
+Komiyama (2022) also show that miners adjust their operational behavior (and thus their
+electricity consumption) to profitability. Furthermore, as will be clear from (10) below, our
+analysis also accommodates fluctuations in Bitcoin prices.
+
+3.4
+
+Simplifying the utility company’s problem (6)
+
+A quick reflection will reveal that the revenue terms in the utility company’s problem (6)
+do not actually affect the utility company’s decisions. This is because on the one hand, the
+revenue from households/industries pD̃ is completely independent of the utility company’s
+
+
+decisions, while the revenue from bitcoin miners P (D̃, S̃k, ξ) · d D̃, S̃k can be interpreted
+as miners’ operating costs, which will also be independent of the electricity price miners are
+charged. This is because although a higher electricity price will have the direct effect of
+discouraging mining, this direct effect will be counteracted by an indirect effect from Bitcoin
+mining difficulty adjustment.
+We will formally establish the above argument in Section 3.4.1. That said, even without
+going into details of the industrial organization of Bitcoin mining, it is immediate that under
+a first-order approximation of assuming perfect competition among Bitcoin miners, miners’
+operating costs equal to mining revenues, and the latter may be argued to be independent of
+the utility company’s decisions. Indeed, total mining revenue within a given period equals
+the product of (1) number of blocks produced within the period, which is hard-coded in
+Bitcoin’s protocol given its on average 10 min block time; (2) block reward which consists
+19
+
+of fixed reward and exogenous transaction fee revenues; (3) Bitcoin price which is arguably
+exogenous to the electricity price set by the regulator (this assumption is reasonable in
+current environments, but may need relaxation if going forward; that said, to the extent
+that Bitcoin price is influenced by many factors beyond electricity price, the assumption is
+likely to hold approximately, even if not perfectly; we plan to discuss more about this later
+or in future research). Therefore, as a first approximation one may interpret our findings in
+Section 3.5 as a reasonable approximation of the reality already.
+The next section will show that the insight we discuss in the above paragraph also applies
+to settings in which bitcoin mining is not perfectly competitive. Readers already comfortable
+with our arguments above may skip Section 3.4.1 without loss of continuity.
+
+3.4.1
+
+Characterizing the miner demand function
+
+It is our intention to assume a general miner demand function d(·, ·). Here we conduct
+a simply analysis to illustrate how d(·, ·) may look like. Again, readers who are already
+comfortable with our arguments in the previous section that we can remove the revenue
+term from Bitcoin miners from the utility company’s objective (7) may skip this section
+without loss of continuity.
+As we have already seen in the discussion above, if the mining industry is perfectly
+competitive, then we can reasonably assume the utility company’s revenue from Bitcoin
+miners is independent of the prices charged to miners. Now we instead follow the literature
+(e.g., Cong, He and Li (2021); Arnosti and Weinberg (2022)) to consider an oligopolistic
+mining industry. Specifically, assume n symmetric miners. Then each miner i’s objective is
+
+max R
+di
+
+di +
+
+d
+Pi
+
+j̸=i dj
+
+− di P
+
+(9)
+
+where di is miner i’s computing power allocation, R is the total dollar-based block reward
+
+20
+
+within a representative period, and P is the electricity price.
+By first order condition, in equilibrium we have12
+P
+j̸=i dj
+P
+= P.
+R
+(di + j̸=i dj )2
+Summing over all i-s we have that
+P
+(n − 1) j dj
+P
+R
+= nP,
+( j dj )2
+and thus
+
+(n−1)
+j dj = R nP . In other words, we have that
+
+P
+
+d=
+
+(n − 1) R
+n P
+
+(10)
+
+R to be exogenous
+Then again we show that with oligopolistic miners, we still have P d = (n−1)
+n
+and independent of the utility company’s decisions.
+Since R constitutes what could be interpreted as ξ in Equations (6) and (7), in subsequent
+analysis we can assume that P absorbs the impact of ξ and thus remove the latter from all
+equations.
+
+Demand response program Equation (10) gives a formula regarding how total bitcoin
+mining demand responds to the charged electricity price P as well as the bitcoin market
+(captured by R) and the mining industry conditions (captured by n). Equation (10) is a
+convenient outcome for demand response programs, in that one can reverse-engineer the
+real-time price of electricity charged to bitcoin miners to produce any given pattern of the
+R
+bitcoin mining demand. More precisely, one can just set P = (n−1)
+.
+n
+d
+
+Although our goal is to have regulators to initiate demand response programs, that is,
+12
+
+The second-order condition is easily checked to be satisfied.
+
+21
+
+to dynamically adjusts the price charged to bitcoin miners and thus indirectly influences
+the intensity of Bitcoin mining, given Equation (10) and the interpretation above, we see
+that we can equivalently assume that the regulator can explicitly set the electricity demand
+from Bitcoin miners d(D̃, S̃k) (this again confirms our comment by the end of the previous
+section). Adopting this treatment will significantly simplify our later analysis, even though
+it is without loss of generality. We will assume so in all subsequent analysis.
+
+3.5
+
+Duality: The utility company’s cost minimization problem
+
+It is easily verified that by crossing out the revenue terms that are independent from the
+utility company’s decisions and assuming (without loss of generality) perfectly controllable d(·, ·), the profit-maximization objective of the utility company will be a duality of
+a cost-minimization problem. In this section, we formally present the utility company’s
+cost-minimization problem (with the simplification in 3.4.1 of assuming the regulator being
+able to directly control the mining intensity through the demand response program), and will
+then for simplicity always use on the utility company’s cost-minimization problem instead
+of its profit-maximization problem in all remaining discussions unless otherwise specified.
+To state the utility company’s cost minimization problem, we have the regulator to
+stipulate the quantity of electricity demand d from bitcoin mining as a function of household/industry electricity demand D — the realization of D̃ , the renewable supply factor S
+— realization of S̃, the cost of fuel c, and existing renewable capacity k.
+With the regulator’s ability to control the quantity of electricity demand from bitcoin
+mining and the optimal decision to fulfill all electricity demands from household/industry
+electricity needs and Bitcoin mining (because recall the implication of p > c), the utility
+company aims to minimize its expected total (initial and variable) cost. Formally, the utility
+
+22
+
+company’s problem is given by:
+n
+o
+min c · E[max{D̃ + d(D̃, S̃) − S̃ · k, 0}] + C · k .
+k
+
+(11)
+
+Notice that Equation (11) is the flip coin of the cost terms in the utility company’s profitmaximization problem (6).
+Consider our focal demand response program—d(D̃, S̃) = S̃ · k − D̃ if S̃ k̇ ≥ D̃; d = δ > 0
+if S̃ · k < D̃. Here, δ > 0 is our demand response program, while δ = 0 is the no bitcoin
+mining benchmark.
+In sum, we can summarize the regulator’s problem as
+
+min
+d(x)≥0,k≥0
+
+subject to: k ∈ arg min c · E
+k
+
+θ·E
+
+
+
+
++ 
+D̃ − k S̃ + d(D̃ − k S̃)
+
++ 
+D̃ − k S̃ + d(D̃ − k S̃)
++ Ck
+
+(12)
+
+and k ≥ 0.
+
+(13)
+
+Technical note: When S̃ · k < D̃, δ = 0 there is trivially no bitcoin mining. When
+S̃ · k ≥ D̃, the utility company’s objective in the no-mining case is max{D̃ − S̃ · k, 0} =
+0, and in our demand response program with δ = 0, the utility company’s objective is
+max{D̃ + d(D̃, S̃) − S̃ · k, 0} = 0, same as no bitcoin mining, although d(D̃, S̃) ̸= 0.
+
+3.6
+
+The implication of introducing Bitcoin mining
+
+We are interested in comparing the scenario with optimally regulated Bitcoin mining intensity
+(induced via an optimal demand response program) and the one in which bitcoin mining is
+banned (that is, d = 0). We are specifically interested in how the introduction of Bitcoin
+mining affects the utility company’s incentive in building renewable capacity and the overall
+effect on total carbon emission. To do so, we first characterize the optimal d(·) and show
+that it be different from 0.
+23
+
+Characterizing the optimal d(·).
+
+min
+d(x)≥0,k≥0
+
+subject to: k ∈ arg min c · E
+
+Recall that the regulator’s problem is
+
+θ·E
+
+
+k
+
+
+
++ 
+D̃ − k S̃ + d(D̃ − k S̃)
+
+D̃ − k S̃ + d(D̃ − k S̃)
+
++ 
+
+(14)
+
+and k ≥ 0
+
++ Ck
+
+(15)
+
+Denote D̃ − k S̃ as x̃ with p.d.f. f (x; k) and lower/upper bounds x(k) ≡ D − k and
+∂
+F (x; k) > 0. Then the regulator’s problem becomes
+x(k) ≡ D, respectively. Note that ∂k
+
+(factoring out constant multipliers):
+Z x(k)
+min
+d(x)≥0,k≥0
+
+Z x(k)
+subject to: k ∈ arg min
+k≥0
+
+(x + d(x))+ f (x; k)dx
+
+(16)
+
+C
+k.
+c
+
+(17)
+
+x(k)
+
+(x + d(x))+ f (x; k)dx +
+
+x(k)
+
+This optimal contracting problem is challenging because it features continuous actions
+(of the agent), namely the renewable capacity choice k, and continuous outcomes, namely
+the realized electricity market imbalance x, so the optimal contract d(x) should be searched
+in a functional space. The exact problem statement also differs from those typically specified
+in principal-agent (wage/effort) problems, which often feature risk-neutral risk-averse agents
+with quasi-linear preferences. In contrast our problem features the principal (the regulator)
+and the agent (the power generator) both being risk neutral. We thus solve the problem
+with tools from variational calculus.
+
+3.6.1
+
+Solving the general problem with variational calculus
+
+We solve the problem (17) with variational calculus. Without loss of generality, we assume
+that S = 0, S = 1, and D = 0. Suppose the optimal solution to (16) is d∗ (·) ≥ 0 and
+k ∗ ≥ 0. Denote A as the region for x in which x + d∗ (x) > 0 (since d∗ (·) ≥ 0, we must have
+
+24
+
+(0, +∞) ⊆ A ). Also note that x(k) = D − k and x(k) = D, then the problem (17) becomes
+Z
+min
+Z
+
+d(x)≥0,k≥0
+
+(18)
+
+C
+k.
+c
+
+(19)
+
+[D−k,D]∩A
+
+(x + d(x))+ f (x; k)dx +
+
+subject to: k ∈ arg min
+k≥0
+
+(x + d(x))+ f (x; k)dx
+
+[D−k,D]∩A
+
+Consider perturbing d∗ (x) and replace it with d∗ (x) + ϵη(x) where ϵ is some constant and
+η(x) some arbitrary function such that ∀x ̸∈ A, η(x) = 0. Then the perturbed optimization
+problem becomes:
+Z
+
+(x + d∗ (x) + ϵη(x))+ f (x; k(ϵ))dx
+
+(20)
+
+C
+k.
+c
+
+(21)
+
+[D−k(ϵ),D]∩A
+
+Z
+
+(x + d∗ (x) + ϵη(x))+ f (x; k)dx +
+
+where k(ϵ) ∈ arg min
+k≥0
+
+[D−k(ϵ),D]∩A
+
+Apparently, for x ∈ A and adequately small ϵ, x + d∗ (x) + ϵη(x) > 0 and therefore
+∂(x+d∗ (x)+ϵη(x))+
+∂ϵ
+
+= η(x). Also assuming that the probability density functions of D̃ and
+
+S̃ are atomless (i.e., the cumulative distribution functions of D̃ and S̃ are continuous), then
+=
+∀k ≥ 0 we have f (x(k); k) = 0. Hence ∂(20)
+∂ϵ
+Z
+
+∂f (x; k(ϵ)) dk(ϵ)
+(x + d (x) + ϵη(x))
+dx +
+∂k
+dϵ
+[D−k(ϵ),D]∩A
+∗
+
+Z
+η(x)f (x; k(ϵ))dx, (22)
+[D−k(ϵ),D]∩A
+
+while the FOC from (21) with respect to k gives
+Z
+
+(x + d∗ (x) + ϵη(x))+
+
+[D−k(ϵ),D]∩A
+
+∂f (x; k(ϵ))
+C
+dx + = 0.
+∂k
+c
+
+(23)
+
+η(x)f (x; k(ϵ))dx.
+
+(24)
+
+Plug the FOC (23) into (22), we have that
+∂(20)
+C dk(ϵ)
+=−
++
+∂ϵ
+c dϵ
+
+Z
+[D−k(ϵ),D]∩A
+
+25
+
+To pin down dk(ϵ)
+, we take derivative with respect to ϵ on (23) and get
+dϵ
+R
+
+dk(ϵ)
+= −
+dϵ
+
+
+
+[D−k(ϵ),D]∩A
+
+η(x) ∂f (x;k(ϵ))
+dx
+∂k
+
+(D − k(ϵ) + d (D − k(ϵ)) + ϵη(D − k(ϵ)))+ ∂f (D−k(ϵ);k(ϵ))
+∂k
+∗
+
++
+
+R
+[D−k(ϵ),D]∩A
+
+(x + d∗ (x) + ϵη(x))+
+
+∂ 2 f (x;k(ϵ))
+∂k2
+
+dx
+
+.
+
+(25)
+
+
+
+
+Hence
+∂(20)
+C
+
+=
+∂ϵ
+c
+
+
+
+R
+[D−k(ϵ),D]∩A
+
+dx
+η(x) ∂f (x;k(ϵ))
+∂k
+
+(D − k(ϵ) + d (D − k(ϵ)) + ϵη(D − k(ϵ)))+ ∂f (D−k(ϵ);k(ϵ))
+∂k
+∗
+
++
+
+2
+dx
+(x + d∗ (x) + ϵη(x))+ ∂ f (x;k(ϵ))
+∂k2
+[D−k(ϵ),D]∩A
+
+R
+
+
+
+
+
+Z
+η(x)f (x; k(ϵ))dx.
+
++
+
+(26)
+
+[D−k(ϵ),D]∩A
+
+Then ∀y ∈ A, setting η(x) = δ(x − y) where δ(·) is the Dirac delta function gives
+∂(20)
+C
+= 
+∂ϵ
+c
+
+
+
+∂f (y;k(ϵ))
+∂k
+
+(D − k(ϵ) + d (D − k(ϵ)) + ϵη(D − k(ϵ)))+ ∂f (D−k(ϵ);k(ϵ))
+∂k
+∗
+
++
+
+R
+[D−k(ϵ),D]∩A
+
+C
+∂(20)
+|ϵ=0 = 
+and
+∂ϵ
+c
+
+
+
+(x + d∗ (x) + ϵη(x))+
+
+∂ 2 f (x;k(ϵ))
+∂k2
+
+dx
+
+∂f (y;k∗ )
+∂k
+∗
+
+∗
+
+∗
+
++
+
+∂f (D−k∗ ;k∗ )
+
+ + f (y; k(ϵ)),(27)
+
+
+
+ + f (y; k ∗ ).
+
+(28)
+
+(D − k + d (D − k ))
+
+∂k
+
+R
+2
+∗
+(x;k )
++ [D−k∗ ,D]∩A (x + d∗ (x))+ ∂ f∂k
+dx
+2
+
+The optimality of d∗ (·) and k ∗ indicates that the right-hand side of (28) ≥ 0 with equality
+for all y ∈ A such that d∗ (y) > 0. Apparently, for all y ∈ A such that d∗ (y) > 0, we must
+∂f (y;k∗ )
+∂k
+also have the score function f (y;k
+∗ ) being constant.
+
+Hence, the solution k ∗ and d∗ (·) are such that they fall in three possible cases:
+
+26
+
+1. x + d∗ (x) ≤ 0;
+2. x + d∗ (x) > 0, d∗ (x) = 0, and (28) ≥ 0;
+3. x + d∗ (x) > 0, d∗ (x) > 0, and (28) = 0.
+while k ∗ satisfies the FOC from (19) with respect to k:
+Z
+[D−k∗ ,D]∩A
+
+(x + d∗ (x))+
+
+∂f (x; k ∗ )
+C
+dx + ≥ 0,
+∂k
+c
+
+(29)
+
+with equality if k ∗ > 0.
+
+3.6.2
+
+A concrete example with independent uniform distributions
+
+In subsequent analysis, we illustrate the intuition of the previous sections using a concrete
+example. Specifically, we assume that D̃ ∼ Uniform[D = 0, D̄] and S̃ ∼ Uniform[0, S̄ = 1].
+We also assume that D̃ and S̃ are independent of each other. Then x(k) = D − k, x(k) = D,
+and f (x; k) =
+
+
+x−(D−k)
+
+
+
+ k(D−D)
+
+
+
+
+
+
+1
+D−D
+
+D−x
+k(D−D)
+
+for x ∈ [D − k, D)
+for x ∈ [D, D − k) if k ∈ [0, D−D];
+
+
+
+x−(D−k)
+
+
+
+ k(D−D)
+
+
+
+
+
+
+for x ∈ [D − k, D]
+
+1
+k
+
+D−x
+k(D−D)
+
+for x ∈ [D − k, D − k)
+for x ∈ [D − k, D)
+
+if k > D−D.
+
+for x ∈ [D, D]
+(30)
+
+(x;k)
+Hence ∂f∂k
+=
+
+
+
+x−D
+
+− k2 (D−D)
+
+
+
+0
+
+
+
+
+ − D−x
+k2 (D−D)
+
+
+
+x−D
+
+for x ∈ [D − k, D)
+− k2 (D−D)
+
+
+
+for x ∈ [D, D − k) if k ∈ [0, D−D];
+− k12
+
+
+
+
+ − D−x
+for x ∈ [D − k, D]
+k2 (D−D)
+
+for x ∈ [D − k, D − k)
+for x ∈ [D − k, D)
+
+if k > D−D,
+
+for x ∈ [D, D]
+(31)
+
+27
+
+2
+
+and ∂ f∂k(x;k)
+=
+2
+
+
+2(x−D)
+
+
+
+ k3 (D−D)
+0
+
+
+
+
+ 2(D−x)
+k3 (D−D)
+
+for x ∈ [D − k, D)
+for x ∈ [D, D − k) if k ∈ [0, D−D];
+for x ∈ [D − k, D]
+
+
+
+2(x−D)
+
+
+
+ k3 (D−D)
+
+for x ∈ [D − k, D − k)
+
+
+
+
+
+
+
+for x ∈ [D, D]
+
+2
+k3
+
+2(D−x)
+k3 (D−D)
+
+for x ∈ [D − k, D)
+
+if k > D−D,
+
+(32)
+∂f (x;k)
+∂k
+=
+Therefore, f (x;k)
+
+
+
+
+− x−D
+
+
+ k(x−(D−k))
+0
+
+
+
+
+
+− k1
+
+
+
+
+if x ∈ [D − k, D)
+− x−D
+
+
+ k(x−(D−k))
+if x ∈ [D, D − k) if k ∈ [0, D−D];
+− k1
+
+
+
+
+
+if x ∈ [D − k, D]
+− k1
+
+if x ∈ [D − k, D − k)
+if k > D−D,
+
+if x ∈ [D − k, D)
+if x ∈ [D, D]
+(33)
+
+Recall from (28) that
+∂(20)
+C
+
+|ϵ=0 =
+∂ϵ
+c
+
+
+
+∂f (y;k∗ )
+∂k
+∗
+
+∗
+
+∗
+
++
+
+∂f (D−k∗ ;k∗ )
+
+ + f (y; k ∗ )
+
+(34)
+
+(D − k + d (D − k ))
+
+∂k
+
+R
+2
+∗
+(x;k )
++ [D−k∗ ,D]∩A (x + d∗ (x))+ ∂ f∂k
+dx
+2
+
+
+
+
+
+
+C
+= 
+c 
+
+ 
+ 
+
+∂f (y;k∗ )
+∂k
+∗
+
+∗
+
+/f (y; k ∗ )
+∗
+
++
+
+1
+k∗ (D−D)
+
+(D − k + d (D − k ))
+R
+2 (x;k ∗ )
++ [D−k∗ ,D]∩A (x + d∗ (x))+ ∂ f∂k
+dx
+2
+
+
+
+
+
+
+
+∗
+ + 1
+ f (y; k ).
+
+
+
+
+
+
+(35)
+
+
+
+1
+(D − k ∗ + d∗ (D − k ∗ ))+ k∗ (D−D)
+
+ > 0. Suppose otherwise,
+R
+2 f (x;k ∗ )
+∂
+∗
++
++ [D−k∗ ,D]∩A (x + d (x))
+dx
+∂k2
+
+
+1
+(D − k ∗ + d∗ (D − k ∗ ))+ k∗ (D−D)
+
+
+ < 0. then ∀x ∈ [min{D, D − k ∗ }, D), we have
+
+R
+2
+∗
+∗
++ ∂ f (x;k )
++ [D−k∗ ,D]∩A (x + d (x))
+dx
+∂k2
+
+
+We first claim that 
+
+(35) > 0. Hence ∀x ∈ [min{D, D − k ∗ }, D), either x ̸∈ A or d(x) = 0. Also note that
+28
+
+∗
+
+∗
+
+∀x ∈ (D − k , min{D, D − k }),
+
+∂f (x;k∗ )
+∂k
+f (x;k∗ )
+
+strictly decreases from +∞ to some positive value.
+
+Hence for small enough x, (35) < 0, and thus x ̸∈ A. For larger x, (35) < 0 (there is at most
+a zero measure point in which (35) = 0), hence either x ̸∈ A or d(x) = 0. Then
+
+
+
+
+∗
+
+∗
+
+∗
+
+
++
+
+1
+k∗ (D−D)
+
+(D − k + d (D − k ))
+
+
+R
+2 f (x;k ∗ )
+∂
++ [D−k∗ ,D]∩A (x + d∗ (x))+ ∂k2 dx
+
+Z
+
+(x + d∗ (x))+
+
+=
+[D−k∗ ,D]∩A
+
+(36)
+
+∂ 2 f (x; k ∗ )
+dx
+∂k 2
+
+(37)
+
+Z
+2
+∗
+2
+∗
++ ∂ f (x; k )
+∗
++ ∂ f (x; k )
+(x + d (x))
+dx
++
+(x
++
+d
+(x))
+dx
+∂k 2
+∂k 2
+[min{0,D−k∗ },D]∩A
+[−k∗ ,min{0,D−k∗ }]∩A
+
+Z
+=
+
+∗
+
+|
+
+{z
+
+}
+
+=0
+
+|
+
+{z
+
+}
+
+>0
+
+> 0,
+
+(38)
+
+which leads to a contradiction.
+
+
+Now that we have 
+
+∗
+
+∗
+
+∗
+
+
++
+
+1
+k∗ (D−D)
+
+(D − k + d (D − k ))
+
+ > 0, then ∀x ∈ [D −
+R
+2
+∗
+(x;k )
++ [D−k∗ ,D]∩A (x + d∗ (x))+ ∂ f∂k
+dx
+2
+
+k ∗ , D − k ∗ ), we have (35) > 0. Hence ∀x ∈ [D − k ∗ , D − k ∗ ), either x ̸∈ A or d(x) =
+
+
+1
+C
+∗
+k∗
++ 1 f (y; k ∗ ). Since
+0. Then ∀x ∈ [D − k , D], (35) = − c R
+2
+∗
+∗
++ ∂ f (x;k )
+[D−k∗ ,D]∩A (x+d
+
+(x))
+
+∂k2
+
+dx
+
+∗
+
+[max{D − k , D}, D] ⊆ A, we must have
+
+−
+
+1
+k∗
++ 1 ≥ 0.
+2
+∗
+∗ (x))+ ∂ f (x;k ) dx
+(x
++
+d
+2
+∗
+∂k
+[D−k ,D]∩A
+
+C
+R
+c
+
+Hence two possibilities:
+1. − Cc R
+
+1
+k∗
+2
+∗
+∗
++ ∂ f (x;k ) dx
+[D−k∗ ,D]∩A (x+d (x))
+∂k2
+
++ 1 > 0. Then ∀x ∈ [D − k ∗ , D], either x ̸∈ A or
+
+d∗ (x) = 0. Then the optimal solution is equivalent to having d∗ (x) = 0 for all x. We
+can interpret this case as “no Bitcoin mining.”
+2. − Cc R
+
+1
+k∗
+2
+∗
+∗
++ ∂ f (x;k ) dx
+[D−k∗ ,D]∩A (x+d (x))
+∂k2
+
++ 1 = 0. Then the optimal solution is equivalent to
+
+having d∗ (x) = 0 for all x ∈ [D − k ∗ , D − k ∗ ) and d∗ (x) ≥ 0 for all x ∈ [D − k ∗ , D].
+29
+
+Hence d∗ (x) features being 0 when x is small. We can interpret this case as “introducing
+Bitcoin mining.”
+
+3.6.3
+
+Comparing the concrete example with or without Bitcoin mining
+
+In subsequent analysis, we will further illustrate the intuition of the previous sections using
+a concrete example. Specifically, we assume that D̃ ∼ Uniform[0, D̄] and S̃ ∼ Uniform[0, S̄].
+We also assume that D̃ and S̃ are independent of each other. Then (11) becomes
+(
+
+1
+min C · k + c ·
+k
+D̄S̄
+
+)
+
+Z D̄ Z S̄
+
+max{D + d(D, S) − S · k, 0}dSdD .
+0
+
+(39)
+
+0
+
+We now consider two cases: without bitcoin mining and with bitcoin mining (and a
+specifically chosen demand response program).
+
+Without bitcoin mining Without bitcoin mining, we have d(D, S) = 0 and the utility
+company’s cost minimization problem reduces to
+(
+
+1
+min C · k + c ·
+k
+D̄S̄
+
+)
+
+Z D̄ Z S̄
+
+max{D − S · k, 0}dSdD .
+0
+
+0
+
+We separate two cases:
+If k S̄ ≥ D̄, then the objective becomes
+(
+
+)
+Z D̄ Z D
+k
+1
+min C · k + c ·
+(D − S · k)dSdD
+k
+D̄S̄ 0 0
+(
+Z D̄ 2 )
+1
+D
+= min C · k + c ·
+dD
+k
+D̄S̄ 0 2k
+r
+
+
+1 D̄2
+D̄2 Cc
+= min C · k + c ·
+≥2
+.
+k
+S̄ 6k
+6S̄
+with equality when k =
+
+q
+
+D̄2 c
+6S̄C
+
+(following the From arithmetic-geometric inequality).
+30
+
+(40)
+(41)
+(42)
+
+If k S̄ < D̄, then the objective becomes
+(
+
+=
+=
+=
+≥
+
+)
+Z S̄ Z D̄
+1
+min C · k + c ·
+(D − S · k) dDdS
+k
+D̄S̄ 0 kS
+(
+ )
+Z S̄ 
+1
+1 2 1
+min C · k + c ·
+D̄ − (kS)2 − S · k D̄ + (kS)2 dS
+k
+2
+2
+D̄S̄ 0
+
+
+
+1
+1 2
+1 2
+1 2 3
+min C · k + c ·
+D̄ S̄ − S̄ · k D̄ + k S̄
+k
+2
+6
+D̄S̄ 2
+
+
+
+1 1 2 1
+1 2 2
+min C · k + c ·
+D̄ − S̄ · k D̄ + k S̄
+k
+2
+6
+D̄ 2
+2
+
+3D̄ 1
+1
+−
+cD̄.
+S̄c
+−
+C
++
+2
+2cS̄ 2 2
+
+(43)
+(44)
+(45)
+(46)
+(47)
+
+with equality when k = c3S̄D̄2 ( 12 S̄c − C) (following the From arithmetic-geometric inequality).
+Therefore, summarizing the above two cases, we have
+
+
+
+If C > 21 S̄c,
+k ∗ = 0,
+
+
+
+
+
+
+
+
+
+
+
+
+ If 1 S̄c < C ≤ 1 S̄c, k ∗ = 3D̄2 ( 1 S̄c − C),
+6
+2
+cS̄ 2
+
+
+
+
+
+q
+
+
+2
+
+c
+S̄
+∗
+
+If C ≤ 6 ,
+k = 6D̄S̄Cc ,
+
+
+
+
+
+
+
+total cost = 12 cD̄
+variable cost = 12 cD̄
+total cost = − 2c3D̄
+S̄ 2
+
+2
+1
+S̄c − C + 12 cD̄
+2
+
+(48)
+
+variable cost = 81 cD̄ + 2c3D̄
+C2
+S̄ 2
+q
+2
+total cost = 2 D̄6S̄Cc
+q
+2
+variable cost = D̄6S̄Cc .
+
+With bitcoin mining With bitcoin mining, we show that there exists some stipulated
+quantity of electricity demand from bitcoin mining d(D, S · k) (which means that there exists
+some demand response programs based on what we learned in Section 3.4.1) that leads to
+lower emission when the utility company chooses its optimal renewable capacity building
+decision.
+
+31
+
+Suppose we specify
+
+d(D, S) =
+
+
+
+ S · k − D,
+
+if S · k − D ≥ 0
+
+d,
+
+if S · k − D < 0
+
+
+
+
+(49)
+
+where d > 0, that is, we let bitcoin mining consume a positive amount of electricity when
+household/industry needs exceed renewable supply, and absorb extra supply from renewable
+when otherwise. A positive d effectively serves as penalty to the under-building of renewable
+capacity. Then in this case, the utility company’s objective becomes
+(
+
+1
+min C · k + c ·
+k
+D̄S̄
+
+)
+
+Z D̄ Z
+(D + d − S · k)dSdD
+0
+
+(50)
+
+0≤S≤S̄,S·k<D
+
+We again separate two cases:
+If k S̄ ≥ D̄, then the objective becomes
+(
+
+)
+Z D̄ Z D
+k
+1
+min C · k + c ·
+(D + d − S · k)dSdD
+k
+D̄S̄ 0 0
+(
+)
+
+Z D̄ 
+1 D2
+D
+1
++d
+= min C · k + c ·
+dD
+k
+2 k
+k
+D̄S̄ 0
+
+
+
+1 D̄3
+D̄2
+1
++d
+= min C · k + c ·
+k
+2k
+D̄S̄ 6 k
+s
+ 2
+
+Cc D̄
+D̄
++d
+≥ 2
+.
+6
+2
+S̄
+
+with equality when k =
+
+r 
+c
+S̄
+
+D̄2
+D̄
++ d 2C
+6C
+
+
+
+(51)
+(52)
+(53)
+(54)
+
+(following the From arithmetic-geometric inequal-
+
+ity).
+If k S̄ < D̄, then the objective becomes
+(
+
+1
+min C · k + c ·
+k
+D̄S̄
+
+)
+
+Z S̄ Z D̄
+(D + d − S · k)dDdS
+0
+
+kS
+
+32
+
+(55)
+
+(
+
+=
+=
+=
+≥
+
+ )
+Z S̄ 
+1
+1 2
+2
+min C · k + c ·
+(D̄ − (kS) ) + (d − kS)(D̄ − kS) dS
+k
+2
+D̄S̄ 0
+
+
+
+1
+1 2 3
+1 2
+1
+2
+min C · k + c ·
+( D̄ + dD̄)S̄ − (d + D̄)k S̄ + k S̄
+k
+2
+2
+6
+D̄S̄
+
+
+
+1
+1 2
+1 2 2
+1
+min C · k + c ·
+( D̄ + dD̄) − (d + D̄)k S̄ + k S̄
+k
+2
+2
+6
+D̄
+
+2
+1
+c 1
+3 D̄
+c( D̄ + d) −
+C−
+(d + D̄)S̄ .
+2
+2
+2 cS̄
+D̄ 2
+
+(56)
+(57)
+(58)
+(59)
+
+with equality when k = 32 (d + D̄) S̄1 − 3C cD̄
+(following the From arithmetic-geometric inS̄ 2
+equality).
+Therefore, summarizing the above two cases, we have
+
+D̄
+
+
+cS̄,
+k ∗ = 0,
+If C > d+
+
+2D̄
+
+
+
+
+
+
+
+
+
+
+
+3d+D̄
+D̄
+d+D̄
+3 d+D̄
+∗
+
+ If 6D̄ cS̄ < C ≤ 2D̄ cS̄, k = 2 S̄ − 3C cS̄ 2 ,
+
+
+
+
+
+
+
+D̄
+
+If C ≤ 3d+
+cS̄,
+
+6D̄
+
+
+
+
+
+
+
+
+k∗ =
+
+r 
+c
+S̄
+
+total cost = c
+
+1
+D̄ + d
+2
+
+
+
+variable cost = c
+
+1
+D̄ + d
+2
+
+
+
+total cost = c( 12 D̄ + d) − 23 cD̄
+C − D̄c 12 (d + D̄)S̄
+S̄ 2
+
+variable cost = 8c D̄ + 14 cd + 32 cD̄
+C 2 − 38 D̄c d2
+S̄ 2
+r
+
+
+
+D̄2
+D̄
+Cc D̄2
+D̄
++ d 2C , total cost = 2 S̄ 6 + d 2
+6C
+r 
+
+D̄2
+D̄
+variable cost = Cc
++
+d
+.
+6
+2
+S̄
+(60)
+
+Comparing the case with and without Bitcoin mining A comparison between (48)
+and (60) immediately reveals that
+•
+
+D̄
+In case c6S̄ < C ≤ 3d+
+cS̄, mining has lower variable cost if
+6D̄
+
+r
+
+Cc
+S̄
+
+
+
+D̄2
++ d D̄2
+6
+
+
+
+< 18 cD̄ +
+
+3D̄
+C 2 which holds when
+2cS̄ 2
+
+d<
+
+D̄ cS̄ − 6C
+
+2
+
+
+3c2 S̄ 2 + 4cC S̄ + 12C 2
+.
+96c3 C S̄ 3
+
+D̄
+• In case 12 cS̄ < C ≤ d+
+cS̄, mining has lower variable cost if 8c D̄+ 14 cd+ 23 cD̄
+C 2 − 38 D̄c d2 <
+2D̄
+S̄ 2
+
+33
+
+2
+
+1
+cD̄ which holds when
+2
+
+!
+√
+1
+2 9C 2 − 2c2 S̄ 2
+d > D̄ 1 +
+3
+cS̄
+or
+
+!
+√
+1
+2 9C 2 − 2c2 S̄ 2
+d < D̄ 1 −
+.
+3
+cS̄
+
+In sum, we prove that there exists a well-planned quantity of electricity demand from
+bitcoin mining that reduces total emission under the utility company’s optimal renewable capacity building decision. This result demonstrate how Bitcoin mining can actually contribute
+to sustainability objectives with the right policies.
+
+3.6.4
+
+Optimal d
+
+To help gain further intuition of the results in Section 3.6.2, we analyze the properties of the
+variable cost function VC(d), defined piecewise as follows (following Equation (60)):
+
+Var(d) =
+
+ 
+
+
+D̄
+
+
+c 2 +d ,
+
+
+
+
+
+D̄
+if C > cS̄ d+
+,
+2D̄
+
+D̄)
+cD̄
+D̄
++ cd
++ 32 cD̄
+C 2 − 83 D̄c d2 , if (3d+
+cS̄ < C ≤ cS̄ d+
+,
+8
+4
+S̄ 2
+6D̄
+2D̄
+
+
+r
+
+
+
+
+
+D̄)
+D̄2
+dD̄
+
+ cC
+,
+if C ≤ (3d+
++
+cS̄,
+6
+2
+S̄
+6D̄
+
+where c > 0, D̄ > 0, S̄ > 0, C > 0, and d ≥ 0.
+Note that Var(d) is proportional to the total carbon emission.
+We proceed in the following steps:
+1. Behavior of VC(d) in Each Case:
+
+34
+
+D̄
+or equivalently d < ( 2cC̄S̄ − 1)D̄, the function is:
+(a) Case 1: When C > cS̄ d+
+2D̄
+
+
+Var(d) = c
+
+
+D̄
++d .
+2
+
+This is linear in d, with:
+dVar
+= c > 0.
+dd
+Hence, VC(d) is strictly increasing in d in this region.
+D̄)
+D̄
+(b) Case 2: When (3d+
+cS̄ < C ≤ cS̄ d+
+, or equivalently ( 2C
+− 1)D̄ ≤ d <
+6D̄
+2D̄
+cS̄
+
+− 13 )D̄, the function is:
+dtransition = ( 2C
+cS̄
+Var(d) =
+
+cD̄ cd 3 D̄ 2 3 c 2
+C −
+d.
++
++
+8
+4
+2 cS̄ 2
+8 D̄
+
+Taking the derivative with respect to d,
+c 3 c
+dVar
+= −
+d.
+dd
+4 4 D̄
+Setting dVar
+= 0, we find the critical point:
+dd
+d=
+
+D̄
+.
+3
+
+i. For d < D̄3 , dVar
+> 0, so VC(d) is increasing.
+dd
+ii. For d > D̄3 , dVar
+< 0, so VC(d) is decreasing.
+dd
+Therefore, VC(d) is increasing for small d, reaches a maximum at d = D̄3 , and
+then decreases.
+D̄)
+(c) Case 3: When C ≤ (3d+
+cS̄ or equivalently d ≥ dtransition = ( 2C
+− 13 )D̄, the
+6D̄
+cS̄
+
+35
+
+function is:
+
+s
+Var(d) =
+
+cC
+S̄
+
+
+
+
+D̄2 dD̄
++
+.
+6
+2
+
+Taking the derivative with respect to d,
+cC D̄
+1
+dVar
+= · r  2S̄
+dd
+2
+cC
+D̄2
+S̄
+
++ d2D̄
+6
+
+ > 0.
+
+Since the derivative is positive, VC(d) is strictly increasing in d in this region.
+2. Continuity of VC(d) at Transition Points: The function VC(d) is continuous at
+the boundaries between the cases:
+(a) At the boundary between Case 2 and Case 3, the transition occurs when:
+
+C=
+
+(3d + D̄)
+cS̄.
+6D̄
+
+Substituting this into both definitions of VC(d), it is straightforward to verify
+that the two expressions match.
+
+3. Comparing VC(d) at d = 0 and d = dtransition : Let dtransition = D̄ 2 cCS̄ − 13 denote
+the transition point between Case 2 and Case 3.
+We assume C > cS̄/6, which is the necessary and sufficient condition for dtransition > 0.
+Under this assumption, we have
+
+Var(dtransition ) =
+
+We characterize Var(0) in two cases.
+
+36
+
+C D̄
+S̄
+
+• When C ≥ cS̄, d = 0 is in Case 1, so
+
+Var(0) =
+
+cD̄
+.
+2
+
+Thus, Var(dtransition ) < Var(0) iff C < cS̄/2, which is not satisfied by C ≥ cS̄.
+• When C < cS̄, d = 0 is in Case 2, so
+
+Var(0) =
+
+cD̄ 3D̄C 2
++
+.
+8
+2cS̄ 2
+
+Thus, Var(dtransition ) < Var(0) iff
+c
+D̄ 3C
+c C
+(
+− )( − ) > 0
+c 2S̄
+4 S̄
+2
+or equivalently
+c
+c
+C
+C
+< or
+> .
+6
+2
+S̄
+S̄
+By above assumptions of C > cS̄/6 and C < cS̄, bitcoin mining reduces total
+emissions iff
+c
+C
+<
+< c.
+2
+S̄
+4. Summary:
+(a) The variable cost VC(d) is not strictly increasing in d ≥ 0; it increases in Cases 1
+and 3, but increases then decreases in Case 2.
+(b) There exists a non-empty range of C̄ such that Var(dtransition ) < Var(0), demonstrating that VC(d) at some positive d > 0 can be strictly less than at d = 0.
+Figure 1 summarizes how total emission changes with the stipulated d. The total emission
+may initially increases as d increasing, reflecting the direct outcome of more allowed bitcoin
+37
+
+Figure 1: Total emission as a function of d
+Emissions
+S̄k ∗ < D̄
+
+k∗ = 0
+
+m∗
+
+(0, 0)
+mining enabled by fuel energy.
+
+S̄k ∗ > D̄
+
+m
+
+However, as d further increases, a second force begins to
+
+dominate: the utility company’s desire to lower the probability of household/industry demand exceeding renewable supply (in which case the utility company serves Bitcoin miners
+with fuel energy and induce unit cost of c) incentives the utility company to increase renewable capacity building. In fact, the carbon emission-minimizing d∗ will be achieved when the
+renewable capacity k is set when D̄ = S̄k, and in this case the total emission is lower than
+when there is no mining at all (i.e., d = 0). As d further increases above d∗ , total emission
+goes up again.
+
+Summary. We can summarize our analysis so far in the following proposition.
+Proposition 1 (The impact of introducing bitcoin mining). Compared to a world in which
+Bitcoin mining is not allowed, introducing Bitcoin mining leads to
+(1) more renewable capacity building (i.e., a higher k);
+(3) potentially lower total emission (i.e., a lower θ · E[max{D̃ + d(D̃, S̃) − S̃ · k, 0}]).
+The intuition for the proof of Proposition 1 can be visualized in Figure 2.
+38
+
+Figure 2: Visualization of the centrally-planned problem
+Note that in Figure 2, the upper-left panel illustrates, for a given level of renewable
+capacity k and a given realization of household/industry demand D̃ and renewable factor S̃,
+the grey area illustrates (in proportion) the utility company’s total variable cost and total
+emission in the baseline case in which no bitcoin mining is introduced. On the upper-right
+corner, we see that a higher level of renewable capacity k can reduce the utility company’s
+total variable cost and total emission (the grey area), but such savings will be counteracted
+by a higher initial cost of renewable capacity building (not illustrated in the graphs). In
+order for the utility company to increase its optimal level, one may seek an increase in extra
+electricity demand.
+In the lower-left panel, we illustrate a naive approach. In this graph, the quantity of demand increases (from black to red), and the optimal capacity adjusts accordingly (increases,
+as the green line illustrates). However, (by an intuition similar to that of the Le Chatelier’s
+
+39
+
+principle) the change increase in k is not large enough to offset the increase in D nor the
+grey area, and total emission will increases if we just naively add more electricity demand.
+The lower-right panel demonstrates how we can add electricity demand smartly. We
+only add extra electricity demand (from Bitcoin mining) when household/industry demand
+exceeds renewable supply, and otherwise cap extra electricity demand from Bitcoin mining
+to only absorb unconsumed renewable supply (in electric engineering parlance, we “curtail”
+the electricity demand from bitcoin miners when the load from household/industry exceeds
+the supply from renewable sources). By adding extra electricity demand (from Bitcoin mining) when household/industry demand exceeds renewable supply, we incentivize the utility
+company to invest in renewable capacity to reduce the probability of such situation happens.
+By capping extra electricity demand from Bitcoin mining to only absorb unconsumed
+renewable supply when household/industry demand does not meet renewable supply, we
+may be able to not increase emission in this situation. It turns out the lower chance of
+having emission at all may sometimes trump the extra emission when this does happen,
+and thus introducing bitcoin mining (with proper control of its intensity) would lower total
+emission.
+
+3.7
+
+Bitcoin mining subsidizing renewable capacity building
+
+In Section 3.5 we demonstrate how a cost-minimizing utility company may optimally increase
+renewable capacity building in face of extra electricity demand from bitcoin miners and a
+well-designed bitcoin mining electricity demand pattern (either through direct control or
+indirect influence through demand response programs) stipulated by an environmentallyaware regulator may reduce carbon emission. Careful readers may notice that we specify
+the emission-reducing bitcoin mining quantity to be chosen by the regulator, and may ask
+whether we can have it chosen by the utility company itself? The answer is no, indeed, if
+the utility company were to be able to decide the price charged to miners (or equivalently
+40
+
+the mining intensity per Section 3.4.1), the cost-minimizing total quantity would be to set
+bitcoin mining to zero. This observation may give the impression that the utility company
+has to suffer in order to facilitate carbon emission reduction. This section will show that
+this is not the case.
+The crux of the above observation is that in the simplified cost-minization model the
+utility company is not directly compensated by miners. Instead miners either absorb extra
+renewable supply (which does not affect the utility company’s cost) or add additional demand
+for fuel energy (which increases the utility company’s cost). The situation changes, however,
+if we go back to the original profit-maximization problem (6) in which the utility company
+can be directly compensated by miners.
+In this section, we explicitly calculate the total profit to the utility company under the
+emission-reducing mining demands and the utility company’s profit when there is no mining,
+and characterize conditions under which the former is higher than the latter. This result
+can be interpreted as evaluating to what extent the introduction of Bitcoin mining can help
+subsidize renewable energy adoption and compensate for lower total emission.
+D̄
+cS̄ < C ≤
+In the uniform distribution example we had in Section 3.5, in the case of 3d+
+6D̄
+1
+cS̄, we have the utility company’s profit in the case of no bitcoin mining to be
+2
+
+c
+3D̄
+1
+pD̄ − D̄ +
+2
+2
+2cS̄ 2
+
+
+
+1
+S̄c − C
+2
+
+2
+
+and that with mining to be
+n−1
+3 D̄
+1
+1
+pD̄ +
+R − c( D̄ + d) +
+2
+n
+2
+2 cS̄ 2
+
+41
+
+
+
+c 1
+(d + D̄)S̄ − C
+D̄ 2
+
+2
+
+It is easy to verify that the latter is higher than the former when
+n−1
+cd 3d
+R>
+−
+n
+4
+4
+
+
+
+cd
+2C
+−
+2D̄
+S̄
+
+
+.
+
+In summary, when the bitcoin market is adequately large (so that R is high), it can subsidize
+the utility company to be willing to adopt emission reducing pricing schedule to miners.
+
+4
+
+Discussions and empirical evaluations (incomplete)
+
+Admittedly, the analytical results we have derived in this paper may be counterintuitive at
+first sight. Therefore, it is helpful to calibrate the model with real parameters to demonstrate
+the quantitative magnitude of our results. For this calibration exercise, we first take note all
+the exogenous parameters within the model:
+• the unit price of electricity charged to households/industry p, in units of $/kwh. We
+take it to be $0.15/kwh (see EnergyBot, 2025).
+• the quantity of demand of electricity from households/industry D̃, in units of kwh,
+characterized by mean, standard deviation, or higher moments. According to the EIA
+(see U.S. Energy Information Administration, 2013), a representative region typically
+has a total electricity consumption of 57 - 155 GW per hour. We thus assume it follows
+a uniform distribution within 0 and 200 GW. Note that the exact level the quantity
+of demand is not important, as we can always “scale” the economy and interpret
+other quantities (for example, renewable capacities) relative to non-mining electricity
+demand.
+• the random utilization rate of renewal energy S̃, as a percentage number, characterized by mean, standard deviation, or higher moments. In electricity parlance, this ratio
+is known as the capacity factor, which is the ratio of actual electrical energy output
+42
+
+over a given period of time to the theoretical maximum electrical energy output over
+that period. Capacity factors varies across different renewable energy sources, ranging from over 90% for nuclear, 32.2% to 34.7% for wind farms in the U.S. (see U.S.
+Energy Information Administration, 2025a), 23% to 45% for hydroelectric dams, and
+12.0% to 29.1% for photovoltaic (solar) power stations (Wikipedia, 2025). There is also
+significant inter-temporal variations. For calibration we set S̃ to be a uniform distribution between 0% and 50% (the exact level is not that important for our qualitative
+arguments, as we can always adjust the capacity building K accordingly).
+• the unit cost of electricity generated from fuel energy c, in units of $/kwh. This number
+ranges from 3-15 cents per kwh.
+• the number of bitcoin miners (mining pools) n. We can pick it to be 30.
+• the dollar value of bitcoin mining reward R, in units of $. Assuming a 10-minute
+average block time, 6.25 BTC per block, and a $60,000 bitcoin price, then R would be
+about 6 × 6.25 × 60, 000 = $2, 250, 000.
+A closer inspection, however, reveals that none of these numbers really matter that much for
+qualitative confirmation, as they all serve as “scaling factors” that do not change the signs
+of net issuance changes with or without mining. It turns that what really matters is the
+correlation between D̃ and S̃. When D̃ and S̃ are not highly correlated (when the electricity
+demand-supply imbalance could be large), Bitcoin mining would play a big role; the benefit
+dimishes when D̃ and S̃ are highly correlated (when the electricity demand and supply are
+more in sync).
+
+43
+
+5
+
+Conclusion
+
+While Bitcoin mining is often criticized for its environmental impact, we challenge this
+conventional wisdom by demonstrating, through a simple model, how integrating Bitcoin
+mining with a well-designed demand response program can actually reduce total emissions.
+Beyond proving the existence of such an effect, our forthcoming work seeks to derive the
+optimal policy under general conditions, offering several policy implications.
+Banning Bitcoin mining, as seen in jurisdictions like China, may be counterproductive, as it overlooks mining’s potential role in incentivizing renewable energy adoption. At
+the same time, effective demand response programs are essential for supporting renewable energy growth, as simply allowing miners to purchase electricity at market rates is
+unlikely to yield significant environmental benefits. Additionally, while emission-reducing
+pricing for miners can drive positive environmental outcomes, it may conflict with the profitmaximizing strategy of a monopolistic grid operator, necessitating regulatory intervention.
+For an incentive scheme to be successful, Bitcoin miners should also be allocated an
+appropriate share of electricity relative to households and industries.
+Future research can expand on our findings in several ways. While we establish that welldesigned pricing policies can reduce carbon emissions, further studies could optimize these
+policies using a mechanism design or contract theory approach, quantifying the maximum potential of Bitcoin mining in emission reduction. Another promising direction is incorporating
+granular data on specific power grids and market structures to accurately assess the benefits
+of Bitcoin mining and refine demand response programs. This operations research-driven
+approach could leverage algorithmic solutions to tackle large-scale optimization challenges,
+further advancing our understanding of Bitcoin mining’s role in a sustainable energy future.
+Finally, our results could also leverage the potentials of other computing uses (e.g., the fastarising AI uses), even if they are not as effective as Bitcoin in terms of memorilessness to
+
+44
+
+interruptions.
+
+References
+Aflaki, Sam, and Serguei Netessine. 2017. “Strategic Investment in Renewable Energy
+Sources: The Effect of Supply Intermittency.” Manufacturing Service Oper. Management,
+19(3): 489–507. 11
+Agrawal, Vishal V, and Şafak Yücel. 2022. “Design of Electricity Demand-Response
+Programs.” Management Sci., 68(10): 7441–7456. 10
+Aı̈d, René, Dylan Possamaı̈, and Nizar Touzi. 2022. “Optimal Electricity Demand
+Response Contracting with Responsiveness Incentives.” Math. Oper. Res., 47(3): 2112–
+2137. 10
+Alizamir, Saed, Foad Iravani, and Şafak Yücel. 2021. “Investment in Wind Energy: The Role of Subsidies.” Georgetown McDonough School of Business Research Paper:
+https: // papers. ssrn. com/ sol3/ papers. cfm? abstract_ id= 3868573 . 12
+Alizamir, Saed, Francis de Véricourt, and Peng Sun. 2016. “Efficient Feed-in-Tariff
+Policies for Renewable Energy Technologies.” Oper. Res., 64(1): 52–66. 12
+Arnosti, Nick, and S Matthew Weinberg. 2022. “Bitcoin: A natural oligopoly.” Management Sci., 68(7): 4755–4771. 8, 20
+Babich, Volodymyr, Ruben Lobel, and Şafak Yücel. 2020. “Promoting Solar Panel
+Investments: Feed-in-Tariff vs. Tax-Rebate Policies.” Manufacturing Service Oper. Management, 22(6): 1148–1164. 12
+
+45
+
+Benetton, Matteo, Giovanni Compiani, and Adair Morse. 2023. “When Cryptomining Comes to Town: High Electricity-Use Spillovers to the Local Economy.” National
+Bureau of Economic Research. 9
+Bernheim, B Douglas, and Michael D Whinston. 1986. “Common agency.” Econometrica: Journal of the Econometric Society, 923–942. 13
+Bertucci, Charles, Louis Bertucci, Jean-Michel Lasry, and Pierre-Louis Lions.
+2024. “A Mean Field Game Approach to Bitcoin Mining.” SIAM J. Financial Math.,
+15(3): 960–987. 8
+Biais, Bruno, Christophe Bisiere, Matthieu Bouvard, and Catherine Casamatta.
+2019. “The blockchain folk theorem.” Rev. Financ. Stud., 32(5): 1662–1715. 8
+Bitcoin.comNews. 2019. “Chinese Bitcoin Miners Migrate North After Wet Season.” https: // web. archive. org/ web/ 20220427014036/ https: // news. bitcoin.
+com/ chinese-bitcoin-miners-migrate-north-after-wet-season/ , Accessed on 10
+February 2025. 9
+Bitcoin Policy Institute. 2024. “How Bitcoin Mining Reduces Carbon Emissions.” https:
+// www. btcpolicy. org/ articles/ bitcoin-mining-reduces-carbon-emissions ,
+Accessed on 10 February 2025. 9
+BITMAIN
+and
+
+Low
+
+Support.
+
+2022.
+
+“Difference
+
+Power
+
+Enhanced
+
+Mode.”
+
+between
+
+Low
+
+Power
+
+Mode
+
+https: // web. archive. org/ web/
+
+20220309092700/ https: // support. bitmain. com/ hc/ en-us/ articles/
+360019738593-Difference-between-Low-Power-Mode-and-Low-Power-Enhanced-Mode ,
+Accessed on 10 February 2025. 10
+
+46
+
+BITMAIN Support. 2024. “S19 Server Manual.” https: // support. bitmain. com/ hc/
+en-us/ articles/ 38059223529241-Antminer-S21-XP , Accessed on 10 February 2025.
+10
+Blockstream. 2022. “Instant energy demand from the Bitcoin network.” https: // web.
+archive. org/ web/ 20220401125045/ https: // layer1. com/ , Accessed on 24 August
+2021. 9
+Bloomberg.
+ging
+
+2021.
+
+Back
+
+“Bitcoin
+
+In.”
+
+‘Hash
+
+Crash’
+
+Rebound
+
+Points
+
+to
+
+Miners
+
+Plug-
+
+https: // www. bloomberg. com/ news/ articles/ 2021-09-03/
+
+bitcoin-hash-crash-rebound-points-to-miners-plugging-back-in , Accessed on
+10 February 2025. 10
+Bolton, Patrick, and Mathias Dewatripont. 2004. Contract theory. MIT press. 12
+Borrero, Miguel, Gautam Gowrisankaran, and Ashley Langer. 2024. Ramping costs
+and coal generator exit. Department of Economics, University of Arizona. 18
+Chatzigiannis, Panagiotis, Foteini Baldimtsi, Igor Griva, and Jiasun Li. 2022. “Diversification Across Mining Pools: Optimal Mining Strategies Under Pow.” J. Cybersecur.,
+8(1): 1–15. 8
+CNBC.
+
+2022a.
+
+“Bitcoin
+
+Miners
+
+are
+
+Helping
+
+Brace
+
+for
+
+Winter
+
+Storm
+
+Impact.”
+
+the
+
+Texas
+
+Grid
+
+https: // web. archive.
+
+org/ web/ 20220203143819/ https: // www. cnbc. com/ 2022/ 02/ 03/
+winter-storm-descends-on-texas-bitcoin-miners-shut-off-to-protect-ercot.
+html , Accessed on 10 February 2025. 10
+CNBC.
+
+2022b.
+
+“Crypto
+
+Grid
+
+Brace
+
+for
+
+Decoded
+Winter
+
+Bitcoin
+Storm
+47
+
+Miners
+Impact.”
+
+are
+
+Helping
+
+the
+
+Texas
+
+https: // web. archive.
+
+org/ web/ 20220203143819/ https: // www. cnbc. com/ 2022/ 02/ 03/
+winter-storm-descends-on-texas-bitcoin-miners-shut-off-to-protect-ercot.
+html , Accessed on 10 February 2025. 10
+Cointelegraph.
+Miner
+
+2020.
+
+Migration
+
+“BTC
+in
+
+Hash
+China.”
+
+Rate
+
+Slumps
+
+Amid
+
+Seasonal
+
+https: // cointelegraph. com/ news/
+
+btc-hash-rate-slumps-amid-seasonal-miner-migration-in-china ,
+
+Accessed
+
+on 10 February 2025. 9
+Cong, Lin William, Zhiguo He, and Jiasun Li. 2021. “Decentralized mining in centralized pools.” Rev. Financ. Stud., 34(3): 1191–1235. 8, 20
+decrypt. 2020. “Bitcoin’s Hash Rate Drops As China’s Rainy Season Ends.”
+https: // web. archive. org/ web/ 20211117210216/ https: // decrypt. co/ 46601/
+bitcoin-hash-rate-drop-attributed-to-chinese-rainy-season , Accessed on 10
+February 2025. 9
+EnergyBot. 2025. “Electricity Rates for Every State in The U.S.” https: // www.
+energybot. com/ electricity-rates/ , Accessed on 10 February 2025. 42
+Fattahi, Ali, Sriram Dasu, and Reza Ahmadi. 2023. “Peak-Load Energy Management
+by Direct Load Control Contracts.” Management Sci., 69(5): 2788–2813. 10
+Fiat, Amos, Anna Karlin, Elias Koutsoupias, and Christos Papadimitriou. 2019.
+“Energy equilibria in proof-of-work mining.” 489–502. 8
+Forbes.
+
+2021.
+
+Not
+
+Mine
+
+“How
+
+This
+
+Bitcoin.”
+
+Billionaire-Backed
+
+Crypto
+
+Startup
+
+Gets
+
+Paid
+
+To
+
+https: // web. archive. org/ web/ 20200524160256/
+
+https: // www. forbes. com/ sites/ christopherhelman/ 2020/ 05/ 21/
+how-this-billionaire-backed-crypto-startup-gets-paid-to-not-mine-bitcoin/
+#7bdc51947596 , Accessed on 10 February 2025. 10
+48
+
+Forbes. 2022. “Why Does Bitcoin Use So Much Energy?”
+
+https: // www. forbes.
+
+com/ advisor/ investing/ cryptocurrency/ bitcoins-energy-usage-explained/ ,
+Accessed on 10 February 2025. 2
+Forbes.
+
+2024.
+
+Mining.”
+
+“The
+
+New
+
+Power
+
+Couple:
+
+Renewable
+
+Energy
+
+And
+
+Bitcoin
+
+https: // www. forbes. com/ sites/ beccabratcher/ 2024/ 09/ 03/
+
+the-new-power-couple-renewable-energy-and-bitcoin-mining/ ,
+
+Accessed
+
+on
+
+10 February 2025. 2
+Gill, Maximilian, Jona Stinner, and Marcel Tyrell. 2024. “Economic Limits of Bitcoin’s Environmental Promises: Pathway or Pitfall for the Green Transformation?” 7
+Goren, Guy, and Alexander Spiegelman. 2019. “Mind the mining.” 475–487. 8
+Green, Jerry R, and Nancy L Stokey. 1983. “A comparison of tournaments and contracts.” Journal of Political Economy, 91(3): 349–364. 13
+Grossman, Sanford J, and Oliver D Hart. 1983. “AN ANALYSIS OF THE
+PRINCIPAL-AGENT PROBLEM.” Econometrica, 51(1). 12
+Halaburda, Hanna, and David Yermack. 2023. “Bitcoin Mining Meets Wall Street:
+A Study of Publicly Traded Crypto Mining Companies.” National Bureau of Economic
+Research. 8
+Holmström, Bengt. 1982. “Moral hazard in teams.” Bell Journal of Economics, 324–340.
+13
+Hu, Shanshan, Gilvan C Souza, Mark E Ferguson, and Wenbin Wang. 2015.
+“Capacity Investment in Renewable Energy Technology with Supply Intermittency: Data
+Granularity Matters!” Manufacturing Service Oper. Management, 17(4): 480–494. 12
+
+49
+
+Ibañez, Juan Ignacio, and Alexander Freier. 2023. “Bitcoin’s Carbon Footprint Revisited: Proof of Work Mining for Renewable Energy Expansion.” J. Chall., 14(3): 35.
+9
+Itoh, Hideshi. 1991. “Incentives to help in multi-agent situations.” Econometrica: Journal
+of the Econometric Society, 611–636. 13
+Kaps, Christian, Simone Marinesi, and Serguei Netessine. 2023. “When Should
+the Off-Grid Sun Shine at Night? Optimum Renewable Generation and Energy Storage
+Investments.” Management Sci., 69(12): 7633–7650. 12
+Kawaguchi, Kohei, Shunya Noda, and Junpei Komiyama. 2022. “Miners’ Reward
+Elasticity and Stability of Competing Proof-of-Work Cryptocurrencies.” Center for Open
+Science. 19
+Kök, A Gürhan, Kevin Shang, and Şafak Yücel. 2018. “Impact of Electricity Pricing
+Policies on Renewable Energy Investments and Carbon Emissions.” Management Sci.,
+64(1): 131–148. 11
+Kök, A Gürhan, Kevin Shang, and Şafak Yücel. 2020. “Investments in Renewable
+and Conventional Energy: The Role of Operational Flexibility.” Manufacturing Service
+Oper. Management, 22(5): 925–941. 12
+Lanteri, Andrea, and Adriano A Rampini. 2025. “Financing the adoption of clean
+technology.” National Bureau of Economic Research. 11
+Layer1 Technologies. 2022. “Building Bitcoin Batteries.” https: // web. archive. org/
+web/ 20220401125045/ https: // layer1. com/ , Accessed on 1 April 2022. 9
+
+50
+
+Lohmann, Timo, and Steffen Rebennack. 2017. “Tailored Benders Decomposition for
+a Long-Term Power Expansion Model with Short-Term Demand Response.” Management
+Sci., 63(6): 2027–2048. 10
+Mahmood, Anzar, Nadeem Javaid, Muhammad Asghar Khan, and Sohail Razzaq. 2015. “An Overview of Load management Techniques in Smart Grid.” Int. J. Energy
+Res., 39(11): 1437–1450. 11
+Martimort, David, and Lars Stole. 2009. “Market participation in delegated and intrinsic common-agency games.” RAND Journal of Economics, 40(1): 78–102. 13
+Mora, Camilo, Randi L Rollins, Katie Taladay, Michael B Kantar, Mason K
+Chock, Mio Shimada, and Erik C Franklin. 2018. “Bitcoin emissions alone could
+push global warming above 2 C.” Nature Climate Change, 8(11): 931–933. 2
+Noda, Shunya, Kyohei Okumura, and Yoshinori Hashimoto. 2020. “An Economic
+Analysis of Difficulty Adjustment Algorithms in Proof-of-Work Blockchain Systems.” EC,
+20: 13–17. 8
+Ordinal Theory Handbook. 2025. “Runes.” https: // docs. ordinals. com/ runes.
+html , Accessed on 10 February 2025. 16
+Peng, Xiaoshan, Owen Q Wu, and Gilvan C Souza. 2024. “Renewable, Flexible,
+and Storage Capacities: Friends or Foes?” Manufacturing Service Oper. Management,
+26(5): 1730–1749. 12
+Peura, Heikki, and Derek W Bunn. 2015. “Dynamic Pricing of Peak Production.” Oper.
+Res., 63(6): 1262–1279. 10
+Prat, Julien, and Benjamin Walter. 2021. “An equilibrium model of the market for
+bitcoin mining.” J. of Political Econom., 129(8): 2415–2452. 8
+51
+
+Rana, Vishrut, Christian Kaps, and Serguei Netessine. 2025. “When Where Watt:
+Harnessing the Value of Time and Location for Renewable Electricity Generation.”
+Available at SSRN: https: // papers. ssrn. com/ sol3/ papers. cfm? abstract_ id=
+5103344 . 12
+Ross, Stephen A. 1973. “The economic theory of agency: The principal’s problem.” The
+American economic review, 63(2): 134–139. 12
+Salanié, Bernard. 2005. The economics of contracts: a primer. MIT Press. 12
+Texas
+
+Tribune. 2024. “Texas Leaders Worry that Bitcoin Mines Threaten to
+
+Crash the State Power Grid.” https: // www. texastribune. org/ 2024/ 07/ 10/
+texas-bitcoin-mine-noise-power-grid-cryptocurrency/ , Accessed on 10 February
+2025. 3
+The
+
+Washington
+
+Post. 2024. “Crypto Leaders Press Trump to Create Fed-
+
+eral Bitcoin Reserve.” https: // www. washingtonpost. com/ business/ 2024/ 11/ 27/
+trump-strategic-bitcoin-reserve-plan/ , Accessed on 10 February 2025. 2
+U.S.
+
+Energy
+
+Information
+
+Administration.
+
+2013.
+
+“Today
+
+in
+
+Energy.”
+
+Electricitydemandpatternsmatterforvaluingelectricitysupplyresources ,
+Accessed on 10 February 2025. 42
+U.S. Energy Information Administration. 2025a. “Electric Power Monthly.” https: //
+www. eia. gov/ electricity/ monthly/ epm_ table_ grapher. php? t= epmt_ 6_ 07_ b ,
+Accessed on 10 February 2025. 43
+U.S. Energy Information Administration. 2025b. “Electricity Explained-Factors Affecting Electricity Prices.” https: // www. eia. gov/ energyexplained/ electricity/
+prices-and-factors-affecting-prices. php , Accessed on 10 February 2025. 16
+52
+
+U.S.
+serve
+
+Senator
+
+Lummis.
+
+Legislation.”
+
+2024.
+
+“Lummis
+
+Introduces
+
+Strategic
+
+Bitcoin
+
+Re-
+
+https: // www. lummis. senate. gov/ press-releases/
+
+lummis-introduces-strategic-bitcoin-reserve-legislation/ ,
+
+Accessed
+
+on
+
+10 February 2025. 2
+Vardakas, John S, Nizar Zorba, and Christos V Verikoukis. 2014. “A Survey on
+Demand Response Programs in Smart Grids: Pricing Methods and Optimization Algorithms.” IEEE Communications Surveys & Tutorials, 17(1): 152–178. 11
+Wikipedia. 2025. “Capacity Factor.” https: // en. wikipedia. org/ wiki/ Capacity_
+factor , Accessed on 10 February 2025. 43
+Yaish, Aviv, and Aviv Zohar. 2023. “Correct Cryptocurrency ASIC Pricing: Are Miners
+Overpaying?” Schloss Dagstuhl-Leibniz-Zentrum für Informatik. 9
+Yaish, Aviv, Saar Tochner, and Aviv Zohar. 2022. “Blockchain Stretching & Squeezing:
+Manipulating Time for your Best Interest.” 65–88. 10
+
+53
+
+Appendix
+A
+
+Extension: when the grid does not serve all miners
+
+Suppose there are another m miners outside of the grid in question facing electricity cost
+c (and we denote the set of in-grid miners as N and out-of-grid miners as M), then each
+in-grid miner i’s objective is
+
+max R
+di
+
+di +
+
+P
+
+di
+P
+− di P
+j̸=i,j∈N dj +
+k∈M dk
+
+(61)
+
+where di is miner i’s computing power allocation, R is the total dollar-based block reward
+within a representative period, and P is the electricity price.
+Similarly each out-of-grid miner i’s objective is
+
+max R
+di
+
+di +
+
+P
+
+di
+P
+− di c
+k̸=i,k∈M dk +
+j∈M dj
+
+(62)
+
+where di is miner i’s computing power allocation, R is the total dollar-based block reward
+within a representative period, and c is the electricity price faced by the out-of-grid miners.
+By first order condition, in equilibrium we have
+P
+P
+j̸=i,j∈N dj +
+k∈M dk
+P
+P
+R
+=P
+(di + j̸=i,j∈N dj + k∈M dk )2
+
+(63)
+
+P
+P
+k̸=i,k∈M dk +
+j∈M dj
+P
+P
+=c
+R
+(di + k̸=i,k∈M dk + j∈M dj )2
+
+(64)
+
+for in-grid miners and
+
+for out-of-grid miners.
+
+54
+
+Summing over all miners we have that
+P
+(m + n − 1)( j∈M∪N dj )
+P
+R
+= nP + mc,
+( j∈M∪N dj )2
+and thus
+X
+
+dj =
+
+j∈M∪N
+
+(m + n − 1)R
+nP + mc
+
+(65)
+
+While summing over all miners within N gives
+
+R
+
+(n − 1)
+
+P
+P
+j∈N dj + n
+k∈M dk
+P
+= nP.
+( j∈M∪N dj )2
+
+(66)
+
+Plug in (65) we get
+P
+n (m+n−1)R
+− j∈N dj
+nP +mc
+R
+= nP.
+
+2
+
+(67)
+
+(m+n−1)R
+nP +mc
+
+In other words, we have that
+(m + n − 1)R nP
+d=
+dj = n
+−
+nP
++
+mc
+R
+j∈N
+X
+
+
+
+(m + n − 1)R
+nP + mc
+
+2
+=
+
+(m + n − 1)R mc − (m − 1)P
+n
+(68)
+nP + mc
+nP + mc
+
+Therefore if the grid only serves a set of oligopolistic miners that are only a part of the local
+miner industry, we have
+
+Pd =
+
+(m + n − 1)R mc − (m − 1)P
+n
+,
+n + mc
+nP + mc
+P
+
+which can be approximately assumed to be exogenous and independent of the grid’s decisions
+if P is not too far away from c. In other words, the fact that a grid only serves a local set of
+miners complicates the problem, but also illustrates the need for global mining coordination.
+We build on above general mining demand formulation to analyze the impact of bitcoin
+mining in a given grid, assuming that miners in this region is much smaller in size than
+55
+
+miners elsewhere, i.e., m ≫ n. We replace c above by Po as we have used c for marginal cost
+of electricty production. We have
+nR
+lim d =
+n/m→0
+Po
+
+
+
+
+
+P
+P
+P
+1−
+and lim P d = nR
+1−
+.
+n/m→0
+Po
+Po
+Po
+
+Note that d ≥ 0 iff P ≤ Po . We assume this holds—otherwise miners will not mine in our
+focal grid.
+We use uniform and independent demand and supply defined as in §3.6.2 and derive
+equilibrium emissions with bitcoin mining under demand response program given by (49);
+we aim to show that it can reduce total emissions than without bitcoin mining. Without
+bitcoin mining, the equilibrium emissions are given by “variable cost” in (48).
+The demand response program in (49) can be explained as: 1. When Sk ≥ D, i.e., renewable electricity supply exceeds standalone demand, all excess capacity is used for mining.
+2. When Sk < D, i.e., renewable electricity supply falls short of standalone demand, d unit
+of electricity is produced from controllable (dirty) source for mining. 3. d can be chosen
+optimally so total emissions are lower than without bitcoin mining.
+In the above formulation, regulator can stipulates any positive amount of mining demand
+because grid can choose P to induce any mining demand d = (1 − 1/n)R/P ∈ (0, +∞). Also
+grid revenue P d does not depend on P , so grid profit maximization problem can be reduced
+to cost minimization problem. This is no longer true here: Since P ∈ [0, Po ], d ∈ [0, nR/P0 ],
+P d ∈ [0, nR/4] and is concave in P , the grid can set P to induce mining demand no larger
+than nR/P0 , and grid revenue from miners increases in P ≤ Po /2 and decreases in P ≥ Po /2.
+We thus adapt demand response program into:
+
+d(D, S) =
+
+
+
+ min{S · k − D, nR/(2Po )},
+
+if S · k − D ≥ 0
+
+d,
+
+if S · k − D < 0,
+
+
+
+
+56
+
+(69)
+
+where d ≤ nR/Po . When Sk ≥ D, i.e., renewable electricity supply exceeds standalone
+demand, excess capacity no larger than nR/(2Po ) is used for mining. Any additional capacity
+is not used for mining because grid revenue decreases in P ≥ Po /2 and d = nR/(2Po ) at
+P = Po /2—even if regulator does not limit excess capacity for mining, grid will set P to
+induce d at most equal to nR/(2Po ).
+Remark: Why not use min{S · k − D, nR/Po }? Because that way we are penalizing k
+investment—when nR/(2Po ) < S · k − D < nR/Po , a higher k reduces grid’s mining revenue
+P d which is decreasing in P > Po /2.
+Under the demand response program, the grid’s problem is:
+Z D̄ Z
+
+
+
+(S · k − D)
+Po 1 −
+Po (S · k − D)dSdD
+(70)
+nR
+0
+0≤S≤S̄,0≤S·k−D≤nR/(2Po )
+Z D̄ Z
+1
+nR
++
+dSdD
+(71)
+D̄S̄ 0 0≤S≤S̄,S·k−D≥nR/(2Po ) 4
+ 
+
+
+Z D̄ Z
+1
+dPo
+Po 1 −
++
+d − c(D + d − S · k) dSdD + p · D̄/2 − C · k.
+nR
+D̄S̄ 0 0≤S≤S̄,S·k<D
+
+1
+max
+k≥0 D̄ S̄
+
+(72)
+The first line represents expected grid profit from mining when 0 ≤ S · k − D ≤ nR/(2Po ).
+In this case, all excess renewable capacity (S · k − D) is used for bitcoin mining, so grid
+
+
+P
+sets P = Po 1 − (S·k−D)
+o . The first line represents expected grid profit from mining
+nR
+when S · k − D ≥ nR/(2Po ). In this case, nR/(2Po ) unit of excess renewable capacity is
+used for bitcoin mining, so grid revenue is nR
+. Notably, in first and second lines, renewable
+4
+capacity exceeds demand, so grid does not produce electricity using controllable supply and
+the marginal cost is zero.
+
+o
+In third line, the first term in the integral, i.e., Po 1 − dP
+d, represents grid revenue
+nR
+from bitcoin mining at stipulated demand d ≤ nR/Po 13 The second term in the integral, i.e.,
+13
+
+I do not restrict to d ≤ nR/2Po because d ∈ (nR/2Po , nR/Po ) offers even stronger incentive for increasing
+k, as a larger d incurs higher c.
+
+57
+
+c(D + d − S · k), is the total cost of controllable electricity supply to meet standalone and
+bitcoin mining demand in excess of renewable energy supply S · k. Next, p · D̄/2 is expected
+revenue from standalone demand and is a constant. The last term C ·k is the cost of building
+renewable energy capacity k.
+Remark: This formulation subsumes grid’s optimal pricing decision P (D, S). So we
+capture a situation in which the grid first decides k, and then P as a function of realized S and
+
+
+P
+D. The utility company’s objective above has optimal P = max{Po 1 − (S·k−D)
+o , Po /2}
+nR
+plugged in in first and second lines, and P induces demand d to meet demand response
+program in third line.
+Proof: Let Π(k) denote the grid’s objective. We consider three cases:
+Case 1: k S̄ ≥ D̄. Third integral is
+Z D̄ Z D 
+
+
+
+
+dPo
+Po 1 −
+d − c(D + d − S · k) dSdD
+nR
+0
+0
+
+
+Z D̄  
+1
+dPo
+D
+D
+D2
+=
+Po 1 −
+d − c(D + d) + c
+dD
+nR
+k
+k
+2k
+D̄S̄ 0
+
+ 
+
+Z D̄  
+D
+D
+1
+dPo
+D
++d
+=
+Po 1 −
+d −c
+dD
+nR
+k
+2
+k
+D̄S̄ 0
+
+
+
+Z D̄  
+D2
+1
+D
+dPo
+=
+−c d −c
+dD
+Po 1 −
+nR
+k
+2k
+D̄S̄ 0
+ 
+
+
+
+1
+D̄
+D̄2
+dPo
+=
+Po 1 −
+−c d −c
+nR
+2k
+6k
+S̄
+1
+D̄S̄
+
+k
+
+(73)
+(74)
+(75)
+(76)
+(77)
+
+nR
+, and is
+Second integral is 0 when D̄ ≤ 2P
+o
+
+1
+D̄S̄
+
+Z min{kS̄− nR ,D̄} Z S̄
+
+nR
+dSdD
+nR
+0
+(D+ 2P
+)/k 4
+o
+
+
+Z min{kS̄− nR ,D̄}
+2Po
+1
+D + nR/(2Po )
+nR
+S̄ −
+dD
+=
+4
+k
+D̄S̄ 0
+"
+
+
+
+
+
+2 #
+nR
+nR
+nR
+1
+nR
+=
+S̄ −
+min k S̄ −
+, D̄ −
+min k S̄ −
+, D̄
+2kPo
+2Po
+2k
+2Po
+4D̄S̄
+2Po
+
+58
+
+(78)
+(79)
+(80)
+
+nR
+when D̄ > 2P
+.
+o
+
+First integral is
+1
+D̄S̄
+
+Z D̄ Z min{(D+ nR )/k,S̄}
+2Po
+
+0
+
+D/k
+
+
+
+(S · k − D)
+Po (S · k − D)dSdD.
+Po 1 −
+nR
+
+(81)
+
+When k S̄ > D̄ + nR/(2Po ), first integral is
+1
+D̄S̄
+
+Z D̄ Z (D+ nR )/k
+2Po
+
+0
+
+D/k
+
+
+
+(S · k − D)
+1 (nR)2
+Po 1 −
+Po (S · k − D)dSdD =
+.
+nR
+S̄ 12 P0 k
+
+Calculation of the Integral. Consider the expression
+1
+D̄ S̄
+
+Z D̄ Z (D+ nR )/k
+2P0
+
+0
+
+D/k
+
+
+
+P0
+P0 1 − nR
+
+Sk−D
+
+
+
+
+S k − D dS dD.
+
+We wish to evaluate this double integral in closed form.
+
+Step 1: Expand the Integrand Inside the integrand, set
+
+
+
+P0
+f (S, D) = P0 1 − nR S k − D
+Sk−D .
+Distribute the terms:
+
+f (S, D) = P0 (S k − D) −
+
+2
+P02
+Sk−D .
+nR
+
+Hence, for each fixed D, we integrate with respect to S over the interval
+
+S∈
+
+h
+
+D
+,
+k
+
+nR i
+2P0
+.
+k
+
+D+
+
+59
+
+(82)
+
+Step 2: Inner Integral over S
+
+Fix D and compute
+
+nR
+
+Z D+ 2P0 h
+2 i
+k
+P2
+dS.
+P0 (S k − D) − nR0 S k − D
+S=
+
+D
+k
+
+Break it into two pieces:
+
+nR
+
+nR
+
+Z D+ 2P0
+I1 (D) =
+
+k
+
+D
+k
+
+P2
+
+P0 (S k − D) dS,
+
+I2 (D) = − nR0
+
+Z D+ 2P0
+k
+
+D
+k
+
+Sk−D
+
+2
+
+dS.
+
+Hence the inner integral is I1 (D) + I2 (D).
+2.1. Compute I1 (D)
+nR
+
+Z D+ 2P0
+I1 (D) = P0
+
+k
+
+D
+k
+
+
+S k − D dS.
+
+Inside the integrand, set X = S k − D. Then X runs from
+
+Xlow =
+
+ 
+D
+k
+
+k − D = D − D = 0 to Xhigh =
+
+ D+ nR 
+2P0
+k
+
+nR
+nR
+k − D = D + 2P
+− D = 2P
+.
+0
+0
+
+Also, dX = k dS, hence dS = k1 dX. This substitution shows
+Z nR
+I1 (D) = P0
+
+2P0
+
+X=0
+
+X k1 dX
+
+P0
+=
+k
+
+Z nR
+
+2P0
+
+0
+
+nR
+
+X dX =
+
+P0 h X 2 i 2P0
+.
+k 2 0
+
+Hence
+I1 (D) =
+
+P0 1  nR 2
+P0 1 (nR)2
+(nR)2
+·
+=
+·
+=
+.
+k 2 2P0
+k 2 4 P02
+8 P0 k
+
+Notice that I1 (D) no longer depends on D (because of that shift by − D in the integrand).
+60
+
+So I1 (D) is constant in D.
+2.2. Compute I2 (D)
+nR
+
+P2
+
+I2 (D) = − nR0
+
+Z D+ 2P0
+k
+
+Sk−D
+
+D
+k
+
+2
+
+dS.
+
+nR
+Again, let X = S k − D, so X goes from 0 to 2P
+, and dS = k1 dX. Then
+0
+
+I2 (D) =
+
+P2
+− nR0
+
+Z nR
+
+2P0
+
+0
+
+X 2 k1 dX
+
+P2
+= − 0
+nR k
+
+Z nR
+
+2P0
+
+X 2 dX.
+
+0
+
+Compute the integral:
+Z A
+
+X 2 dX =
+
+h
+
+0
+nR
+Hence for A = 2P
+,
+0
+
+Z nR
+
+2P0
+
+X 2 dX =
+
+0
+
+X3
+3
+
+iA
+
+=
+
+0
+
+A3
+.
+3
+
+1  nR 3 (nR)3
+.
+=
+3 2P0
+24 P03
+
+Thus
+I2 (D) = −
+
+(nR)3
+(nR)3 P02
+(nR)2 1
+P02
+·
+=
+−
+=
+−
+.
+nR k 24 P03
+24 nR k P03
+24 k P0
+
+Simplify the constants:
+I2 (D) = −
+
+(nR)2
+.
+24 P0 k
+
+2.3. Combine I1 (D) and I2 (D) Hence the inner integral (with respect to S) is
+(nR)2
+(nR)2
+(nR)2 
+1
+(nR)2 2
+(nR)2
+I1 (D) + I2 (D) =
+−
+=
+1−
+=
+· =
+.
+8 P0 k
+24 P0 k
+8 P0 k
+3
+8 P0 k 3
+12 P0 k
+Observe that this result is independent of D. Therefore, once we integrate with respect
+to D from 0 to D̄, we can factor it out.
+
+61
+
+Step 3: Outer Integral over D
+1
+D̄ S̄
+
+The expression now becomes
+
+Z D̄
+
+
+1 (nR)2
+(constant in D) dD =
+{z
+}
+D̄ S̄ 12 P0 k
+D=0 |
+(nR)2 /[12 P0 k]
+
+Z D̄
+1 dD.
+0
+
+So
+=
+
+
+1 (nR)2
+1 (nR)2
+.
+D̄ =
+D̄ S̄ 12 P0 k
+S̄ 12 P0 k
+
+Step 4: Final Simplified Result Hence the final value of the double integral is:
+nR
+
+1
+D̄ S̄
+
+Z D̄ Z D+ 2P0
+k
+
+0
+
+D
+k
+
+
+
+1 (nR)2
+P0
+P0 1 − nR
+(S k − D) (S k − D) dS dD =
+.
+S̄ 12 P0 k
+
+This completes the calculation. As each step shows, the integral ultimately does not depend
+on D in the inner part, making the outer integration straightforward.
+When k S̄ ≤ D̄ + nR/(2Po ), first integral is
+
+Z D̄ Z min{(D+ nR )/k,S̄} 
+2Po
+1
+(S · k − D)
+Po 1 −
+Po (S · k − D)dSdD
+nR
+D̄S̄ 0 D/k
+
+
+
+
+i
+(nR)2
+1
+nR
+1 h  nR 
+=
+k S̄ −
++ G
+− G k S̄ − D̄
+,
+2P0
+k
+2P0
+D̄ S̄ 12P0 k
+where
+G(x) =
+
+P0 2
+P2
+x − 0 x3 .
+2
+3nR
+
+Proof. We wish to evaluate
+(
+
+1
+I=
+D̄ S̄
+
+nR
+
+Z D̄ Z min D+ 2P0 , S̄
+k
+
+0
+
+S= D
+k
+
+)
+
+
+
+P0
+P0 1 −
+(Sk − D) (Sk − D) dS dD .
+nR
+
+62
+
+(83)
+(84)
+
+In the present case we assume
+k S̄ ≤ D̄ +
+
+nR
+.
+2P0
+
+D∗ = k S̄ −
+
+nR
+.
+2P0
+
+Define
+
+Then for a given D the upper limit in the S–integral is
+
+(
+min
+
+nR
+D + 2P
+0
+
+k
+
+)
+, S̄
+
+
+nR
+D + 2P
+
+0
+
+
+, if 0 ≤ D ≤ D∗ ,
+k
+=
+
+
+S̄,
+if D∗ ≤ D ≤ D̄ .
+
+Thus, we split the overall integral into two parts:
+i
+1 h
+I=
+IA + IB ,
+D̄ S̄
+where
+nR
+
+Z D∗ Z D+ 2P0
+
+Z D̄
+
+k
+
+IA =
+
+f (S, D) dS dD,
+D=0
+
+Z S̄
+
+IB =
+
+S= D
+k
+
+f (S, D) dS dD ,
+D=D∗
+
+S= D
+k
+
+with
+
+
+P0
+f (S, D) = P0 1 −
+(Sk − D) (Sk − D) .
+nR
+(a) Evaluation of IA :
+For fixed D ∈ [0, D∗ ] the inner integration is over
+"
+
+nR
+
+D D + 2P0
+S∈
+,
+k
+k
+
+63
+
+#
+.
+
+We substitute
+X = Sk − D,
+
+dS =
+
+dX
+.
+k
+
+When S = Dk then X = 0 and when
+
+S=
+
+nR
+D + 2P
+0
+
+k
+
+then X =
+
+nR
+.
+2P0
+
+In terms of X the integrand becomes
+
+
+P0
+P2
+f (S, D) = P0 1 −
+X X = P0 X − 0 X 2 .
+nR
+nR
+Thus the inner integral is
+nR
+
+Z D+ 2P0
+k
+
+J(D) =
+S= D
+k
+
+1
+f (S, D) dS =
+k
+
+Z nR h
+
+P02 2 i
+P0 X −
+X dX .
+nR
+X=0
+2P0
+
+We compute
+Z nR
+
+1
+X dX =
+2
+
+
+
+nR
+2P0
+
+2
+
+1
+X dX =
+3
+
+
+
+3
+
+2P0
+
+0
+
+(nR)2
+,
+=
+8P02
+
+and
+Z nR
+
+2P0
+
+0
+
+2
+
+nR
+2P0
+
+=
+
+(nR)3
+.
+24P03
+
+Thus,
+
+
+
+
+1
+(nR)2
+P02 (nR)3
+1 (nR)2 (nR)2
+(nR)2
+J(D) =
+P0
+−
+=
+−
+=
+.
+k
+8P02
+nR 24P03
+k 8P0
+24P0
+12P0 k
+Since this result is independent of D,
+Z D∗
+IA =
+
+J(D) dD =
+0
+
+64
+
+(nR)2 ∗
+D .
+12P0 k
+
+Recalling that
+D∗ = k S̄ −
+
+nR
+,
+2P0
+
+we have
+(nR)2
+IA =
+12P0 k
+
+
+
+nR
+k S̄ −
+.
+2P0
+
+(b) Evaluation of IB :
+For D ∈ [D∗ , D̄] the upper limit in S is S̄; hence,
+Z D̄
+
+Z S̄
+
+IB =
+
+f (S, D) dS dD .
+D=D∗
+
+S= D
+k
+
+Again, set
+X = Sk − D,
+
+dS =
+
+dX
+.
+k
+
+When S = Dk , then X = 0; when S = S̄ then
+X = k S̄ − D .
+
+Thus,
+Z S̄
+
+1
+f (S, D) dS =
+k
+S= D
+k
+
+Z kS̄−D 
+X=0
+
+
+P02 2
+X dX .
+P0 X −
+nR
+
+Define the antiderivative
+P02 3
+P0 2
+G(X) =
+X −
+X .
+2
+3nR
+Then,
+Z S̄
+f (S, D) dS =
+S= D
+k
+
+i 1
+
+
+1h
+G k S̄ − D − G(0) = G k S̄ − D .
+k
+k
+
+Hence,
+1
+IB =
+k
+
+Z D̄
+
+
+G k S̄ − D dD .
+
+D=D∗
+
+65
+
+Now, substitute
+Y = k S̄ − D,
+
+dY = −dD .
+
+When D = D∗ , then
+
+nR
+nR 
+=
+,
+Y = k S̄ − D∗ = k S̄ − k S̄ −
+2P0
+2P0
+and when D = D̄ we have Y = k S̄ − D̄. Changing the integration variable and reversing
+limits to absorb the minus sign, we obtain
+1
+IB =
+k
+
+Z nR
+
+2P0
+
+G(Y ) dY .
+
+Y =kS̄−D̄
+
+That is,
+i
+1 h  nR 
+IB = G
+− G k S̄ − D̄ .
+k
+2P0
+(c) Final Combined Result:
+The overall integral is therefore
+I=
+
+i
+1 h
+IA + IB ,
+D̄ S̄
+
+with
+(nR)2
+IA =
+12P0 k
+
+
+
+nR
+k S̄ −
+2P0
+
+
+
+i
+1 h  nR 
+and IB = G
+− G k S̄ − D̄ ,
+k
+2P0
+
+where
+G(x) =
+
+P0 2
+P2
+x − 0 x3 .
+2
+3nR
+
+Thus, we obtain the final expression:
+(
+
+1
+D̄ S̄
+
+nR
+
+Z D̄ Z min D+ 2P0 , S̄
+k
+
+0
+
+S= D
+k
+
+)
+
+
+P0
+
+1−
+
+
+
+
+
+
+i
+(nR)2
+P0
+1
+nR
+1 h  nR 
+(Sk − D) (Sk−D) dS dD =
+kS̄ −
++
+G
+− G kS̄ − D̄
+.
+nR
+D̄ S̄ 12P0 k
+2P0
+k
+2P0
+
+This completes the evaluation.
+66
+
+
