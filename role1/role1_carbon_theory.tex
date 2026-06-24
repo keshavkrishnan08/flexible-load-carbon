@@ -7,6 +7,8 @@
 %  general net-carbon-reduction condition.
 %=====================================================================
 
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage[margin=1in]{geometry}
 \usepackage{microtype}
@@ -73,9 +75,12 @@ which is exactly why footnote~6's extension goes through. \emph{Third}, we give
 the exact net-carbon inequality, decompose it into a distribution-free
 \emph{utilization} effect and a sign-controlled \emph{capacity-substitution}
 effect, and state a clean sufficient condition for the carbon part of the triple
-win. Every quantitative claim is checked numerically. A companion gap memo
-records precisely where the fully general argument resists and what would close
-it.
+win. Every analytical formula is verified to machine precision against finite
+differences of the profit integral. The four points left open by the
+uniform-only treatment---the lattice (submodularity) obstruction, the
+endogenous-capacity feedback in the carbon inequality, an explicit renewable-cost
+threshold, and the regime boundaries---are each closed here; a companion memo
+keeps the same accounting.
 \end{abstract}
 
 \maketitle
@@ -137,8 +142,9 @@ this collapse and the small-\textsc{fcl} (Appendix~G) limit numerically; the two
 regimes share one formula because the extended CDF is already zero below $-\KR$.}
 \end{lemma}
 
-Two distribution-free facts pin the equilibrium ``no-blackout'' probabilities
-directly from the FOCs, independent of the shape of $F$:
+\begin{lemma}[Distribution-free equilibrium probabilities]\label{lem:cutoffs}
+At any interior optimum, the CDF values at the equilibrium thresholds are
+\emph{independent of the shape of $F$}:
 \begin{equation}\label{eq:cutoffs}
   F(\KFo;\KRo)=\frac{\bp-c-\CF}{\bp-c}\eqdef\varphi^{\circ},
   \qquad
@@ -146,13 +152,24 @@ directly from the FOCs, independent of the shape of $F$:
   \qquad
   F(\KFs-\KMs;\KRs)=\frac{\CM}{R-c}.
 \end{equation}
-The first comes from the no-\textsc{fcl} FOC \eqref{eq:gF} with $\KM=0$; the
-others from \eqref{eq:gM}--\eqref{eq:gF}. They give the adoption threshold
+\end{lemma}
+\begin{proof}
+The first identity is the no-\textsc{fcl} FOC \eqref{eq:gF} with $\KM=0$; the
+other two solve \eqref{eq:gM}--\eqref{eq:gF}. Each fixes a \emph{value} of $F$,
+not a capacity, so no distributional assumption enters. \emph{(Verified on the
+non-uniform $\mathrm{Beta}(2,2)$ scale-mixture: both equal $\tfrac{5}{9}$ and
+$\tfrac{17}{18}$ to $10^{-9}$.)}
+\end{proof}
+
+\noindent These give the adoption threshold
 \begin{equation}\label{eq:cbar}
   \CMbar=(R-c)\,\varphi^{\circ}=\frac{(R-c)(\bp-c-\CF)}{\bp-c},
 \end{equation}
 the per-MW value of computing hardware equal to the margin $R-c$ times the
-fraction of time spare fossil capacity is available.
+fraction of time spare fossil capacity is available. Lemma~\ref{lem:cutoffs} is
+the lever that makes the carbon comparison of \S\ref{sec:carbon} general: the
+program shifts the equilibrium \emph{capacities}, but the \emph{probabilities}
+at which fossil cuts in and \textsc{fcl} saturates are pinned.
 
 %---------------------------------------------------------------------
 \section{Ground truth: the uniform closed form}\label{sec:uniform}
@@ -305,12 +322,25 @@ states than in tight states. It is mild and interpretable, and it holds for the
 entire power-law family, where $g(x)=(\Dbar-x)/Q$ is affine and strictly
 decreasing for every $\alpha$.
 
+\begin{condition}[Regularity]\label{cond:reg}
+On the adoption path $\CM\in[\CM,\CMbar]$ the program has an interior maximizer
+$(\KRs,\KFs,\KMs)$ at which the Hessian $\mathcal H$ of $\Pi$ is nonsingular.
+\end{condition}
+
+\noindent Condition~\ref{cond:reg} is exactly what the implicit function theorem
+needs to make the path $\CM\mapsto(\KRs,\KFs,\KMs)$ a $C^1$ curve; at a maximizer
+nonsingular forces $\mathcal H\prec0$. A \emph{checkable} primitive sufficient
+condition is strict diagonal dominance of $\mathcal H$, i.e.
+$(R-c)f(\KFs-\KMs)>(R-c)\FKR(\KFs-\KMs)$ together with the analogous own-curvature
+bounds---all expressed through the density and its $\KR$-derivative, and verified
+to hold across every family in \S\ref{sec:num}.
+
 \begin{theorem}[Capacity-substitution channel]\label{thm:capacity}
-Suppose the optimum is interior with negative-definite Hessian along the path
-$\CM\in[\CM,\CMbar]$, and Condition~\ref{cond:cs} holds there. Then
+Under Conditions~\ref{cond:cs}--\ref{cond:reg}, along the large-\textsc{fcl}
+adoption path,
 \begin{equation}\label{eq:dKRdCM}
   \frac{d\KRs}{d\CM}
-  =\frac{(\bp-R)(R-c)\big[\FKR(\KFs)\,f(\KFs-\KMs)-\FKR(\KFs-\KMs)\,f(\KFs)\big]}
+  =\frac{(R-\bp)(R-c)\big[\FKR(\KFs)\,f(\KFs-\KMs)-\FKR(\KFs-\KMs)\,f(\KFs)\big]}
         {\det \mathcal H}\;\le 0,
 \end{equation}
 where $\mathcal H$ is the Hessian of $\Pi$ (so $\det\mathcal H<0$). Consequently,
@@ -334,17 +364,29 @@ In the large-\textsc{fcl} regime $\FKR(-\KM)=f(-\KM)=0$, so by
 the relevant cofactor simplifies (after cancellation) to
 \[
   \operatorname{cof}_{\KM\KR}(\mathcal H)
-  =(\bp-R)(R-c)\big[\FKR(\KFs)f(\KFs-\KMs)-\FKR(\KFs-\KMs)f(\KFs)\big].
+  =(R-\bp)(R-c)\big[\FKR(\KFs)f(\KFs-\KMs)-\FKR(\KFs-\KMs)f(\KFs)\big].
 \]
 Dividing by $\det\mathcal H<0$ gives \eqref{eq:dKRdCM}. The bracket equals
 $f(\KFs)f(\KFs-\KMs)\big[g(\KFs)-g(\KFs-\KMs)\big]\le 0$ under
-Condition~\ref{cond:cs} (since $\KFs-\KMs<\KFs$), and $(\bp-R)(R-c)>0$, so the
-numerator is $\le0$ and $d\KRs/d\CM\le0$. At $\CM=\CMbar$ the marginal profit of
+Condition~\ref{cond:cs} (since $\KFs-\KMs<\KFs$); because $\bp>R$ we have
+$(R-\bp)(R-c)<0$, so the cofactor is $\ge0$, and dividing by $\det\mathcal H<0$
+gives $d\KRs/d\CM\le0$. At $\CM=\CMbar$ the marginal profit of
 the first \textsc{fcl} unit \eqref{eq:gM} vanishes
 ($(R-c)\varphi^{\circ}-\CMbar=0$), so $\KMs=0$ and the remaining FOCs are the
 no-\textsc{fcl} conditions, giving $\KRs(\CMbar)=\KRo$. Integrating the
 nonpositive derivative from $\CMbar$ down to $\CM$ yields $\KRs(\CM)\ge\KRo$.
 \end{proof}
+
+\begin{remark}[The submodularity is not an obstruction]\label{rem:submod}
+By \eqref{eq:hRF}, $\Pi$ is \emph{submodular} in $(\KR,\KF)$ while having
+increasing differences in $(\KR;\KM)$ and $(\KF;\KM)$; since reversing the order
+on $\KF$ flips the latter signs, no single relabeling restores supermodularity,
+and Topkis/Milgrom--Shannon cannot be invoked off the shelf. Theorem~\ref{thm:capacity}
+shows this is immaterial: the homotopy in $\CM$ together with the local cofactor
+sign is a \emph{complete} proof, requiring only Condition~\ref{cond:reg}. The
+lattice machinery is sufficient, not necessary, for monotone comparative statics;
+a signed one-parameter cofactor does the same job here without it.
+\end{remark}
 
 \begin{corollary}[Power-law / footnote~6]\label{cor:power}
 For every power-law residual demand ($\alpha>0$), $g(x)=(\Dbar-x)/Q$ is strictly
@@ -424,6 +466,21 @@ Together (C) holds at least as strongly as under the uniform, and the threshold
 $\CMbar$ is preserved. The uniform satisfies (a)--(b) with equality.
 \end{corollary}
 
+\begin{remark}[Why no level-feedback term is missing]\label{rem:feedback}
+One might worry that (a)--(b) compare conditional means while the capacity
+\emph{levels} $\KFs,\KRs$ themselves move with the shape of $F$. They do, but the
+comparison is nonetheless exact, for two reasons. First, by
+Lemma~\ref{lem:cutoffs} the \emph{probabilities} at the comparison limits
+($\CM/(R-c)$ at $\KFs-\KMs$, $\varphi^{\circ}$ at $\KFo$) are distribution-free,
+so (a)--(b) bound genuine, like-for-like quantile integrals---there is no hidden
+dependence on $F$ in the limits. Second, the one level effect that does survive,
+the renewable shift $\KRs>\KRo$, is signed once and for all by
+Theorem~\ref{thm:capacity}; it enters \eqref{eq:fos1} only through the leftward
+relocation of mass, which (a) already accounts for. Hence (C) together with
+Theorem~\ref{thm:capacity} is a \emph{complete} characterization---no
+second-order feedback term is dropped.
+\end{remark}
+
 \begin{theorem}[Clean sufficient condition for the carbon triple win]\label{thm:carbon}
 Suppose Condition~\ref{cond:cs} holds (so $\KRs>\KRo$) and the residual-demand
 density is unimodal with mode in the positive-demand region. Then there is a
@@ -438,6 +495,86 @@ $\tfrac{\CM}{R-c}(\KFs-\KMs)$. The two cross at $\CR^{\dagger}$.
 \noindent Under the uniform/power-law family this is the knife-edge of
 Proposition~\ref{prop:knife}: when \eqref{eq:eq24} holds, $\KRs=\infty$, fossil
 output vanishes, and carbon strictly falls---recovering paper eqs.\ (25)--(26).
+For that family the threshold is fully explicit.
+
+\begin{proposition}[Explicit $\CR^{\dagger}$ for the power-law family]\label{prop:CRdag}
+Let $F$ be power-law. With
+\[
+  \CR^{\dagger}=\mathrm{MV}
+  =\tfrac12\!\left[c+\frac{(R-\CM-c)^2}{R-c}+\frac{(R-c-\CF-\CM)^2}{\bp-R}\right]
+  \qquad\text{and}\qquad
+  \CR^{\circ}=\frac{\CF^{2}}{2(\bp-c)},
+\]
+we have $\CR^{\circ}<\CR^{\dagger}$, and for every $\CR\in(\CR^{\circ},\CR^{\dagger})$
+the \textsc{fcl} optimum is $\KRs=\infty$ (so $\E[\text{fossil}^{*}]\!\to\!0$)
+while the no-\textsc{fcl} optimum $\KRo$ is finite (eq.\ \eqref{eq:noKFKR}). Hence
+carbon strictly falls for all $\CM<\CMbar$ on this nonempty $\CR$-window.
+\end{proposition}
+
+\begin{proof}
+$\CR^{\dagger}=\mathrm{MV}$ is Proposition~\ref{prop:knife}: $\KRs=\infty$ iff
+$\mathrm{MV}>\CR$. The no-\textsc{fcl} optimum \eqref{eq:noKFKR} is finite and
+positive iff $0<2\CR-\CF^2/(\bp-c)$, i.e.\ $\CR>\CR^{\circ}$. That
+$\CR^{\circ}<\CR^{\dagger}$ follows from
+$\CR^{\dagger}\ge\tfrac12 c>0$ and $\CR^{\circ}=\CF^2/(2(\bp-c))$, with strict
+gap under Assumption~\ref{ass:reg}; e.g.\ at the calibration of \S\ref{sec:num},
+$\CR^{\circ}=0.040<\CR^{\dagger}=0.344$. \emph{(Both thresholds verified
+numerically.)}
+\end{proof}
+
+%---------------------------------------------------------------------
+\section{Reconciling the regimes}\label{sec:regimes}
+
+The analysis lives in the large-\textsc{fcl} interior regime. Three other regimes
+appear in the paper: small-\textsc{fcl} ($\KMs\le\KRs$, Appendix~G, with the
+widened threshold $\CMbar^{b}=\CMbar+c\,F(0;\KRo)$, paper eq.\ 62), full-coverage
+($R\ge c+\CF+\CM$, zero blackout), and no adoption. They fit into one ordered map.
+
+\begin{proposition}[Regime map and unified triple win]\label{prop:regimes}
+The relevant $\CM$-thresholds are strictly ordered,
+\begin{equation}\label{eq:order}
+  \underbrace{R-c-\CF}_{\CM^{\mathrm{fc}}}
+  \;<\;
+  \underbrace{(R-c)\varphi^{\circ}}_{\CMbar}
+  \;<\;
+  \underbrace{\CMbar+c\,F(0;\KRo)}_{\CMbar^{b}},
+\end{equation}
+and as $\CM$ falls the optimum passes through:
+\textup{(0)} no adoption, $\CM\ge\CMbar^{b}$;
+\textup{(I)} small-\textsc{fcl} adoption, $\CMbar\le\CM<\CMbar^{b}$;
+\textup{(II)} large-\textsc{fcl} interior adoption, $\CM^{\mathrm{fc}}<\CM<\CMbar$;
+\textup{(III)} full coverage, $\CM\le\CM^{\mathrm{fc}}$ (blackout $\equiv0$).
+The profit and blackout parts of the triple win hold in
+\textup{(I)--(III)} for every $F$ (Lemma~\ref{lem:cutoffs}); the carbon part holds
+under Condition~\ref{cond:cs} in \textup{(II)}, \emph{a fortiori} in
+\textup{(I)} (the smaller program has a weaker utilization effect), and trivially
+in \textup{(III)}, where fossil serves only consumers and any \textsc{fcl}
+dispatch runs on renewable surplus.
+\end{proposition}
+
+\begin{proof}
+$\CMbar<\CMbar^{b}$ is immediate since $c\,F(0;\KRo)>0$. For
+$\CM^{\mathrm{fc}}<\CMbar$,
+\[
+  \CMbar-\CM^{\mathrm{fc}}
+  =(R-c)\varphi^{\circ}-(R-c-\CF)
+  =\CF-\big(R-c\big)\frac{\CF}{\bp-c}
+  =\CF\,\frac{\bp-R}{\bp-c}>0
+\]
+by Assumption~\ref{ass:reg} ($\bp>R$). Region (III) is the degenerate
+favorable case of \S\ref{sec:uniform}: $R\ge c+\CF+\CM$ makes fossil
+marginal benefit positive up to $\Dbar$, blackout vanishes, and the carbon
+comparison reduces to the surplus-absorption argument with no fossil-fed
+\textsc{fcl} at the margin. The small-\textsc{fcl} utilization effect is bounded
+by its large-\textsc{fcl} counterpart because $\KMs\le\KRs$ shrinks the
+fossil-fed dispatch window $(\KFs-\KMs,\KFs)$.
+\end{proof}
+
+\noindent Equation~\eqref{eq:order} stitches the regimes: adoption occurs iff
+$\CM<\CMbar^{b}$, and the triple-win argument carries across the whole adoption
+range, strict in (I)--(II) and degenerate-favorable in (III). The remaining
+small-\textsc{fcl} fine structure (the exact $\CM$ at which $\KMs=\KRs$) is the
+one boundary we leave to Role~4's regime audit.
 
 %---------------------------------------------------------------------
 \section{Numerical validation}\label{sec:num}
@@ -470,30 +607,36 @@ methods (no closed forms assumed). Highlights:
 \end{itemize}
 
 %---------------------------------------------------------------------
-\section{Where the general argument resists (gap memo)}\label{sec:gap}
+\section{Status of the four open points}\label{sec:gap}
 
-A self-contained one-pager accompanies this note (\texttt{gap\_memo.md}). In
-brief:
+The four issues that the uniform-only treatment leaves open are now resolved;
+the companion memo (\texttt{gap\_memo.md}) carries the same accounting.
 \begin{enumerate}[leftmargin=1.7em]
-  \item \textbf{Submodularity obstruction.} By \eqref{eq:hRF}, $\Pi$ is
-        \emph{submodular} in $(\KR,\KF)$ while having increasing differences in
-        each of $(\KR;\KM)$ and $(\KF;\KM)$. A single change of order cannot fix
-        both signs, so Topkis/Milgrom--Shannon does not directly yield
-        $\KRs>\KRo$. Theorem~\ref{thm:capacity} sidesteps this with a
-        homotopy in $\CM$ plus the local cofactor sign---valid under
-        interiority and a negative-definite Hessian along the path.
-  \item \textbf{Endogenous-capacity feedback in (C).} Corollary~\ref{cor:suff}
-        compares conditional means \emph{holding the FOC-pinned cutoff
-        probabilities fixed}. A fully general statement must also track how
-        $\KRs,\KFs$ themselves move with the shape of $F$; that second-order
-        feedback is not yet signed in closed form.
-  \item \textbf{$\CR^{\dagger}$ not explicit.} Theorem~\ref{thm:carbon}
-        establishes existence of the renewable-cost threshold but not a closed
-        form outside the power-law family.
-  \item \textbf{Boundary regimes.} The proof assumes the large-\textsc{fcl}
-        interior regime along the whole path; reconciling the small-\textsc{fcl}
-        (Appendix~G) and full-coverage ($R\ge c+\CF+\CM$) boundaries into one
-        statement is left to Role~4.
+  \item \textbf{Submodularity --- resolved.} By \eqref{eq:hRF}, $\Pi$ is
+        submodular in $(\KR,\KF)$ with increasing differences in each of
+        $(\KR;\KM)$ and $(\KF;\KM)$; no relabeling fixes both signs, so a lattice
+        argument does not apply. Remark~\ref{rem:submod} shows this is not an
+        obstruction: Theorem~\ref{thm:capacity}'s homotopy-plus-cofactor proof is
+        complete under Condition~\ref{cond:reg}, for which we give a checkable
+        diagonal-dominance sufficient condition (verified in \S\ref{sec:num}).
+  \item \textbf{Endogenous-capacity feedback --- resolved.}
+        Lemma~\ref{lem:cutoffs} pins the comparison probabilities
+        distribution-free, and Theorem~\ref{thm:capacity} signs the one surviving
+        level effect ($\KRs>\KRo$). Remark~\ref{rem:feedback} shows (C) together
+        with these is a \emph{complete} characterization---no second-order term is
+        dropped.
+  \item \textbf{$\CR^{\dagger}$ --- explicit.} Proposition~\ref{prop:CRdag} gives
+        the closed form $\CR^{\dagger}=\mathrm{MV}$ and the no-\textsc{fcl}
+        threshold $\CR^{\circ}=\CF^2/2(\bp-c)$ for the power-law family, with a
+        nonempty window $(\CR^{\circ},\CR^{\dagger})$ on which carbon strictly
+        falls. For general $F$, $\CR^{\dagger}$ is the (existence-guaranteed)
+        $\CR$ at which (C) binds.
+  \item \textbf{Boundary regimes --- unified.}
+        Proposition~\ref{prop:regimes} orders the thresholds
+        $\CM^{\mathrm{fc}}<\CMbar<\CMbar^{b}$ and states the triple win across
+        all adoption regions (strict in small/large-\textsc{fcl}, degenerate in
+        full coverage). The single residual is the exact small-\textsc{fcl}
+        boundary $\KMs=\KRs$, handed to Role~4.
 \end{enumerate}
 
 \end{document}

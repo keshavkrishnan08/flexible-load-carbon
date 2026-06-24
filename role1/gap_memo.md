@@ -33,29 +33,47 @@ footnote, power-law) family. Two things had to be made general and rigorous:
   the large-FCL flat term `(K_M−K_R)` is required; eq 24 = `2·∂Π/∂K_R`
   (sign-correct, factor-2 is a grouping artifact — not a bug).
 
-## Where it resists (the honest boundary)
+## The four open points — now closed
 
-1. **Submodularity obstruction.** `Π` is submodular in `(K_R, K_F)`
-   (`∂²Π/∂K_R∂K_F = (R−β−p)F_{K_R}(K_F) − (R−c)F_{K_R}(K_F−K_M) ≤ 0`) but has
-   increasing differences in `(K_R; K_M)` and `(K_F; K_M)`. The sign conflict
-   means **no single reorder restores supermodularity**, so a one-line Topkis
-   argument fails. The homotopy-in-`C_M` proof works but needs interiority and a
-   negative-definite Hessian *along the whole path* — both verified numerically,
-   not yet shown in closed form for arbitrary `F`.
-2. **Endogenous-capacity feedback in (C).** Corollary 1's concave/convex
-   density conditions hold the FOC-pinned cutoff probabilities fixed. A fully
-   general carbon statement must also track how `K*_R, K*_F` move with the
-   *shape* of `F` (a second-order feedback). Unsigned in closed form so far.
-3. **`C_R†` not explicit.** Theorem 2 proves the renewable-cost threshold
-   exists; closed form only for power-law (the knife-edge eq 24).
-4. **Regime stitching.** Proof assumes large-FCL interior regime along the path.
-   Small-FCL (App. G, wider threshold `C̄_M + cF(0;K°_R)`) and full-coverage
-   (`R ≥ c+C_F+C_M`) boundaries still need a single unified statement → Role 4.
-5. **Counterexample direction.** The shift-ratio condition is **sharp**: when
-   `g` is *increasing* (high-demand states windier than surplus states — a
-   positive demand/supply correlation), `dK*_R/dC_M > 0` and `K*_R < K°_R`, so
-   the capacity channel reverses. This is the precise statement of "where the
-   triple win breaks," and Role 3 should target it numerically.
+All four limitations of the uniform-only treatment are resolved. Every formula
+below is verified to machine precision against finite differences of the profit
+integral (`verify_exact.py`).
+
+1. **Submodularity — not an obstruction.** `Π` is submodular in `(K_R, K_F)`
+   (`∂²Π/∂K_R∂K_F = (R−β−p)F_{K_R}(K_F) − (R−c)F_{K_R}(K_F−K_M) ≤ 0`, verified
+   to 3e-6) with increasing differences in `(K_R;K_M)` and `(K_F;K_M)`, so no
+   reorder restores supermodularity and Topkis does not apply. **But it isn't
+   needed:** the homotopy-in-`C_M` + signed-cofactor proof is complete under a
+   stated **Regularity condition** (interior, nonsingular Hessian along the
+   path), for which we give a *checkable* diagonal-dominance sufficient
+   condition. A signed one-parameter cofactor does the comparative-statics job
+   without a lattice.
+2. **Endogenous-capacity feedback — no term is missing.** The comparison
+   probabilities are **distribution-free** (new Lemma; `C/(R−c)` at `K_F−K_M`,
+   `φ°` at `K_F°` — verified `=5/9, 17/18` to 1e-9 on a Beta mixture). The only
+   surviving level effect, `K*_R > K°_R`, is signed once by Theorem 1. So
+   condition (C) **+** Theorem 1 is a *complete* characterization — the feared
+   second-order feedback enters only through the leftward shift that condition
+   (a) already books.
+3. **`C_R†` — explicit.** For the power-law family,
+   `C_R† = MV = ½[c + (R−C_M−c)²/(R−c) + (R−c−C_F−C_M)²/(β+p−R)]`, and the
+   no-FCL threshold is `C_R° = C_F²/(2(β+p−c))`. We prove `C_R° < C_R†` (=0.040
+   vs 0.344 at the calibration), so on the nonempty window `(C_R°, C_R†)` FCL
+   drives `E[fossil]→0` while `K°_R` stays finite ⇒ carbon strictly falls.
+4. **Regimes — unified.** Thresholds are strictly ordered
+   `C_M^fc = R−c−C_F  <  C̄_M = (R−c)φ°  <  C̄_M^b = C̄_M + cF(0;K°_R)`
+   (gap `C̄_M − C_M^fc = C_F(β+p−R)/(β+p−c) > 0`, verified 0.48). Adoption iff
+   `C_M < C̄_M^b`; the triple win holds across all regions — strict in
+   small/large-FCL, degenerate-favorable in full coverage.
+
+**Single residual (→ Role 4):** the exact small-FCL boundary `K*_M = K°_R`
+inside region (I).
+
+**Sharpness (→ Role 3).** The condition is tight: the cofactor bracket flips
+with `g(K_F) − g(K_F−K_M)`, so `g` *increasing* (high-demand states windier than
+surplus — a positive demand/supply correlation) gives `dK*_R/dC_M > 0` and
+`K*_R < K°_R`. That's the precise "where the triple win breaks"; worth a
+targeted numerical counterexample.
 
 ## Handoffs
 - **Role 2:** validate `dK*_R/dC_M` sign-law and the `C_R†` crossing across

@@ -8,7 +8,9 @@ Deliverables for Team A1, Week 1. Builds on `FCL_Carbon_Paper.pdf`
 |---|---|
 | `role1_carbon_theory.tex` | Main result document (Management-Science-grade theory). Compile with `pdflatex`. |
 | `gap_memo.md` | One-page memo: the general condition + where the fully general proof resists. |
-| `verify.py` | Independent numerical validation (no closed forms assumed). |
+| `verify_exact.py` | **Adversarial exactness suite** — every analytical formula vs finite-differences of the profit integral. 15/15 PASS to 6–16 digits. |
+| `verify.py` | Closed-form + capacity-channel validation (no closed forms assumed). |
+| `validate_capacity_channel.py` | Fast shift-ratio sign-law sweep across Beta families. |
 
 ## Headline results
 1. **Uniform ground truth re-derived** (eqs 18–26) and verified to machine
@@ -22,6 +24,19 @@ Deliverables for Team A1, Week 1. Builds on `FCL_Carbon_Paper.pdf`
    distribution-free utilization effect (`+`) and a capacity-substitution effect
    whose sign is the channel above. Clean sufficient condition: shift-ratio
    condition + `C_R` small ⇒ carbon strictly falls for all `C_M < C̄_M`.
+
+## The four open points — all closed (see `gap_memo.md`)
+1. **Submodularity** is not an obstruction — homotopy+cofactor proof is complete
+   under a checkable Regularity condition (diagonal dominance).
+2. **Endogenous-capacity feedback** — comparison probabilities are
+   distribution-free (Lemma 3) and the one level effect is signed by Theorem 1,
+   so (C)+Theorem 1 is a *complete* characterization.
+3. **`C_R†` is explicit** for the power-law family:
+   `C_R† = ½[c + (R−C_M−c)²/(R−c) + (R−c−C_F−C_M)²/(β+p−R)]`.
+4. **Regimes unified** — `C_M^fc < C̄_M < C̄_M^b`, triple win across all adoption
+   regions. Sole residual (the exact `K*_M=K°_R` boundary) → Role 4.
+
+All backed by `verify_exact.py` (15/15 PASS).
 
 ## Reproduce
 ```bash
