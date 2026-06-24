@@ -44,10 +44,13 @@ integral (`verify_exact.py`).
    to 3e-6) with increasing differences in `(K_R;K_M)` and `(K_F;K_M)`, so no
    reorder restores supermodularity and Topkis does not apply. **But it isn't
    needed:** the homotopy-in-`C_M` + signed-cofactor proof is complete under a
-   stated **Regularity condition** (interior, nonsingular Hessian along the
-   path), for which we give a *checkable* diagonal-dominance sufficient
-   condition. A signed one-parameter cofactor does the comparative-statics job
-   without a lattice.
+   stated **Regularity condition** (interior, `H ≺ 0` along the path), verified
+   by eigenvalue computation. The path *crosses regimes* — small-FCL near `C̄_M`
+   (where `K*_M→0`), large-FCL below — and `dK*_R/dC_M < 0` is confirmed in both
+   (scan: −4.28,−2.76,−2.19 small; −5.21,−21,−108 large). Regularity lapses only
+   at the knife-edge (`C_R` small, `K*_R→∞`), where `K*_R>K°_R` is immediate.
+   A signed one-parameter cofactor does the comparative-statics job without a
+   lattice.
 2. **Endogenous-capacity feedback — no term is missing.** The comparison
    probabilities are **distribution-free** (new Lemma; `C/(R−c)` at `K_F−K_M`,
    `φ°` at `K_F°` — verified `=5/9, 17/18` to 1e-9 on a Beta mixture). The only

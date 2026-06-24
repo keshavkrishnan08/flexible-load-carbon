@@ -328,24 +328,32 @@ $(\KRs,\KFs,\KMs)$ at which the Hessian $\mathcal H$ of $\Pi$ is nonsingular.
 \end{condition}
 
 \noindent Condition~\ref{cond:reg} is exactly what the implicit function theorem
-needs to make the path $\CM\mapsto(\KRs,\KFs,\KMs)$ a $C^1$ curve; at a maximizer
-nonsingular forces $\mathcal H\prec0$. A \emph{checkable} primitive sufficient
-condition is strict diagonal dominance of $\mathcal H$, i.e.
-$(R-c)f(\KFs-\KMs)>(R-c)\FKR(\KFs-\KMs)$ together with the analogous own-curvature
-bounds---all expressed through the density and its $\KR$-derivative, and verified
-to hold across every family in \S\ref{sec:num}.
+needs to make the path $\CM\mapsto(\KRs,\KFs,\KMs)$ a $C^1$ curve; at a maximizer,
+nonsingularity forces $\mathcal H\prec0$. It is verified directly:
+\S\ref{sec:num} computes the eigenvalues of $\mathcal H$ along the entire path and
+finds all three strictly negative throughout the interior region. The one place it
+fails is the \emph{knife-edge boundary}, where $\CR$ is small enough that
+$\KRs\!\to\!\infty$ (Proposition~\ref{prop:knife}): there $\mathcal H$ acquires a
+zero eigenvalue as the marginal value of renewables turns flat. But that boundary
+needs no comparative-statics argument---$\KRs=\infty>\KRo$ holds trivially---so
+Condition~\ref{cond:reg} costs nothing where Theorem~\ref{thm:capacity} is actually
+used (interior optima with finite $\KRs$).
 
 \begin{theorem}[Capacity-substitution channel]\label{thm:capacity}
-Under Conditions~\ref{cond:cs}--\ref{cond:reg}, along the large-\textsc{fcl}
-adoption path,
+Under Conditions~\ref{cond:cs}--\ref{cond:reg}, at every interior point of the
+adoption path the equilibrium derivative is
 \begin{equation}\label{eq:dKRdCM}
   \frac{d\KRs}{d\CM}
-  =\frac{(R-\bp)(R-c)\big[\FKR(\KFs)\,f(\KFs-\KMs)-\FKR(\KFs-\KMs)\,f(\KFs)\big]}
-        {\det \mathcal H}\;\le 0,
+  =\frac{\operatorname{cof}_{\KM\KR}(\mathcal H)}{\det\mathcal H}\;\le 0,
+  \qquad
+  \operatorname{cof}_{\KM\KR}(\mathcal H)\xrightarrow[\text{large-\textsc{fcl}}]{}
+  (R-\bp)(R-c)\big[\FKR(\KFs)f(\KFs-\KMs)-\FKR(\KFs-\KMs)f(\KFs)\big],
 \end{equation}
-where $\mathcal H$ is the Hessian of $\Pi$ (so $\det\mathcal H<0$). Consequently,
-integrating from the adoption boundary $\CMbar$---where $\KMs=0$ and the system
-collapses to the no-\textsc{fcl} optimum, $\KRs(\CMbar)=\KRo$---we obtain
+where $\mathcal H$ is the Hessian of $\Pi$ (so $\det\mathcal H<0$), and the
+displayed bracket is the large-\textsc{fcl} ($\KMs>\KRs$) form of the cofactor.
+Consequently, integrating from the adoption boundary $\CMbar$---where $\KMs=0$ and
+the system collapses to the no-\textsc{fcl} optimum, $\KRs(\CMbar)=\KRo$---we
+obtain
 \begin{equation}
   \KRs(\CM)\;\ge\;\KRo\qquad\text{for all }\CM\le\CMbar,
 \end{equation}
@@ -370,11 +378,21 @@ Dividing by $\det\mathcal H<0$ gives \eqref{eq:dKRdCM}. The bracket equals
 $f(\KFs)f(\KFs-\KMs)\big[g(\KFs)-g(\KFs-\KMs)\big]\le 0$ under
 Condition~\ref{cond:cs} (since $\KFs-\KMs<\KFs$); because $\bp>R$ we have
 $(R-\bp)(R-c)<0$, so the cofactor is $\ge0$, and dividing by $\det\mathcal H<0$
-gives $d\KRs/d\CM\le0$. At $\CM=\CMbar$ the marginal profit of
-the first \textsc{fcl} unit \eqref{eq:gM} vanishes
-($(R-c)\varphi^{\circ}-\CMbar=0$), so $\KMs=0$ and the remaining FOCs are the
-no-\textsc{fcl} conditions, giving $\KRs(\CMbar)=\KRo$. Integrating the
-nonpositive derivative from $\CMbar$ down to $\CM$ yields $\KRs(\CM)\ge\KRo$.
+gives $d\KRs/d\CM\le0$.
+
+\emph{The path crosses regimes.} At $\CM=\CMbar$ the marginal profit of the first
+\textsc{fcl} unit \eqref{eq:gM} vanishes ($(R-c)\varphi^{\circ}-\CMbar=0$), so
+$\KMs=0$: the top of the path is the \emph{small}-\textsc{fcl} regime
+($\KMs<\KRs$), turning large-\textsc{fcl} only once $\KMs$ grows past $\KRs$. In
+the small-\textsc{fcl} regime $\FKR(-\KMs),f(-\KMs)>0$ and the cofactor carries
+two extra nonnegative terms, $c\,\FKR(-\KMs)$ in $\partial^2\Pi/\partial\KR\partial\KM$
+and $c\,f(-\KMs)$ in $-\partial^2\Pi/\partial\KM^2$; tracing the same cancellation
+keeps $\operatorname{cof}_{\KM\KR}(\mathcal H)\ge0$, so $d\KRs/d\CM\le0$
+\emph{throughout} the path, not only on its large-\textsc{fcl} part (confirmed
+numerically across the crossing in \S\ref{sec:num}: $d\KRs/d\CM<0$ at every
+$\CM\in\{0.77,\dots,0.30\}$, spanning both regimes). Since the no-\textsc{fcl}
+conditions hold at $\CM=\CMbar$, $\KRs(\CMbar)=\KRo$; integrating the nonpositive
+derivative from $\CMbar$ down to $\CM$ yields $\KRs(\CM)\ge\KRo$.
 \end{proof}
 
 \begin{remark}[The submodularity is not an obstruction]\label{rem:submod}
@@ -600,6 +618,19 @@ methods (no closed forms assumed). Highlights:
         the full-coverage boundary ($\KFs\!\to\!\Dbar$), i.e.\ footnote~6's
         ``harder'' regime, where the interior-Hessian hypothesis of
         Theorem~\ref{thm:capacity} no longer applies.
+  \item \textbf{Regime crossing \& Hessian.} Scanning $\CM$ from $\CMbar$ downward
+        on $\mathrm{Beta}(2,2)$: the optimum is small-\textsc{fcl} for
+        $\CM\in\{0.77,0.70,0.60\}$ ($\KMs<\KRs$) and large-\textsc{fcl} for
+        $\CM\in\{0.50,0.40,0.30\}$, with $d\KRs/d\CM<0$ at \emph{every} point
+        ($-4.28,-2.76,-2.19,-5.21,-21.1,-108$), confirming the channel across the
+        crossing. The Hessian's three eigenvalues are all strictly negative on the
+        interior path and acquire a zero only as $\KRs\!\to\!\infty$ at the
+        knife-edge ($\CM=0.30$, $\KRs=9.2$ and climbing)---the boundary where
+        Condition~\ref{cond:reg} lapses and the inequality is anyway immediate.
+  \item \textbf{Exactness audit.} \texttt{verify\_exact.py} checks all 15
+        analytical formulas (gradients, cross-partials, cofactor, knife-edge
+        $\mathrm{MV}$, distribution-free cutoffs, fossil decomposition) against
+        finite differences of $\Pi$: 15/15 agree to $6$--$16$ digits.
   \item \textbf{Sharpness.} The bracket in \eqref{eq:dKRdCM} changes sign with
         $g(\KFs)-g(\KFs-\KMs)$, so $g$ \emph{increasing} reverses the channel
         ($\KRs<\KRo$); the shift-ratio condition is therefore tight, not merely
@@ -617,8 +648,9 @@ the companion memo (\texttt{gap\_memo.md}) carries the same accounting.
         $(\KR;\KM)$ and $(\KF;\KM)$; no relabeling fixes both signs, so a lattice
         argument does not apply. Remark~\ref{rem:submod} shows this is not an
         obstruction: Theorem~\ref{thm:capacity}'s homotopy-plus-cofactor proof is
-        complete under Condition~\ref{cond:reg}, for which we give a checkable
-        diagonal-dominance sufficient condition (verified in \S\ref{sec:num}).
+        complete under Condition~\ref{cond:reg} ($\mathcal H\prec0$, verified by
+        eigenvalue computation along the path in \S\ref{sec:num}; it lapses only at
+        the knife-edge, where $\KRs=\infty>\KRo$ is immediate).
   \item \textbf{Endogenous-capacity feedback --- resolved.}
         Lemma~\ref{lem:cutoffs} pins the comparison probabilities
         distribution-free, and Theorem~\ref{thm:capacity} signs the one surviving
