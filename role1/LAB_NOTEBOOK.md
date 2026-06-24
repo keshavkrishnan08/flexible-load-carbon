@@ -20,6 +20,15 @@ raises optimal renewable capacity `K*_R > K°_R`; (3) strengthen the
 - **B2** — flexibility continuum, AI/storage, multi-grid, price exogeneity, dynamics.
 Anything touching those is logged as "dropped (out of scope)".
 
+> **Scope note (post-review).** The Role 1 deliverable is the *General Carbon
+> Theory* — entries **E1–E6** (`role1_carbon_theory.tex` + `gap_memo.md`).
+> Entries **E8–E10** (optimal-contract, correlation comparative static, robust /
+> detail-free) were built under a broader "general contracting" framing; on
+> re-reading the A1 Week 1 Plan they overlap **Role 3** (carbon sign across
+> distributions) and **Role 4** (core-proof generalization, regimes), so they have
+> been **quarantined** to `exploratory_cross_role/` and are *not* counted as the
+> Role 1 deliverable. They remain logged here for provenance.
+
 ---
 
 ## E1 — Ground truth: re-derive the uniform closed forms
