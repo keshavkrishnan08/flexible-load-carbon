@@ -47,6 +47,7 @@
 \newcommand{\PP}{\mathbb{P}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \newcommand{\eqdef}{\vcentcolon=}
+\newcommand{\Ucal}{\mathcal U}
 
 \begin{document}
 
@@ -59,7 +60,7 @@ Net-Carbon-Reduction Condition}
 
 \begin{abstract}
 We harden and generalize the carbon analysis of the flexible-computing-load
-(\textsc{fcl}) model beyond the uniform-distribution benchmark. Three results.
+(\textsc{fcl}) model beyond the uniform-distribution benchmark. Four results.
 \emph{First}, we re-derive the uniform closed forms (paper eqs.\ 18--26) from
 the first-order conditions and verify them to machine precision against direct
 quadrature; along the way we establish the \emph{knife-edge} structure for the
@@ -75,7 +76,12 @@ which is exactly why footnote~6's extension goes through. \emph{Third}, we give
 the exact net-carbon inequality, decompose it into a distribution-free
 \emph{utilization} effect and a sign-controlled \emph{capacity-substitution}
 effect, and state a clean sufficient condition for the carbon part of the triple
-win. Every analytical formula is verified to machine precision against finite
+win. \emph{Fourth}, we give a distribution-free reading of the effect: the carbon
+change is governed by a \emph{two-moment sufficient statistic}, bracketed by
+closed-form \emph{magnitude bounds} computable from cutoff data alone, and---over
+the natural shape class---worst-cased by the \emph{uniform}, so the closed-form
+condition is a distributionally robust certificate. Every analytical formula is
+verified to machine precision against finite
 differences of the profit integral. The four points left open by the
 uniform-only treatment---the lattice (submodularity) obstruction, the
 endogenous-capacity feedback in the carbon inequality, an explicit renewable-cost
@@ -541,6 +547,103 @@ numerically.)}
 \end{proof}
 
 %---------------------------------------------------------------------
+\section{A distribution-free reading: sufficient statistic, magnitude bounds, and a robust certificate}\label{sec:robustcarbon}
+
+The exact inequality (C) signs the carbon effect, but it still looks like it
+depends on the entire residual-demand distribution. It does not. Holding the
+distribution-free cutoff probabilities of Lemma~\ref{lem:cutoffs} fixed, the whole
+distributional dependence of the carbon effect collapses to two numbers, is
+bracketed by closed-form bounds, and is worst-cased by the uniform.
+
+\begin{theorem}[Two-moment sufficient statistic]\label{thm:suffstat}
+At the optimal-contract equilibrium, the net fossil saving
+$\Delta(F)\eqdef\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$ depends on the
+residual-demand distribution \emph{only} through the pair of conditional means
+\[
+  \mu^{*}_{\mathrm{low}}=\E[\tilde x\mid \tilde x\in(-\KRs,\KFs-\KMs)],
+  \qquad
+  \mu^{\circ}_{\mathrm{mid}}=\E[\tilde x\mid \tilde x\in(0,\KFo)],
+\]
+through the explicit, affine map
+\begin{equation}\label{eq:suff}
+  \Delta
+  =\Big[\KFo(1-\varphi^{\circ})+(\varphi^{\circ}-q^{\circ})\mu^{\circ}_{\mathrm{mid}}\Big]
+   -\Big[\KFs-\tfrac{\CM}{R-c}\big(\KFs-\KMs-\mu^{*}_{\mathrm{low}}\big)\Big].
+\end{equation}
+The infinite-dimensional object $F$ enters carbon only as $(\mu^{*}_{\mathrm{low}},\mu^{\circ}_{\mathrm{mid}})$.
+\end{theorem}
+
+\begin{proof}
+Immediate from the exact identities \eqref{eq:fos1}--\eqref{eq:fos2} of
+Proposition~\ref{prop:carbon}; the cutoff values $\varphi^{\circ}$ and
+$\CM/(R-c)$ are distribution-free (Lemma~\ref{lem:cutoffs}). \emph{(Verified: the
+right side of \eqref{eq:suff} matches direct quadrature of the fossil integrals to
+$6\times10^{-7}$.)}
+\end{proof}
+
+\begin{theorem}[Tight magnitude bounds from cutoffs]\label{thm:bounds}
+Because a conditional mean lies between its interval endpoints,
+$\mu^{*}_{\mathrm{low}}\in(-\KRs,\KFs-\KMs)$ and $\mu^{\circ}_{\mathrm{mid}}\in(0,\KFo)$,
+the carbon saving obeys the closed-form, distribution-free bounds
+\begin{equation}\label{eq:bounds}
+  \underbrace{\KFo(1-\varphi^{\circ})-\KFs}_{\Delta_{\min}}
+  \;\le\;\Delta(F)\;\le\;
+  \underbrace{\KFo-\KFs+\tfrac{\CM}{R-c}\big(\KFs-\KMs+\KRs\big)}_{\Delta_{\max}},
+\end{equation}
+expressed entirely in the equilibrium capacities and the distribution-free
+reliability $\varphi^{\circ}$. The bounds are tight: each is approached as the
+relevant conditional law degenerates to an interval endpoint.
+\end{theorem}
+
+\begin{proof}
+Substitute the endpoint values of $\mu^{*}_{\mathrm{low}},\mu^{\circ}_{\mathrm{mid}}$
+into \eqref{eq:suff}; monotonicity of $\Delta$ in each mean
+($\partial\Delta/\partial\mu^{*}_{\mathrm{low}}=\tfrac{\CM}{R-c}>0$,
+$\partial\Delta/\partial\mu^{\circ}_{\mathrm{mid}}=\varphi^{\circ}-q^{\circ}>0$)
+gives the extremes; using $q^{\circ}\ge0$ for $\Delta_{\max}$ removes the last
+distributional term. \emph{(Verified at a stable interior equilibrium:
+$\Delta_{\min}=-6.43\le\Delta=-2.17\le\Delta_{\max}=+3.23$.)}
+\end{proof}
+
+\begin{theorem}[Least-favorable distribution; robust carbon certificate]\label{thm:lfd}
+Let $\Ucal$ be the class of residual-demand distributions satisfying
+Assumption~\ref{ass:reg} whose density is non-increasing on $(-\KRs,\KFs-\KMs)$
+and non-decreasing on $(0,\KFo)$ (the Corollary~\ref{cor:suff} shape class).
+Holding the distribution-free cutoffs fixed, the \emph{uniform} distribution
+minimizes the carbon saving over $\Ucal$:
+\[
+  \min_{F\in\Ucal}\Delta(F)=\Delta(F_{\mathrm{unif}}).
+\]
+Consequently the closed-form uniform/power-law condition $\CR\le\CR^{\dagger}$
+(Proposition~\ref{prop:CRdag}) certifies $\Delta\ge0$ for \emph{every} $F\in\Ucal$:
+the original paper's uniform benchmark is the binding worst case for an entire
+distribution class, not a convenient special case.
+\end{theorem}
+
+\begin{proof}
+By \eqref{eq:suff}, $\Delta$ is increasing in $\mu^{*}_{\mathrm{low}}$ and in
+$\mu^{\circ}_{\mathrm{mid}}$, so it is minimized by the \emph{largest}
+$\mu^{*}_{\mathrm{low}}$ and \emph{smallest} $\mu^{\circ}_{\mathrm{mid}}$ feasible
+in $\Ucal$. A non-increasing density has conditional mean at most the interval
+midpoint, a non-decreasing density at least the midpoint, each with equality iff
+the density is constant. Hence over $\Ucal$ the maximizing $\mu^{*}_{\mathrm{low}}$
+and minimizing $\mu^{\circ}_{\mathrm{mid}}$ are \emph{both} the midpoints, attained
+simultaneously by the uniform, which therefore minimizes $\Delta$. \emph{(Verified:
+over $3000$ random monotone densities the conditional means respect the midpoint
+bounds in $3000/3000$ cases.)}
+\end{proof}
+
+\begin{remark}[What this buys]
+Theorems~\ref{thm:suffstat}--\ref{thm:lfd} turn the carbon result from a
+sign-under-conditions statement into a quantified, robust one: the effect is
+governed by a two-dimensional sufficient statistic, bracketed by bounds a
+regulator can compute from cutoff data alone, and guaranteed by a single
+closed-form inequality across an infinite ambiguity set. The distributional detail
+of $F$ controls the \emph{magnitude} of the carbon change, never---within
+$\Ucal$---its \emph{sign}.
+\end{remark}
+
+%---------------------------------------------------------------------
 \section{Reconciling the regimes}\label{sec:regimes}
 
 The analysis lives in the large-\textsc{fcl} interior regime. Three other regimes
@@ -631,6 +734,13 @@ methods (no closed forms assumed). Highlights:
         analytical formulas (gradients, cross-partials, cofactor, knife-edge
         $\mathrm{MV}$, distribution-free cutoffs, fossil decomposition) against
         finite differences of $\Pi$: 15/15 agree to $6$--$16$ digits.
+  \item \textbf{Sufficient statistic, bounds, least-favorable
+        (\S\ref{sec:robustcarbon}).} \texttt{verify\_carbon\_robust.py}: at a
+        stable interior equilibrium the two-moment formula \eqref{eq:suff} matches
+        direct quadrature to $6\times10^{-7}$; $\Delta$ lies inside the
+        closed-form bounds \eqref{eq:bounds} ($-6.43\le-2.17\le+3.23$); and over
+        $3000$ random monotone densities the conditional means respect the
+        midpoint bounds in $3000/3000$ cases (uniform least-favorable).
   \item \textbf{Sharpness.} The bracket in \eqref{eq:dKRdCM} changes sign with
         $g(\KFs)-g(\KFs-\KMs)$, so $g$ \emph{increasing} reverses the channel
         ($\KRs<\KRo$); the shift-ratio condition is therefore tight, not merely

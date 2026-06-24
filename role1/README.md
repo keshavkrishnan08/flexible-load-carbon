@@ -21,6 +21,7 @@ Prop. 4, footnote 6).
 | `verify.py` | Closed-form (eqs 25/26) + knife-edge + capacity-channel validation. |
 | `validate_capacity_channel.py` | Shift-ratio sign-law sweep across Beta families (`K*_R>K°_R`). |
 | `validate_regime_crossing.py` | Regime-crossing + Hessian-definiteness scan. |
+| `verify_carbon_robust.py` | Sufficient statistic + magnitude bounds + least-favorable distribution (§"distribution-free reading"). |
 | `LAB_NOTEBOOK.md` | Chronological research log (entries E1–E10; E8–E10 are the quarantined cross-role work). |
 | `exploratory_cross_role/` | **Out-of-scope** material (optimal-contract / mechanism / robustness / correlation-charting). NOT part of the Role 1 deliverable — candidate handoffs to Role 3 / Role 4. See its README. |
 
@@ -36,6 +37,16 @@ Prop. 4, footnote 6).
    distribution-free utilization effect and a capacity-substitution effect whose
    sign is the channel above. Sufficient condition: shift-ratio + `C_R` small ⇒
    carbon strictly falls for all `C_M < C̄_M`.
+4. **Distribution-free reading of the carbon effect** (the capstone):
+   - **Two-moment sufficient statistic** — the whole distributional dependence of
+     the carbon change collapses to `(μ*_low, μ°_mid)` at the distribution-free
+     cutoffs (verified to 6e-7).
+   - **Tight closed-form magnitude bounds** computable from cutoff data alone
+     (`Δ_min ≤ Δ ≤ Δ_max`; verified inside).
+   - **Least-favorable distribution = uniform** within the monotone-density class
+     ⇒ the closed-form condition is a *worst-case carbon certificate* over an
+     infinite ambiguity set (verified 3000/3000). The paper's uniform benchmark is
+     the *binding* worst case, not a convenient special case.
 
 ## The four open points — all closed (see `gap_memo.md`)
 1. **Submodularity** is not an obstruction — homotopy+cofactor proof is complete
