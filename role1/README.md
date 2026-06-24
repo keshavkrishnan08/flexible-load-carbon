@@ -7,7 +7,9 @@ Deliverables for Team A1, Week 1. Builds on `FCL_Carbon_Paper.pdf`
 | File | What it is |
 |---|---|
 | `role1_carbon_theory.tex` | Main result document (Management-Science-grade theory). Compile with `pdflatex`. |
-| `role1_contract_theory.tex` | **Extension** — the optimal demand-response *contract*: existence/uniqueness/characterization (general F), N&S emission condition, the demand–supply correlation comparative static, and the regulator–utility mechanism. |
+| `role1_contract_theory.tex` | **Extension I** — the optimal demand-response *contract*: existence/uniqueness/characterization (general F), N&S emission condition, the demand–supply correlation comparative static, and the regulator–utility mechanism. |
+| `role1_robust_contract.tex` | **Extension II** — distributionally *robust* (least-favorable = uniform ⇒ closed-form worst-case certificate) and *detail-free* (prior-independent, Wilson-doctrine) contracting. |
+| `LAB_NOTEBOOK.md` | Chronological research log: derivations, the sign-error catch, test-bug catches, dropped directions (carbon-tax = B1), verification ledger, open problems. |
 | `gap_memo.md` | One-page memo: the general condition + where the fully general proof resists. |
 | `verify_exact.py` | **Adversarial exactness suite** — every analytical formula vs finite-differences of the profit integral. 15/15 PASS to 6–16 digits. |
 | `verify.py` | Closed-form + capacity-channel validation (no closed forms assumed). |
