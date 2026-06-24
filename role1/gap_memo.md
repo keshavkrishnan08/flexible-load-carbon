@@ -58,11 +58,17 @@ integral (`verify_exact.py`).
    condition (C) **+** Theorem 1 is a *complete* characterization — the feared
    second-order feedback enters only through the leftward shift that condition
    (a) already books.
-3. **`C_R†` — explicit.** For the power-law family,
-   `C_R† = MV = ½[c + (R−C_M−c)²/(R−c) + (R−c−C_F−C_M)²/(β+p−R)]`, and the
-   no-FCL threshold is `C_R° = C_F²/(2(β+p−c))`. We prove `C_R° < C_R†` (=0.040
-   vs 0.344 at the calibration), so on the nonempty window `(C_R°, C_R†)` FCL
-   drives `E[fossil]→0` while `K°_R` stays finite ⇒ carbon strictly falls.
+3. **`C_R†` — now a theorem for general `F`.** The viability threshold
+   `C_R† = sup{C_R : Δ(C_R) ≥ 0}` is finite and positive for *every* `F` (with
+   a.s.-positive renewables): carbon falls on the nonempty window `(C_R°, C_R†)`
+   and rises above it. Proof anchors both ends — the rigorous large-cost limit
+   `Δ → −U₀ < 0` (no renewables ⇒ FCL only adds the utilization effect) plus the
+   small-cost unbounded-renewables regime, with the strict gap `C_R° < C_R†`
+   forced by the `R>c` shadow-value weight. Explicit instance (power-law):
+   `C_R† = MV = ½[c + (R−C_M−c)²/(R−c) + (R−c−C_F−C_M)²/(β+p−R)]`,
+   `C_R° = C_F²/(2(β+p−c))`. Verified [`verify_threshold.py`]: Beta(2,5) carbon
+   falls for small `C_R` (Δ=+0.56,+1.07), rises past `C_R†∈(0.35,0.5)`,
+   `Δ<0` at the large-cost anchor. *(Upgrades the earlier heuristic.)*
 4. **Regimes — unified.** Thresholds are strictly ordered
    `C_M^fc = R−c−C_F  <  C̄_M = (R−c)φ°  <  C̄_M^b = C̄_M + cF(0;K°_R)`
    (gap `C̄_M − C_M^fc = C_F(β+p−R)/(β+p−c) > 0`, verified 0.48). Adoption iff

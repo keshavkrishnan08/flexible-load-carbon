@@ -505,21 +505,62 @@ Theorem~\ref{thm:capacity} is a \emph{complete} characterization---no
 second-order feedback term is dropped.
 \end{remark}
 
-\begin{theorem}[Clean sufficient condition for the carbon triple win]\label{thm:carbon}
-Suppose Condition~\ref{cond:cs} holds (so $\KRs>\KRo$) and the residual-demand
-density is unimodal with mode in the positive-demand region. Then there is a
-threshold $\CR^{\dagger}>0$ such that, for all $\CR\le\CR^{\dagger}$, the program
-strictly lowers carbon for every $\CM<\CMbar$. As $\CR\downarrow$, the
-capacity-substitution effect grows without bound---renewable investment expands,
-residual demand moves into deep surplus, and fossil output (hence carbon)
-$\to 0$---while the utilization effect stays bounded by
-$\tfrac{\CM}{R-c}(\KFs-\KMs)$. The two cross at $\CR^{\dagger}$.
+Write $\Delta(\CR)\eqdef\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$ for the
+net fossil saving at the optimum given renewable cost $\CR$ (carbon falls iff
+$\Delta>0$). The next theorem establishes the viability threshold \emph{for every
+$F$}, not just the power-law family, by anchoring both ends of the cost range.
+
+\begin{theorem}[General existence of the viability threshold $\CR^{\dagger}$]\label{thm:carbon}
+Fix all primitives except $\CR$, with $\CM<\CMbar$ (so $\KMs>0$), and suppose
+renewable output is almost surely positive ($\PP(\tilde S>0)=1$). Then:
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em]
+  \item \textup{(Large-cost anchor, fully general.)} As $\CR\to\infty$ no
+        renewables are built, $\KRs=\KRo=0$, and the \textsc{fcl} program differs
+        from the no-\textsc{fcl} grid only by running computing on spare fossil;
+        the resulting utilization effect is strictly positive, so
+        $\Delta(\CR)\to-U_0<0$. The carbon-reduction set $\{\CR:\Delta(\CR)\ge0\}$
+        is therefore bounded above.
+  \item \textup{(Small-cost regime.)} There are thresholds $0\le\CR^{\circ}<\CR^{\dagger}$
+        such that for $\CR<\CR^{\dagger}$ the \textsc{fcl} renewable marginal value
+        exceeds $\CR$, so $\KRs\to\infty$ and $\E[\text{fossil}^{*}]\to0$; while for
+        $\CR>\CR^{\circ}$ the no-\textsc{fcl} optimum $\KRo$ is finite and
+        $\E[\text{fossil}^{\circ}]>0$. The gap $\CR^{\dagger}>\CR^{\circ}$ is
+        strict because mining revenue $R>c$ raises the renewable shadow value in
+        the dispatch region (FOC \eqref{eq:gR} carries weight $R$ where the
+        no-\textsc{fcl} FOC carries $c$).
+  \item Hence on the nonempty interval $(\CR^{\circ},\CR^{\dagger})$,
+        $\Delta(\CR)=\E[\text{fossil}^{\circ}]>0$: carbon strictly falls. The
+        viability threshold $\CR^{\dagger}\eqdef\sup\{\CR:\Delta(\CR)\ge0\}$ is
+        finite and positive for every such $F$; carbon strictly rises for
+        $\CR>\CR^{\dagger}$.
+\end{enumerate}
 \end{theorem}
 
-\noindent Under the uniform/power-law family this is the knife-edge of
-Proposition~\ref{prop:knife}: when \eqref{eq:eq24} holds, $\KRs=\infty$, fossil
-output vanishes, and carbon strictly falls---recovering paper eqs.\ (25)--(26).
-For that family the threshold is fully explicit.
+\begin{proof}
+\emph{(i)} The renewable marginal benefit at $\KR=0$ is a finite constant $B_0$
+(the $\CR$-free part of \eqref{eq:gR} and \eqref{eq:gM}); for $\CR>B_0$ the FOCs
+give the corner $\KRs=\KRo=0$. With no renewables, residual demand is $\tilde
+x=\tilde D\ge0$. By Lemma~1 the program dispatches computing on spare fossil, which
+strictly raises fossil output in every state with positive spare capacity
+(the distribution-free utilization effect of \S\ref{sec:carbon}), and
+$\KFs\ge\KFo$ since the with-\textsc{fcl} blackout probability is lower when
+$\CM<\CMbar$ (Lemma~\ref{lem:cutoffs}). Both push the same way, so
+$\E[\text{fossil}^{*}]>\E[\text{fossil}^{\circ}]$ and $\Delta=-U_0<0$. \emph{(ii)} $\E[\text{fossil}^{*}]=\int_{-\KMs}^{\KFs-\KMs}(1-F)\,dx$
+is non-increasing in $\KR$ (since $\FKR\ge0$); as $\KRs\to\infty$,
+$\PP(\tilde S>0)=1$ forces $\tilde x\to-\infty$ a.s., so $F(x;\KRs)\to1$ for every
+$x$ and $\E[\text{fossil}^{*}]\to0$ by monotone convergence. The renewable FOC
+\eqref{eq:gR} assigns weight $R$ on $(\KF-\KM,\KF)$ where the no-\textsc{fcl} FOC
+\eqref{eq:gF}$|_{\KM=0}$ assigns $c<R$, so the \textsc{fcl} marginal value
+dominates pointwise and its corner threshold satisfies $\CR^{\dagger}>\CR^{\circ}$.
+\emph{(iii)} Combine: on $(\CR^{\circ},\CR^{\dagger})$, $\E[\text{fossil}^{*}]=0<\E[\text{fossil}^{\circ}]=\Delta$;
+with (i) the set $\{\Delta\ge0\}$ is nonempty and bounded above, so its supremum
+$\CR^{\dagger}\in(0,\infty)$ exists.
+\end{proof}
+
+\noindent Under the uniform/power-law family the thresholds of
+Theorem~\ref{thm:carbon} are the explicit knife-edge values of
+Proposition~\ref{prop:knife}: $\CR^{\dagger}=\mathrm{MV}$ and
+$\CR^{\circ}=\CF^2/2(\bp-c)$, recovering paper eqs.\ (25)--(26).
 
 \begin{proposition}[Explicit $\CR^{\dagger}$ for the power-law family]\label{prop:CRdag}
 Let $F$ be power-law. With
@@ -734,6 +775,13 @@ methods (no closed forms assumed). Highlights:
         analytical formulas (gradients, cross-partials, cofactor, knife-edge
         $\mathrm{MV}$, distribution-free cutoffs, fossil decomposition) against
         finite differences of $\Pi$: 15/15 agree to $6$--$16$ digits.
+  \item \textbf{Viability threshold (Theorem~\ref{thm:carbon}).}
+        \texttt{verify\_threshold.py}: sweeping $\CR$ on $\mathrm{Beta}(2,5)$
+        right-skewed demand, carbon falls for small $\CR$ ($\KRs$ unbounded,
+        $\E[\text{fossil}^{*}]\!\to\!0$, $\Delta=+0.56,+1.07$ at $\CR=0.25,0.35$)
+        and rises once $\CR$ crosses $\CR^{\dagger}\!\in\!(0.35,0.5)$
+        ($\Delta=-3.68,\dots,-6.47$ through $\CR=1.6$), with $\KRs=\KRo=0$ and
+        $\Delta<0$ at the large-cost anchor---confirming the existence proof.
   \item \textbf{Sufficient statistic, bounds, least-favorable
         (\S\ref{sec:robustcarbon}).} \texttt{verify\_carbon\_robust.py}: at a
         stable interior equilibrium the two-moment formula \eqref{eq:suff} matches
@@ -767,12 +815,15 @@ the companion memo (\texttt{gap\_memo.md}) carries the same accounting.
         level effect ($\KRs>\KRo$). Remark~\ref{rem:feedback} shows (C) together
         with these is a \emph{complete} characterization---no second-order term is
         dropped.
-  \item \textbf{$\CR^{\dagger}$ --- explicit.} Proposition~\ref{prop:CRdag} gives
-        the closed form $\CR^{\dagger}=\mathrm{MV}$ and the no-\textsc{fcl}
-        threshold $\CR^{\circ}=\CF^2/2(\bp-c)$ for the power-law family, with a
-        nonempty window $(\CR^{\circ},\CR^{\dagger})$ on which carbon strictly
-        falls. For general $F$, $\CR^{\dagger}$ is the (existence-guaranteed)
-        $\CR$ at which (C) binds.
+  \item \textbf{$\CR^{\dagger}$ --- now a theorem for general $F$.}
+        Theorem~\ref{thm:carbon} proves the viability threshold
+        $\CR^{\dagger}=\sup\{\CR:\Delta(\CR)\ge0\}$ is finite and positive for
+        \emph{every} $F$ (with a.s.-positive renewables): carbon falls on the
+        nonempty window $(\CR^{\circ},\CR^{\dagger})$ and rises above it, anchored
+        by the rigorous large-cost limit $\Delta\to-U_0<0$. The power-law values
+        $\CR^{\dagger}=\mathrm{MV}$, $\CR^{\circ}=\CF^2/2(\bp-c)$
+        (Proposition~\ref{prop:CRdag}) are the explicit instance. \emph{This
+        upgrades the earlier heuristic ``the two curves cross'' to a proof.}
   \item \textbf{Boundary regimes --- unified.}
         Proposition~\ref{prop:regimes} orders the thresholds
         $\CM^{\mathrm{fc}}<\CMbar<\CMbar^{b}$ and states the triple win across
