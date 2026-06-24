@@ -22,7 +22,8 @@ Prop. 4, footnote 6).
 | `validate_capacity_channel.py` | Shift-ratio sign-law sweep across Beta families (`K*_R>K°_R`). |
 | `validate_regime_crossing.py` | Regime-crossing + Hessian-definiteness scan. |
 | `verify_carbon_robust.py` | Sufficient statistic + magnitude bounds + least-favorable distribution (§"distribution-free reading"). |
-| `LAB_NOTEBOOK.md` | Chronological research log (entries E1–E10; E8–E10 are the quarantined cross-role work). |
+| `LAB_NOTEBOOK.md` | Dated, append-only research log (ISO-8601 entries E1–E11; conventions at top). |
+| `CONTRIBUTIONS.md` | Append-only contributions ledger (one row per result/fix/decision, with commit). |
 | `exploratory_cross_role/` | **Out-of-scope** material (optimal-contract / mechanism / robustness / correlation-charting). NOT part of the Role 1 deliverable — candidate handoffs to Role 3 / Role 4. See its README. |
 
 ## Headline results (Role 1)

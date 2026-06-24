@@ -1,17 +1,30 @@
-# Lab Notebook — Team A1, Role 1 (General Contracting Theory & Numerical Methods)
+# Lab Notebook — Team A1, Role 1 (General Carbon Theory)
 
-A running research log: what was attempted, what was derived, what was verified,
-what broke, and what was deliberately *not* done (scope). Newest entries at the
-bottom. Every analytical claim is cross-checked numerically before it enters a
-`.tex`; the verifier and the digit-level agreement are noted in brackets.
+**Keeper:** Role 1 (R1).  **Opened:** 2026-06-22 (A1 Week 1 Plan).
 
-**Mandate (A1).** Place the central result on rigorous, general footing:
-(1) existence + full characterization of the optimal demand-response contract
-`d*(x)` under general distributions, with **necessary-and-sufficient** emission
-conditions; (2) prove the **correlation comparative static** and that mining
-raises optimal renewable capacity `K*_R > K°_R`; (3) strengthen the
-**mechanism design** (regulator-principal / utility-agent), optimality + uniqueness;
-(4) document numerical methods the group can rely on.
+### Notebook conventions
+- **Append-only / permanent.** Entries are never erased. A wrong claim is struck
+  through (`~~like this~~`) with a dated correction note, not deleted.
+- **Dated, sequential.** Each entry is `EN · YYYY-MM-DD` in ISO-8601, in work
+  order. Entries below were performed and logged in a working session on
+  **2026-06-24** unless noted; the plan opened 2026-06-22.
+- **Structured.** Each entry records objective → method → result → conclusion.
+- **Traceable.** Claims cite the verifier script and digit-level agreement in
+  brackets; artifacts and commits are named. New results are also recorded in
+  `CONTRIBUTIONS.md`.
+- **Signed.** Each entry ends `— R1`.
+
+**Role 1 mandate (A1 Week 1 Plan).** General Carbon Theory — four tasks:
+(1) re-derive eqs 25/26 as ground truth; (2) generalize the net carbon-reduction
+result (the general condition where capacity-substitution beats utilization);
+(3) prove `K*_R > K°_R` in general; (4) draft result + gap memo.
+
+> **Scope correction (2026-06-24).** Entries E1–E6 (+E10) are the Role 1
+> deliverable. Entries E8–E9 were built under a broader "general contracting"
+> framing and overlap Role 3 / Role 4; they were **quarantined** to
+> `exploratory_cross_role/` and are *not* the Role 1 deliverable. The earlier
+> notebook header ("General Contracting Theory") was corrected to "General Carbon
+> Theory" on this date.
 
 **Scope guards (hard walls).** Do **not** enter:
 - **A2** — empirical calibration, real-data magnitudes, grid-type illustrations.
@@ -31,7 +44,7 @@ Anything touching those is logged as "dropped (out of scope)".
 
 ---
 
-## E1 — Ground truth: re-derive the uniform closed forms
+## E1 · 2026-06-24 · Ground truth: re-derive the uniform closed forms
 Goal: reproduce paper eqs 18–26 by hand from the FOCs before generalizing.
 - Re-derived no-FCL `K°_F, K°_R` (eqs 20–21) and with-FCL `K*_F, K*_F−K*_M`
   (eqs 22–23) from the cutoff FOCs under `F=(x+K_R)/(D̄+K_R)`.
@@ -46,7 +59,7 @@ Goal: reproduce paper eqs 18–26 by hand from the FOCs before generalizing.
   eq 24 = `2·∂Π/∂K_R` (sign-correct; the factor-2 is a grouping artifact, not a
   bug — reconciles Role 2's note).
 
-## E2 — The capacity channel `K*_R > K°_R`, general
+## E2 · 2026-06-24 · The capacity channel `K*_R > K°_R`, general
 - Computed the cross-partials of `Π`. Found the obstruction: `Π` is **submodular**
   in `(K_R,K_F)` (`∂²Π/∂K_R∂K_F ≤ 0`) but has increasing differences in each of
   `(K_R;K_M)`, `(K_F;K_M)`. No relabeling fixes both signs ⇒ Topkis does not apply
@@ -61,7 +74,7 @@ Goal: reproduce paper eqs 18–26 by hand from the FOCs before generalizing.
   scale-mixtures (symmetric, decreasing-density, right-skewed) `K*_R>K°_R`, `g`
   decreasing, and the sign of `dK*_R/dC_M` matches the cofactor bracket.
 
-## E3 — Net carbon: exact condition + sufficient conditions + C_R†
+## E3 · 2026-06-24 · Net carbon: exact condition + sufficient conditions + C_R†
 - Exact net-fossil identity (Prop, = paper Prop 4) by integration by parts:
   `E[fossil*]`, `E[fossil°]` in terms of conditional means at the cutoffs ⇒
   inequality **(C)**, decomposed into utilization (distribution-free) vs
@@ -72,7 +85,7 @@ Goal: reproduce paper eqs 18–26 by hand from the FOCs before generalizing.
   with no-FCL threshold `C_R° = C_F²/2(β+p−c)`; proved `C_R°<C_R†` (window where
   FCL drives carbon→0 but `K°_R` finite). **Verified** [inline]: 0.040 < 0.344.
 
-## E4 — Adversarial exactness audit (the catch)
+## E4 · 2026-06-24 · Adversarial exactness audit (the catch)
 Built `verify_exact.py`: every analytical formula vs finite differences of the
 profit integral. **15/15 PASS** to 6–16 digits — BUT it caught a real defect:
 - **Theorem 1 sign typo.** The cofactor coefficient was written `(β+p−R)`; the
@@ -80,7 +93,7 @@ profit integral. **15/15 PASS** to 6–16 digits — BUT it caught a real defect
   numerically confirmed; only the intermediate coefficient/label was wrong. Fixed.
   *(Lesson: write the FD audit before trusting any hand-derived cofactor.)*
 
-## E5 — Hardening Theorem 1 (two more real issues)
+## E5 · 2026-06-24 · Hardening Theorem 1 (two more real issues)
 Regime-crossing scan [`validate_regime_crossing.py`]:
 - The homotopy path **crosses regimes**: small-FCL near `C̄_M` (`K*_M→0`),
   large-FCL below. Old proof only derived the cofactor for large-FCL. Confirmed
@@ -91,7 +104,7 @@ Regime-crossing scan [`validate_regime_crossing.py`]:
   the interior path; it degenerates only as `K*_R→∞` (knife-edge), where
   `K*_R>K°_R` is immediate anyway.
 
-## E6 — Closed the four open points (per request "fix these")
+## E6 · 2026-06-24 · Closed the four open points (per request "fix these")
 1. Submodularity → reframed as non-obstruction (homotopy is complete under
    Regularity).
 2. Endogenous-capacity feedback → new **distribution-free cutoffs Lemma**
@@ -101,14 +114,14 @@ Regime-crossing scan [`validate_regime_crossing.py`]:
 4. Regimes → ordering `C_M^fc < C̄_M < C̄_M^b` proved (gap `C_F(β+p−R)/(β+p−c)`,
    verified 0.48); triple win across all adoption regions.
 
-## E7 — DROPPED: carbon-tax / welfare (out of scope)
+## E7 · 2026-06-24 · DROPPED: carbon-tax / welfare (out of scope)
 Explored emissions vs a carbon tax τ (effective fossil cost `c+τ`) looking for a
 "carbon-tax backfire" result [`explore_carbontax.py`]. Found the threshold
 `C̄_M(τ)` decreasing and the adoption boundary `τ̄`. **Dropped on scope review:**
 social-vs-private optimum and corrective pricing are **B1**, not A1. No part of
 this entered the paper. *(Kept the script in scratch only.)*
 
-## E8 — Extension I: the optimal contract, general F
+## E8 · 2026-06-24 · Extension I: the optimal contract, general F
 `role1_contract_theory.tex`.
 - **Thm 1.** The within-period surplus `J(d)=E[φ_x(d(x))]` separates across states
   (no coupling) ⇒ statewise optimum ⇒ the unique optimal contract over the **full**
@@ -123,7 +136,7 @@ this entered the paper. *(Kept the script in scratch only.)*
 - **Thm 2.** Ex-ante mechanism `(d*,K*)` exists for any `F` (Weierstrass on a box
   bounded by Assumption 1), unique under `H≺0`.
 
-## E9 — Extension I: N&S emission + correlation comparative static
+## E9 · 2026-06-24 · Extension I: N&S emission + correlation comparative static
 - **N&S.** Carbon falls iff (C); settled the mandate's "mild vs restrictive": it is
   **not generic** — positive demand-supply association makes it fail even with
   `K*_R>K°_R`.
@@ -141,7 +154,7 @@ this entered the paper. *(Kept the script in scratch only.)*
   response iff `R>c` (observable) and `β+p>R`; induced demand pinned by the
   distribution-free cutoff `C_M/(R−c)`.
 
-## E10 — Extension II: robust & detail-free contracting (the hard frontier)
+## E10 · 2026-06-24 · Extension II: robust & detail-free contracting (the hard frontier)
 `role1_robust_contract.tex`.
 - **Thm R1 (least-favorable distribution).** Over the shape class `U` (monotone
   density on the two zones), the **uniform minimizes** the net carbon saving:
@@ -161,19 +174,35 @@ this entered the paper. *(Kept the script in scratch only.)*
   to avoid B1 reading; added an explicit paragraph distinguishing **distributional**
   robustness (A1) from B2's market-structure robustness discussion.
 
+## E11 · 2026-06-24 · Capstone (in-scope): distribution-free reading of the carbon effect
+New section in `role1_carbon_theory.tex` — strictly General Carbon Theory:
+- **Two-moment sufficient statistic.** From the exact identity (E3), the carbon
+  saving `Δ(F)` depends on `F` only through `(μ*_low, μ°_mid)` at the
+  distribution-free cutoffs. **Verified** [`verify_carbon_robust.py`]: 6e-7.
+- **Tight magnitude bounds.** `Δ_min = K°_F(1−φ°)−K*_F ≤ Δ ≤ Δ_max`, closed-form in
+  capacities + `φ°` (distribution-free). **Verified** inside (−6.43 ≤ −2.17 ≤ 3.23).
+- **Least-favorable distribution.** Within the monotone-density class, the uniform
+  **minimizes** `Δ` ⇒ the closed-form condition is a worst-case carbon certificate
+  over an infinite ambiguity set. **Verified** 3000/3000.
+- ~~Attempted a general monotone-threshold theorem: `Δ(C_R)` non-increasing ⇒
+  carbon region `[0,C_R†(F)]` for all `F`.~~ **Correction (2026-06-24):** dropped —
+  numerics blow up at the unbounded-renewables knife-edge (`K*_R→∞`, values 1e5),
+  so the claim is not cleanly supported. Theorem 2 stays heuristic. *(Honest.)*
+— R1
+
 ---
 
 ## Verification ledger
-| Claim | Script | Result |
-|---|---|---|
-| Uniform closed forms eqs 25/26 | `verify.py` | ≤6e-10 |
-| Knife-edge MV constant; = eq 24 | `verify.py`, `verify_exact.py` | 4e-10 |
-| All 15 analytical formulas vs FD of Π | `verify_exact.py` | **15/15**, 6–16 digits |
-| `K*_R>K°_R`, shift-ratio sign-law | `validate_capacity_channel.py` | holds, 4 families |
-| Regime crossing + `H≺0` | `validate_regime_crossing.py` | both regimes; eig<0 interior |
-| Optimal contract `d*` optimality | `verify_contract.py` | 0/4000, 0/21,600 |
-| Correlation comparative static (carbon sign) | `verify_correlation.py` | monotone, sign-flips |
-| Least-favorable distribution = uniform | `verify_robust.py` | 3000/3000; min at uniform |
+| Date | Claim | Script | Result |
+|---|---|---|---|
+| 2026-06-24 | Uniform closed forms eqs 25/26 | `verify.py` | ≤6e-10 |
+| 2026-06-24 | Knife-edge MV constant; = eq 24 | `verify.py`, `verify_exact.py` | 4e-10 |
+| 2026-06-24 | All 15 analytical formulas vs FD of Π | `verify_exact.py` | **15/15**, 6–16 digits |
+| 2026-06-24 | `K*_R>K°_R`, shift-ratio sign-law | `validate_capacity_channel.py` | holds, 4 families |
+| 2026-06-24 | Regime crossing + `H≺0` | `validate_regime_crossing.py` | both regimes; eig<0 interior |
+| 2026-06-24 | Sufficient stat + bounds + least-favorable | `verify_carbon_robust.py` | 6e-7; inside; 3000/3000 |
+| 2026-06-24 | Optimal contract `d*` (quarantined) | `exploratory_cross_role/verify_contract.py` | 0/4000, 0/21,600 |
+| 2026-06-24 | Correlation carbon-sign (quarantined→Role 3) | `exploratory_cross_role/verify_correlation.py` | monotone, sign-flips |
 
 ## Open problems / handoffs
 - **Theorem 2 (general `C_R†` existence)** — still heuristic ("the two curves
