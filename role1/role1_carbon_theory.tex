@@ -62,31 +62,32 @@ Net-Carbon-Reduction Condition}
 We harden and generalize the carbon analysis of the flexible-computing-load
 (\textsc{fcl}) model beyond the uniform-distribution benchmark. Four results.
 \emph{First}, we re-derive the uniform closed forms (paper eqs.\ 18--26) from
-the first-order conditions and verify them to machine precision against direct
+the first-order conditions and verify them numerically against direct
 quadrature; along the way we establish the \emph{knife-edge} structure for the
 entire power-law family and reconcile two transcription issues in the current
 draft. \emph{Second}, we prove the central comparative-statics claim
 $\KRs>\KRo$---renewable capacity is strictly higher with the \textsc{fcl}
-program---for \emph{any} residual-demand distribution satisfying a single,
-economically transparent condition on the \emph{shift ratio}
-$g(x)=\FKR(x)/f(x)$: the program raises renewable capacity whenever an extra
-megawatt of renewables relaxes residual demand more in deep-surplus states than
-in tight states. The power-law family satisfies this for every shape parameter,
-which is exactly why footnote~6's extension goes through. \emph{Third}, we give
-the exact net-carbon inequality, decompose it into a distribution-free
-\emph{utilization} effect and a sign-controlled \emph{capacity-substitution}
-effect, and state a clean sufficient condition for the carbon part of the triple
-win. \emph{Fourth}, we give a distribution-free reading of the effect: the carbon
-change is governed by a \emph{two-moment sufficient statistic}, bracketed by
-closed-form \emph{magnitude bounds} computable from cutoff data alone, and---over
-the natural shape class---worst-cased by the \emph{uniform}, so the closed-form
-condition is a distributionally robust certificate. Every analytical formula is
-verified to machine precision against finite
-differences of the profit integral. The four points left open by the
-uniform-only treatment---the lattice (submodularity) obstruction, the
-endogenous-capacity feedback in the carbon inequality, an explicit renewable-cost
-threshold, and the regime boundaries---are each closed here; a companion memo
-keeps the same accounting.
+program---for \emph{any} residual-demand distribution satisfying two conditions:
+an economically transparent monotonicity of the \emph{shift ratio}
+$g(x)=\FKR(x)/f(x)$, plus interior regularity. The program raises renewable
+capacity whenever an extra megawatt of renewables relaxes residual demand more in
+deep-surplus states than in tight states. The power-law family satisfies the
+shift-ratio condition for every shape parameter, which is exactly why footnote~6's
+extension goes through. \emph{Third}, we give the exact net-carbon inequality,
+decompose it into a distribution-free \emph{utilization} effect and a
+sign-controlled \emph{capacity-substitution} effect, and state a clean sufficient
+condition for the carbon part of the triple win. \emph{Fourth}, we give a
+distribution-free reading of the effect: \emph{at fixed equilibrium capacities} the
+carbon change is affine in two conditional means, is bracketed by closed-form
+\emph{magnitude bounds} computable from cutoff data, and---among distributions
+sharing those capacities, within the natural shape class---is worst-cased by the
+\emph{uniform}. Every analytical formula is verified against finite
+differences of the profit integral to 6--16 digits. Of the points left open by the
+uniform-only treatment, three are closed---the lattice (submodularity)
+obstruction, the endogenous-capacity feedback (at fixed capacities), and the
+renewable-cost threshold (general upper anchor; explicit window for the power-law
+family)---and the regime map is unified up to the small-\textsc{fcl} crossover; a
+companion memo keeps the same accounting.
 \end{abstract}
 
 \maketitle
@@ -149,15 +150,17 @@ regimes share one formula because the extended CDF is already zero below $-\KR$.
 \end{lemma}
 
 \begin{lemma}[Distribution-free equilibrium probabilities]\label{lem:cutoffs}
-At any interior optimum, the CDF values at the equilibrium thresholds are
-\emph{independent of the shape of $F$}:
+At any interior optimum, the no-\textsc{fcl} threshold satisfies
+$F(\KFo;\KRo)=\varphi^{\circ}\eqdef\frac{\bp-c-\CF}{\bp-c}$, independent of the
+shape of $F$. In the \emph{large-\textsc{fcl}} regime ($F(-\KMs;\KRs)=0$) the two
+\textsc{fcl} thresholds are likewise distribution-free:
 \begin{equation}\label{eq:cutoffs}
-  F(\KFo;\KRo)=\frac{\bp-c-\CF}{\bp-c}\eqdef\varphi^{\circ},
-  \qquad
   F(\KFs;\KRs)=\frac{\bp-c-\CF-\CM}{\bp-R},
   \qquad
   F(\KFs-\KMs;\KRs)=\frac{\CM}{R-c}.
 \end{equation}
+In the small-\textsc{fcl} regime the term $cF(-\KMs;\KRs)$ in \eqref{eq:gM} does
+not vanish, and these two values are not pinned by the FOCs alone.
 \end{lemma}
 \begin{proof}
 The first identity is the no-\textsc{fcl} FOC \eqref{eq:gF} with $\KM=0$; the
@@ -211,8 +214,8 @@ $\int_a^b\FKR\,dx=\big[(b-a)(\Dbar-\tfrac{a+b}{2})\big]/Q^2$,
   \frac{c\,\Dbar^2}{Q^{\circ 2}}=2\CR-\frac{\CF^2}{\bp-c},
 \]
 because $\gamma^2(\bp-c)=\CF^2/(\bp-c)$. Solving for $Q^{\circ}$ and subtracting
-$\Dbar$ gives \eqref{eq:noKFKR}. \emph{(Verified to machine precision against the
-quadrature solver.)}
+$\Dbar$ gives \eqref{eq:noKFKR}. \emph{(Verified against the quadrature solver: the
+capacities satisfy the FOCs to $\le10^{-15}$.)}
 \end{proof}
 
 \paragraph{Carbon (paper eqs.\ 25--26).}
@@ -320,7 +323,7 @@ level holding its quantile fixed---the strength of the renewable
 
 \begin{condition}[Shift ratio]\label{cond:cs}
 $g(x;\KR)$ is non-increasing in $x$ on $(\KFs-\KMs,\,\KFs)$ at each point of the
-equilibrium path $\CM\in[\CM,\CMbar]$.
+equilibrium path $\CM\in(0,\CMbar]$.
 \end{condition}
 
 Condition~\ref{cond:cs} says the renewable shift bites harder in deep-surplus
@@ -329,7 +332,7 @@ entire power-law family, where $g(x)=(\Dbar-x)/Q$ is affine and strictly
 decreasing for every $\alpha$.
 
 \begin{condition}[Regularity]\label{cond:reg}
-On the adoption path $\CM\in[\CM,\CMbar]$ the program has an interior maximizer
+On the adoption path $\CM\in(0,\CMbar]$ the program has an interior maximizer
 $(\KRs,\KFs,\KMs)$ at which the Hessian $\mathcal H$ of $\Pi$ is nonsingular.
 \end{condition}
 
@@ -390,15 +393,20 @@ gives $d\KRs/d\CM\le0$.
 \textsc{fcl} unit \eqref{eq:gM} vanishes ($(R-c)\varphi^{\circ}-\CMbar=0$), so
 $\KMs=0$: the top of the path is the \emph{small}-\textsc{fcl} regime
 ($\KMs<\KRs$), turning large-\textsc{fcl} only once $\KMs$ grows past $\KRs$. In
-the small-\textsc{fcl} regime $\FKR(-\KMs),f(-\KMs)>0$ and the cofactor carries
-two extra nonnegative terms, $c\,\FKR(-\KMs)$ in $\partial^2\Pi/\partial\KR\partial\KM$
-and $c\,f(-\KMs)$ in $-\partial^2\Pi/\partial\KM^2$; tracing the same cancellation
-keeps $\operatorname{cof}_{\KM\KR}(\mathcal H)\ge0$, so $d\KRs/d\CM\le0$
+the small-\textsc{fcl} regime $\FKR(-\KMs)>0$, which adds a single term to the
+relevant cofactor $\operatorname{cof}_{\KM\KR}(\mathcal H)=H_{RF}H_{FM}-H_{RM}H_{FF}$
+through $H_{RM}=(R-c)\FKR(\KFs-\KMs)+c\,\FKR(-\KMs)$: it becomes
+$\operatorname{cof}_{\KM\KR}^{\text{large}}-c\,\FKR(-\KMs)\,H_{FF}$, and since
+$H_{FF}=(R-\bp)f(\KFs)-(R-c)f(\KFs-\KMs)<0$ under Assumption~\ref{ass:reg} this
+extra term is $\ge0$. Hence $\operatorname{cof}_{\KM\KR}\ge0$ and $d\KRs/d\CM\le0$
 \emph{throughout} the path, not only on its large-\textsc{fcl} part (confirmed
 numerically across the crossing in \S\ref{sec:num}: $d\KRs/d\CM<0$ at every
 $\CM\in\{0.77,\dots,0.30\}$, spanning both regimes). Since the no-\textsc{fcl}
-conditions hold at $\CM=\CMbar$, $\KRs(\CMbar)=\KRo$; integrating the nonpositive
-derivative from $\CMbar$ down to $\CM$ yields $\KRs(\CM)\ge\KRo$.
+conditions hold at $\CM=\CMbar$, $\KRs(\CMbar)=\KRo$. The path
+$\CM\mapsto\KRs$ is continuous (maximum theorem) and, by the above,
+$d\KRs/d\CM\le0$ at every point off the regime boundary $\KMs=\KRs$; a continuous
+function with a.e.-nonpositive derivative is non-increasing, so integrating from
+$\CMbar$ down to $\CM$ yields $\KRs(\CM)\ge\KRo$.
 \end{proof}
 
 \begin{remark}[The submodularity is not an obstruction]\label{rem:submod}
@@ -507,51 +515,61 @@ second-order feedback term is dropped.
 
 Write $\Delta(\CR)\eqdef\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$ for the
 net fossil saving at the optimum given renewable cost $\CR$ (carbon falls iff
-$\Delta>0$). The next theorem establishes the viability threshold \emph{for every
-$F$}, not just the power-law family, by anchoring both ends of the cost range.
+$\Delta>0$). The next theorem has a \emph{fully general} upper anchor and a
+small-cost window established for the knife-edge (power-law / scale) families.
 
-\begin{theorem}[General existence of the viability threshold $\CR^{\dagger}$]\label{thm:carbon}
-Fix all primitives except $\CR$, with $\CM<\CMbar$ (so $\KMs>0$), and suppose
-renewable output is almost surely positive ($\PP(\tilde S>0)=1$). Then:
+\begin{theorem}[Viability threshold: general anchor, explicit window]\label{thm:carbon}
+Fix all primitives except $\CR$, with $\CM<\CMbar$ (so $\KMs>0$).
 \begin{enumerate}[label=(\roman*),leftmargin=2.2em]
-  \item \textup{(Large-cost anchor, fully general.)} As $\CR\to\infty$ no
-        renewables are built, $\KRs=\KRo=0$, and the \textsc{fcl} program differs
-        from the no-\textsc{fcl} grid only by running computing on spare fossil;
-        the resulting utilization effect is strictly positive, so
-        $\Delta(\CR)\to-U_0<0$. The carbon-reduction set $\{\CR:\Delta(\CR)\ge0\}$
-        is therefore bounded above.
-  \item \textup{(Small-cost regime.)} There are thresholds $0\le\CR^{\circ}<\CR^{\dagger}$
-        such that for $\CR<\CR^{\dagger}$ the \textsc{fcl} renewable marginal value
-        exceeds $\CR$, so $\KRs\to\infty$ and $\E[\text{fossil}^{*}]\to0$; while for
-        $\CR>\CR^{\circ}$ the no-\textsc{fcl} optimum $\KRo$ is finite and
-        $\E[\text{fossil}^{\circ}]>0$. The gap $\CR^{\dagger}>\CR^{\circ}$ is
-        strict because mining revenue $R>c$ raises the renewable shadow value in
-        the dispatch region (FOC \eqref{eq:gR} carries weight $R$ where the
-        no-\textsc{fcl} FOC carries $c$).
-  \item Hence on the nonempty interval $(\CR^{\circ},\CR^{\dagger})$,
-        $\Delta(\CR)=\E[\text{fossil}^{\circ}]>0$: carbon strictly falls. The
-        viability threshold $\CR^{\dagger}\eqdef\sup\{\CR:\Delta(\CR)\ge0\}$ is
-        finite and positive for every such $F$; carbon strictly rises for
-        $\CR>\CR^{\dagger}$.
+  \item \textup{(Large-cost anchor --- holds for every $F$.)} For all $\CR$ above a
+        finite $B_0$, no renewables are built, $\KRs=\KRo=0$, and the \textsc{fcl}
+        program differs from the no-\textsc{fcl} grid only by running computing on
+        spare fossil; the utilization effect is strictly positive, so
+        $\Delta(\CR)=-U_0<0$. Hence the carbon-reduction set $\{\CR:\Delta(\CR)\ge0\}$
+        is bounded above, for \emph{every} $F$.
+  \item \textup{(Small-cost window --- knife-edge families.)} Suppose the
+        \textsc{fcl} renewable problem admits unbounded investment for small $\CR$
+        (true for the power-law family, Proposition~\ref{prop:knife}, and more
+        generally any family whose renewable marginal value is constant along the
+        re-optimization locus), and that renewable output is a.s.\ positive. Then
+        there are thresholds $0\le\CR^{\circ}<\CR^{\dagger}$ with: for
+        $\CR<\CR^{\dagger}$, $\KRs=\infty$ and $\E[\text{fossil}^{*}]=0$; for
+        $\CR>\CR^{\circ}$, $\KRo$ finite and $\E[\text{fossil}^{\circ}]>0$. So on
+        $(\CR^{\circ},\CR^{\dagger})$ carbon strictly falls,
+        $\Delta=\E[\text{fossil}^{\circ}]>0$.
+  \item Therefore $\CR^{\dagger}\eqdef\sup\{\CR:\Delta(\CR)\ge0\}$ is finite (part
+        i, general) and, for the knife-edge families, positive (part ii), with
+        carbon rising for $\CR>\CR^{\dagger}$. For the power-law family
+        $\CR^{\dagger},\CR^{\circ}$ are the explicit values of
+        Proposition~\ref{prop:CRdag}. \emph{(For a general $F$ with an interior
+        renewable optimum, $\{\Delta\ge0\}$ is bounded above by part (i); its
+        non-emptiness---i.e.\ that carbon falls somewhere---is what Condition~CS
+        delivers in the cases we can sign, and is conjectured in general.)}
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
 \emph{(i)} The renewable marginal benefit at $\KR=0$ is a finite constant $B_0$
-(the $\CR$-free part of \eqref{eq:gR} and \eqref{eq:gM}); for $\CR>B_0$ the FOCs
-give the corner $\KRs=\KRo=0$. With no renewables, residual demand is $\tilde
-x=\tilde D\ge0$. By Lemma~1 the program dispatches computing on spare fossil, which
-strictly raises fossil output in every state with positive spare capacity
-(the distribution-free utilization effect of \S\ref{sec:carbon}), and
-$\KFs\ge\KFo$ since the with-\textsc{fcl} blackout probability is lower when
-$\CM<\CMbar$ (Lemma~\ref{lem:cutoffs}). Both push the same way, so
-$\E[\text{fossil}^{*}]>\E[\text{fossil}^{\circ}]$ and $\Delta=-U_0<0$. \emph{(ii)} $\E[\text{fossil}^{*}]=\int_{-\KMs}^{\KFs-\KMs}(1-F)\,dx$
-is non-increasing in $\KR$ (since $\FKR\ge0$); as $\KRs\to\infty$,
-$\PP(\tilde S>0)=1$ forces $\tilde x\to-\infty$ a.s., so $F(x;\KRs)\to1$ for every
-$x$ and $\E[\text{fossil}^{*}]\to0$ by monotone convergence. The renewable FOC
-\eqref{eq:gR} assigns weight $R$ on $(\KF-\KM,\KF)$ where the no-\textsc{fcl} FOC
-\eqref{eq:gF}$|_{\KM=0}$ assigns $c<R$, so the \textsc{fcl} marginal value
-dominates pointwise and its corner threshold satisfies $\CR^{\dagger}>\CR^{\circ}$.
+(the $\CR$-free part of \eqref{eq:gR}); for $\CR>B_0$ the FOCs give the corner
+$\KRs=\KRo=0$. With no renewables, residual demand is $\tilde x=\tilde D\ge0$. By
+Lemma~1 the program dispatches computing on spare fossil, which strictly raises
+fossil output in every state with positive spare capacity (the distribution-free
+utilization effect of \S\ref{sec:carbon}); and $\KFs\ge\KFo$ because, at common
+$\KR=0$, the with-\textsc{fcl} no-blackout probability
+$F(\KFs)=\frac{\bp-c-\CF-\CM}{\bp-R}\ge\varphi^{\circ}=F(\KFo)$ when $\CM\le\CMbar$
+(equality at $\CMbar$, larger as $\CM$ falls; Lemma~\ref{lem:cutoffs}). Both push
+the same way, so $\E[\text{fossil}^{*}]>\E[\text{fossil}^{\circ}]$ and
+$\Delta=-U_0<0$. This uses no distributional assumption.
+\emph{(ii)} In the knife-edge regime the renewable marginal value is a constant
+$\mathrm{MV}_{\!*}$ along the locus, so $\KRs=\infty$ iff $\CR<\CR^{\dagger}\eqdef\mathrm{MV}_{\!*}$;
+likewise the no-\textsc{fcl} value is a constant $\mathrm{MV}_{\!\circ}$ with $\KRo=\infty$
+iff $\CR<\CR^{\circ}\eqdef\mathrm{MV}_{\!\circ}$. Since \eqref{eq:gR} weights the
+dispatch region by $R$ where the no-\textsc{fcl} FOC weights it by $c<R$,
+$\mathrm{MV}_{\!*}>\mathrm{MV}_{\!\circ}$, i.e.\ $\CR^{\dagger}>\CR^{\circ}$ (for the
+power-law family this is the explicit comparison of Proposition~\ref{prop:CRdag}).
+For $\CR\in(\CR^{\circ},\CR^{\dagger})$: $\KRs=\infty$ with $\PP(\tilde S>0)=1$ sends
+$\tilde x\to-\infty$ a.s.\ so $\E[\text{fossil}^{*}]=0$, while $\KRo$ is finite and
+$\E[\text{fossil}^{\circ}]>0$.
 \emph{(iii)} Combine: on $(\CR^{\circ},\CR^{\dagger})$, $\E[\text{fossil}^{*}]=0<\E[\text{fossil}^{\circ}]=\Delta$;
 with (i) the set $\{\Delta\ge0\}$ is nonempty and bounded above, so its supremum
 $\CR^{\dagger}\in(0,\infty)$ exists.
@@ -590,50 +608,66 @@ numerically.)}
 %---------------------------------------------------------------------
 \section{A distribution-free reading: sufficient statistic, magnitude bounds, and a robust certificate}\label{sec:robustcarbon}
 
-The exact inequality (C) signs the carbon effect, but it still looks like it
-depends on the entire residual-demand distribution. It does not. Holding the
-distribution-free cutoff probabilities of Lemma~\ref{lem:cutoffs} fixed, the whole
-distributional dependence of the carbon effect collapses to two numbers, is
-bracketed by closed-form bounds, and is worst-cased by the uniform.
+The exact inequality (C) appears to depend on the entire residual-demand
+distribution. Two of its three channels do not: the cutoff \emph{probabilities}
+are distribution-free (Lemma~\ref{lem:cutoffs}), and---\emph{at the equilibrium
+capacities}---the remaining dependence is affine in two conditional means. We are
+careful throughout this section to separate what is genuinely distribution-free
+(the cutoff probabilities) from what still moves with $F$ (the capacity
+\emph{levels} $\KFs,\KMs,\KRs,\KFo$ and the surplus probability
+$q^{\circ}=F(0;\KRo)$). The results below are exact statements at fixed
+capacities; the residual cross-distribution dependence through the capacities is
+discussed at the end.
 
-\begin{theorem}[Two-moment sufficient statistic]\label{thm:suffstat}
-At the optimal-contract equilibrium, the net fossil saving
-$\Delta(F)\eqdef\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$ depends on the
-residual-demand distribution \emph{only} through the pair of conditional means
+\begin{theorem}[Affine representation at fixed capacities]\label{thm:suffstat}
+Fix the equilibrium capacities and $q^{\circ}$. Then the net fossil saving
+$\Delta=\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$ is \emph{affine} in the
+two conditional means
 \[
   \mu^{*}_{\mathrm{low}}=\E[\tilde x\mid \tilde x\in(-\KRs,\KFs-\KMs)],
   \qquad
   \mu^{\circ}_{\mathrm{mid}}=\E[\tilde x\mid \tilde x\in(0,\KFo)],
 \]
-through the explicit, affine map
+through the explicit map
 \begin{equation}\label{eq:suff}
   \Delta
   =\Big[\KFo(1-\varphi^{\circ})+(\varphi^{\circ}-q^{\circ})\mu^{\circ}_{\mathrm{mid}}\Big]
    -\Big[\KFs-\tfrac{\CM}{R-c}\big(\KFs-\KMs-\mu^{*}_{\mathrm{low}}\big)\Big].
 \end{equation}
-The infinite-dimensional object $F$ enters carbon only as $(\mu^{*}_{\mathrm{low}},\mu^{\circ}_{\mathrm{mid}})$.
+Two distributions with the same equilibrium capacities, the same $q^{\circ}$, and
+the same two conditional means yield the same $\Delta$.
 \end{theorem}
 
 \begin{proof}
 Immediate from the exact identities \eqref{eq:fos1}--\eqref{eq:fos2} of
-Proposition~\ref{prop:carbon}; the cutoff values $\varphi^{\circ}$ and
-$\CM/(R-c)$ are distribution-free (Lemma~\ref{lem:cutoffs}). \emph{(Verified: the
-right side of \eqref{eq:suff} matches direct quadrature of the fossil integrals to
-$6\times10^{-7}$.)}
+Proposition~\ref{prop:carbon}; the cutoff probabilities $\varphi^{\circ}$ and
+$\CM/(R-c)$ are distribution-free (Lemma~\ref{lem:cutoffs}, large-\textsc{fcl}).
+\emph{(Verified: the right side of \eqref{eq:suff} matches direct quadrature of the
+fossil integrals to $6\times10^{-7}$.)}
 \end{proof}
 
-\begin{theorem}[Tight magnitude bounds from cutoffs]\label{thm:bounds}
+\begin{remark}[Not a sufficient statistic across $F$]
+Equation \eqref{eq:suff} is \emph{not} a claim that $\Delta$ depends on $F$ only
+through $(\mu^{*}_{\mathrm{low}},\mu^{\circ}_{\mathrm{mid}})$: the coefficients
+themselves involve the capacities and $q^{\circ}$, which move with the shape of
+$F$. It is the exact \emph{conditional} representation---the lever for the bounds
+and the least-favorable comparison below, both of which are stated at fixed
+capacities.
+\end{remark}
+
+\begin{theorem}[Magnitude bounds from cutoffs, at fixed capacities]\label{thm:bounds}
 Because a conditional mean lies between its interval endpoints,
 $\mu^{*}_{\mathrm{low}}\in(-\KRs,\KFs-\KMs)$ and $\mu^{\circ}_{\mathrm{mid}}\in(0,\KFo)$,
-the carbon saving obeys the closed-form, distribution-free bounds
+the carbon saving obeys the closed-form bounds
 \begin{equation}\label{eq:bounds}
   \underbrace{\KFo(1-\varphi^{\circ})-\KFs}_{\Delta_{\min}}
-  \;\le\;\Delta(F)\;\le\;
+  \;\le\;\Delta\;\le\;
   \underbrace{\KFo-\KFs+\tfrac{\CM}{R-c}\big(\KFs-\KMs+\KRs\big)}_{\Delta_{\max}},
 \end{equation}
-expressed entirely in the equilibrium capacities and the distribution-free
-reliability $\varphi^{\circ}$. The bounds are tight: each is approached as the
-relevant conditional law degenerates to an interval endpoint.
+expressed in the equilibrium capacities and the distribution-free reliability
+$\varphi^{\circ}$ (the capacities being held at their equilibrium values). The
+bounds are tight given those capacities: each is approached as the relevant
+conditional law degenerates to an interval endpoint.
 \end{theorem}
 
 \begin{proof}
@@ -646,42 +680,51 @@ distributional term. \emph{(Verified at a stable interior equilibrium:
 $\Delta_{\min}=-6.43\le\Delta=-2.17\le\Delta_{\max}=+3.23$.)}
 \end{proof}
 
-\begin{theorem}[Least-favorable distribution; robust carbon certificate]\label{thm:lfd}
-Let $\Ucal$ be the class of residual-demand distributions satisfying
-Assumption~\ref{ass:reg} whose density is non-increasing on $(-\KRs,\KFs-\KMs)$
-and non-decreasing on $(0,\KFo)$ (the Corollary~\ref{cor:suff} shape class).
-Holding the distribution-free cutoffs fixed, the \emph{uniform} distribution
-minimizes the carbon saving over $\Ucal$:
-\[
-  \min_{F\in\Ucal}\Delta(F)=\Delta(F_{\mathrm{unif}}).
-\]
-Consequently the closed-form uniform/power-law condition $\CR\le\CR^{\dagger}$
-(Proposition~\ref{prop:CRdag}) certifies $\Delta\ge0$ for \emph{every} $F\in\Ucal$:
-the original paper's uniform benchmark is the binding worst case for an entire
-distribution class, not a convenient special case.
+\begin{theorem}[Least-favorable conditional shape]\label{thm:lfd}
+Fix the equilibrium capacities and $q^{\circ}$. Among conditional laws whose
+density is non-increasing on the \textsc{fcl} zone $(-\KRs,\KFs-\KMs)$ and
+non-decreasing on the no-\textsc{fcl} zone $(0,\KFo)$ (the
+Corollary~\ref{cor:suff} shape class $\Ucal$), the \emph{uniform} (linear CDF)
+minimizes the carbon saving $\Delta$ of \eqref{eq:suff}.
 \end{theorem}
 
 \begin{proof}
-By \eqref{eq:suff}, $\Delta$ is increasing in $\mu^{*}_{\mathrm{low}}$ and in
-$\mu^{\circ}_{\mathrm{mid}}$, so it is minimized by the \emph{largest}
-$\mu^{*}_{\mathrm{low}}$ and \emph{smallest} $\mu^{\circ}_{\mathrm{mid}}$ feasible
-in $\Ucal$. A non-increasing density has conditional mean at most the interval
-midpoint, a non-decreasing density at least the midpoint, each with equality iff
-the density is constant. Hence over $\Ucal$ the maximizing $\mu^{*}_{\mathrm{low}}$
-and minimizing $\mu^{\circ}_{\mathrm{mid}}$ are \emph{both} the midpoints, attained
-simultaneously by the uniform, which therefore minimizes $\Delta$. \emph{(Verified:
-over $3000$ random monotone densities the conditional means respect the midpoint
-bounds in $3000/3000$ cases.)}
+By \eqref{eq:suff}, at fixed capacities $\Delta$ is increasing in
+$\mu^{*}_{\mathrm{low}}$ and in $\mu^{\circ}_{\mathrm{mid}}$, so it is minimized by
+the \emph{largest} $\mu^{*}_{\mathrm{low}}$ and \emph{smallest}
+$\mu^{\circ}_{\mathrm{mid}}$. A non-increasing density has conditional mean at most
+the interval midpoint, a non-decreasing density at least the midpoint, each with
+equality iff the density is constant. Hence both extremes are the midpoints,
+attained by the uniform. \emph{(Verified: over $3000$ random monotone densities the
+conditional means respect the midpoint bounds in $3000/3000$ cases.)}
 \end{proof}
 
+\begin{remark}[Scope: this is a fixed-capacity statement]\label{rem:lfd}
+Theorem~\ref{thm:lfd} does \emph{not} establish that the uniform is the worst case
+for the realized saving $\Delta(F)$ across all $F\in\Ucal$, because the equilibrium
+capacities $\KFs,\KMs,\KRs,\KFo$ and $q^{\circ}$ co-vary with the shape of $F$
+(Lemma~\ref{lem:cutoffs} pins only the cutoff \emph{probabilities}). The direction
+of the surviving capacity effect---the renewable shift---is signed by
+Theorem~\ref{thm:capacity} ($\KRs>\KRo$), but a full cross-$F$ minimization would
+have to control the capacity covariation, which we do not close. We therefore
+state the genuinely distribution-robust certificate only in its honest form: the
+closed-form $\CR\le\CR^{\dagger}$ guarantees $\Delta\ge0$ for the uniform/power-law
+family (Proposition~\ref{prop:CRdag}), and Theorem~\ref{thm:lfd} shows the uniform
+is the least-favorable \emph{conditional shape}---not yet the least-favorable
+\emph{distribution}---within $\Ucal$. (Note the uniform residual demand is itself
+the knife-edge of Proposition~\ref{prop:knife}, with a corner rather than interior
+$\KRs$; closing the cross-$F$ statement is left open.)
+\end{remark}
+
 \begin{remark}[What this buys]
-Theorems~\ref{thm:suffstat}--\ref{thm:lfd} turn the carbon result from a
-sign-under-conditions statement into a quantified, robust one: the effect is
-governed by a two-dimensional sufficient statistic, bracketed by bounds a
-regulator can compute from cutoff data alone, and guaranteed by a single
-closed-form inequality across an infinite ambiguity set. The distributional detail
-of $F$ controls the \emph{magnitude} of the carbon change, never---within
-$\Ucal$---its \emph{sign}.
+At fixed equilibrium capacities, Theorems~\ref{thm:suffstat}--\ref{thm:lfd} reduce
+the carbon effect to a two-mean affine form, bracket it by bounds a regulator can
+compute from cutoff data, and identify the uniform as the least-favorable
+conditional shape---so the distributional detail of $F$ controls the
+\emph{magnitude} of the carbon change at given capacities. Turning the
+fixed-capacity least-favorable result into a genuine distribution-robust
+certificate over all of $\Ucal$ requires signing the capacity covariation
+(Remark~\ref{rem:lfd}); that step is open.
 \end{remark}
 
 %---------------------------------------------------------------------
@@ -706,12 +749,16 @@ and as $\CM$ falls the optimum passes through:
 \textup{(I)} small-\textsc{fcl} adoption, $\CMbar\le\CM<\CMbar^{b}$;
 \textup{(II)} large-\textsc{fcl} interior adoption, $\CM^{\mathrm{fc}}<\CM<\CMbar$;
 \textup{(III)} full coverage, $\CM\le\CM^{\mathrm{fc}}$ (blackout $\equiv0$).
-The profit and blackout parts of the triple win hold in
-\textup{(I)--(III)} for every $F$ (Lemma~\ref{lem:cutoffs}); the carbon part holds
-under Condition~\ref{cond:cs} in \textup{(II)}, \emph{a fortiori} in
-\textup{(I)} (the smaller program has a weaker utilization effect), and trivially
-in \textup{(III)}, where fossil serves only consumers and any \textsc{fcl}
-dispatch runs on renewable surplus.
+The profit and blackout parts of the triple win hold in the
+\emph{large}-\textsc{fcl} regions \textup{(II)--(III)} for every $F$, since there
+the cutoff probabilities are distribution-free (Lemma~\ref{lem:cutoffs}); in the
+small-\textsc{fcl} region \textup{(I)} the cutoffs are not pinned by the FOCs alone
+(Lemma~\ref{lem:cutoffs}), and the profit/blackout comparison there relies on the
+Appendix-G analysis (Role~4). The carbon part holds under Condition~\ref{cond:cs}
+in \textup{(II)}; in \textup{(III)} it holds trivially, fossil serving only
+consumers with \textsc{fcl} on renewable surplus. We do \emph{not} claim it
+``a fortiori'' in \textup{(I)}: a smaller program shrinks both sides of (C), and
+signing the net change there is left to the small-\textsc{fcl} analysis.
 \end{proposition}
 
 \begin{proof}
@@ -748,8 +795,12 @@ methods (no closed forms assumed). Highlights:
   \item \textbf{Uniform closed forms.} Carbon eqs.\ (25)/(26) match quadrature to
         $\le 6\times10^{-10}$; capacities \eqref{eq:noKFKR}--\eqref{eq:fclKFKM}
         satisfy the FOCs to $\le 10^{-15}$.
-  \item \textbf{Knife-edge.} $\mathrm{MV}(\KR)$ constant across $\KR\in\{1,5,9\}$
-        for $\alpha\in\{0.5,1,2\}$; eq.\ \eqref{eq:eq24} reproduces paper eq.\ (24).
+  \item \textbf{Knife-edge.} Along the \emph{large-\textsc{fcl}} portion of the
+        re-optimization locus, $\mathrm{MV}(\KR)$ is constant in $\KR$ (verified at
+        $\KR\in\{1,4,5\}$ for $\alpha\in\{0.5,1,2\}$, e.g.\ uniform $0.3444$ at
+        both $\KR=1,4$); the locus leaves this regime for large $\KR$
+        ($\KMs<\KRs$), where $\mathrm{MV}$ is no longer constant. Eq.\
+        \eqref{eq:eq24} reproduces paper eq.\ (24).
   \item \textbf{Capacity channel.} On strictly-concave Beta scale-mixtures
         $\tilde x=\tilde D-\KR\tilde S$ with interior optima, across symmetric,
         decreasing-density, and right-skewed consumer demand
@@ -766,8 +817,9 @@ methods (no closed forms assumed). Highlights:
         on $\mathrm{Beta}(2,2)$: the optimum is small-\textsc{fcl} for
         $\CM\in\{0.77,0.70,0.60\}$ ($\KMs<\KRs$) and large-\textsc{fcl} for
         $\CM\in\{0.50,0.40,0.30\}$, with $d\KRs/d\CM<0$ at \emph{every} point
-        ($-4.28,-2.76,-2.19,-5.21,-21.1,-108$), confirming the channel across the
-        crossing. The Hessian's three eigenvalues are all strictly negative on the
+        ($-4.28,-2.76,-2.19,-5.21,-21.1,-92.1$; the last is a noisy
+        finite-difference at the knife-edge $\KRs=9.2$), confirming the channel
+        across the crossing. The Hessian's three eigenvalues are all strictly negative on the
         interior path and acquire a zero only as $\KRs\!\to\!\infty$ at the
         knife-edge ($\CM=0.30$, $\KRs=9.2$ and climbing)---the boundary where
         Condition~\ref{cond:reg} lapses and the inequality is anyway immediate.
@@ -780,28 +832,39 @@ methods (no closed forms assumed). Highlights:
         right-skewed demand, carbon falls for small $\CR$ ($\KRs$ unbounded,
         $\E[\text{fossil}^{*}]\!\to\!0$, $\Delta=+0.56,+1.07$ at $\CR=0.25,0.35$)
         and rises once $\CR$ crosses $\CR^{\dagger}\!\in\!(0.35,0.5)$
-        ($\Delta=-3.68,\dots,-6.47$ through $\CR=1.6$), with $\KRs=\KRo=0$ and
-        $\Delta<0$ at the large-cost anchor---confirming the existence proof.
+        ($\Delta=-3.68,\dots,-6.47$ through $\CR=1.6$). The large-cost anchor (i)
+        is the rigorous, fully general part; the small-cost window is verified
+        here only for scale-mixtures, where two caveats apply---the equilibrium
+        solver is erratic near the knife-edge (we report the clean
+        cold-started points), and for strongly right-skewed demand the no-\textsc{fcl}
+        grid also builds heavy renewables, so the strict fall on
+        $(\CR^{\circ},\CR^{\dagger})$ can be razor-thin ($\Delta\!\to\!0^{+}$).
   \item \textbf{Sufficient statistic, bounds, least-favorable
         (\S\ref{sec:robustcarbon}).} \texttt{verify\_carbon\_robust.py}: at a
         stable interior equilibrium the two-moment formula \eqref{eq:suff} matches
         direct quadrature to $6\times10^{-7}$; $\Delta$ lies inside the
         closed-form bounds \eqref{eq:bounds} ($-6.43\le-2.17\le+3.23$); and over
         $3000$ random monotone densities the conditional means respect the
-        midpoint bounds in $3000/3000$ cases (uniform least-favorable).
-  \item \textbf{Sharpness.} The bracket in \eqref{eq:dKRdCM} changes sign with
-        $g(\KFs)-g(\KFs-\KMs)$, so $g$ \emph{increasing} reverses the channel
-        ($\KRs<\KRo$); the shift-ratio condition is therefore tight, not merely
-        sufficient.
+        midpoint bounds in $3000/3000$ cases (uniform least-favorable \emph{at fixed
+        capacities}; the cross-distribution version is discussed in
+        \S\ref{sec:robustcarbon}).
+  \item \textbf{Sharpness (algebraic).} The bracket in \eqref{eq:dKRdCM} changes
+        sign with $g(\KFs)-g(\KFs-\KMs)$, so an increasing $g$ would reverse the
+        channel ($\KRs<\KRo$); the shift-ratio condition is therefore plausibly
+        tight. A realized reversed-channel example proved hard to construct---even
+        at demand--supply correlation $+0.95$ the equilibrium window stayed in the
+        decreasing-$g$ region---so an explicit counterexample is left to Role~3
+        (comparative statics).
 \end{itemize}
 
 %---------------------------------------------------------------------
-\section{Status of the four open points}\label{sec:gap}
+\section{Status of the open points}\label{sec:gap}
 
-The four issues that the uniform-only treatment leaves open are now resolved;
-the companion memo (\texttt{gap\_memo.md}) carries the same accounting.
+Of the four issues the uniform-only treatment leaves open, three are closed and
+the fourth is reduced to one boundary; the companion memo
+(\texttt{gap\_memo.md}) carries the same accounting.
 \begin{enumerate}[leftmargin=1.7em]
-  \item \textbf{Submodularity --- resolved.} By \eqref{eq:hRF}, $\Pi$ is
+  \item \textbf{Submodularity --- closed.} By \eqref{eq:hRF}, $\Pi$ is
         submodular in $(\KR,\KF)$ with increasing differences in each of
         $(\KR;\KM)$ and $(\KF;\KM)$; no relabeling fixes both signs, so a lattice
         argument does not apply. Remark~\ref{rem:submod} shows this is not an
@@ -809,27 +872,27 @@ the companion memo (\texttt{gap\_memo.md}) carries the same accounting.
         complete under Condition~\ref{cond:reg} ($\mathcal H\prec0$, verified by
         eigenvalue computation along the path in \S\ref{sec:num}; it lapses only at
         the knife-edge, where $\KRs=\infty>\KRo$ is immediate).
-  \item \textbf{Endogenous-capacity feedback --- resolved.}
-        Lemma~\ref{lem:cutoffs} pins the comparison probabilities
+  \item \textbf{Endogenous-capacity feedback --- closed at fixed capacities.}
+        Lemma~\ref{lem:cutoffs} pins the comparison \emph{probabilities}
         distribution-free, and Theorem~\ref{thm:capacity} signs the one surviving
-        level effect ($\KRs>\KRo$). Remark~\ref{rem:feedback} shows (C) together
-        with these is a \emph{complete} characterization---no second-order term is
-        dropped.
-  \item \textbf{$\CR^{\dagger}$ --- now a theorem for general $F$.}
-        Theorem~\ref{thm:carbon} proves the viability threshold
-        $\CR^{\dagger}=\sup\{\CR:\Delta(\CR)\ge0\}$ is finite and positive for
-        \emph{every} $F$ (with a.s.-positive renewables): carbon falls on the
-        nonempty window $(\CR^{\circ},\CR^{\dagger})$ and rises above it, anchored
-        by the rigorous large-cost limit $\Delta\to-U_0<0$. The power-law values
+        level effect ($\KRs>\KRo$); at fixed capacities (C) is then a complete
+        affine representation (Theorem~\ref{thm:suffstat}, Remark~\ref{rem:feedback}).
+        The residual cross-distribution capacity covariation (Remark~\ref{rem:lfd})
+        is signed in direction but not fully closed.
+  \item \textbf{$\CR^{\dagger}$ --- general upper anchor, explicit window.}
+        Theorem~\ref{thm:carbon} proves $\{\CR:\Delta\ge0\}$ is bounded above for
+        \emph{every} $F$ (the rigorous large-cost limit $\Delta\to-U_0<0$), and
+        exhibits a nonempty strict-fall window $(\CR^{\circ},\CR^{\dagger})$ for the
+        knife-edge / power-law family, with explicit
         $\CR^{\dagger}=\mathrm{MV}$, $\CR^{\circ}=\CF^2/2(\bp-c)$
-        (Proposition~\ref{prop:CRdag}) are the explicit instance. \emph{This
-        upgrades the earlier heuristic ``the two curves cross'' to a proof.}
-  \item \textbf{Boundary regimes --- unified.}
-        Proposition~\ref{prop:regimes} orders the thresholds
-        $\CM^{\mathrm{fc}}<\CMbar<\CMbar^{b}$ and states the triple win across
-        all adoption regions (strict in small/large-\textsc{fcl}, degenerate in
-        full coverage). The single residual is the exact small-\textsc{fcl}
-        boundary $\KMs=\KRs$, handed to Role~4.
+        (Proposition~\ref{prop:CRdag}). \emph{This upgrades the earlier heuristic
+        ``the two curves cross'' to a proof of the upper anchor; a general-$F$
+        nonempty window remains conjectural.}
+  \item \textbf{Boundary regimes --- ordered, one crossover open.}
+        Proposition~\ref{prop:regimes} proves the strict ordering
+        $\CM^{\mathrm{fc}}<\CMbar<\CMbar^{b}$ and the triple win in the large-\textsc{fcl}
+        and full-coverage regions; the small-\textsc{fcl} region~(I) and the exact
+        crossover $\KMs=\KRs$ rest on the Appendix-G analysis, handed to Role~4.
 \end{enumerate}
 
 \end{document}

@@ -17,6 +17,8 @@ new dated row.
 | 2026-06-24 | R1 | Scope correction: quarantined out-of-scope contracting/correlation work to `exploratory_cross_role/` (candidate handoffs → Role 3 / Role 4) | `exploratory_cross_role/` · `d50efab` |
 | 2026-06-24 | R1 | Capstone: two-moment sufficient statistic, tight magnitude bounds, least-favorable distribution (robust carbon certificate) | §"distribution-free reading" · `01f4843` |
 | 2026-06-24 | R1 | Dropped general monotone-`C_R`-threshold claim (numerics diverge at knife-edge); Theorem 2 left honest | `LAB_NOTEBOOK.md` E11 · `01f4843` |
+| 2026-06-24 | R1 | General existence theorem for the viability threshold C_R-dagger (large-cost anchor + power-law window) | role1_carbon_theory.tex Thm 4 · c761532 |
+| 2026-06-24 | R1 | Adversarial peer review (3 referees); downgraded 2 overstated theorems to conditional form, rescoped threshold, fixed cofactor sentence + numbers | RESPONSE_TO_REFEREES.md · pending |
 
 ## Cross-role flags (for the group, not Role 1 deliverables)
 | Date | From | To | Item |

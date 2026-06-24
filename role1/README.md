@@ -23,45 +23,42 @@ Prop. 4, footnote 6).
 | `validate_regime_crossing.py` | Regime-crossing + Hessian-definiteness scan. |
 | `verify_carbon_robust.py` | Sufficient statistic + magnitude bounds + least-favorable distribution (§"distribution-free reading"). |
 | `LAB_NOTEBOOK.md` | Dated, append-only research log (ISO-8601 entries E1–E11; conventions at top). |
+| `RESPONSE_TO_REFEREES.md` | Point-by-point response to a 3-referee adversarial review; what was fixed/downgraded/defended. |
 | `CONTRIBUTIONS.md` | Append-only contributions ledger (one row per result/fix/decision, with commit). |
 | `exploratory_cross_role/` | **Out-of-scope** material (optimal-contract / mechanism / robustness / correlation-charting). NOT part of the Role 1 deliverable — candidate handoffs to Role 3 / Role 4. See its README. |
 
-## Headline results (Role 1)
-1. **Uniform ground truth re-derived** (eqs 18–26) and verified to machine
-   precision; knife-edge structure proved for the whole power-law family; eq 24
-   shown to equal `2·∂Π/∂K_R` (sign-correct).
-2. **Capacity-substitution channel, general** — `K*_R > K°_R` for any
-   distribution whose **shift ratio** `g(x)=F_{K_R}/f` is non-increasing across
-   the FCL dispatch window. Proof by homotopy in `C_M` + Hessian-cofactor sign.
-   Power-law satisfies it for every α (⇒ footnote 6).
-3. **Net-carbon condition (C)** — exact inequality, decomposed into a
-   distribution-free utilization effect and a capacity-substitution effect whose
-   sign is the channel above. Sufficient condition: shift-ratio + `C_R` small ⇒
-   carbon strictly falls for all `C_M < C̄_M`.
-4. **Distribution-free reading of the carbon effect** (the capstone):
-   - **Two-moment sufficient statistic** — the whole distributional dependence of
-     the carbon change collapses to `(μ*_low, μ°_mid)` at the distribution-free
-     cutoffs (verified to 6e-7).
-   - **Tight closed-form magnitude bounds** computable from cutoff data alone
-     (`Δ_min ≤ Δ ≤ Δ_max`; verified inside).
-   - **Least-favorable distribution = uniform** within the monotone-density class
-     ⇒ the closed-form condition is a *worst-case carbon certificate* over an
-     infinite ambiguity set (verified 3000/3000). The paper's uniform benchmark is
-     the *binding* worst case, not a convenient special case.
+## Headline results (Role 1) — post-referee, honestly calibrated
+1. **Uniform ground truth re-derived** (eqs 18–26), verified vs quadrature to
+   6e-10 (FOCs ≤1e-15); knife-edge proved for the power-law family (constant MV on
+   the *large-FCL* portion of the locus); eq 24 = `2·∂Π/∂K_R` (sign-correct).
+2. **Capacity-substitution channel, general** — `K*_R > K°_R` for any distribution
+   satisfying **two** conditions: shift-ratio `g(x)=F_{K_R}/f` non-increasing,
+   plus interior regularity. Proof by homotopy in `C_M` + Hessian-cofactor sign.
+   Power-law satisfies the shift-ratio condition for every α. *(3 referees found no
+   counterexample, incl. a from-scratch copula rebuild at corr +0.95.)*
+3. **Net-carbon condition (C)** — exact inequality; distribution-free utilization
+   effect vs sign-controlled capacity-substitution effect.
+4. **Distribution-free reading** (capstone, stated at *fixed equilibrium
+   capacities*): the carbon change is **affine in two conditional means**, sits
+   inside **closed-form magnitude bounds** from cutoff data, and the **uniform is
+   the least-favorable conditional shape** within the monotone class. *Honest
+   scope:* these are fixed-capacity statements; the cross-distribution
+   "robust certificate over every F∈U" is **not** closed (capacities co-vary with
+   F) — flagged open.
+5. **Viability threshold `C_R†`** — general large-cost anchor (`Δ→−U₀<0`, every F)
+   + explicit power-law window; general-F nonempty window conjectural.
 
-## The four open points — all closed (see `gap_memo.md`)
-1. **Submodularity** is not an obstruction — homotopy+cofactor proof is complete
-   under a Regularity condition (`H≺0`, verified by eigenvalues; lapses only at
-   the knife-edge where `K*_R=∞>K°_R` is immediate).
-2. **Endogenous-capacity feedback** — comparison probabilities are
-   distribution-free (Lemma 3) and the one level effect is signed by Theorem 1,
-   so (C)+Theorem 1 is a *complete* characterization.
-3. **`C_R†` explicit** for the power-law family:
-   `C_R† = ½[c + (R−C_M−c)²/(R−c) + (R−c−C_F−C_M)²/(β+p−R)]`.
-4. **Regimes ordered** — `C_M^fc < C̄_M < C̄_M^b`. (Full small-FCL/regime stitching
-   is Role 4.)
+## Status of the open points (see `gap_memo.md`, `RESPONSE_TO_REFEREES.md`)
+- **Submodularity** — closed (homotopy+cofactor under Regularity `H≺0`).
+- **Endogenous-capacity feedback** — closed *at fixed capacities*; cross-F
+  covariation signed in direction, not fully closed.
+- **`C_R†`** — general upper anchor proven; explicit power-law window; general
+  window conjectural.
+- **Regimes** — ordering `C_M^fc < C̄_M < C̄_M^b` proven; small-FCL region (I) +
+  crossover `K*_M=K°_R` → Role 4.
 
-All backed by `verify_exact.py` (15/15 PASS).
+Exact-algebra core backed by `verify_exact.py` (15/15, 6–16 digits). The paper now
+claims exactly what it proves; full referee response in `RESPONSE_TO_REFEREES.md`.
 
 ## Reproduce
 ```bash

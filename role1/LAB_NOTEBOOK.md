@@ -190,6 +190,27 @@ New section in `role1_carbon_theory.tex` — strictly General Carbon Theory:
   so the claim is not cleanly supported. Theorem 2 stays heuristic. *(Honest.)*
 — R1
 
+## E12 · 2026-06-24 · Adversarial peer review (3 referees) + honesty revision
+Subjected the paper to three independent adversarial referees: a proof-checker, a
+counterexample hunter (rebuilt the model from scratch with a Gaussian copula, 70+
+runs), and an overclaim auditor (ran all 5 scripts vs cited numbers).
+- **No genuine counterexample found** — every failure coincided with a violated
+  hypothesis (sharpness confirmed). Core results (K*_R>K°_R, cutoffs, bounds,
+  threshold anchor) robust.
+- But several statements over-reached. **Fixed:** ~~"two-moment sufficient
+  statistic"~~ → affine representation *at fixed capacities* (the means aren't a
+  sufficient statistic across F — capacities & q° move with F); ~~"uniform
+  least-favorable, robust certificate for every F∈U"~~ → least-favorable
+  *conditional shape* (cross-F covariation open); distribution-free cutoffs Lemma
+  → *large-FCL only*; ~~C_R† "for every F"~~ → general upper anchor + explicit
+  power-law window (general window conjectural); Thm 1 small-FCL cofactor sentence
+  cited wrong matrix entry (H_MM→H_FF); Prop-regime "a fortiori in (I)" dropped
+  (backwards); "machine precision"→"6–16 digits"; MV "{1,5,9}"→{1,4,5} large-FCL;
+  −108→−92.1; "all four closed"→three+one crossover open.
+- Full point-by-point in `RESPONSE_TO_REFEREES.md`. No theorem retracted; two
+  downgraded to honest conditional form, one rescoped. PDF 11pp.
+— R1
+
 ---
 
 ## Verification ledger
