@@ -1,152 +1,124 @@
 \documentclass[11pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[margin=0.9in]{geometry}
+\usepackage[margin=0.85in]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{enumitem}
 \usepackage{xcolor}
-\usepackage[colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue!55!black]{hyperref}
 
 \definecolor{a1blue}{RGB}{31,78,140}
-\newcommand{\hd}[1]{\vspace{12pt}\par\noindent{\large\bfseries\color{a1blue}#1}\par\vspace{3pt}}
-\newcommand{\role}[2]{\hd{#1}\noindent\textit{Mandate.} #2\par\vspace{2pt}}
-\setlist[itemize]{leftmargin=1.4em,itemsep=2.5pt,topsep=3pt}
+\newcommand{\hd}[1]{\vspace{9pt}\par\noindent{\large\bfseries\color{a1blue}#1}\par\vspace{2pt}}
+\newcommand{\role}[2]{\hd{#1}\noindent\textit{Mandate.}\ #2\par\vspace{1pt}}
+\setlist[itemize]{leftmargin=1.3em,itemsep=1.5pt,topsep=2pt}
 \newcommand{\KR}{K_R}\newcommand{\CR}{C_R}\newcommand{\CM}{C_M}
-
-\title{\vspace{-1.2cm}\textbf{A1 Week 2 Plan}\\[2pt]
-\large General Carbon/Contracting Theory \& Numerical Methods --- the road to a
-\emph{Management Science} submission}
-\author{}\date{}
+\pagestyle{empty}
 
 \begin{document}
-\maketitle\vspace{-1.4cm}
+\begin{center}
+{\Large\bfseries A1 Week 2 Plan}\\[2pt]
+{\small General Carbon/Contracting Theory \& Numerical Methods --- closing the
+gap to a \emph{Management Science} submission}
+\end{center}
+\vspace{-2pt}
 
-\noindent\textbf{Where we are.} Week 1 delivered the spine: the
-capacity-substitution channel $\KR^{*}>\KR^{\circ}$, the exact net-carbon
-inequality (C), the distribution-free cutoffs, the closed-form thresholds
+\noindent\textbf{Status.} Week 1 delivered the spine: the capacity-substitution
+channel $\KR^{*}>\KR^{\circ}$, the exact net-carbon inequality (C), the
+distribution-free cutoffs, the closed-form thresholds
 ($\bar C_M,\CR^{\dagger},\CR^{\circ},\bar C_M^b$), a 15/15 machine-precision audit,
-and a 3-referee honesty pass --- cross-validated by all four roles. An adversarial
+a 3-referee honesty pass, and a green four-role integration. An adversarial
 \emph{Management Science} review puts us at $\approx$70--75\% of the rigor bar.
-The gap is one keystone (a general-distribution, finite-optimum carbon theorem)
-plus robustness, a clean numerical narrative, and positioning. Week 2 closes it.
+The gap is one keystone --- a general-distribution, finite-optimum carbon theorem
+--- plus robustness, a clean numerical narrative, and theory positioning.
 
 \smallskip
-\noindent\textbf{Scope (hard wall).} A1 only: general theory + numerical methods.
-\emph{Not} A2 (empirical calibration / real-data magnitudes), \emph{not} B1
-(reliability, welfare, social-vs-private pricing), \emph{not} B2 (flexibility
-continuum, AI, storage, multi-grid, dynamics). Every task below is theory or
-numerical-method work on the A1 model.
-
-\smallskip
-\noindent\textbf{Parallelization.} The four roles are designed to run
-simultaneously and share only notation + the Week-1 closed forms. Role~1 (lead)
-carries the keystone; Roles~2--4 consume Role~1's conditions \emph{as they land}
-but can start immediately on their independent components.
+\noindent\textbf{Scope (hard wall --- A1 only).} Every task below is general
+\emph{theory} or \emph{numerical-method} work on the FCL carbon model. \emph{Out
+of scope:} real-data calibration/magnitudes (A2); reliability, welfare,
+social-vs-private optimum (B1); flexibility continuum, AI, storage, multi-grid,
+dynamics (B2). Roles stay in their own lane below.
 
 %====================================================================
-\role{Role 1 --- Lead General Theory \;\textnormal{\small(keystone; carries the heaviest load)}}{%
-Turn the headline from ``conditional/conjectural for general $F$'' into a proved,
-finite-optimum, general-distribution theorem. The paper's title depends on this role.}
+\role{Role 1 --- General Carbon Theory \;\textnormal{\small(lead; carries the heaviest load)}}{%
+Turn the headline from ``conditional for general $F$'' into a proved,
+finite-optimum, general-distribution theorem --- the paper's title depends on it.}
 \begin{itemize}
-  \item \textbf{Existence \& uniqueness of the interior optimum.} Prove coercivity
-        of the profit $\Pi$ and give a primitive condition on $F$ (e.g.\
-        log-concave density, or monotone hazard) under which any interior critical
-        point is the unique global maximizer --- discharging the ``interior
-        optimum is assumed'' gap and supplying Condition~2 ($\mathcal H\prec0$)
-        from primitives rather than eigenvalue scans.
-  \item \textbf{Promote the shift-ratio condition to a primitive.} Replace the
-        endogenous-window condition ``$g(x)=F_{\KR}/f$ non-increasing on
-        $(\KR^{*}{-}K_M^{*},\KR^{*})$'' with a support-wide monotone-$g$ (or
-        hazard-rate) condition on $F$ that \emph{implies} it, and prove the
-        implication. State it as a clean primitive hypothesis.
-  \item \textbf{Prove general-$F$ non-emptiness of $\{\Delta\ge0\}$ (the keystone).}
-        Under the primitive shift-ratio condition plus a tail/skew condition, prove
-        carbon \emph{falls somewhere} in $\CR$ for any such $F$ --- upgrading
-        Theorem~3(iii) from conjecture to theorem, or sharply characterizing the
-        $F$-class for which it holds.
-  \item \textbf{Finite-interior-optimum carbon win.} Exhibit a primitive condition
-        under which carbon strictly falls at a \emph{finite, interior} $\KR^{*}$
-        (not the $\KR^{*}{=}\infty$ knife-edge corner), so the result is not an
-        unbounded-capacity artifact.
-  \item \textbf{State the main theorem; re-scope the abstract/title} to match
-        exactly what (1)--(4) deliver, and write the economic-intuition narrative
-        (why $R>c$ + negative demand--supply association $\Rightarrow$ carbon
-        falls) at journal quality.
+  \item \textbf{Existence \& uniqueness.} Prove coercivity of profit $\Pi$ and a
+        primitive condition on $F$ (e.g.\ log-concave density) under which any
+        interior critical point is the unique global maximizer.
+  \item \textbf{Primitive shift-ratio condition.} Replace the endogenous-window
+        ``$g(x)=F_{\KR}/f$ non-increasing'' with a support-wide condition on $F$
+        that \emph{implies} it, and prove the implication.
+  \item \textbf{General-$F$ non-emptiness (keystone).} Under that primitive plus a
+        tail/skew condition, prove carbon \emph{falls somewhere} in $\CR$ for any
+        such $F$ --- upgrading the current conjecture to a theorem.
+  \item \textbf{Finite-optimum carbon win.} Give a primitive condition under which
+        carbon strictly falls at a \emph{finite, interior} $\KR^{*}$ (not the
+        $\KR^{*}{=}\infty$ corner).
+  \item \textbf{Main theorem + re-scope.} State the headline theorem, align the
+        abstract/title to exactly what is proved, and write the economic intuition
+        at journal quality.
 \end{itemize}
 
 %====================================================================
-\role{Role 2 --- Distributional Robustness Theory}{%
-Close the cross-distribution robustness layer that Week 1 left at ``fixed
-capacities.''}
-\begin{itemize}
-  \item \textbf{Sign the capacity covariation} $dK^{*}/dF$ along the shape class
-        $\mathcal U$, converting the least-favorable result from a fixed-capacity
-        statement into a genuine cross-$F$ \emph{least-favorable-distribution}
-        theorem (or prove the obstruction precisely).
-  \item \textbf{Robust certificate.} Turn the magnitude bounds into a guarantee
-        $\Delta\ge0$ valid for \emph{every} $F\in\mathcal U$ with $\CR\le\CR^{\dagger}$,
-        making the closed-form condition a true distributionally-robust certificate.
-  \item \textbf{Repair the $\mathbb E[\text{fossil}^{*}]\to0$ limit} with a
-        dominated-convergence / finite-$\KR$ envelope argument, removing the
-        a.s.-corner hand-wave in the threshold proof.
-  \item \textbf{Position the robustness machinery} against the
-        least-favorable-distribution / distributionally-robust-optimization
-        literature (feeds Role~4's bibliography).
-\end{itemize}
-
-%====================================================================
-\role{Role 3 --- Numerical Methods \& Reproducibility}{%
-One coherent, reproducible numerical backbone that demonstrates the theory at a
+\role{Role 2 --- Solver \& Numerical Methods}{%
+One coherent, reproducible numerical backbone demonstrating the theory at a
 finite interior optimum.}
 \begin{itemize}
-  \item \textbf{One carbon-sign narrative.} Replace the scattered ``2/32, 10/40''
+  \item \textbf{One carbon-sign narrative.} Replace the scattered ``2/32'' counts
         with a principled sweep over Role~1's primitive condition on a curated
-        distribution family, showing carbon falls at a \emph{finite interior}
-        optimum --- one consistent story across Roles~1/3/4.
-  \item \textbf{Hessian certificate.} A reproducible script confirming
-        $\mathcal H\prec0$ on the interior path for Role~1's distribution class
-        (backstops the existence/regularity proof).
-  \item \textbf{Build the reversed-channel counterexample.} Construct a realized
-        $F$ with $g$ increasing $\Rightarrow \KR^{*}<\KR^{\circ}$ --- the
-        sharpness example Week~1 could not produce (algebraic sign-flip is not a
-        realized example).
-  \item \textbf{Solver hardening + one-command harness.} Replace finite-difference
-        cofactors with analytic ones (kills the noisy knife-edge points), document
-        tolerances, and ship a single \texttt{reproduce} command covering the 15
-        exact-formula checks plus the carbon sweep.
+        family, showing carbon falls at a finite interior optimum.
+  \item \textbf{Hessian certificate.} A reproducible check that $\mathcal H\prec0$
+        on the interior path for Role~1's distribution class (backstops existence).
+  \item \textbf{Analytic-cofactor solver.} Replace finite-difference cofactors with
+        analytic ones (removes the noisy knife-edge points); document tolerances.
+  \item \textbf{One-command reproducibility.} A single \texttt{reproduce} harness
+        covering the 15 exact-formula checks plus the carbon sweep.
 \end{itemize}
 
 %====================================================================
-\role{Role 4 --- Consistency, Regimes \& Positioning}{%
+\role{Role 3 --- Comparative Statics \& Robustness}{%
+Close the cross-distribution robustness layer Week 1 left at ``fixed capacities,''
+and deliver the sharpness example.}
+\begin{itemize}
+  \item \textbf{Cross-$F$ least-favorable.} Sign the capacity covariation
+        $dK^{*}/dF$ along the shape class $\mathcal U$, turning the fixed-capacity
+        result into a genuine least-favorable-distribution theorem.
+  \item \textbf{Robust certificate.} Make $\CR\le\CR^{\dagger}\Rightarrow\Delta\ge0$
+        hold for \emph{every} $F\in\mathcal U$, or prove the obstruction cleanly.
+  \item \textbf{Reversed-channel counterexample.} Construct a realized $F$ with
+        $g$ increasing $\Rightarrow \KR^{*}<\KR^{\circ}$ --- the sharpness example
+        Week~1 could not produce.
+  \item \textbf{Repair the limit.} Replace the $\mathbb E[\text{fossil}^{*}]\to0$
+        a.s.-corner step with a dominated-convergence / finite-$\KR$ argument.
+\end{itemize}
+
+%====================================================================
+\role{Role 4 --- Theory Hardening, Regimes \& Positioning}{%
 Make the four pieces one manuscript a referee reads as a single, consistent
 paper.}
 \begin{itemize}
-  \item \textbf{Unify the cross-role statements.} One Assumption~1
-        ($R>c+\CM$) everywhere, one carbon decomposition (Role~1's two-force
-        split), and strip any out-of-scope miner/oligopoly material --- a single
-        notation table and regime map for the whole manuscript.
-  \item \textbf{Complete the regime map} with the finite-optimum statement from
-        Role~1, so small-FCL / interior / full-coverage and the boundedness axis
-        ($\CR$) compose into one consistent theorem.
-  \item \textbf{Write the literature section} (theory side: capacity investment
-        \& peak-load pricing, monotone comparative statics, interruptible/
-        demand-response load, distributionally-robust / least-favorable methods)
-        and add the bibliography --- currently zero citations.
-  \item \textbf{Assemble \& edit the manuscript:} move all ``verified to $10^{-k}$''
-        out of proof bodies into the numerical section, self-contain the draft
-        corrections, and align every abstract claim with the theorem it cites.
+  \item \textbf{Unify the manuscript.} One Assumption~1 ($R>c+\CM$) and one carbon
+        decomposition (Role~1's two-force split) everywhere; one notation table.
+  \item \textbf{Complete the regime map.} Fold Role~1's finite-optimum statement
+        into the small-FCL / interior / full-coverage map plus the $\CR$
+        boundedness axis, as one consistent theorem.
+  \item \textbf{Theory positioning.} Write the related-work section and
+        bibliography on the \emph{methods} A1 uses --- monotone comparative statics
+        (Topkis/Milgrom--Shannon), interruptible/demand-response economics, and
+        distributionally-robust / least-favorable-distribution analysis.
+  \item \textbf{Assemble \& edit.} Move all ``verified to $10^{-k}$'' out of proof
+        bodies into the numerical section; align every claim with its theorem.
 \end{itemize}
 
 %====================================================================
-\vspace{4pt}
-\hd{Dependencies \& sequencing}
-\noindent All four start immediately. Role~1 delivers two primitives early --- the
-\emph{primitive shift-ratio condition} (unblocks Role~3's sweep and Role~2's
-class $\mathcal U$) and the \emph{existence condition} (unblocks Role~2's capacity
-covariation and Role~3's Hessian certificate). Roles~2--4 hand Role~4 their final
-statements for assembly in the last two days. Acceptance gate: a
-\emph{Management Science} referee cannot reject on theory/rigor once Role~1
-(keystone) and Role~4 (consistency + positioning) land; Roles~2--3 turn an
-acceptance into a strong one.
+\hd{Sequencing}
+\noindent All four start now and share only notation $+$ the Week-1 closed forms.
+Role~1 delivers two primitives early --- the primitive shift-ratio condition
+(unblocks Role~2's sweep and Role~3's class $\mathcal U$) and the existence
+condition (unblocks Role~3's covariation and Role~2's Hessian check). Roles~2--4
+hand Role~4 their final statements for assembly. \textbf{Acceptance gate:} a
+referee cannot reject on rigor once Role~1 (keystone) and Role~4 (consistency $+$
+positioning) land; Roles~2--3 turn acceptance into a strong one.
 
 \end{document}
