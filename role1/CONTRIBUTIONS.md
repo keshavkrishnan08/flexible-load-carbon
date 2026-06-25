@@ -19,6 +19,8 @@ new dated row.
 | 2026-06-24 | R1 | Dropped general monotone-`C_R`-threshold claim (numerics diverge at knife-edge); Theorem 2 left honest | `LAB_NOTEBOOK.md` E11 · `01f4843` |
 | 2026-06-24 | R1 | General existence theorem for the viability threshold C_R-dagger (large-cost anchor + power-law window) | role1_carbon_theory.tex Thm 4 · c761532 |
 | 2026-06-24 | R1 | Adversarial peer review (3 referees); downgraded 2 overstated theorems to conditional form, rescoped threshold, fixed cofactor sentence + numbers | RESPONSE_TO_REFEREES.md · pending |
+| 2026-06-25 | R1 | Self-audit caught a sign defect in Thm 6/7 proofs (referees missed it); fixed prose + verifier tilt check (bounds/conclusions were already correct) | role1_carbon_theory.tex §6 · c539cae |
+| 2026-06-25 | R1 | Reviewed team updates: Role-3 (complete, validates my theory 32/32), Role-4 (rebuilt to FCL mandate, 17 tests, uses my closed forms); both consistent | (review) · n/a |
 
 ## Cross-role flags (for the group, not Role 1 deliverables)
 | Date | From | To | Item |
