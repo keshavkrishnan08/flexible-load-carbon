@@ -402,11 +402,13 @@ extra term is $\ge0$. Hence $\operatorname{cof}_{\KM\KR}\ge0$ and $d\KRs/d\CM\le
 \emph{throughout} the path, not only on its large-\textsc{fcl} part (confirmed
 numerically across the crossing in \S\ref{sec:num}: $d\KRs/d\CM<0$ at every
 $\CM\in\{0.77,\dots,0.30\}$, spanning both regimes). Since the no-\textsc{fcl}
-conditions hold at $\CM=\CMbar$, $\KRs(\CMbar)=\KRo$. The path
-$\CM\mapsto\KRs$ is continuous (maximum theorem) and, by the above,
-$d\KRs/d\CM\le0$ at every point off the regime boundary $\KMs=\KRs$; a continuous
-function with a.e.-nonpositive derivative is non-increasing, so integrating from
-$\CMbar$ down to $\CM$ yields $\KRs(\CM)\ge\KRo$.
+conditions hold at $\CM=\CMbar$, $\KRs(\CMbar)=\KRo$. By the implicit function
+theorem (Condition~\ref{cond:reg}, $\mathcal H$ nonsingular), $\CM\mapsto\KRs$ is
+$C^1$ on each of the two open regime intervals and continuous across the single
+boundary point $\KMs=\KRs$; hence it is \emph{absolutely continuous} on the
+compact interval $[\CM,\CMbar]$. An absolutely continuous function with
+a.e.-nonpositive derivative is non-increasing, so integrating
+$d\KRs/d\CM\le0$ from $\CMbar$ down to $\CM$ yields $\KRs(\CM)\ge\KRo$.
 \end{proof}
 
 \begin{remark}[The submodularity is not an obstruction]\label{rem:submod}
