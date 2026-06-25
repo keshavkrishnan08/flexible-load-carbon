@@ -211,6 +211,23 @@ runs), and an overclaim auditor (ran all 5 scripts vs cited numbers).
   downgraded to honest conditional form, one rescoped. PDF 11pp.
 — R1
 
+## E13 · 2026-06-25 · Self-audit: sign defect in Thm 6/7 proofs (referees missed it)
+Re-auditing for "make it perfect," caught a genuine sign error the 3 referees did
+not: Thm 6 / Thm 7 prose stated `∂Δ/∂μ*_low = +C_M/(R−c) > 0`. From eq:suff it is
+`−C_M/(R−c) < 0` (a larger μ*_low raises E[fossil*], lowering Δ). Verified
+numerically: −0.5556 = −C_M/(R−c). The **bounds and conclusions were correct** (they
+used the right directions); only the stated partial sign was wrong, making the proof
+prose internally contradictory ("increasing … minimized by largest"). → Fixed both
+proofs (Δ decreasing in μ*_low, increasing in μ°_mid); added a tilt check to
+`verify_carbon_robust.py` confirming uniform minimizes Δ over U (Δ vs tilt
+s=[0,.2,.5,1,2,4]: −1.69,−0.64,+0.59,+1.67,+2.36,+2.71 → min at s=0). PDF 11pp.
+
+Also reviewed team updates: Role-3 (now complete, validates K*_R>K°_R 32/32, carbon
+rare at low-C_R — confirms my threshold thm) and Role-4 (rebuilt to FCL mandate, 17
+tests pass, adopts my C_R†/C_R°/C̄_M^b closed forms + eq24=2(C_R†−C_R)). Role-2 36
+tests pass. main still un-integrated.
+— R1
+
 ---
 
 ## Verification ledger

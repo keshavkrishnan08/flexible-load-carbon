@@ -81,5 +81,9 @@ def cm_nondec(a,bb,sh,n=3000):
     t=np.linspace(a,bb,n); w=np.exp(sh*(t-a)); w/=np.trapz(w,t); return np.trapz(w*t,t)
 ok1=all(cm_noninc(a1,b1,rng.uniform(0,3))<= (a1+b1)/2 +1e-9 for _ in range(3000))
 ok2=all(cm_nondec(a2,b2,rng.uniform(0,3))>= (a2+b2)/2 -1e-9 for _ in range(3000))
-print(f"(C) within monotone class: mu*_low<=midpoint {ok1} and mu^o_mid>=midpoint {ok2}"
-      f"  => uniform is least-favorable (minimizes Delta)")
+print(f"(C) within monotone class: mu*_low<=midpoint {ok1} and mu^o_mid>=midpoint {ok2}")
+# direct: at fixed capacities, tilt from uniform (s=0) into U and confirm Delta is MINIMIZED at the uniform
+def Delta_suff(mu_low,mu_mid): return (KFn*(1-phi)+(phi-q)*mu_mid)-(KF-(CM/(R-c))*((KF-KM)-mu_low))
+ds=[Delta_suff(cm_noninc(a1,b1,s), cm_nondec(a2,b2,s)) for s in [0,0.2,0.5,1,2,4]]
+print(f"    Delta vs tilt s=[0,.2,.5,1,2,4]: {[round(d,4) for d in ds]}")
+print(f"    sign check: dDelta/dmu*_low<0 and dDelta/dmu^o_mid>0; uniform (s=0) MINIMIZES Delta? {abs(min(ds)-ds[0])<1e-9}")

@@ -672,12 +672,16 @@ conditional law degenerates to an interval endpoint.
 
 \begin{proof}
 Substitute the endpoint values of $\mu^{*}_{\mathrm{low}},\mu^{\circ}_{\mathrm{mid}}$
-into \eqref{eq:suff}; monotonicity of $\Delta$ in each mean
-($\partial\Delta/\partial\mu^{*}_{\mathrm{low}}=\tfrac{\CM}{R-c}>0$,
-$\partial\Delta/\partial\mu^{\circ}_{\mathrm{mid}}=\varphi^{\circ}-q^{\circ}>0$)
-gives the extremes; using $q^{\circ}\ge0$ for $\Delta_{\max}$ removes the last
-distributional term. \emph{(Verified at a stable interior equilibrium:
-$\Delta_{\min}=-6.43\le\Delta=-2.17\le\Delta_{\max}=+3.23$.)}
+into \eqref{eq:suff}, using its monotonicity in each mean:
+$\partial\Delta/\partial\mu^{*}_{\mathrm{low}}=-\tfrac{\CM}{R-c}<0$ (since a larger
+$\mu^{*}_{\mathrm{low}}$ raises $\E[\text{fossil}^{*}]$) and
+$\partial\Delta/\partial\mu^{\circ}_{\mathrm{mid}}=\varphi^{\circ}-q^{\circ}>0$. The
+smallest $\Delta$ thus takes the \emph{largest} $\mu^{*}_{\mathrm{low}}=\KFs-\KMs$
+(giving $\E[\text{fossil}^{*}]=\KFs$) and the smallest $\mu^{\circ}_{\mathrm{mid}}=0$,
+yielding $\Delta_{\min}$; the largest $\Delta$ takes the smallest
+$\mu^{*}_{\mathrm{low}}=-\KRs$ and largest $\mu^{\circ}_{\mathrm{mid}}=\KFo$, and
+$q^{\circ}\ge0$ then bounds the last term, yielding $\Delta_{\max}$. \emph{(Verified
+at a stable interior equilibrium: $\Delta_{\min}=-6.43\le\Delta=-2.17\le\Delta_{\max}=+3.23$.)}
 \end{proof}
 
 \begin{theorem}[Least-favorable conditional shape]\label{thm:lfd}
@@ -689,14 +693,20 @@ minimizes the carbon saving $\Delta$ of \eqref{eq:suff}.
 \end{theorem}
 
 \begin{proof}
-By \eqref{eq:suff}, at fixed capacities $\Delta$ is increasing in
-$\mu^{*}_{\mathrm{low}}$ and in $\mu^{\circ}_{\mathrm{mid}}$, so it is minimized by
-the \emph{largest} $\mu^{*}_{\mathrm{low}}$ and \emph{smallest}
-$\mu^{\circ}_{\mathrm{mid}}$. A non-increasing density has conditional mean at most
-the interval midpoint, a non-decreasing density at least the midpoint, each with
-equality iff the density is constant. Hence both extremes are the midpoints,
-attained by the uniform. \emph{(Verified: over $3000$ random monotone densities the
-conditional means respect the midpoint bounds in $3000/3000$ cases.)}
+By \eqref{eq:suff}, at fixed capacities $\Delta$ is \emph{decreasing} in
+$\mu^{*}_{\mathrm{low}}$ (coefficient $-\CM/(R-c)$) and \emph{increasing} in
+$\mu^{\circ}_{\mathrm{mid}}$ (coefficient $\varphi^{\circ}-q^{\circ}>0$), so it is
+minimized by the \emph{largest} feasible $\mu^{*}_{\mathrm{low}}$ and the
+\emph{smallest} feasible $\mu^{\circ}_{\mathrm{mid}}$. A non-increasing density on
+the \textsc{fcl} zone has conditional mean at \emph{most} the interval midpoint, so
+the largest feasible $\mu^{*}_{\mathrm{low}}$ over $\Ucal$ is the midpoint; a
+non-decreasing density on the no-\textsc{fcl} zone has conditional mean at
+\emph{least} the midpoint, so the smallest feasible $\mu^{\circ}_{\mathrm{mid}}$ is
+the midpoint. Both midpoints are attained \emph{simultaneously} by the uniform
+(constant density), which therefore minimizes $\Delta$. \emph{(Verified: over
+$3000$ random monotone densities the conditional means respect the midpoint bounds
+in $3000/3000$, and a continuous tilt from uniform into $\Ucal$ raises $\Delta$ ---
+uniform is the minimizer.)}
 \end{proof}
 
 \begin{remark}[Scope: this is a fixed-capacity statement]\label{rem:lfd}
