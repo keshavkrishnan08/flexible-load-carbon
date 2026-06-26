@@ -56,5 +56,5 @@ is worst-cased (within the monotone-density class) by the uniform.
 bash run_all.sh        # runs Role 1 audit + Role 2/4 pytest + Role 3 experiments
 ```
 See `INTEGRATION.md` for the consistency check and the combined results table,
-and `NEXT_ROLES_A1.pdf` for the parallelized plan that takes A1 to a
+and `A1_deliverables/A1_Week2_NextRoles.pdf (Word) and A1_deliverables/A1_integrated_paper.pdf` for the parallelized plan that takes A1 to a
 Management-Science-ready submission.
