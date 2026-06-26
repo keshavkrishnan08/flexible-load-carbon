@@ -21,6 +21,12 @@ new dated row.
 | 2026-06-24 | R1 | Adversarial peer review (3 referees); downgraded 2 overstated theorems to conditional form, rescoped threshold, fixed cofactor sentence + numbers | RESPONSE_TO_REFEREES.md · pending |
 | 2026-06-25 | R1 | Self-audit caught a sign defect in Thm 6/7 proofs (referees missed it); fixed prose + verifier tilt check (bounds/conclusions were already correct) | role1_carbon_theory.tex §6 · c539cae |
 | 2026-06-25 | R1 | Reviewed team updates: Role-3 (complete, validates my theory 32/32), Role-4 (rebuilt to FCL mandate, 17 tests, uses my closed forms); both consistent | (review) · n/a |
+| 2026-06-26 | R1 | **A1 Week 2.** Existence + uniqueness + contract optimality via recursive-triangular FOC (unconditional (K_F,K_M) ND block + scalar Schur); unique dispatch via strict R>c | `role1_week2_theory.tex` §2 Thm 1 · pending |
+| 2026-06-26 | R1 | Shift-ratio condition made uniform along the C_M-homotopy (support-wide monotone g ⇒ realized endpoint inequality at every C_M) | §3 Lemma 4 · pending |
+| 2026-06-26 | R1 | Emission keystone: exact endogenous condition + primitive sufficient bound (endpoint shift-ratio + two-zone tail/skew). Resolves Week-1 conjecture NEGATIVE — carbon falls at NO large-FCL interior optimum (exhaustive scan, max Δ<0); fall only at the cheap-renewable corner. Mechanism: surplus-state FCL is fossil-served | §4 Thm 2 / Prop 3 · pending |
+| 2026-06-26 | R1 | Connectedness of {C_R:Δ≥0}: bounded + non-empty + single interval under strict-down-crossing MRSV condition | §5 Thm 3 · pending |
+| 2026-06-26 | R1 | Sharp N&S channel condition as a path integral (monotone g sufficient not necessary); two-sided Δ bounds proved tight via attaining laws | §6 Thm 4/5 · pending |
+| 2026-06-26 | R1 | Week-2 numerical suite vs quadrature of Π | `verify_week2.py` · pending |
 
 ## Cross-role flags (for the group, not Role 1 deliverables)
 | Date | From | To | Item |

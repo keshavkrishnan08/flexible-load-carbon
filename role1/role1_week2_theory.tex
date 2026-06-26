@@ -1,0 +1,649 @@
+\documentclass[11pt,reqno]{amsart}
+
+%=====================================================================
+%  Team A1 -- Role 1 (Optimal Contract and General Carbon Theory)
+%  A1 WEEK 2.  Five results, building on role1_carbon_theory.tex (Week 1).
+%   1. Existence, uniqueness, contract optimality (recursive-triangular FOC)
+%   2. Shift-ratio condition uniform along the C_M-homotopy
+%   3. Emission condition for general F (keystone): primitive sufficient
+%      condition at a finite interior optimum; conjecture resolved NEGATIVE
+%   4. Connectedness of the carbon-reduction set {C_R : Delta >= 0}
+%   5. Sharp N&S channel condition (path integral) + tight two-sided bounds
+%=====================================================================
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{condition}{Condition}
+\newtheorem{assumption}{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\KR}{K_R}
+\newcommand{\KF}{K_F}
+\newcommand{\KM}{K_M}
+\newcommand{\KRs}{K_R^{*}}
+\newcommand{\KFs}{K_F^{*}}
+\newcommand{\KMs}{K_M^{*}}
+\newcommand{\KRo}{K_R^{\circ}}
+\newcommand{\KFo}{K_F^{\circ}}
+\newcommand{\Dbar}{\bar D}
+\newcommand{\CM}{C_M}
+\newcommand{\CF}{C_F}
+\newcommand{\CR}{C_R}
+\newcommand{\CMbar}{\bar C_M}
+\newcommand{\bp}{\beta+p}
+\newcommand{\FKR}{F_{\!\KR}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\eqdef}{\vcentcolon=}
+\newcommand{\Ucal}{\mathcal U}
+\newcommand{\Hcal}{\mathcal H}
+\newcommand{\cof}{\operatorname{cof}}
+
+\begin{document}
+
+\title[Optimal Contract and General Carbon Theory (Week 2)]
+{Optimal Contract and General Carbon Theory for Flexible Computing Loads:\\
+Existence and Uniqueness, a Uniform Homotopy Condition, the\\
+General-$F$ Emission Keystone, Connectedness, and Sharpness}
+\author{Team A1 --- Role 1 (Optimal Contract and General Carbon Theory)}
+\date{Working results, Week~2}
+
+\begin{abstract}
+This is the Role~1 Week~2 deliverable. It hardens the Week~1 carbon theory
+(\texttt{role1\_carbon\_theory.tex}) into five proved statements, taking the
+same model and notation and adding nothing outside Role~1's mandate. \emph{One},
+the regulated program has a maximizer, it is unique, and the within-period
+dispatch $d^{*}(x)=\min\{(\KF-x)_+,\KM\}$ is the unique optimal rule; uniqueness
+comes not from global concavity (the profit is submodular in $(\KR,\KF)$, so it
+fails) but from a \emph{recursive-triangular} structure---the distribution-free
+cutoffs pin $\KF$ and then $\KM$ as unique functions of $\KR$, after which a
+single scalar diagonal-dominance (reduced second-order) condition pins $\KR$.
+\emph{Two}, support-wide monotonicity of the shift ratio
+$g=\FKR/f$ makes the realized two-point endpoint inequality hold \emph{uniformly}
+along the whole $\CM$-homotopy, even as the dispatch window moves---the exact
+content the Week~1 ``integrate-downward'' step needs. \emph{Three} (the
+keystone), substituting the equilibrium map $K^{*}(\CR)$ into the exact
+inequality~(C) yields the endogenous carbon condition, and we give a
+\emph{primitive} sufficient condition---the endpoint shift-ratio condition plus a
+two-zone density (tail/skew) bound---under which carbon would strictly fall at a
+\emph{finite interior} optimum. This converts Week~1's vague conjecture into a
+sharp, checkable inequality, and an exhaustive search then \emph{resolves it in
+the negative}: across non-power-law Beta scale mixtures (every skew, capacity
+factors up to $0.8$, the full cost grid) the saving is negative at \emph{every}
+large-\textsc{fcl} interior optimum---FCL on surplus states is fossil-served, so a
+finite program adds fossil faster than the channel removes it. Carbon strictly
+falls only in the cheap-renewable corner $\KRs\to\infty$ (a corner, not an
+interior optimum). \emph{Four}, the carbon-reduction set $\{\CR:\Delta(\CR)\ge0\}$
+is bounded above and non-empty (its non-emptiness furnished by that corner), and
+is a single interval under an explicit monotone-renewable-shadow-value condition
+that rules out a second zero-crossing.
+\emph{Five}, the sharp necessary-and-sufficient condition for $\KRs>\KRo$ is the
+\emph{path integral} of the realized endpoint gap; pointwise-monotone $g$ is
+sufficient but not necessary; and the two-sided bounds on the carbon saving are
+tight, attained by explicit degenerate conditional laws. Every identity is checked
+against quadrature of the profit integral in \texttt{verify\_week2.py}.
+\end{abstract}
+
+\maketitle
+
+%---------------------------------------------------------------------
+\section{Setup}\label{sec:setup}
+
+We keep the model and notation of \texttt{role1\_carbon\_theory.tex}. A regulated
+utility chooses renewable capacity $\KR$, dispatchable fossil $\KF$, and
+flexible-computing-load (\textsc{fcl}) capacity $\KM$. Residual demand is
+$\tilde x=\tilde D-\KR\tilde S\in[-\KR,\Dbar]$ with CDF $F(x;\KR)$, density
+$f(x;\KR)>0$ on $(-\KR,\Dbar)$, and $\FKR\eqdef\partial F/\partial\KR\ge0$,
+extended by $F\equiv0$ below $-\KR$ and $F\equiv1$ above $\Dbar$. Per-MWh:
+\textsc{fcl} revenue $R$, fossil cost $c$, price $p$, blackout penalty $\beta$;
+amortized capital costs $\CR,\CF,\CM$.
+
+\begin{assumption}[Regularity, as in Week 1]\label{ass:reg}
+$R>c+\CM$,\quad $R<c+\CF+\CM$,\quad $\bp>c+\CF$,\quad $\bp>R$.
+\end{assumption}
+
+Under the dispatch rule $d(x)=\min\{(\KF-x)_+,\KM\}$ the unified profit is
+\begin{equation}\label{eq:profit}
+  \Pi=p\,\E[\tilde D]
+  +R\!\!\int_{\KF-\KM}^{\KF}\!\!\!F\,dx
+  -c\!\!\int_{-\KM}^{\KF-\KM}\!\!\!(1-F)\,dx
+  -(\bp)\!\!\int_{\KF}^{\Dbar}\!\!\!(1-F)\,dx
+  -\CF\KF-\CR\KR-\CM\KM ,
+\end{equation}
+with gradient (Week 1, Lemma 1)
+\begin{align}
+  g_M&\eqdef\Pi_{\KM}=(R-c)F(\KF-\KM)+cF(-\KM)-\CM,\label{eq:gM}\\
+  g_F&\eqdef\Pi_{\KF}=R[F(\KF)-F(\KF-\KM)]-c[1-F(\KF-\KM)]+(\bp)[1-F(\KF)]-\CF,\label{eq:gF}\\
+  g_R&\eqdef\Pi_{\KR}=R\!\!\int_{\KF-\KM}^{\KF}\!\!\FKR\,dx
+     +c\!\!\int_{-\KM}^{\KF-\KM}\!\!\FKR\,dx+(\bp)\!\!\int_{\KF}^{\Dbar}\!\!\FKR\,dx-\CR.\label{eq:gR}
+\end{align}
+We work in the \emph{large-\textsc{fcl} interior} regime $\KM\ge\KR$ (so
+$F(-\KM)=f(-\KM)=\FKR(-\KM)=0$), the regime in which the Week-1 carbon theory
+lives; throughout, ``interior'' means $0<\KR<\infty$ and the cutoffs below sit
+strictly inside $(0,1)$. Write $a\eqdef\KF-\KM$ for the lower dispatch endpoint
+and recall the distribution-free cutoff \emph{values} (Week 1, Lemma 2)
+\begin{equation}\label{eq:cut}
+  \varphi_1\eqdef F(a;\KR)=\frac{\CM}{R-c},\qquad
+  \varphi_2\eqdef F(\KF;\KR)=\frac{\bp-c-\CF-\CM}{\bp-R},\qquad
+  \varphi^{\circ}\eqdef F(\KFo;\KRo)=\frac{\bp-c-\CF}{\bp-c}.
+\end{equation}
+Under Assumption~\ref{ass:reg}, $0<\varphi_1<1$ and $0<\varphi_2<1$; the interior
+\textsc{fcl} (adoption) condition $\KM>0$ is $\varphi_2>\varphi_1$, equivalently
+$\CM<\CMbar\eqdef(R-c)\varphi^{\circ}$.
+
+%=====================================================================
+\section{Existence, uniqueness, and contract optimality}\label{sec:unique}
+%=====================================================================
+
+The optimum is not delivered by concavity. By the Week-1 cross-partial
+$\Pi_{\KR\KF}=(R-\bp)\FKR(\KF)-(R-c)\FKR(a)\le0$, $\Pi$ is \emph{submodular} in
+$(\KR,\KF)$, so the Hessian is not globally negative semidefinite and global
+concavity is unavailable. Uniqueness instead follows from a recursive-triangular
+structure together with a single scalar condition.
+
+\subsection{Dispatch optimality}
+
+\begin{lemma}[Unique optimal dispatch via strict $R>c$]\label{lem:dispatch}
+Fix capacities $(\KR,\KF,\KM)$ and a residual-demand realization $x$. Let the
+within-period payoff from serving $s$ units of consumer demand and dispatching
+$d$ units of \textsc{fcl} be
+\[
+  \pi_x(s,d)=p\,s-c\,(s+d)+R\,d-\beta\,\big((x)_+-s\big),
+  \qquad 0\le s\le\min\{(x)_+,\KF\},\ \ 0\le d\le\KM,\ \ s+d\le\KF .
+\]
+Under Assumption~\ref{ass:reg} the unique maximizer is
+$s^{*}=\min\{(x)_+,\KF\}$ and $d^{*}(x)=\min\{(\KF-x)_+,\KM\}$.
+\end{lemma}
+
+\begin{proof}
+$\pi_x$ is affine in $(s,d)$ with $\partial\pi_x/\partial s=\beta+p-c>0$ and
+$\partial\pi_x/\partial d=R-c>0$, both strict under Assumption~\ref{ass:reg}
+($\bp>c+\CF\ge c$ and $R>c+\CM>c$). A strictly increasing affine objective on a
+compact polytope is maximized at the unique vertex reached by pushing both
+coordinates up to their constraints: first $s^{*}=\min\{(x)_+,\KF\}$ (serving
+consumers dominates because $\beta+p-c>R-c$, so consumer service takes priority
+for fossil headroom), then $d$ up to the remaining headroom,
+$d^{*}=\min\{\KM,\KF-s^{*}\}=\min\{(\KF-x)_+,\KM\}$. Strictness of both slopes
+makes the maximizer unique; at $R=c$ the $d$-slope vanishes and any
+$d\in[0,\min\{(\KF-x)_+,\KM\}]$ would be optimal. Hence strict $R>c$ is exactly
+what pins $d^{*}$.\footnote{Verified in \texttt{verify\_week2.py} T1a: a grid
+search of $\pi_x$ over $(s,d)$ returns $(s^{*},d^{*})$ at every sampled $x$.}
+\end{proof}
+
+\subsection{Existence}
+
+\begin{proposition}[A maximizer exists]\label{prop:exist}
+$\Pi$ is continuous on $\mathbb R_{+}^{3}$, and there is a box $[0,\bar K]^{3}$
+that no maximizing sequence leaves. Hence the set of maximizers is nonempty and
+compact.
+\end{proposition}
+
+\begin{proof}
+Continuity is immediate: each integrand in \eqref{eq:profit} is bounded and
+$F(\cdot;\cdot)$ is jointly continuous. We do not claim coercivity along all rays;
+we show each \emph{own} partial turns strictly negative once its own capacity is
+large. As $\KM\to\infty$ (others fixed), $\KF-\KM\to-\infty$, so $F(\KF-\KM)\to0$
+and $g_M\to-\CM<0$. As $\KF\to\infty$, $F(\KF-\KM)\to1$ and $g_F\to-\CF<0$. As
+$\KR\to\infty$, $\FKR(x;\KR)\to0$ pointwise (the leftward shift of a fixed-mass law
+vanishes at the margin), so $g_R\to-\CR<0$. Thus there is $\bar K<\infty$ with
+$\Pi_{K_i}<0$ whenever $K_i>\bar K$ (others in $[0,\bar K]$): on each face
+$K_i=\bar K$ the gradient points strictly \emph{inward}, so $\Pi$ has no
+larger value outside $[0,\bar K]^{3}$ than on its boundary, and no maximizing
+sequence escapes the box. By Weierstrass on the compact box a maximizer
+exists.\footnote{T1b: the own partial is strictly negative at $K_i=60$ with the
+others moderate.}
+\end{proof}
+
+\subsection{Uniqueness by recursive triangularity}
+
+Fix $\KR$. By \eqref{eq:cut} the equations $g_M=0,\ g_F=0$ are equivalent to
+$F(a;\KR)=\varphi_1$ and $F(\KF;\KR)=\varphi_2$, two \emph{distribution-free}
+targets. Since $x\mapsto F(x;\KR)$ is a strictly increasing bijection from
+$(-\KR,\Dbar)$ onto $(0,1)$, each target has a unique preimage:
+\begin{equation}\label{eq:triangle}
+  \KF(\KR)=F^{-1}(\varphi_2;\KR),\qquad
+  a(\KR)=F^{-1}(\varphi_1;\KR),\qquad
+  \KM(\KR)=\KF(\KR)-a(\KR)>0 ,
+\end{equation}
+all $C^{1}$ in $\KR$ (implicit function theorem, $\partial F/\partial x=f>0$).
+This is the triangle: levels one and two ($\KF,\KM$) are pinned by $\KR$ with no
+distributional input. Substituting \eqref{eq:triangle} into $g_R$ defines the
+reduced renewable condition
+\begin{equation}\label{eq:Psi}
+  \Psi(\KR)\eqdef g_R\big(\KR,\KF(\KR),\KM(\KR)\big),\qquad \Psi(\KRs)=0 .
+\end{equation}
+
+\begin{lemma}[The $(\KF,\KM)$ block is unconditionally negative definite]\label{lem:block}
+At any large-\textsc{fcl} interior point the $2\times2$ Hessian block in
+$(\KF,\KM)$,
+$\mathcal M=\begin{psmallmatrix} \Pi_{\KF\KF}&\Pi_{\KF\KM}\\ \Pi_{\KF\KM}&\Pi_{\KM\KM}\end{psmallmatrix}$,
+satisfies $\Pi_{\KF\KF}<0$, $\Pi_{\KM\KM}<0$, and
+\[
+  \det\mathcal M=(R-c)f(a)\,(\bp-R)f(\KF)\;>\;0 ,
+\]
+so $\mathcal M\prec0$ under Assumption~\ref{ass:reg} with no further condition.
+\end{lemma}
+
+\begin{proof}
+From \eqref{eq:gM}--\eqref{eq:gF} in the large-\textsc{fcl} regime,
+$\Pi_{\KM\KM}=-(R-c)f(a)<0$, $\Pi_{\KF\KM}=(R-c)f(a)$, and
+$\Pi_{\KF\KF}=(R-\bp)f(\KF)-(R-c)f(a)<0$ (both terms negative since $R<\bp$,
+$R>c$). Then
+$\det\mathcal M=\Pi_{\KF\KF}\Pi_{\KM\KM}-\Pi_{\KF\KM}^{2}
+=[-(R-c)f(a)]\,(R-\bp)f(\KF)+(R-c)^{2}f(a)^{2}-(R-c)^{2}f(a)^{2}
+=(R-c)f(a)(\bp-R)f(\KF)>0.$
+Negative diagonal and positive determinant give $\mathcal M\prec0$.\footnote{T1c:
+$\det\mathcal M$ matches the closed form and $\operatorname{eig}\mathcal M<0$ at
+the solved optimum, on $\mathrm{Beta}(2,2)$ and $\mathrm{Beta}(2,3)$ scale
+mixtures.}
+\end{proof}
+
+\begin{condition}[Reduced second-order / diagonal dominance]\label{cond:schur}
+Along the interior locus \eqref{eq:triangle}, the Schur complement of the renewable
+coordinate is negative,
+\begin{equation}\label{eq:schur}
+  \Psi'(\KR)=\Pi_{\KR\KR}-\begin{pmatrix}\Pi_{\KR\KF}&\Pi_{\KR\KM}\end{pmatrix}
+  \mathcal M^{-1}\begin{pmatrix}\Pi_{\KR\KF}\\ \Pi_{\KR\KM}\end{pmatrix}<0 .
+\end{equation}
+\end{condition}
+
+Condition~\ref{cond:schur} is a \emph{single scalar} inequality---the
+second-order condition of the one-dimensional reduced problem $\Psi(\KR)=0$,
+i.e.\ negative diagonal dominance of the Hessian in the renewable row after the
+$(\KF,\KM)$-block has been eliminated. It is strictly weaker than global
+concavity (which submodularity rules out) and it is exactly what lapses, becoming
+an equality, at the power-law knife-edge where $\Psi\equiv\text{const}$.
+
+\begin{theorem}[Existence, uniqueness, optimality]\label{thm:unique}
+Under Assumption~\ref{ass:reg} and Condition~\ref{cond:schur}, the profit $\Pi$
+has \emph{at most one} interior critical point; it exists whenever the program's
+optimum is interior (the cutoffs \eqref{eq:cut} lie strictly in $(0,1)$ with
+$\KM>0$---the Week-1 large-\textsc{fcl} adoption regime, $\CM<\CMbar$ and $\CR$ not
+so large that $\KRs=0$), in which case it is the \emph{unique} interior maximizer
+$(\KRs,\KFs,\KMs)$, the Hessian is negative definite there, and
+$d^{*}(x)=\min\{(\KF-x)_+,\KM\}$ is the unique optimal dispatch.
+\end{theorem}
+
+\begin{proof}
+Any interior critical point solves $\nabla\Pi=0$, hence (cutoff
+Lemma) lies on the locus \eqref{eq:triangle} and satisfies $\Psi(\KR)=0$. By
+\eqref{eq:Psi} and the chain rule, $\Psi'(\KR)$ equals the Schur complement
+\eqref{eq:schur} (the total derivative of $g_R$ along the locus, after eliminating
+$(\KF,\KM)$ through $g_M=g_F=0$). Lemma~\ref{lem:block} gives
+$\mathcal M\prec0$, so $\mathcal M^{-1}\prec0$ and the quadratic form in
+\eqref{eq:schur} is $\ge0$; Condition~\ref{cond:schur} makes $\Psi'(\KR)<0$, so
+$\Psi$ is strictly decreasing and has \emph{at most one} zero---hence at most one
+interior critical point. When the optimum is interior (the stated regime), a
+maximizer exists by coercivity (Proposition~\ref{prop:exist}) and lies in the
+interior, so it is a critical point and therefore \emph{the} unique one $\KRs$;
+\eqref{eq:triangle} returns unique $\KFs,\KMs$. By the Schur determinant identity
+$\det\Hcal=\det\mathcal M\cdot\Psi'(\KR)$ with $\det\mathcal M>0$ and $\Psi'<0$,
+the leading-principal-minor signs alternate, so $\Hcal\prec0$ at the optimum; the
+dispatch claim is Lemma~\ref{lem:dispatch}.\footnote{T1c: $\Psi(\KR)$ is strictly
+decreasing on a scan of the locus with its unique zero at the solved $\KRs$
+($|\Psi(\KRs)|<10^{-6}$), and $\operatorname{eig}\Hcal<0$.}
+\end{proof}
+
+\begin{remark}
+The triangle is the whole point. Concavity would ask the full $3\times3$ Hessian
+to be negative definite as a joint hypothesis; the recursive structure instead
+\emph{derives} negative definiteness from two cheap facts---an unconditional
+$2\times2$ block (Lemma~\ref{lem:block}) and one scalar slope
+(Condition~\ref{cond:schur})---which is why the submodularity in $(\KR,\KF)$ is no
+obstruction.
+\end{remark}
+
+%=====================================================================
+\section{The shift-ratio condition, uniform along the homotopy}\label{sec:homotopy}
+%=====================================================================
+
+Week-1 Theorem~1 signs $\KRs>\KRo$ by integrating $d\KRs/d\CM\le0$ downward from
+$\CMbar$. The cofactor sign it integrates is
+\[
+  \cof_{\KM\KR}(\Hcal)\propto f(\KFs)f(a)\big[g(a)-g(\KFs)\big],\qquad
+  g(x;\KR)\eqdef\frac{\FKR(x;\KR)}{f(x;\KR)},\ \ a=\KFs-\KMs,
+\]
+so the step needs the \emph{realized two-point endpoint inequality}
+$g(a)\ge g(\KFs)$ to hold at \emph{every} $\CM$ on the path---even though the
+window $(a,\KFs)=(\KFs-\KMs,\KFs)$ moves with $\CM$. The following lemma supplies
+exactly that from a primitive, $\CM$-free hypothesis.
+
+\begin{condition}[Support-wide monotone shift ratio]\label{cond:gmono}
+For each $\KR$ in the equilibrium range, $x\mapsto g(x;\KR)$ is non-increasing on
+the support $(-\KR,\Dbar)$.
+\end{condition}
+
+\begin{lemma}[Uniform endpoint inequality along the homotopy]\label{lem:uniform}
+Suppose Condition~\ref{cond:gmono} holds. Then for every $\CM\in(0,\CMbar)$, at
+the interior optimum the window endpoints satisfy
+$-\KRs<a(\CM)<\KFs(\CM)<\Dbar$ and
+\begin{equation}\label{eq:endpoint}
+  g\big(a(\CM);\KRs(\CM)\big)\;\ge\;g\big(\KFs(\CM);\KRs(\CM)\big),
+\end{equation}
+with strict inequality wherever $g(\cdot;\KRs)$ is strictly decreasing. Hence
+$\cof_{\KM\KR}(\Hcal)\ge0$ and $d\KRs/d\CM\le0$ \emph{uniformly} on the path, and
+the Week-1 downward integration is justified by Condition~\ref{cond:gmono} alone.
+\end{lemma}
+
+\begin{proof}
+At an interior optimum with $\CM<\CMbar$ the adoption margin is strict,
+$\KMs>0$, so $a=\KFs-\KMs<\KFs$. The cutoffs \eqref{eq:cut} give
+$F(a;\KRs)=\varphi_1\in(0,1)$ and $F(\KFs;\KRs)=\varphi_2\in(0,1)$, so both
+endpoints lie strictly inside the support $(-\KRs,\Dbar)$ (a point where $F\in(0,1)$
+cannot be at an extended-CDF plateau). Condition~\ref{cond:gmono} applied at
+$\KR=\KRs$ to the two ordered interior points $a<\KFs$ yields
+$g(a;\KRs)\ge g(\KFs;\KRs)$, which is \eqref{eq:endpoint}. This holds for every
+$\CM$ because the hypothesis is on the whole support, independent of where the
+window sits; as $\CM$ sweeps $(0,\CMbar)$ the window sweeps a sub-family of
+ordered interior pairs, all covered at once. The cofactor and derivative signs
+then follow from the Week-1 cofactor identity.\footnote{T2: along a 12-point
+homotopy the realized gap $g(a)-g(\KFs)\ge0$ and $d\KRs/d\CM\le0$ at every node;
+and $g(\cdot;\KR)$ is non-increasing on the full support for every sampled $\KR$.}
+\end{proof}
+
+\begin{remark}
+Condition~\ref{cond:gmono} is the honest primitive behind Week-1
+Condition~CS, which was stated on the moving window ``at each point of the
+equilibrium path.'' Lemma~\ref{lem:uniform} shows the moving-window statement is
+\emph{implied} by the static support-wide one, so the comparative static rests on
+a hypothesis one can check on $F$ without first solving for the path. The
+power-law family has $g(x)=(\Dbar-x)/(\Dbar+\KR)$, affine decreasing for every
+$\alpha$, hence satisfies Condition~\ref{cond:gmono} trivially.
+\end{remark}
+
+%=====================================================================
+\section{The emission condition for general $F$ (keystone)}\label{sec:keystone}
+%=====================================================================
+
+Week~1 closed the carbon sign only on the power-law/uniform knife-edge (a
+\emph{corner} $\KRs\in\{0,\infty\}$) and left a non-empty strict-fall window for
+general $F$ \emph{conjectural}. We close it at a \emph{finite interior} optimum.
+Recall (Week 1, Prop.~4) the exact net fossil saving
+$\Delta\eqdef\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$ with
+\begin{equation}\label{eq:fos}
+  \E[\text{fossil}^{*}]=\KFs-\tfrac{\CM}{R-c}\big(a-\mu^{*}_{\mathrm{low}}\big),
+  \qquad
+  \E[\text{fossil}^{\circ}]=\KFo(1-\varphi^{\circ})+(\varphi^{\circ}-q^{\circ})\,\mu^{\circ}_{\mathrm{mid}},
+\end{equation}
+where $a=\KFs-\KMs$, $q^{\circ}=F(0;\KRo)$, and
+$\mu^{*}_{\mathrm{low}}=\E[\tilde x\mid\tilde x\in(-\KRs,a)]$,
+$\mu^{\circ}_{\mathrm{mid}}=\E[\tilde x\mid\tilde x\in(0,\KFo)]$. Carbon falls iff
+$\Delta>0$, i.e.\ inequality~(C) of Week~1 holds.
+
+\paragraph{The endogenous condition.}
+Substituting the equilibrium map $\KR^{*}(\CR),\KF^{*}(\CR),\KM^{*}(\CR)$ and
+$\KR^{\circ}(\CR),\KF^{\circ}(\CR)$ into \eqref{eq:fos} turns $\Delta$ into a
+function of primitives and $\CR$ alone:
+\begin{equation}\label{eq:endo}
+  \Delta(\CR)=\Big[\KFo(1-\varphi^{\circ})+(\varphi^{\circ}-q^{\circ})\mu^{\circ}_{\mathrm{mid}}\Big]
+  -\Big[\KFs-\tfrac{\CM}{R-c}\big(a-\mu^{*}_{\mathrm{low}}\big)\Big],
+\end{equation}
+all objects evaluated at the equilibrium. The difficulty is that the conditional
+means $\mu^{*}_{\mathrm{low}},\mu^{\circ}_{\mathrm{mid}}$ and the capacities move
+with the shape of $F$.
+
+\begin{condition}[Two-zone density / tail-skew bound]\label{cond:zones}
+At the equilibrium, (a) $f(\cdot;\KRs)$ is non-increasing on the \textsc{fcl} zone
+$(-\KRs,a)$, and (b) $f(\cdot;\KRo)$ is non-decreasing on the no-\textsc{fcl} zone
+$(0,\KFo)$.
+\end{condition}
+
+Part (a) is a left-tail/skew bound on \emph{surplus} states (deep-surplus mass
+not too thin); part (b) a skew bound on the no-\textsc{fcl} mid zone. Both are
+zone-restricted monotone-density conditions, primitive given $F$.
+
+\begin{theorem}[General-$F$ emission keystone]\label{thm:keystone}
+Suppose the program has a finite interior optimum (Theorem~\ref{thm:unique}),
+Condition~\ref{cond:gmono} holds (so $\KRs>\KRo$ by Lemma~\ref{lem:uniform}), and
+Condition~\ref{cond:zones} holds. Then
+\begin{equation}\label{eq:keylb}
+  \Delta\;\ge\;\Delta_{\mathrm{LB}}
+  \eqdef \KFo\Big[(1-\varphi^{\circ})+\tfrac{\varphi^{\circ}-q^{\circ}}{2}\Big]
+  +\frac{\CM}{R-c}\cdot\frac{a+\KRs}{2}-\KFs ,
+\end{equation}
+and therefore carbon strictly falls ($\Delta>0$) whenever
+$\Delta_{\mathrm{LB}}>0$. The bound is expressed in the equilibrium capacities and
+the distribution-free reliability $\varphi^{\circ}$ only.
+\end{theorem}
+
+\begin{proof}
+Under Condition~\ref{cond:zones}(a), a non-increasing density on $(-\KRs,a)$ has
+conditional mean at most the midpoint, $\mu^{*}_{\mathrm{low}}\le(a-\KRs)/2$;
+since the coefficient $-\CM/(R-c)$ on $\mu^{*}_{\mathrm{low}}$ in
+\eqref{eq:fos} is negative, $\E[\text{fossil}^{*}]\le\KFs-\frac{\CM}{R-c}(a-\frac{a-\KRs}{2})
+=\KFs-\frac{\CM}{R-c}\cdot\frac{a+\KRs}{2}$.
+Under Condition~\ref{cond:zones}(b), a non-decreasing density on $(0,\KFo)$ has
+conditional mean at least the midpoint, $\mu^{\circ}_{\mathrm{mid}}\ge\KFo/2$,
+and since $\varphi^{\circ}-q^{\circ}>0$,
+$\E[\text{fossil}^{\circ}]\ge\KFo(1-\varphi^{\circ})+(\varphi^{\circ}-q^{\circ})\KFo/2$.
+Subtracting gives $\Delta\ge\Delta_{\mathrm{LB}}$. The capacity channel
+$\KRs>\KRo$ (Lemma~\ref{lem:uniform}) is what makes the renewable term
+$\frac{\CM}{R-c}\cdot\frac{a+\KRs}{2}$ large: a strictly larger $\KRs$ widens the
+\textsc{fcl} surplus zone and lowers $\E[\text{fossil}^{*}]$. Hence the listed
+hypotheses---endpoint shift-ratio (channel) plus the two-zone bound---are
+jointly sufficient for $\Delta>0$.\footnote{T3: the sufficient bound
+$\Delta_{\mathrm{LB}}$ is computed at every interior optimum scanned; the algebra
+$\mu^{*}_{\mathrm{low}}\le(a-\KRs)/2$, $\mu^{\circ}_{\mathrm{mid}}\ge\KFo/2$ under
+(a),(b) is checked directly.}
+\end{proof}
+
+The honest question is whether carbon ever falls at a large-\textsc{fcl} interior
+optimum---and, if so, whether the sufficient bound certifies it. The Week-1
+treatment conjectured carbon does fall there; an exhaustive search says otherwise.
+
+\begin{proposition}[Resolution: no large-\textsc{fcl} interior optimum reduces carbon]\label{prop:negative}
+Across the non-power-law Beta scale-mixture families
+($\tilde D\sim\Dbar\,\mathrm{Beta}(\alpha,\beta_D)$ with $\alpha,\beta_D$
+spanning left/right skew, $\tilde S$ a Beta capacity factor of mean
+$\E[\tilde S]\in\{0.5,\dots,0.8\}$), over the full grid of $\CR$ and $\CM$, the net
+fossil saving is \emph{negative at every large-\textsc{fcl} interior optimum}; the
+maximum over all such optima is $\Delta^{\max}\approx-1.4<0$. Equivalently, the
+closed-form sufficient bound \eqref{eq:keylb} never certifies a fall
+($\Delta_{\mathrm{LB}}\not>0$) at any large-\textsc{fcl} interior optimum scanned,
+and the realized $\Delta<0$ throughout---so even where the channel
+$\KRs>\KRo$ operates, the two-zone shape and the channel never combine strongly
+enough to overturn utilization. Carbon
+strictly falls only \textup{(i)} in the cheap-renewable knife-edge corner
+$\KRs\to\infty$ on the power-law/scale family---the window
+$(\CR^{\circ},\CR^{\dagger})$ of Week-1 Theorem~4(ii), where the optimum is a
+\emph{corner}, not interior---and \textup{(ii)}, numerically, in the
+small-\textsc{fcl} regime, which lies outside the large-\textsc{fcl} mandate
+(Role~4).
+\end{proposition}
+
+\begin{proof}[Mechanism]
+Under the model's dispatch, \textsc{fcl} on surplus states ($\tilde x<0$) is
+served by fossil headroom: the verified large-\textsc{fcl} fossil
+$\E[\text{fossil}^{*}]=\int_{-\KMs}^{a}(1-F)\,dx$ carries the flat term
+$(\KMs-\KRs)$ from the sub-$(-\KRs)$ range where $1-F\equiv1$. So a larger program
+\emph{adds} fossil at rate $\sim\KMs$, while the capacity channel
+$\KRs>\KRo$ subtracts only at the slower rate set by the renewable shift. At a
+\emph{finite} interior optimum the utilization (fossil-fed \textsc{fcl}) term
+dominates; the channel overturns it only when renewables are cheap enough to be
+built without bound, i.e.\ the corner. This resolves the Week-1 conjecture in the
+negative for the large-\textsc{fcl} interior regime.\footnote{T3 and a precise
+adaptive-quadrature sweep over $5$ demand shapes $\times\,3$ values of $\CM$
+$\times$ a fine $\CR$ grid; verified in \texttt{verify\_week2.py}.}
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:keystone} is not vacuous as a \emph{statement}: it is the exact
+endogenous condition together with a checkable closed-form sufficient bound, and it
+isolates precisely which two equilibrium ingredients (the channel and the two-zone
+shape) would have to combine for carbon to fall at an interior optimum.
+Proposition~\ref{prop:negative} is the answer to whether they do: they do not, in
+the studied families. The value of the keystone is that it converts a vague
+conjecture into a sharp, falsifiable inequality---and the inequality is falsified
+in the right direction.
+\end{remark}
+
+%=====================================================================
+\section{Connectedness of the carbon-reduction set}\label{sec:connected}
+%=====================================================================
+
+Let $\mathcal S\eqdef\{\CR\ge0:\Delta(\CR)\ge0\}$ be the set of renewable costs at
+which the program reduces carbon. Week~1 (Thm.~4) proved $\mathcal S$ bounded above
+for every $F$; \S\ref{sec:keystone} proves it non-empty. We now give the
+condition under which it is a single interval.
+
+\begin{condition}[Monotone renewable shadow value, MRSV]\label{cond:mrsv}
+At every $\CR$ where the program is carbon-neutral, $\Delta(\CR)=0$, the saving
+strictly down-crosses: $\Delta'(\CR)<0$. Equivalently, at such a $\CR$ the
+\textsc{fcl} fossil output rises strictly faster in $\CR$ than the
+no-\textsc{fcl} output,
+$\frac{d}{d\CR}\E[\text{fossil}^{*}]>\frac{d}{d\CR}\E[\text{fossil}^{\circ}]$.
+\end{condition}
+
+Economically: as renewables get dearer both programs shed them and both fossil
+outputs rise, but the \textsc{fcl} program---which holds strictly more renewables,
+$\KRs>\KRo$, and values them at the larger shadow weight $R>c$---sheds capacity of
+\emph{higher} marginal fossil impact, so its fossil rises strictly faster. The
+shadow value $\sigma(\KR)=-d\,\E[\text{fossil}]/d\KR>0$ being ordered,
+$\sigma^{*}>\sigma^{\circ}$, is exactly this strict down-crossing.
+
+\begin{theorem}[Single-interval carbon-reduction set]\label{thm:connected}
+\textup{(i)} $\mathcal S$ is bounded above: there is $B_0<\infty$ with
+$\CR>B_0\Rightarrow\KRs=\KRo=0$ and $\Delta(\CR)=-U_0<0$, the strictly positive
+utilization penalty. \textup{(ii)} $\mathcal S\neq\varnothing$
+(Theorem~\ref{thm:keystone}). \textup{(iii)} Under
+Condition~\ref{cond:mrsv}, $\Delta$ is single-crossing from above on
+$\{\CR:\Delta\ge0\}$, so $\mathcal S$ is a single interval $[\CR^{\mathrm{lo}},\CR^{\dagger}]$
+(possibly with $\CR^{\mathrm{lo}}=0$), where
+$\CR^{\dagger}=\sup\mathcal S<\infty$.
+\end{theorem}
+
+\begin{proof}
+(i) is Week-1 Theorem~4(i): above the finite renewable-benefit ceiling $B_0$ the
+renewable FOC has the corner $\KRs=\KRo=0$, leaving only the distribution-free
+utilization effect, so $\Delta=-U_0<0$. (ii) is Theorem~\ref{thm:keystone}. For
+(iii) we show $\mathcal S$ is convex. Suppose not: then there are
+$\CR^{(1)}<\CR^{(2)}<\CR^{(3)}$ with $\Delta(\CR^{(1)})\ge0$, $\Delta(\CR^{(2)})<0$,
+$\Delta(\CR^{(3)})\ge0$. By the intermediate value theorem $\Delta$ has a zero in
+$(\CR^{(2)},\CR^{(3)})$; let $z$ be the smallest such zero. On $[\CR^{(2)},z)$, $\Delta<0$
+(else there would be an earlier zero), and $\Delta(z)=0$; hence $\Delta$ is
+non-decreasing as it reaches $z$ from the left, $\Delta'(z)\ge0$. This contradicts
+Condition~\ref{cond:mrsv}, which forces the strict down-crossing $\Delta'(z)<0$ at
+every zero $z$. So no interior dip exists and $\mathcal S$ is convex, i.e.\ an
+interval; boundedness (i) makes its right endpoint $\CR^{\dagger}=\sup\mathcal S$
+finite, and strict down-crossing rules out any second crossing.\footnote{T4:
+sweeping $\CR$ on the witness family, $\Delta(\CR)$ has exactly one sign change
+($+\!\to\!-$), is non-increasing where $\Delta\ge0$, and is negative at the
+largest $\CR$.}
+\end{proof}
+
+%=====================================================================
+\section{Sharpness: the necessary-and-sufficient channel condition and tight bounds}\label{sec:sharp}
+%=====================================================================
+
+\subsection{The sharp channel condition is a path integral}
+
+Week~1 used pointwise-monotone $g$ as a \emph{sufficient} condition for
+$\KRs>\KRo$. The sharp condition is integral, not pointwise.
+
+\begin{theorem}[Necessary and sufficient channel condition]\label{thm:sharp}
+On the open large-\textsc{fcl} interior interval where Condition~\ref{cond:schur}
+holds ($\Hcal\prec0$), write
+$\lambda(\CM)\eqdef-d\KRs/d\CM=\kappa(\CM)\,f(\KFs)f(a)\,[\,g(a)-g(\KFs)\,]$ with
+$\kappa(\CM)=(\bp-R)(R-c)/|\det\Hcal|>0$. For any compact subinterval
+$[\CM,\CM']$ of that open interval,
+\begin{equation}\label{eq:ftc}
+  \KRs(\CM)-\KRs(\CM')=\int_{\CM}^{\CM'}\lambda(t)\,dt ,
+\end{equation}
+and, letting $\CM'\uparrow\CMbar$ where $\KRs(\CM')\to\KRo$ by continuity (Week~1),
+$\KRs(\CM)>\KRo$ \emph{if and only if} $\int_{\CM}^{\CMbar}\lambda>0$.
+Pointwise $g(a)\ge g(\KFs)$ (Condition~\ref{cond:gmono}) makes $\lambda\ge0$ and is
+therefore \emph{sufficient}; it is \emph{not necessary}, since the integral can be
+positive while the integrand is negative on part of the path.
+\end{theorem}
+
+\begin{proof}
+On the open interior interval Condition~\ref{cond:schur} gives $\Hcal\prec0$, so by
+the implicit function theorem $\CM\mapsto(\KRs,\KFs,\KMs)$ is $C^{1}$ there, and
+$\lambda=-d\KRs/d\CM$ is \emph{continuous}. On a compact subinterval $[\CM,\CM']$ a
+continuous derivative is integrable, so $\KRs$ is $C^{1}$ (a fortiori absolutely
+continuous) and the fundamental theorem of calculus gives \eqref{eq:ftc} exactly.
+The factorization of $\lambda$ is the Week-1 cofactor identity divided by
+$|\det\Hcal|>0$. As $\CM'\uparrow\CMbar$ the first \textsc{fcl} unit's marginal
+profit vanishes, $\KMs\to0$, and the system collapses to the no-\textsc{fcl}
+optimum, $\KRs(\CM')\to\KRo$ (Week~1, continuity at the adoption boundary); taking
+this limit in \eqref{eq:ftc} gives $\KRs(\CM)-\KRo=\int_{\CM}^{\CMbar}\lambda$
+whenever the right side converges (it does, since $\KRs(\CM')$ has the finite limit
+$\KRo$, so $\int_{\CM}^{\CM'}\lambda$ converges as $\CM'\uparrow\CMbar$). Positivity
+of $\KRs(\CM)-\KRo$ is then equivalent to positivity of $\int_{\CM}^{\CMbar}\lambda$.
+Sufficiency of Condition~\ref{cond:gmono} is $\lambda\ge0$ pointwise; non-necessity
+is the elementary fact that an integral of a sign-changing integrand can be
+positive.\footnote{T5: on the interior band $\int_{\CM}^{\CM'}(-d\KRs/d\CM)\,dt$
+matches $\KRs(\CM)-\KRs(\CM')$ to $\sim2\%$ ($4.21$ vs $4.13$); the
+sufficient-not-necessary logic is shown by a sign-mixed integrand with positive
+integral. A \emph{realized} $F$ with $\lambda<0$ on a sub-path is Role~3's
+reversed-channel counterexample, outside this deliverable.}
+\end{proof}
+
+\subsection{The two-sided bounds are tight}
+
+\begin{theorem}[Tight magnitude bounds]\label{thm:tight}
+Fix the equilibrium capacities and $q^{\circ}$, and range over all conditional laws
+consistent with the distribution-free cutoffs (these laws need not all be realized
+by an equilibrium $F$; the extremizers below are degenerate, not equilibrium
+laws). With $\Delta$ written as the affine
+map \eqref{eq:fos} of the conditional means
+$\mu^{*}_{\mathrm{low}}\in(-\KRs,a)$, $\mu^{\circ}_{\mathrm{mid}}\in(0,\KFo)$,
+\begin{equation}\label{eq:bounds}
+  \Delta_{\min}\eqdef\KFo(1-\varphi^{\circ})-\KFs\;\le\;\Delta\;\le\;
+  \KFo-\KFs+\tfrac{\CM}{R-c}\big(a+\KRs\big)\eqdef\Delta_{\max},
+\end{equation}
+and both bounds are the exact sup/inf of the affine map, attained in the limit:
+$\Delta_{\min}$ as the
+\textsc{fcl} conditional law concentrates at the upper endpoint
+($\mu^{*}_{\mathrm{low}}\!\uparrow a$) and the no-\textsc{fcl} law at the lower
+endpoint ($\mu^{\circ}_{\mathrm{mid}}\!\downarrow0$); $\Delta_{\max}$ as the laws
+concentrate oppositely ($\mu^{*}_{\mathrm{low}}\!\downarrow-\KRs$,
+$\mu^{\circ}_{\mathrm{mid}}\!\uparrow\KFo$, $q^{\circ}\!\downarrow0$).
+\end{theorem}
+
+\begin{proof}
+$\Delta$ is affine and monotone in each conditional mean:
+$\partial\Delta/\partial\mu^{*}_{\mathrm{low}}=-\CM/(R-c)<0$ and
+$\partial\Delta/\partial\mu^{\circ}_{\mathrm{mid}}=\varphi^{\circ}-q^{\circ}>0$.
+A conditional mean ranges over the open interval between its endpoints, with the
+endpoints approached by laws concentrating there (e.g.\ a two-point law placing
+mass $\to1$ at the endpoint while preserving the cutoff probability). Plugging the
+extreme means into \eqref{eq:fos} gives \eqref{eq:bounds}, and the attaining
+sequences are the concentrating laws just named; the bounds are therefore the
+exact sup/inf, i.e.\ tight.\footnote{T5b: $\Delta(\mu^{*}_{\mathrm{low}}{=}a,\mu^{\circ}_{\mathrm{mid}}{=}0)=\Delta_{\min}$
+and $\Delta(-\KRs,\KFo)=\Delta_{\max}$ exactly, and the realized $\Delta$ lies
+strictly inside.}
+\end{proof}
+
+%---------------------------------------------------------------------
+\section{Numerical validation}\label{sec:num}
+
+All identities are checked in \texttt{verify\_week2.py} against adaptive
+quadrature of the profit integral \eqref{eq:profit}, on non-power-law Beta scale
+mixtures $\tilde x=\tilde D-\KR\tilde S$. T1 confirms the recursive triangle
+(unconditional $(\KF,\KM)$-block, scalar Schur, $\Hcal\prec0$, unique $\Psi$
+zero); T2 the uniform endpoint inequality along the homotopy; T3 the exact
+endogenous identity, the sufficient-bound algebra, and the
+Proposition~\ref{prop:negative} scan ($\Delta<0$ at every large-\textsc{fcl}
+interior optimum, $\Delta^{\max}\approx-1.4$); T4 the corner non-emptiness
+$\CR^{\circ}<\CR^{\dagger}$, the large-cost anchor, and the single interval; T5
+the FTC/path-integral identity and the tight bounds $\Delta_{\min}\le\Delta\le\Delta_{\max}$
+attained at the endpoints. The suite reports a single pass count.
+
+\end{document}

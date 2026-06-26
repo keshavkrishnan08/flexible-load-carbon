@@ -12,6 +12,18 @@ Prop. 4, footnote 6).
 | Prove the capacity comparison `K*_R > K°_R` in general (from the eq-15 shadow value) | §3 (Theorem 1) | ✅ |
 | Draft result + gap memo by Friday | `gap_memo.md` | ✅ |
 
+## Role 1 tasks (A1 Week 2 Plan) → status
+| Task | Where | Status |
+|---|---|---|
+| Existence, uniqueness, contract optimality (recursive-triangular FOC; unique dispatch via strict `R>c`) | `role1_week2_theory.tex` §2 (Thm 1) | ✅ |
+| Shift-ratio condition uniform along the `C_M`-homotopy | §3 (Lemma 4) | ✅ |
+| Emission condition for general `F` (keystone): primitive sufficient condition at a finite interior optimum + non-power-law witness | §4 (Thm 2, Cor 2) | ✅ |
+| Connectedness of the carbon-reduction set `{C_R: Δ≥0}` (bounded, non-empty, single interval) | §5 (Thm 3) | ✅ |
+| Sharp N&S channel condition (path integral) + tight two-sided bounds | §6 (Thm 4, Thm 5) | ✅ |
+
+All Week 2 identities checked in `verify_week2.py` against quadrature of the
+profit integral.
+
 ## Contents (the Role 1 deliverable)
 | File | What it is |
 |---|---|

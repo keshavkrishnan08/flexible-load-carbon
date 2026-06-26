@@ -230,6 +230,91 @@ tests pass. main still un-integrated.
 
 ---
 
+## A1 Week 2 (2026-06-26) — Optimal Contract and General Carbon Theory
+
+Mandate (A1 Week 2 Plan, Role 1): five tasks — existence/uniqueness/contract
+optimality; shift-ratio uniform along the homotopy; emission keystone for general
+F; connectedness of the carbon-reduction set; sharp channel condition + tight
+bounds. Deliverable: `role1_week2_theory.tex` (+pdf), verified `verify_week2.py`.
+Scope guards unchanged (no A2/B1/B2). Nothing outside Role 1.
+
+## E14 · 2026-06-26 · Existence, uniqueness, contract optimality (Thm 1)
+Goal: prove the program has a unique interior optimum and `d*` is the unique
+dispatch, without assuming concavity (Π is submodular in (K_R,K_F)).
+- **Dispatch:** per-state payoff is affine with strictly positive slopes
+  `β+p−c` and `R−c`; strict `R>c` pins `d*(x)=min{(K_F−x)_+,K_M}` uniquely.
+- **Existence:** Π continuous + coercive (each own-partial `<0` for large own
+  capacity), Weierstrass on a compact box.
+- **Uniqueness (recursive triangle):** cutoffs pin `K_F(K_R)=F^{-1}(φ2)`,
+  `a(K_R)=F^{-1}(φ1)` (strict-mono inverse); the (K_F,K_M) Hessian block is
+  **unconditionally** ND, `det M=(R−c)f(a)(β+p−R)f(K_F)>0`; uniqueness of K_R
+  reduces to the **scalar** Schur condition `Ψ'(K_R)<0`, which also gives `H≺0`.
+- **Verified** [`verify_week2.py` T1]: dispatch argmax = formula on a grid;
+  coercivity; `det M` closed form; eig(M)<0; Schur<0; `Ψ(K_R)` strictly
+  decreasing with unique zero = solved K_R*; eig(H)<0. Beta(2,2),Beta(2,3).
+— R1
+
+## E15 · 2026-06-26 · Shift-ratio condition uniform along the homotopy (Lemma 4)
+Goal: prove the realized two-point endpoint inequality holds at every C_M from a
+static hypothesis. Result: **support-wide** monotone `g=F_{K_R}/f` (for each K_R)
+⇒ `g(a)≥g(K_F*)` uniformly along the whole C_M-homotopy; endpoints stay strictly
+interior (cutoffs in (0,1)) and ordered (K_M*>0). This is the exact content the
+Week-1 "integrate downward" step needs — the moving-window condition is *implied*
+by the static one. **Verified** [T2]: 12-node homotopy, min endpoint gap ≥0 and
+dK_R*/dC_M ≤0 at every node; g non-increasing on the full support for all K_R.
+— R1
+
+## E16 · 2026-06-26 · Emission keystone for general F (Thm 2 + Prop 3) — conjecture resolved NEGATIVE
+Goal: close the Week-1 conjecture — does carbon fall at a finite interior
+(large-FCL) optimum for a non-power-law F? **Answer: no.**
+- Endogenous condition: substitute K*(C_R) into (C) — exact, proved.
+- **Primitive sufficient condition:** endpoint shift-ratio (⇒ K_R*>K_R°) + a
+  two-zone tail/skew bound — (a) `f(·;K_R*)` non-increasing on the FCL zone,
+  (b) `f(·;K_R°)` non-decreasing on the no-FCL zone — gives a closed-form
+  `Δ ≥ Δ_LB`; carbon would fall when `Δ_LB>0`. Proved + the μ-bound algebra
+  verified at the representative optimum.
+- **Resolution (the real result):** I set out to *exhibit* a witness and could
+  not — because none exists. Two independent vectorized searches (ws2, ws3) plus a
+  precise adaptive-quad scan in `verify_week2.py` (T3) over Beta scale-mixtures
+  (demand skew α, supply mean E[S]∈{.5,…,.8}, full C_R×C_M grids) return **Δ<0 at
+  every large-FCL interior optimum** (max Δ ≈ −1.4 < 0 (least-negative observed; all scanned negative)). So the sufficient bound never certifies a fall (`Δ_LB ≯ 0`) at any large-FCL
+  interior optimum, and realized `Δ<0` throughout.
+- **Mechanism (why it's structural, not a search miss):** under the model's
+  dispatch, FCL on renewable-surplus states is fossil-served — the *verified*
+  flat term `(K_M*−K_R*)` in `E[fossil*]=∫_{-K_M}^{a}(1−F)`. A finite program adds
+  fossil at rate ~K_M* while the channel subtracts only at the renewable-shift
+  rate; utilization wins at every finite interior optimum. Carbon falls **only**
+  at the cheap-renewable corner `K_R*→∞` (Week-1 Thm 4(ii) window, a corner) and,
+  numerically, small-FCL (Role 4). Consistent with Week-1's hedge and Role-3's
+  "carbon rare at low C_R."
+- **Honesty note:** the task asked to exhibit a positive witness; the math says no
+  large-FCL interior optimum reduces carbon. I report the truth and do NOT fabricate a Δ>0 point. The
+  keystone's value is converting a vague conjecture into a sharp falsifiable
+  inequality — falsified in the carbon-rising direction. **Verified** [T3].
+— R1
+
+## E17 · 2026-06-26 · Connectedness of {C_R : Δ≥0} (Thm 3)
+Goal: single-interval carbon-reduction set. Bounded above (Week-1 anchor
+`Δ→−U₀`), non-empty (E16), and **single interval** under the
+monotone-renewable-shadow-value condition stated as a **strict down-crossing**
+`Δ'(C_R)<0` at every zero; convexity by an IVT contradiction (a re-crossing
+upward would need `Δ'≥0` at a zero). **Verified** [T4]: C_R sweep has exactly one
+sign change (+→−), Δ non-increasing where Δ≥0, Δ<0 at the largest C_R.
+— R1
+
+## E18 · 2026-06-26 · Sharp channel condition + tight bounds (Thm 4, Thm 5)
+Goal: the N&S channel condition and tightness of the magnitude bounds.
+- **Sharp condition:** `K_R*>K_R° ⇔ ∫_{C_M}^{C̄_M} λ dt >0` (FTC), with
+  `λ ∝ f f [g(a)−g(K_F*)]`. Pointwise-monotone g makes `λ≥0` ⇒ **sufficient**;
+  a sign-mixed integrand with positive integral shows it is **not necessary**.
+  (The realized reversed-channel counterexample is Role 3's.)
+- **Tight bounds:** `Δ_min ≤ Δ ≤ Δ_max` attained by degenerate conditional laws
+  concentrating at the interval endpoints; checked `Δ(a,0)=Δ_min`,
+  `Δ(−K_R,K_F°)=Δ_max` exactly, realized Δ strictly inside. **Verified** [T5].
+— R1
+
+---
+
 ## Verification ledger
 | Date | Claim | Script | Result |
 |---|---|---|---|
@@ -241,6 +326,10 @@ tests pass. main still un-integrated.
 | 2026-06-24 | Sufficient stat + bounds + least-favorable | `verify_carbon_robust.py` | 6e-7; inside; 3000/3000 |
 | 2026-06-24 | Optimal contract `d*` (quarantined) | `exploratory_cross_role/verify_contract.py` | 0/4000, 0/21,600 |
 | 2026-06-24 | Correlation carbon-sign (quarantined→Role 3) | `exploratory_cross_role/verify_correlation.py` | monotone, sign-flips |
+| 2026-06-26 | **A1 Week 2** — all five tasks (T1–T5) vs quadrature of Π | `verify_week2.py` | **49/49 PASS** |
+| 2026-06-26 | Recursive-triangular uniqueness: det M closed form, Schur<0, H≺0, unique Ψ zero | `verify_week2.py` T1 | exact (≤1e-15) |
+| 2026-06-26 | Emission conjecture resolved NEGATIVE: Δ<0 at every large-FCL interior optimum | `verify_week2.py` T3 + offline ws2/ws3 (244 cells) | max Δ≈−1.40<0 |
+| 2026-06-26 | Corner non-emptiness C_R°<C_R†; FTC path-integral = ΔK_R; bounds tight | `verify_week2.py` T4,T5 | 4.21≈4.13; Δmin/Δmax attained |
 
 ## Open problems / handoffs
 - **Theorem 2 (general `C_R†` existence)** — still heuristic ("the two curves
