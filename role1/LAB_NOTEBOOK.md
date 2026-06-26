@@ -313,6 +313,34 @@ Goal: the N&S channel condition and tightness of the magnitude bounds.
   `Δ(−K_R,K_F°)=Δ_max` exactly, realized Δ strictly inside. **Verified** [T5].
 — R1
 
+## E19 · 2026-06-26 · Deep re-audit of T3 (mechanism fix + both regimes) — negative confirmed
+Prompted to re-examine the T3 negative finding. Built a **direct state-by-state
+fossil simulator** with explicit renewable-surplus absorption (FCL served from
+surplus first). Two findings:
+- **Mechanism correction.** My E16 prose ("FCL on surplus draws fossil; flat term
+  = fossil added") was WRONG. The direct simulator with surplus absorption equals
+  the closed form `∫_{-K_M}^{a}(1−F)` to 7 digits (6.1833 both). So the formula
+  already credits surplus absorption. The correct mechanism is the **irreducible
+  floor** `(K_M−K_R)_+`: max surplus in any state is `≤K_R`, so a large-FCL
+  program (`K_M>K_R`) can't be fully surplus-powered — it burns ≥`K_M−K_R` fossil
+  at deepest surplus. Floor vanishes iff `K_M≤K_R` (small-FCL).
+- **Both regimes checked → still negative.** Searched small-FCL interior optima
+  (profit-maximization, robust to the FOC-solve instability at small `C_R`).
+  Result: Δ≤0 there too, for a *different* reason — small-FCL is optimal only at
+  small `C_R`, where the **no-FCL** grid already drives `K_F°→0`
+  (`E[fossil°]→0`), leaving nothing to save; the channel even *reverses*
+  (`K_R*≤K_R°`, FCL's flexibility lets you build slightly fewer renewables).
+  Representative: `CR=0.10` → no-FCL `(K_R°,K_F°)=(14.4,0.0)`, with-FCL
+  `(14.0,1.6,2.1)`, Δ=−0.21.
+- **Conclusion (sharper than E16).** Carbon falls at **no** finite interior
+  optimum — large-FCL (floor) nor small-FCL (baseline already decarbonized) —
+  only at the cheap-renewable corner `K_R*→∞`. This is *consistent* with Role-3's
+  "carbon rare at low C_R." Did NOT fabricate a positive witness; reported the
+  true two-regime negative. → Rewrote Prop 3 (now Prop "no finite interior
+  optimum reduces carbon"), fixed the abstract + mechanism, added direct-simulator
+  + floor + small-C_R checks to `verify_week2.py`.
+— R1
+
 ---
 
 ## Verification ledger

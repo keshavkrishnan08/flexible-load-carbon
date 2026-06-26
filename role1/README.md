@@ -17,7 +17,7 @@ Prop. 4, footnote 6).
 |---|---|---|
 | Existence, uniqueness, contract optimality (recursive-triangular FOC; unique dispatch via strict `R>c`) | `role1_week2_theory.tex` §2 (Thm 1) | ✅ |
 | Shift-ratio condition uniform along the `C_M`-homotopy | §3 (Lemma 4) | ✅ |
-| Emission condition for general `F` (keystone): primitive sufficient condition at a finite interior optimum + non-power-law witness | §4 (Thm 2, Cor 2) | ✅ |
+| Emission condition for general `F` (keystone): exact endogenous condition + sufficient bound; **resolves Week-1 conjecture NEGATIVE** — carbon falls at no finite interior optimum (large-FCL floor; small-FCL baseline already decarbonized), only at the cheap-renewable corner | §4 (Thm 2, Prop 3) | ✅ |
 | Connectedness of the carbon-reduction set `{C_R: Δ≥0}` (bounded, non-empty, single interval) | §5 (Thm 3) | ✅ |
 | Sharp N&S channel condition (path integral) + tight two-sided bounds | §6 (Thm 4, Thm 5) | ✅ |
 

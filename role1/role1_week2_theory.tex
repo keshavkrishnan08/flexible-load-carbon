@@ -83,16 +83,19 @@ inequality~(C) yields the endogenous carbon condition, and we give a
 \emph{primitive} sufficient condition---the endpoint shift-ratio condition plus a
 two-zone density (tail/skew) bound---under which carbon would strictly fall at a
 \emph{finite interior} optimum. This converts Week~1's vague conjecture into a
-sharp, checkable inequality, and an exhaustive search then \emph{resolves it in
-the negative}: across non-power-law Beta scale mixtures (every skew, capacity
-factors up to $0.8$, the full cost grid) the saving is negative at \emph{every}
-large-\textsc{fcl} interior optimum---FCL on surplus states is fossil-served, so a
-finite program adds fossil faster than the channel removes it. Carbon strictly
-falls only in the cheap-renewable corner $\KRs\to\infty$ (a corner, not an
-interior optimum). \emph{Four}, the carbon-reduction set $\{\CR:\Delta(\CR)\ge0\}$
-is bounded above and non-empty (its non-emptiness furnished by that corner), and
-is a single interval under an explicit monotone-renewable-shadow-value condition
-that rules out a second zero-crossing.
+sharp, checkable inequality, and an exhaustive search (with a direct fossil
+simulator validating the formula to $7$ digits) then \emph{resolves it in the
+negative across both regimes}: carbon falls at \emph{no} finite interior optimum.
+In large-\textsc{fcl} ($\KMs\ge\KRs$) an irreducible fossil floor $(\KMs-\KRs)$
+(the \textsc{fcl} exceeds the maximal renewable surplus, so it cannot be fully
+surplus-powered) keeps utilization on top, $\Delta<0$. In small-\textsc{fcl} the
+floor vanishes, but that regime arises only where renewables are cheap enough that
+the \emph{no-\textsc{fcl}} grid is already near fossil-free, leaving nothing to save
+and even reversing the channel. Carbon strictly falls only in the cheap-renewable
+corner $\KRs\to\infty$. \emph{Four}, the carbon-reduction set
+$\{\CR:\Delta(\CR)\ge0\}$ is bounded above and non-empty (its non-emptiness
+furnished by that corner), and is a single interval under an explicit
+monotone-renewable-shadow-value condition that rules out a second zero-crossing.
 \emph{Five}, the sharp necessary-and-sufficient condition for $\KRs>\KRo$ is the
 \emph{path integral} of the realized endpoint gap; pointwise-monotone $g$ is
 sufficient but not necessary; and the two-sided bounds on the carbon saving are
@@ -443,54 +446,75 @@ $\mu^{*}_{\mathrm{low}}\le(a-\KRs)/2$, $\mu^{\circ}_{\mathrm{mid}}\ge\KFo/2$ und
 (a),(b) is checked directly.}
 \end{proof}
 
-The honest question is whether carbon ever falls at a large-\textsc{fcl} interior
-optimum---and, if so, whether the sufficient bound certifies it. The Week-1
-treatment conjectured carbon does fall there; an exhaustive search says otherwise.
+Whether the sufficient bound is \emph{activated} at a given optimum depends on the
+regime, and the regime is decided by a single comparison---\textsc{fcl} capacity
+against renewable capacity---through the renewable-surplus accounting that the
+verified fossil formula already performs. We make this precise.
 
-\begin{proposition}[Resolution: no large-\textsc{fcl} interior optimum reduces carbon]\label{prop:negative}
-Across the non-power-law Beta scale-mixture families
-($\tilde D\sim\Dbar\,\mathrm{Beta}(\alpha,\beta_D)$ with $\alpha,\beta_D$
-spanning left/right skew, $\tilde S$ a Beta capacity factor of mean
-$\E[\tilde S]\in\{0.5,\dots,0.8\}$), over the full grid of $\CR$ and $\CM$, the net
-fossil saving is \emph{negative at every large-\textsc{fcl} interior optimum}; the
-maximum over all such optima is $\Delta^{\max}\approx-1.4<0$. Equivalently, the
-closed-form sufficient bound \eqref{eq:keylb} never certifies a fall
-($\Delta_{\mathrm{LB}}\not>0$) at any large-\textsc{fcl} interior optimum scanned,
-and the realized $\Delta<0$ throughout---so even where the channel
-$\KRs>\KRo$ operates, the two-zone shape and the channel never combine strongly
-enough to overturn utilization. Carbon
-strictly falls only \textup{(i)} in the cheap-renewable knife-edge corner
-$\KRs\to\infty$ on the power-law/scale family---the window
-$(\CR^{\circ},\CR^{\dagger})$ of Week-1 Theorem~4(ii), where the optimum is a
-\emph{corner}, not interior---and \textup{(ii)}, numerically, in the
-small-\textsc{fcl} regime, which lies outside the large-\textsc{fcl} mandate
-(Role~4).
+\paragraph{The irreducible fossil floor.}
+The carbon-relevant fossil $\E[\text{fossil}^{*}]=\int_{-\KMs}^{a}(1-F)\,dx$ is
+\emph{not} a naive count of \textsc{fcl} as fossil: it nets out the renewable
+surplus that powers the \textsc{fcl} for free in surplus states. We verified this
+directly---a state-by-state simulation that serves \textsc{fcl} from renewable
+surplus first matches the integral to $7$ digits (T3). The maximal surplus in any
+state is $(\,-\tilde x)_+\le\KRs$ (attained as $\tilde S\to1,\tilde D\to0$), so a
+program with $\KMs>\KRs$ has \textsc{fcl} larger than \emph{any} possible surplus:
+even in the deepest-surplus state it must draw at least $\KMs-\KRs$ from fossil.
+That irreducible floor $(\KMs-\KRs)_+$---the flat term of
+$\E[\text{fossil}^{*}]$---is exactly the sub-$(-\KRs)$ range where $1-F\equiv1$.
+It vanishes precisely when $\KMs\le\KRs$.
+
+\begin{proposition}[Resolution: no finite interior optimum reduces carbon]\label{prop:regimecarbon}
+At a finite interior optimum carbon never strictly falls; the saving $\Delta<0$ (or
+$\to0$) in \emph{both} regimes, for two distinct reasons.
+\textup{(i)} \emph{Large-\textsc{fcl}} ($\KMs\ge\KRs$): the floor $(\KMs-\KRs)\ge0$
+keeps fossil high, utilization dominates the channel, and across the non-power-law
+Beta scale mixtures (every skew, $\E[\tilde S]$ up to $0.8$, the full $\CR\times\CM$
+grid) $\Delta<0$ at every large-\textsc{fcl} interior optimum
+($\Delta^{\max}\approx-1.4$). \textup{(ii)} \emph{Small-\textsc{fcl}}
+($\KMs<\KRs$): this regime arises only at small $\CR$, where renewables are so
+cheap that the \emph{no-\textsc{fcl}} grid already drives fossil capacity and output
+to (near) zero ($\KFo\to0$, $\E[\text{fossil}^{\circ}]\to0$); there is then nothing
+left to save, and the \textsc{fcl}'s demand flexibility even lets the program build
+slightly \emph{fewer} renewables, $\KRs\le\KRo$, so the channel reverses and
+$\Delta\le0$. Carbon strictly falls only at the cheap-renewable knife-edge
+\emph{corner} $\KRs\to\infty$ (power-law family, the window
+$(\CR^{\circ},\CR^{\dagger})$ of Week-1 Theorem~4(ii)), where
+$\E[\text{fossil}^{*}]=0<\E[\text{fossil}^{\circ}]$. Interior carbon reduction is
+thus absent in this model---a corner phenomenon.
 \end{proposition}
 
-\begin{proof}[Mechanism]
-Under the model's dispatch, \textsc{fcl} on surplus states ($\tilde x<0$) is
-served by fossil headroom: the verified large-\textsc{fcl} fossil
-$\E[\text{fossil}^{*}]=\int_{-\KMs}^{a}(1-F)\,dx$ carries the flat term
-$(\KMs-\KRs)$ from the sub-$(-\KRs)$ range where $1-F\equiv1$. So a larger program
-\emph{adds} fossil at rate $\sim\KMs$, while the capacity channel
-$\KRs>\KRo$ subtracts only at the slower rate set by the renewable shift. At a
-\emph{finite} interior optimum the utilization (fossil-fed \textsc{fcl}) term
-dominates; the channel overturns it only when renewables are cheap enough to be
-built without bound, i.e.\ the corner. This resolves the Week-1 conjecture in the
-negative for the large-\textsc{fcl} interior regime.\footnote{T3 and a precise
-adaptive-quadrature sweep over $5$ demand shapes $\times\,3$ values of $\CM$
-$\times$ a fine $\CR$ grid; verified in \texttt{verify\_week2.py}.}
+\begin{proof}[Mechanism and verification]
+Carbon-relevant fossil already nets out renewable absorption: a state-by-state
+simulation that powers \textsc{fcl} from renewable surplus first matches
+$\int_{-\KMs}^{a}(1-F)\,dx$ to $7$ digits ($6.1833$ both, T3). The net effect of
+\textsc{fcl} splits into a utilization \emph{addition} in tight states ($\tilde x>0$,
+\textsc{fcl} on spare fossil) and \emph{removals} from the channel $\KRs>\KRo$ and
+from surplus absorption in slack states; the floor $(\KMs-\KRs)_+$ caps the
+absorption. In large-\textsc{fcl} the floor is positive and utilization wins
+(part i, scan). In small-\textsc{fcl} the floor is zero but, at the small $\CR$ that
+makes $\KMs<\KRs$ optimal, the no-\textsc{fcl} benchmark is already (near)
+fossil-free, so $\Delta\le0$ with a reversed channel (part ii: e.g.\ at $\CR{=}0.10$,
+$\KFo\approx0$ and $\KRs{<}\KRo$, $\Delta\approx-0.2$). The only escape is sending
+$\KRs\to\infty$ at a cost $\CR$ where $\KRo$ stays finite---the corner.\footnote{T3:
+the direct$=$closed fossil match, the large-\textsc{fcl} scan
+($\Delta^{\max}\approx-1.4$), and the small-\textsc{fcl} optima
+($\KFo\!\to\!0$, $\KRs\!\le\!\KRo$, $\Delta\le0$) are all in
+\texttt{verify\_week2.py}.}
 \end{proof}
 
-\begin{remark}
-Theorem~\ref{thm:keystone} is not vacuous as a \emph{statement}: it is the exact
-endogenous condition together with a checkable closed-form sufficient bound, and it
-isolates precisely which two equilibrium ingredients (the channel and the two-zone
-shape) would have to combine for carbon to fall at an interior optimum.
-Proposition~\ref{prop:negative} is the answer to whether they do: they do not, in
-the studied families. The value of the keystone is that it converts a vague
-conjecture into a sharp, falsifiable inequality---and the inequality is falsified
-in the right direction.
+\begin{remark}[What was resolved, and an earlier slip corrected]
+Week~1 conjectured carbon falls at an interior optimum but never exhibited one. The
+answer is \emph{no}, definitively, across both regimes---it falls only at the
+corner. The keystone's value is having converted a vague conjecture into a sharp,
+checkable inequality (Theorem~\ref{thm:keystone}); the inequality is then falsified
+in both regimes, for the two complementary reasons above. (An earlier draft of this
+proof claimed the large-\textsc{fcl} flat term meant \textsc{fcl} ``draws fossil on
+surplus''; that was wrong---the fossil formula already credits surplus absorption.
+The correct statement is the \emph{floor}: in large-\textsc{fcl} the \textsc{fcl}
+exceeds the maximal surplus $\KRs$ and so cannot be \emph{fully} surplus-powered.)
+The full small-\textsc{fcl} cutoff structure is Role~4's; here the direct fossil
+identity settles the sign without it.
 \end{remark}
 
 %=====================================================================
@@ -640,7 +664,7 @@ mixtures $\tilde x=\tilde D-\KR\tilde S$. T1 confirms the recursive triangle
 (unconditional $(\KF,\KM)$-block, scalar Schur, $\Hcal\prec0$, unique $\Psi$
 zero); T2 the uniform endpoint inequality along the homotopy; T3 the exact
 endogenous identity, the sufficient-bound algebra, and the
-Proposition~\ref{prop:negative} scan ($\Delta<0$ at every large-\textsc{fcl}
+Proposition~\ref{prop:regimecarbon} scan ($\Delta<0$ at every large-\textsc{fcl}
 interior optimum, $\Delta^{\max}\approx-1.4$); T4 the corner non-emptiness
 $\CR^{\circ}<\CR^{\dagger}$, the large-cost anchor, and the single interval; T5
 the FTC/path-integral identity and the tight bounds $\Delta_{\min}\le\Delta\le\Delta_{\max}$
