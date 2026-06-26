@@ -11,72 +11,79 @@ TITLE = "A1 Week 2 Plan"
 ROLES = [
  ("Role 1 (Optimal Contract and General Carbon Theory)", [
    ("Prove existence, uniqueness, and contract optimality.",
-    "Prove expected profit is coercive and, under a primitive condition on F (e.g. a log-concave density), "
-    "strictly concave on the interior region, so the capacity optimum is unique; and prove the dispatch "
-    "contract d*(x)=min{(K_F−x)_+, K_M} is the unique optimal policy via the strict R>c ordering. This "
-    "supplies the negative-definite-Hessian condition from primitives instead of assuming it."),
-   ("Promote the shift-ratio condition to a primitive.",
-    "Prove that a support-wide monotonicity of g(x)=F_{K_R}/f (or a hazard-rate condition on F) implies the "
-    "endogenous-window condition the capacity channel currently relies on; give the implication with a proof."),
-   ("Prove the necessary-and-sufficient emission condition for general F.",
-    "Under that primitive plus a tail/skew condition, prove a sharp iff for carbon reduction at a finite "
-    "interior optimum for any such F, upgrading the endogenous inequality (C) and the existence conjecture to "
-    "a theorem in primitives. Exhibit a non-power-law F satisfying all conditions to prove the class non-vacuous."),
-   ("Prove single-crossing and the viability threshold for general F.",
-    "Extend the renewable-cost window from the power-law family to general F and prove Δ(C_R) is single-crossing, "
-    "so the carbon-reduction set is the interval {C_R < C_R†} and the strict fall occurs at a finite interior "
-    "K_R* rather than the unbounded corner."),
-   ("Prove sharpness and tight magnitude bounds.",
-    "Prove the shift-ratio condition is necessary as well as sufficient for K_R* > K_R° (a realized boundary, "
-    "not just an algebraic sign), and prove the two-sided bounds on the carbon saving Δ are tight, "
-    "characterizing the carbon-reduction region in primitive parameter space."),
+    "Prove the interior optimum is unique via the recursive FOC structure — the distribution-free cutoff "
+    "F(K_F°)=φ° pins K_F* as a unique implicit function, then K_M*, then K_R* (a monotone-triangular / "
+    "diagonal-dominance condition on the Hessian in primitives, not global concavity, which fails since Π is "
+    "submodular in (K_R,K_F)); and prove d*(x)=min{(K_F−x)_+,K_M} is the unique optimal dispatch via strict R>c."),
+   ("Make the shift-ratio condition uniform along the homotopy.",
+    "Prove that support-wide monotonicity of g(x)=F_{K_R}/f implies the realized endpoint condition holds "
+    "uniformly along the whole C_M-homotopy, even as the window (K_F*−K_M*, K_F*) moves — this is the actual "
+    "content Theorem 1's 'integrate downward' step needs, beyond the pointwise condition."),
+   ("Prove the emission condition for general F (keystone).",
+    "Substitute the equilibrium map K*(C_R) into the exact inequality (C) to get the endogenous carbon "
+    "condition, and prove a primitive sufficient condition (the endpoint shift-ratio condition plus a tail/skew "
+    "bound) under which it holds at a finite interior optimum; exhibit a non-power-law F (e.g. truncated "
+    "lognormal) satisfying it to prove the admissible class is non-vacuous."),
+   ("Prove connectedness of the carbon-reduction set.",
+    "Prove {C_R : Δ(C_R)≥0} is bounded above (large-cost anchor) and non-empty, and that it is a single interval "
+    "under an explicit monotone-renewable-shadow-value condition on F — general F can cross zero twice, so "
+    "identify and prove the condition that rules out the second crossing."),
+   ("Prove the sharp channel condition and tight bounds.",
+    "Establish the sharp necessary-and-sufficient condition for K_R*>K_R°: the realized two-point endpoint "
+    "inequality g(K_F*)≥g(K_F*−K_M*) — monotone g is sufficient but NOT necessary — and prove the two-sided "
+    "bounds on the carbon saving Δ are tight by exhibiting the attaining distributions."),
  ]),
  ("Role 2 (Solver and Numerical Methods)", [
    ("Build and validate the general solver.",
-    "Implement the joint-capacity and dispatch solver for d*(x) and (K_R,K_F,K_M) under any residual-demand "
-    "distribution, and validate it against the closed forms to machine precision — the verified backend the "
-    "rest of the group computes against."),
+    "Implement the joint-capacity/dispatch solver for d*(x) and (K_R,K_F,K_M) under any residual-demand "
+    "distribution, validated against the benchmarks to machine precision — including at least one non-power-law "
+    "F with a semi-closed form, so the test set goes beyond the Week-1 uniform case."),
    ("Run the carbon-sign sweep at a finite optimum.",
-    "Sweep over Role 1's primitive condition on a curated distribution family and show, numerically, that "
-    "carbon falls at a finite interior optimum — replacing the scattered Week-1 counts with one principled map."),
-   ("Certify the Hessian on the interior path.",
-    "Numerically certify the profit Hessian is negative definite along the interior equilibrium path for "
-    "Role 1's distribution class, by eigenvalue computation, backstopping existence and uniqueness."),
-   ("Derive and implement the analytic Hessian and cofactors.",
-    "Derive the full analytic Hessian and the comparative-statics cofactors (replacing finite differences, "
-    "which are noisy at the knife-edge) and certify them against the solved equilibria across the class."),
+    "Sweep over Role 1's primitive condition on a synthetic, theory-tied distribution family and show "
+    "numerically that carbon falls at a finite interior optimum — one principled map replacing the scattered "
+    "Week-1 counts."),
+   ("Derive the analytic Hessian and certify negative-definiteness.",
+    "Derive and implement the full analytic Hessian and comparative-statics cofactors (replacing the "
+    "knife-edge-noisy finite differences), and on that analytic Hessian certify negative-definiteness along the "
+    "interior path for Role 1's class."),
+   ("Map the boundary of the regularity region.",
+    "Exhibit distributions in the admitted class where the Hessian fails to be negative definite, delimiting "
+    "Condition 2 sharply and complementing Role 1's uniqueness proof — a numerical map of where regularity holds."),
  ]),
  ("Role 3 (Comparative Statics and Robustness)", [
-   ("Prove the correlation and price comparative statics.",
-    "Prove the net-carbon sign is governed by the demand–supply association g = E[S | x]; that mining raises "
-    "optimal renewable capacity K_R* > K_R°; and sign ∂(carbon effect)/∂R, ∂/∂β, and ∂/∂p via the "
-    "Hessian-cofactor identities, under general conditions."),
+   ("Sign the price and adoption-margin comparative statics.",
+    "Via the Hessian-cofactor identities, under the explicit interior-regime hypotheses (R inside the "
+    "Assumption-1 bounds), sign ∂(carbon effect)/∂R, ∂/∂β, ∂/∂p, and ∂/∂C_M (the adoption margin), and prove "
+    "mining raises K_R*>K_R° under the endpoint shift-ratio condition."),
    ("Prove the cross-distribution robust certificate.",
-    "Sign the capacity covariation dK*/dF along the shape class U so the least-favorable result holds across F "
-    "— making C_R ≤ C_R† ⇒ Δ ≥ 0 a genuine distributionally-robust certificate — or prove the obstruction."),
+    "Along a specified one-parameter deformation within the shape class U (a mean-preserving-spread / "
+    "likelihood-ratio path), sign the capacity covariation dK*/dt so the least-favorable result holds across "
+    "the path — making C_R ≤ C_R† ⇒ Δ ≥ 0 a genuine robust certificate — or prove the obstruction."),
    ("Construct the reversed-channel counterexample.",
-    "Build a realized distribution F with g increasing for which K_R* < K_R°, demonstrating the channel reverses "
-    "— the sharpness example Week 1 could not produce — and solve it numerically to confirm."),
+    "Construct a realized F violating the endpoint shift-ratio condition (g(K_F*)<g(K_F*−K_M*) at the realized "
+    "thresholds) for which K_R*<K_R°, and solve it numerically — the sharpness witness Week 1 could not produce, "
+    "certifying necessity of the endpoint condition (Role 1)."),
    ("Prove the limit-interchange rigorously.",
-    "Replace the expected-fossil-to-zero corner step with a dominated-convergence or finite-capacity envelope "
-    "argument, so the threshold proof holds without the a.s.-limit shortcut."),
+    "Replace the expected-fossil-to-zero a.s.-corner step with a dominated-convergence / finite-capacity "
+    "envelope argument, so the threshold proof holds without the limit shortcut."),
  ]),
  ("Role 4 (Mechanism Design and Regimes)", [
-   ("Prove the principal–agent implementation with IR and IC.",
-    "Cast the regulator as principal and the utility/miner as agent; write the participation (IR) and "
-    "incentive-compatibility (IC) constraints and prove the price-based program implements d* optimally and, "
-    "where feasible, uniquely — not merely as the principal's first-best dispatch — stating the price-taking / "
-    "exogenous-R conditions under which IR and IC are slack."),
+   ("Prove a single-price implements the optimum.",
+    "Prove the non-trivial instrument result: a single per-MWh price R (not a state-contingent transfer) "
+    "uniquely implements the dispatch d* and pins the capacity vector, and characterize exactly when the price "
+    "instrument is rich enough to do so — the regulator's instrument-design problem."),
    ("Prove the unified regime theorem.",
-    "Combine the C_M coverage axis (no adoption / small-FCL / interior / full coverage) and the C_R boundedness "
-    "axis into one theorem, and pin down the small-FCL crossover K_M* = K_R° that Week 1 left open."),
+    "Compose the C_M coverage axis (no adoption / small-FCL / interior / full coverage) and the C_R boundedness "
+    "axis into one theorem, and pin down the small-FCL/large-FCL crossover precisely as the parameter-space "
+    "locus where K_M*=K_R° (left open in Week 1)."),
    ("Prove the necessity of Assumption 1.",
-    "For each of the four parameter conditions, prove it is necessary for the interior optimum or the economic "
-    "sign it guards, and characterize the regime obtained when it is relaxed (full-coverage corner, no "
-    "adoption, or a perverse curtailment)."),
+    "Upgrade the four parameter conditions from pressure-test to proof: prove each is necessary for the interior "
+    "optimum or the sign it guards, and characterize the regime obtained when relaxed (full-coverage corner, no "
+    "adoption, or perverse curtailment)."),
    ("Characterize the second-best contract under private information.",
-    "When the agent privately observes its availability a(x)=(K_F−x)_+, derive the optimal screening contract "
-    "(the second-best d*) and characterize how the resulting information rent changes the emission outcome "
+    "Introduce genuine private information the principal cannot infer from observed demand — the agent privately "
+    "knows the renewable factor S while only the demand D is observed, so residual demand is the agent's private signal — "
+    "and derive the second-best screening contract and how its information rent shifts the emission outcome "
     "versus the full-information benchmark."),
  ]),
 ]
@@ -106,7 +113,7 @@ blue=Color(BLUE[0]/255,BLUE[1]/255,BLUE[2]/255)
 H1=ParagraphStyle('H1',fontName='Helvetica-Bold',fontSize=20,textColor=blue,spaceAfter=10)
 RH=ParagraphStyle('RH',fontName='Helvetica-Bold',fontSize=13,textColor=blue,spaceBefore=12,spaceAfter=4)
 BUL=ParagraphStyle('BUL',fontName='Helvetica',fontSize=11,leading=14)
-def esc(s): return s.replace("&","&amp;")
+def esc(s): return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
 pdf_path=os.path.join(OUT,"A1_Week2_NextRoles.pdf")
 doc=SimpleDocTemplate(pdf_path,pagesize=letter,topMargin=1*inch,bottomMargin=1*inch,leftMargin=1*inch,rightMargin=1*inch)
 fl=[Paragraph(TITLE,H1)]
