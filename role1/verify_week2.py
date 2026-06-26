@@ -7,13 +7,13 @@ Nothing is taken on faith.  Five Week-2 tasks:
 
   T1  existence, uniqueness (recursive-triangular FOC), dispatch optimality
   T2  shift-ratio condition uniform along the C_M-homotopy
-  T3  emission condition for general F (keystone): truncated-lognormal instance
+  T3  emission keystone: floor lemma + numerical resolution (Beta scale mixtures)
   T4  connectedness of the carbon-reduction set {C_R : Delta>=0}
   T5  sharp N&S channel condition (path integral) + tight two-sided bounds
 
 Pass = agreement to >= 6 digits unless a looser tol is stated inline.
-Reuses the model exactly as in verify_exact.py; adds a non-power-law
-(truncated-lognormal) residual-demand family.
+Reuses the model exactly as in verify_exact.py; the keystone (T3) uses
+non-power-law Beta scale mixtures and a direct fossil simulator.
 """
 import numpy as np
 from scipy import integrate, optimize
@@ -239,7 +239,7 @@ for KR in np.linspace(0.5,6,8):
 ok("g(.;KR) non-increasing on full support, all KR",mono)
 
 # ===================================================================
-print("\n"+"="*78,"\n  T3  EMISSION CONDITION FOR GENERAL F (keystone): truncated-lognormal\n","="*78)
+print("\n"+"="*78,"\n  T3  EMISSION KEYSTONE: floor lemma + numerical resolution (Beta mixtures)\n","="*78)
 # carbon-relevant fossil expectations: the Week-1 VERIFIED reference integrals
 #   E[fossil*] = int_{-KM}^{KF-KM}(1-F)dx     (paper eq fosfcl; verify_exact CHECK6 1e-9)
 #   E[fossil0] = int_{0}^{KFo}(1-F)dx         (paper eq fos2;   verify_exact CHECK6 1e-16)
@@ -365,7 +365,7 @@ dm=DirectMix(2,2,2,2)
 # at the representative large-FCL optimum (W), direct (surplus-absorbed) == closed form.
 # (use W['KR'..] explicitly: the scan above rebinds the bare KR,KF,KM names.)
 chk("direct fossil (surplus-absorbed) == closed form eq:fos1",
-    dm.Efossil(W['KR'],W['KF'],W['KM']),Efos_with(d0,P0r,W['star']),3e-2)
+    dm.Efossil(W['KR'],W['KF'],W['KM']),Efos_with(d0,P0r,W['star']),1e-4)
 # --- floor mechanism: (K_M-K_R)_+ controls the sign at fixed no-FCL baseline (KRo=2,KFo=6) ---
 En0=dm.Eno(2.0,6.0)
 ok("no-FCL baseline E[fossil](KRo=2,KFo=6) > 0",En0>1.0,f"={En0:.3f}")
