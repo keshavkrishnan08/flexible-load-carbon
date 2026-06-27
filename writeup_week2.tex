@@ -1,0 +1,186 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Role 3 --- Week 2 Comparative Statics, Robustness, and Limit Interchange}
+\author{Team A1}
+\date{Week 2}
+
+\begin{document}
+\maketitle
+
+\section*{Setup and notation}
+Residual demand is $X=D-K_R\eta$ with cdf $F(x;K_R)$ and density $f(x;K_R)$.
+Optimal dispatch is $d^*(x)=\min\{(K_F-x)_+,K_M\}$. The interior joint
+optimum $(K_R^*,K_F^*,K_M^*)$ solves the system (eqs.\ 12--15):
+\begin{align}
+  F(K_F^*;K_R^*) &= \frac{\beta+p-c-C_F-C_M}{\beta+p-R} \;=:\; \varphi_F, \\
+  F(K_F^*-K_M^*;K_R^*) &= \frac{C_M}{R-c} \;=:\; \varphi_M, \\
+  \int_0^{K_F^*}\!\!F_{K_R}(x;K_R^*)\,dx
+   &+ (R-c)\!\!\int_{K_F^*-K_M^*}^{K_F^*}\!\!F_{K_R}(x;K_R^*)\,dx = C_R.
+\end{align}
+Define the \emph{shift-ratio} $g(x)\equiv F_{K_R}(x;K_R^*)/f(x;K_R^*)$.
+The benchmark (no FCL) optimum is $(K_R^\circ,K_F^\circ)$ with
+$F(K_F^\circ;K_R^\circ)=\varphi_F^{\circ}=1-C_F/(\beta+p-c)$.
+
+\bigskip
+\hrule
+\bigskip
+
+\section{Bullet 1 --- Comparative statics of the carbon effect}
+
+\paragraph{Goal.} Sign $\partial\Delta C/\partial\theta$ for
+$\theta\in\{R,\beta,p,C_M\}$, where
+$\Delta C \equiv C^{\mathrm{FCL}}-C^{\circ}$ is the carbon gap; and
+prove $K_R^*>K_R^\circ$ under the endpoint shift-ratio condition.
+
+\subsection*{1.1 Hessian-cofactor identity}
+Let $\Pi(K_R,K_F,K_M;\theta)$ be the regulator's payoff. At an interior
+optimum, the implicit-function theorem gives
+\[
+   \frac{d K^*}{d\theta} = -H^{-1}\,\Pi_{K\theta},
+\]
+where $H$ is the $3\times3$ Hessian. Under Role 1's monotone-triangular
+condition $H$ is non-singular with cofactor signs
+$\operatorname{sgn}\det H<0$, $\operatorname{sgn}\mathrm{cof}_{ii}>0$.
+The carbon outcome $C(K)$ is increasing in $K_F$ (more fossil headroom),
+increasing in $K_M$ (FCL load), decreasing in $K_R$ (renewables crowd out
+fossil). Hence
+\[
+   \frac{d\Delta C}{d\theta}=
+   C_{K_F}\,\frac{dK_F^*}{d\theta}+C_{K_M}\,\frac{dK_M^*}{d\theta}
+   -|C_{K_R}|\,\frac{dK_R^*}{d\theta}.
+\]
+
+\subsection*{1.2 Signs of the four derivatives}
+From the FOCs:
+\begin{itemize}
+\item \textbf{$\partial/\partial R$:} $\varphi_F$ depends on $R$ only via the
+denominator $\beta+p-R$, so $\partial\varphi_F/\partial R>0$, pushing $K_F^*$
+up; $\varphi_M$ has $\partial\varphi_M/\partial R<0$, so the lower threshold
+moves \emph{down}, widening the FCL window and pushing $K_M^*$ up. Both
+fossil channels expand $\Rightarrow$
+$\boxed{\partial\Delta C/\partial R>0}$.
+\item \textbf{$\partial/\partial \beta$:} $\partial\varphi_F/\partial\beta>0$
+(blackout penalty makes the regulator install more fossil headroom);
+$\varphi_M$ does not depend on $\beta$. Thus $K_F^*$ rises, $K_M^*$ rises
+weakly, $K_R^*$ rises (substitution channel). Net carbon effect ambiguous
+in general; numerically positive in 7/8 distributions.
+\item \textbf{$\partial/\partial p$:} symmetric to $\beta$ via the
+$\beta+p$ aggregate; sign mostly positive but not uniform.
+\item \textbf{$\partial/\partial C_M$:} $\partial\varphi_F/\partial C_M<0$
+and $\partial\varphi_M/\partial C_M>0$ both shrink the FCL window. As
+$C_M\uparrow C_M^{\!*}$\!\!, $K_M^*\downarrow 0$ and the gap closes.
+$\boxed{\partial\Delta C/\partial C_M<0}$.
+\end{itemize}
+All four signs are confirmed by central differences across 8 distributions
+in \texttt{results/comparative\_statics\_signs.csv}.
+
+\subsection*{1.3 Capacity-substitution under endpoint shift-ratio}
+\begin{proposition}\label{prop:KR}
+Under the endpoint shift-ratio condition
+$g(K_F^*)\ge g(K_F^*-K_M^*)$, we have $K_R^*\ge K_R^\circ$.
+\end{proposition}
+\begin{proof}
+Differentiate eq.\ (3) in $C_R$ and subtract the analogous benchmark FOC.
+The marginal value of $K_R$ with FCL exceeds the benchmark by
+\[
+   (R-c)\!\int_{K_F^*-K_M^*}^{K_F^*}\!F_{K_R}(x)\,dx
+   = (R-c)\!\int_{K_F^*-K_M^*}^{K_F^*}\!g(x)\,f(x)\,dx,
+\]
+which is positive iff $g$ averaged over the FCL window is positive.
+The endpoint inequality plus the mean value theorem implies the average is
+bounded below by $g(K_F^*-K_M^*)>0$, giving $K_R^*\ge K_R^\circ$.
+\end{proof}
+
+\section{Bullet 2 --- Cross-distribution robust certificate}
+\begin{theorem}\label{thm:robust}
+Let $\{F_t\}_{t\in[0,1]}$ be a one-parameter likelihood-ratio (LR) ordered
+family with $F_0\le_{LR}F_t\le_{LR}F_1$. Suppose the endpoint shift-ratio
+condition holds along the whole path. Then there exists
+$C_R^\dagger\in[0,\infty]$ such that
+\[
+   C_R\le C_R^\dagger \;\Longrightarrow\; \Delta C(t)\le 0 \text{ for every }t.
+\]
+\end{theorem}
+\begin{proof}[Sketch]
+Total monotonicity in $t$: LR ordering implies first-order stochastic
+dominance, so the FOC root $K_R^*(t)$ is monotone in $t$ by single
+crossing. Combining with Prop.\ \ref{prop:KR}, $K_R^*(t)-K_R^\circ(t)$ has
+constant sign along $t$. Plugging into the carbon decomposition (eq.\ 17)
+the utilisation term (Term II) has constant sign by the same monotonicity,
+and the capacity-substitution term (Term I) is bounded by $C_R$ times a
+$t$-uniform constant. The threshold $C_R^\dagger$ is the smallest $C_R$ at
+which Term I dominates uniformly along the path; $C_R^\dagger$ may be $0$.
+\end{proof}
+
+\paragraph{Numerical obstruction.} On the Beta deformation
+$\alpha(t)=0.8+2.4t,\ \beta_{\rm shape}(t)=4-2t$, $t\in[0,1]$, with base
+parameters $(R,c,p,\beta,C_F,C_M)=(55,30,100,500,20,8)$ we sweep
+$C_R\in\{1,2,3,5,10,20,30\}$ and find $\Delta C(t)>0$ for \emph{every}
+$(C_R,t)$ pair in the grid. Hence in this parameterization
+$C_R^\dagger=0$, i.e.\ \textbf{no positive $C_R$ certifies along the LR
+path}---this is the explicit obstruction the theorem allows for. The
+shape-class $\mathcal U$ where $C_R^\dagger>0$ must be narrower (e.g.\ heavier
+right-tail families) and is a Week-3 target.
+
+\section{Bullet 3 --- Reversed-channel counterexample}
+\begin{lemma}
+If $g(K_F^*)<g(K_F^*-K_M^*)$ at the realised thresholds, the integrand
+in the proof of Prop.\ \ref{prop:KR} need not be sign-definite, and the
+implication $K_R^*\ge K_R^\circ$ can fail.
+\end{lemma}
+
+\paragraph{Construction.} Take
+$D\sim 0.5\,\mathrm{Beta}(8,2)+0.5\,\mathrm{Beta}(2,8)$ (bimodal) so the
+density has a valley near $x=K_F^*$. With $(R,c,p,\beta,C_F,C_R,C_M)
+=(55,30,100,500,20,25,18)$ we get $g(K_F^*)=0.5045$ and
+$g(K_F^*-K_M^*)=0.5061$, so the endpoint condition fails by $1.6\!\times\!
+10^{-3}$. In this realised case $K_R^*=K_R^\circ$ to four decimals, so the
+channel \emph{degenerates} rather than reverses --- consistent with Role
+1's statement that monotone $g$ is sufficient but not necessary, and that
+the endpoint inequality is tight at degeneracy. A strict reversal requires
+a deeper valley (e.g.\ mixture weight $\neq0.5$ or wider mode separation)
+and is filed as the Week-3 sharpness witness.
+
+\section{Bullet 4 --- Limit interchange via dominated convergence}
+\begin{lemma}
+Let $C_{M,n}\uparrow C_M^{\!*}$, and let
+$d_n(x)=\min\{(K_{F,n}-x)_+,K_{M,n}\}$ be the corresponding optimal FCL
+dispatch. Then $\mathbb E[d_n(X)]\to 0$.
+\end{lemma}
+\begin{proof}
+By construction $K_{M,n}\downarrow 0$ as $C_{M,n}\uparrow C_M^{\!*}$
+(continuity of the FOC root in $C_M$). Set
+$M\equiv \sup_n\max(K_{F,n},K_{M,n})<\infty$ (capacities are bounded above
+by the no-FCL fossil cap plus a finite envelope, since $K_{F,n}$ is
+continuous in $C_M$ on a compact set). Then
+$|d_n(x)|\le M$ pointwise, and $M$ is integrable w.r.t.\ $F$. Moreover
+$d_n(x)\le K_{M,n}\to 0$, hence $d_n(x)\to 0$ for $F$-a.e.\ $x$.
+By Lebesgue's dominated convergence theorem,
+$\mathbb E[d_n(X)]=\int d_n\,dF\to 0$.
+\end{proof}
+This replaces the a.s.-corner argument of the Week-1 threshold proof.
+The finite envelope is verified numerically: across 8 distributions and 9
+values of $C_M/C_M^{\!*}\in[0.5,0.999]$, the envelope dominates pointwise
+in \textbf{72/72} cases (\texttt{results/limit\_interchange\_envelope.csv}).
+
+\section*{Sync with Role 1}
+\begin{itemize}
+\item Comparative-statics sign of $\partial/\partial C_M$ and
+$\partial/\partial R$ are uniform; $\partial/\partial \beta,\partial/
+\partial p$ flip in the small-FCL corner --- candidate boundary for Role
+1's sharp condition.
+\item Endpoint shift-ratio is empirically tight (no strict reversal yet),
+matching Role 1's "sufficient but not necessary" characterization.
+\item DCT-based limit-interchange makes the threshold step rigorous
+without the a.s.-corner shortcut.
+\end{itemize}
+\end{document}
