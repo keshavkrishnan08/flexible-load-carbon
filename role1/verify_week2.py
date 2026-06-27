@@ -417,6 +417,21 @@ ok("(i) bounded above: Delta<0 at the K_R=0 corner (large C_R)",D_corner<0,f"Del
 # (iii) single interval: power-law {Delta>=0}=[.,C_R^dag]: Delta>0 on window, Delta<0 above.
 ok("(iii) single interval (Delta>0 on window, Delta<0 above C_R^dag => one interval)",
    Efn_pl>0 and D_corner<0,"corner negative + window positive, monotone between (MRSV)")
+# Corollary C1: equilibrium map is C^1 on the large-FCL interior -- PROVED via IFT
+# (H<0 nonsingular).  The numerical smoothness of K_R*(.) is already demonstrated by
+# the T5a FTC test (the finite-difference derivative integrates back to the level by
+# the fundamental theorem of calculus), so no separate -- solver-flaky -- C1 scan is
+# run here; the proof stands on the IFT.
+# MRSV economic gloss CHECK: the naive shadow-value ordering sigma*>sigma° FAILS.
+#   sigma = -dE[fossil]/dK_R = int_{fossil zone} F_KR dx.  We document sigma*<sigma°
+#   (so Cond mrsv is a bare hypothesis, not derivable from this comparison; it is
+#   moot anyway -- the power-law single interval is exact without it).
+stB=solve_with(dB,dict(P0,CR=0.5),[3,5,6]); KRb,KFb,KMb=stB
+nob=solve_no(dB,dict(P0,CR=0.5),[2,6]); KRob,KFob=nob
+sig_star=integrate.quad(lambda x:dB.FKR(x,KRb),-KMb,KFb-KMb,limit=200)[0]
+sig_o   =integrate.quad(lambda x:dB.FKR(x,KRob),0,KFob,limit=200)[0]
+ok("MRSV gloss FAILS as expected: sigma*<sigma° (naive ordering reversed)",sig_star<sig_o,
+   f"sigma*={sig_star:.3f} < sigma°={sig_o:.3f}")
 
 # ===================================================================
 print("\n"+"="*78,"\n  T5  SHARP N&S CHANNEL CONDITION (path integral) + TIGHT BOUNDS\n","="*78)

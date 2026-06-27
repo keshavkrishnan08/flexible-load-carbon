@@ -367,6 +367,30 @@ condition/scope issues. Closed them (no math errors — honesty/rigor):
   residual numerical." PDF 9pp.
 — R1
 
+## E21 · 2026-06-27 · "Make it perfect": close the open items (C¹, T4, T3 framing)
+Pushed the three remaining open items as far as they go in-scope.
+- **C¹-ness CLOSED.** Corollary: under Condition Schur (H≺0), the equilibrium map
+  C_R↦(K_R*,K_F*,K_M*) and (K_R°,K_F°) are C¹ by IFT, so Δ is C¹ on the large-FCL
+  interior. Removes the "C¹ we don't close" caveat (only the large↔small-FCL
+  crossing stays Role 4). Verified: K_R*(C_R) FD-derivative finite & smoothly
+  varying.
+- **T4 restructured.** Made the EXACT power-law interval S=[0,C_R†] the PROVED
+  theorem (i)+(ii), unconditional, with strict-fall core (C_R°,C_R†) distinguished
+  from the Δ=0 flat. MRSV/(iii) demoted to an optional general-F extension, vacuous
+  in the scanned family.
+- **σ*>σ° gloss was FALSE — corrected.** The suite caught it: σ*=0.297 < σ°=0.425.
+  So the MRSV "shadow-value ordering" economic justification is wrong (no-FCL
+  renewables carry the larger marginal fossil impact). Removed the false claim;
+  MRSV is now stated as a bare hypothesis, openly not derivable, and MOOT (the
+  power-law result needs it not). Suite now documents σ*<σ° as the honest fact.
+- **T3 framing sharpened.** Prop irreducible (proved: capacities+cutoffs don't
+  determine sign(Δ); the range [Δmin,Δmax]=[-6.43,+3.23] straddles 0, verified) is
+  the structural resolution; the family-wide Δ<0 is a conjecture BY NECESSITY (the
+  impossibility forbids a distribution-free proof), backed by >250 cells (offline
+  ws2/ws3 + in-suite scan), Δ0<0 everywhere. Disclosed Δ_LB ≡ Δ0.
+- Third hostile-referee pass ("qualified yes") items all fixed. PDF 10pp.
+— R1
+
 ---
 
 ## Verification ledger

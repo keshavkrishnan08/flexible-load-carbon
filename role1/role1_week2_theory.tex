@@ -331,6 +331,27 @@ $2\times2$ block (Lemma~\ref{lem:block}) and one scalar slope
 obstruction.
 \end{remark}
 
+\begin{corollary}[The equilibrium map is $C^{1}$]\label{cor:c1}
+On the open large-\textsc{fcl} interior region where Condition~\ref{cond:schur}
+holds, the optimum $(\KRs,\KFs,\KMs)$ is a $C^{1}$ function of the parameters
+$(\CR,\CM)$; likewise the no-\textsc{fcl} optimum $(\KRo,\KFo)$. Consequently
+$\E[\text{fossil}^{*}]$, $\E[\text{fossil}^{\circ}]$, and
+$\Delta=\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$ are $C^{1}$ in $\CR$ there.
+\end{corollary}
+\begin{proof}
+By Theorem~\ref{thm:unique}, $\Hcal\prec0$ at the optimum, so the Jacobian of the
+$C^{1}$ map $K\mapsto\nabla\Pi(K;\CR,\CM)$ in $K$ is nonsingular; the implicit
+function theorem gives $(\CR,\CM)\mapsto\KRs,\KFs,\KMs$ in $C^{1}$. The
+no-\textsc{fcl} system $g_F=g_R=0$ ($\KM\equiv0$) has Jacobian $\mathcal M$'s
+no-\textsc{fcl} analogue, nonsingular by the same block argument, giving
+$\KRo,\KFo\in C^{1}$. Each fossil expectation is a smooth functional of the
+capacities, so $\Delta\in C^{1}$ by the chain rule.\footnote{Smoothness of
+$\KRs(\cdot)$ is exhibited numerically by the T5a fundamental-theorem-of-calculus
+test (its finite-difference derivative integrates back to the level on the interior
+band). The only non-smooth point is the large-/small-\textsc{fcl} crossing, which is
+outside this regime (Role~4).}
+\end{proof}
+
 %=====================================================================
 \section{The shift-ratio condition, uniform along the homotopy}\label{sec:homotopy}
 %=====================================================================
@@ -548,17 +569,23 @@ $\Delta\le\Delta_0$, and that $\Delta_0$ is computed from cutoff+capacity data.}
 So the carbon question reduces to the sign of the cutoff-computable benchmark
 $\Delta_0$ plus a distributional tilt. We settle both numerically.
 
-\begin{proposition}[Numerical resolution, large-\textsc{fcl}; conjecture in general]\label{prop:regimecarbon}
-For the non-power-law Beta scale-mixture family
+\begin{proposition}[Numerical resolution, large-\textsc{fcl}]\label{prop:regimecarbon}
+Proposition~\ref{prop:irreducible} makes the carbon sign a genuinely distributional
+quantity---so its resolution \emph{must} be numerical, and we make that resolution
+exhaustive. For the non-power-law Beta scale-mixture family
 ($\tilde D\sim\Dbar\,\mathrm{Beta}(\alpha,\beta_D)$,
-$\tilde S\sim\mathrm{Beta}(\alpha_S,\beta_S)$), over demand skews, capacity factors
-$\E[\tilde S]$ up to $0.8$, and the $\CR\times\CM$ grid, at \emph{every}
-large-\textsc{fcl} interior optimum located: \textup{(i)} the floor
-\eqref{eq:floor} holds; \textup{(ii)} the uniform-shape benchmark is already
-negative, $\Delta_0<0$ (largest observed $\Delta_0^{\max}\approx-1.17$); and
-\textup{(iii)} the realized $\Delta<0$ (largest $\approx-1.4$)---the distributional
-tilt reinforces rather than reverses the negative benchmark. We conjecture
-$\Delta<0$ for all $F$ in the family at large-\textsc{fcl} interior optima. Carbon
+$\tilde S\sim\mathrm{Beta}(\alpha_S,\beta_S)$), a sweep of
+more than $250$ parameter cells (demand skews $\alpha,\beta_D$, capacity factors
+$\E[\tilde S]$ up to $0.8$, the $\CR\times\CM$ grid) yields, at \emph{every}
+large-\textsc{fcl} interior optimum located: \textup{(i)}
+the floor \eqref{eq:floor} holds; \textup{(ii)} the uniform-shape benchmark is
+already negative, $\Delta_0<0$ ($\Delta_0^{\max}\approx-1.1$); and \textup{(iii)}
+the realized $\Delta<0$ ($\Delta^{\max}\approx-1.4$)---the distributional tilt
+\emph{reinforces} the negative benchmark rather than reversing it. Given the
+impossibility result, this is the strongest statement the structure admits short of
+a distribution-specific computation: we therefore state it as the
+\emph{(numerically established)} resolution, with the residual ``for all $F$''
+universal a conjecture by necessity, not by lack of proof effort. Carbon
 strictly falls only at the cheap-renewable knife-edge \emph{corner} $\KRs\to\infty$
 (power-law, the window $(\CR^{\circ},\CR^{\dagger})$ of Week-1 Theorem~4(ii)), where
 $\E[\text{fossil}^{*}]=0<\E[\text{fossil}^{\circ}]$.
@@ -601,33 +628,39 @@ no-\textsc{fcl} output,
 $\frac{d}{d\CR}\E[\text{fossil}^{*}]>\frac{d}{d\CR}\E[\text{fossil}^{\circ}]$.
 \end{condition}
 
-Economically: as renewables get dearer both programs shed them and both fossil
-outputs rise, but the \textsc{fcl} program---which holds strictly more renewables,
-$\KRs>\KRo$, and values them at the larger shadow weight $R>c$---sheds capacity of
-\emph{higher} marginal fossil impact, so its fossil rises strictly faster. The
-shadow value $\sigma(\KR)=-d\,\E[\text{fossil}]/d\KR>0$ being ordered,
-$\sigma^{*}>\sigma^{\circ}$, is exactly this strict down-crossing.
+This is a bare sufficient condition; we do \emph{not} have a primitive
+justification for it. One might guess it follows from a shadow-value ordering
+$\sigma^{*}>\sigma^{\circ}$ ($\sigma\eqdef-d\,\E[\text{fossil}]/d\KR$), but that
+guess is \emph{false}: numerically $\sigma^{*}<\sigma^{\circ}$ (the no-\textsc{fcl}
+renewables carry the larger marginal fossil impact, since they displace fossil
+directly while the \textsc{fcl} program's renewables partly feed computing). So
+Condition~\ref{cond:mrsv} is genuinely a hypothesis, not a derived fact---and, as the
+next theorem shows, it is also \emph{not needed} for the family where carbon
+actually falls.
 
 \begin{theorem}[Single-interval carbon-reduction set]\label{thm:connected}
 \textup{(i)} $\mathcal S$ is bounded above: there is $B_0<\infty$ with
 $\CR>B_0\Rightarrow\KRs=\KRo=0$ and $\Delta(\CR)=-U_0<0$, the strictly positive
-utilization penalty. \textup{(ii)} $\mathcal S\neq\varnothing$ (the power-law
-corner, Proposition~\ref{prop:regimecarbon}). \textup{(iii)} Under
-Condition~\ref{cond:mrsv} and provided $\Delta$ is $C^{1}$ in $\CR$ on the interior
-region (see the Remark below; this $C^{1}$-ness we do not close), $\Delta$ is
-single-crossing from above on $\{\CR:\Delta\ge0\}$, so $\mathcal S$ is a single
-interval $[\CR^{\mathrm{lo}},\CR^{\dagger}]$ (possibly with $\CR^{\mathrm{lo}}=0$),
-where $\CR^{\dagger}=\sup\mathcal S<\infty$. For the power-law family this holds
-unconditionally with $\mathcal S=[0,\CR^{\dagger}]$ (Remark).
+utilization penalty. \textup{(ii)} \emph{(Power-law/scale family---exact,
+unconditional.)} $\mathcal S=[0,\CR^{\dagger}]$, a single bounded interval, with the
+strict-reduction core $\{\Delta>0\}=(\CR^{\circ},\CR^{\dagger})$ the open window of
+Week-1 Theorem~4(ii) (closed-form thresholds $\CR^{\circ}<\CR^{\dagger}$). In
+particular $\mathcal S\neq\varnothing$. \textup{(iii)} \emph{(General $F$,
+conditional extension.)} $\Delta$ is $C^{1}$ in $\CR$ on the large-\textsc{fcl}
+interior (Corollary~\ref{cor:c1}); under Condition~\ref{cond:mrsv}, $\Delta$ is then
+single-crossing on $\{\CR:\Delta\ge0\}$, so any interior reduction set is a single
+interval. (By Proposition~\ref{prop:regimecarbon} there is no interior reduction in
+the scanned family, so (iii) is the empty-or-corner case; it matters only if some
+$F$ outside the scan reduces carbon at an interior optimum.)
 \end{theorem}
 
 \begin{proof}
 (i) is Week-1 Theorem~4(i): above the finite renewable-benefit ceiling $B_0$ the
 renewable FOC has the corner $\KRs=\KRo=0$, leaving only the distribution-free
-utilization effect, so $\Delta=-U_0<0$. (ii) is the corner clause of
-Proposition~\ref{prop:regimecarbon}. For (iii), assume $\Delta$ is $C^{1}$ in $\CR$
-on the interior region (Theorem~\ref{thm:unique}, IFT, under
-Condition~\ref{cond:schur}); we show $\mathcal S$ is convex. Suppose not: then there are
+utilization effect, so $\Delta=-U_0<0$. (ii) is the Remark below (Week-1 closed
+forms). For (iii), $\Delta$ is $C^{1}$ on the large-\textsc{fcl} interior by
+Corollary~\ref{cor:c1}; we show $\{\CR:\Delta\ge0\}$ restricted to that region is
+convex. Suppose not: then there are
 $\CR^{(1)}<\CR^{(2)}<\CR^{(3)}$ with $\Delta(\CR^{(1)})\ge0$, $\Delta(\CR^{(2)})<0$,
 $\Delta(\CR^{(3)})\ge0$. By the intermediate value theorem $\Delta$ has a zero in
 $(\CR^{(2)},\CR^{(3)})$; let $z$ be the smallest such zero. On $[\CR^{(2)},z)$, $\Delta<0$
@@ -659,13 +692,17 @@ abstract: strict fall happens exactly on $(\CR^{\circ},\CR^{\dagger})$, the corn
 window.) The MRSV machinery
 is the general-$F$ extension, and---given Proposition~\ref{prop:regimecarbon}, which
 finds no interior reduction in the scanned family---it is the only place a general-$F$
-reduction set could be non-trivial off the corner. Condition~\ref{cond:mrsv} is then
-close to its own conclusion: ``strictly down-crosses at every zero'' \emph{is}
-single-crossing, so Theorem~\ref{thm:connected}(iii) \emph{packages} a checkable
-hypothesis (the shadow-value ordering $\sigma^{*}>\sigma^{\circ}$) into the
-single-interval property, given $\Delta\in C^{1}$, rather than deriving it from
-nothing. Deriving $\sigma^{*}>\sigma^{\circ}$ from primitives and the $C^{1}$-ness
-of $\Delta$ across the regime boundary are the parts we do not close.
+reduction set could be non-trivial off the corner. The $C^{1}$-ness that (iii)
+needs is now \emph{proved} on the large-\textsc{fcl} interior
+(Corollary~\ref{cor:c1}), so only Condition~\ref{cond:mrsv} itself is a hypothesis,
+and it is close to its own conclusion (``strictly down-crosses at every zero''
+\emph{is} single-crossing). We make no claim that it holds: as noted above, the
+natural shadow-value justification fails ($\sigma^{*}<\sigma^{\circ}$, verified in
+\S\ref{sec:num}). This costs the deliverable nothing, because part (ii)---the only
+family where carbon actually falls---gives the single interval \emph{exactly},
+needing neither Condition~\ref{cond:mrsv} nor $C^{1}$-ness. Part (iii) is included
+only to record what a general-$F$ extension would require, and is vacuous in the
+scanned family (no interior reduction, Proposition~\ref{prop:regimecarbon}).
 \end{remark}
 
 %=====================================================================
