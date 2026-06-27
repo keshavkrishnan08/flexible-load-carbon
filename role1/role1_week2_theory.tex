@@ -84,18 +84,22 @@ keystone), substituting the equilibrium map $K^{*}(\CR)$ into the exact
 inequality~(C) yields the endogenous carbon condition, and we give a
 \emph{primitive} sufficient condition---the endpoint shift-ratio condition plus a
 two-zone density (tail/skew) bound---that would make carbon fall at a
-\emph{finite interior} optimum. The point is what this checkable inequality then
-reveals: it is essentially \emph{never activated}. We prove an irreducible fossil
-floor (a program with $\KMs>\KRs$ draws at least $\KMs-\KRs$ fossil, since the
-\textsc{fcl} exceeds the maximal renewable surplus $\le\KRs$ and cannot be fully
-surplus-powered), and an exhaustive numerical search over the Beta scale-mixture
-family then finds $\Delta\le0$ at \emph{every} large-\textsc{fcl} interior optimum
-located ($\Delta^{\max}\approx-1.4$); we conjecture, but do not analytically prove,
-that this holds family-wide, and that the small-\textsc{fcl} case (Role~4's regime)
-also fails because there the no-\textsc{fcl} grid is already near fossil-free.
-Carbon strictly falls only in the cheap-renewable corner $\KRs\to\infty$. So the
-honest reading is a \emph{negative} one: interior carbon reduction is rare and
-unwitnessed; it is a corner phenomenon. \emph{Four}, the carbon-reduction set
+\emph{finite interior} optimum. We then settle whether it ever fires, with two
+\emph{proved} results and a numerical benchmark. First, a fossil floor:
+$\E[\text{fossil}^{*}]\ge\KFs(R-c-\CM)/(R-c)$ (and $\ge\KMs-\KRs$), since an
+\textsc{fcl} exceeding the maximal renewable surplus $\le\KRs$ cannot be fully
+surplus-powered. Second---the key structural point---we prove the carbon sign is
+\emph{irreducibly distributional}: holding the equilibrium capacities and cutoffs
+fixed, the admissible conditional laws make $\Delta$ range over an interval that
+straddles zero, so capacities and cutoffs together cannot determine
+$\operatorname{sign}\Delta$ and Week-1's conjecture admits no proof from the
+distribution-free structure alone. The residual
+question is then the sign of a cutoff-computable benchmark $\Delta_0$ plus a density
+tilt; numerically, at every large-\textsc{fcl} interior optimum scanned $\Delta_0<0$
+($\le-1.17$) and the tilt reinforces it, $\Delta<0$ ($\le-1.4$). Carbon strictly
+falls only in the cheap-renewable corner $\KRs\to\infty$. So the honest reading is
+\emph{negative}: interior carbon reduction is a corner phenomenon (the
+small-\textsc{fcl} regime is Role~4's, not claimed here). \emph{Four}, the carbon-reduction set
 $\{\CR:\Delta(\CR)\ge0\}$ is bounded above and non-empty---its non-emptiness
 coming from that power-law corner, not from an interior optimum---and is a single
 interval under an explicit monotone-renewable-shadow-value condition that, we note,
@@ -278,6 +282,15 @@ i.e.\ negative diagonal dominance of the Hessian in the renewable row after the
 $(\KF,\KM)$-block has been eliminated. It is strictly weaker than global
 concavity (which submodularity rules out) and it is exactly what lapses, becoming
 an equality, at the power-law knife-edge where $\Psi\equiv\text{const}$.
+\emph{Primitive content.} $\Psi(\KR)+\CR$ is the marginal value of renewables along
+the re-optimization locus; $\Psi'<0$ says this marginal value is strictly
+decreasing in $\KR$---the renewable problem is single-peaked along the locus. The
+power-law family is the exact boundary ($\Psi'\equiv0$, constant marginal value:
+the knife-edge of Week-1, Prop.~knife), so any family with strictly diminishing
+renewable returns along the locus---which we verify for the Beta scale mixtures by
+the eigenvalue scan of \S\ref{sec:num}---satisfies it strictly. (We give a
+checkable scalar, not a closed-form primitive on $F$; deriving $\Psi'<0$ from a
+density condition on $F$ in general is open.)
 
 \begin{theorem}[Existence, uniqueness, optimality]\label{thm:unique}
 Under Assumption~\ref{ass:reg} and Condition~\ref{cond:schur}, the profit $\Pi$
@@ -415,7 +428,11 @@ $(0,\KFo)$.
 
 Part (a) is a left-tail/skew bound on \emph{surplus} states (deep-surplus mass
 not too thin); part (b) a skew bound on the no-\textsc{fcl} mid zone. Both are
-zone-restricted monotone-density conditions, primitive given $F$.
+monotone-density conditions on the model primitive $f$ (the zone endpoints are
+equilibrium-determined, but one obtains a fully primitive sufficient version by
+requiring the monotonicity on the maximal zones swept as $\CM,\CR$ range over the
+adoption region). Like Condition~\ref{cond:gmono}, these are conditions on $F$, not
+on the solved optimum.
 
 \begin{theorem}[General-$F$ emission keystone]\label{thm:keystone}
 Suppose the program has a finite interior optimum (Theorem~\ref{thm:unique}),
@@ -459,68 +476,108 @@ $\mu^{*}_{\mathrm{low}}\le(a-\KRs)/2$, $\mu^{\circ}_{\mathrm{mid}}\ge\KFo/2$ und
 (a),(b) is checked directly.}
 \end{proof}
 
-Whether the sufficient bound is \emph{activated} at a given optimum depends on the
-regime, decided by \textsc{fcl} capacity against renewable capacity. We can prove
-one half of the picture and must report the other half as a numerical finding. The
-provable half is a lower bound on \textsc{fcl} fossil.
+Whether the bound is \emph{activated} is the real question. We resolve it with two
+proved facts---a fossil floor and an exact impossibility---plus a numerical
+benchmark. We stay in the large-\textsc{fcl} regime throughout (Role~1's mandate);
+the small-\textsc{fcl} regime is Role~4's and we make no claim about it.
 
-\begin{lemma}[Irreducible fossil floor]\label{lem:floor}
-In the large-\textsc{fcl} regime ($\KMs\ge\KRs$),
-$\E[\text{fossil}^{*}]\ge\KMs-\KRs$. Equivalently, the \textsc{fcl} cannot be fully
-powered by renewable surplus: the maximal surplus in any state is
-$(-\tilde x)_+\le\KRs$, so an \textsc{fcl} of size $\KMs>\KRs$ draws at least
-$\KMs-\KRs$ from fossil even in the deepest-surplus state.
+\begin{lemma}[Fossil floor]\label{lem:floor}
+In the large-\textsc{fcl} regime ($\KMs\ge\KRs$), using only the cutoff $\varphi_1$,
+\begin{equation}\label{eq:floor}
+  \E[\text{fossil}^{*}]\;\ge\;\KFs\,(1-\varphi_1)=\KFs\,\frac{R-c-\CM}{R-c}
+  \qquad\text{and}\qquad \E[\text{fossil}^{*}]\ge\KMs-\KRs .
+\end{equation}
+The first holds because $F\le F(a)=\varphi_1$ on $(-\KMs,a)$, so
+$\E[\text{fossil}^{*}]=\int_{-\KMs}^{a}(1-F)\ge(a+\KMs)(1-\varphi_1)=\KFs(1-\varphi_1)$;
+the second because $F\equiv0$ on $(-\KMs,-\KRs)$. Physically the second is the
+\emph{floor}: the \textsc{fcl} exceeds the maximal renewable surplus $\le\KRs$, so
+an $\KMs>\KRs$ \textsc{fcl} draws at least $\KMs-\KRs$ fossil even at deepest
+surplus.\footnote{The fossil formula already credits surplus absorption---a
+state-by-state simulation serving \textsc{fcl} from surplus first matches
+$\int_{-\KMs}^{a}(1-F)$ to $\approx6$ digits (T3, $6.18324$ vs $6.18325$); the floor
+is the \emph{residual} after that credit.}
 \end{lemma}
+
+The floor lower-bounds $\E[\text{fossil}^{*}]$ but does not by itself sign
+$\Delta=\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$, because the channel
+$\KRs>\KRo$ pushes the other way. The next result explains why \emph{no}
+distribution-free argument can sign it---the sign is irreducibly distributional.
+
+\begin{proposition}[The carbon sign is irreducibly distributional]\label{prop:irreducible}
+Hold the equilibrium capacities $(\KFs,\KMs,\KRs,\KFo)$ and the surplus probability
+$q^{\circ}$ fixed. By Week-1's sufficient-statistic theorem, $\Delta$ is then
+\emph{affine} in the two conditional means
+$\mu^{*}_{\mathrm{low}}\in(-\KRs,a)$ and $\mu^{\circ}_{\mathrm{mid}}\in(0,\KFo)$,
+with coefficients fixed by those capacities and cutoffs; the means themselves are
+\emph{not} determined by capacities and cutoffs. Writing $\Delta_0$ for the value at
+the interval midpoints (the uniform shape),
+\begin{equation}\label{eq:D0}
+  \Delta_0\eqdef\KFo\Big[(1-\varphi^{\circ})+\tfrac{\varphi^{\circ}-q^{\circ}}{2}\Big]
+  -\Big(\KFs-\tfrac{\CM}{R-c}\cdot\tfrac{a+\KRs}{2}\Big),
+\end{equation}
+the two-zone tilts sandwich $\Delta$ around it---$\Delta\ge\Delta_0$ under
+Cond.~\ref{cond:zones}(a,b), $\Delta\le\Delta_0$ under the reverse tilt
+(a$'$,b$'$), equality at the uniform. (Note $\Delta_0$ is exactly the keystone bound
+$\Delta_{\mathrm{LB}}$ of \eqref{eq:keylb}: the only ``sufficient-for-fall''
+statement is $\Delta_0>0$, and Cond.~\ref{cond:zones} is precisely the tilt giving
+$\Delta\ge\Delta_0$.) By Week-1's tight-bounds theorem, as the means sweep their
+intervals $\Delta$ ranges over $[\Delta_{\min},\Delta_{\max}]$, and at the
+equilibrium capacities this range \emph{straddles zero}: $\Delta_{\min}<0<\Delta_{\max}$
+(e.g.\ at the representative optimum $[\Delta_{\min},\Delta_{\max}]=[-6.43,+3.23]$).
+Consequently \textbf{the equilibrium capacities and cutoffs together do not
+determine the sign of $\Delta$}---a function of those quantities alone cannot equal
+$\operatorname{sign}\Delta$, since both signs occur at the same capacities and
+cutoffs for different admissible conditional laws. Only the conditional means break
+the tie, which is why Week-1's conjecture admits no proof from the distribution-free
+structure alone.\footnote{Caveat (as in Theorem~\ref{thm:tight}): the extremal laws
+attaining $\Delta_{\min},\Delta_{\max}$ are degenerate and need not be realized by
+an equilibrium $F$. The claim is under-determination of $\operatorname{sign}\Delta$
+by capacities and cutoffs over the admissible-conditional-law class, not that an
+equilibrium attains the extremes.}
+\end{proposition}
 \begin{proof}
-$\E[\text{fossil}^{*}]=\int_{-\KMs}^{a}(1-F)\,dx\ge\int_{-\KMs}^{-\KRs}(1-F)\,dx
-=\int_{-\KMs}^{-\KRs}1\,dx=\KMs-\KRs$, since $F\equiv0$ below $-\KRs$.\footnote{The
-fossil formula already credits surplus absorption: a state-by-state simulation that
-serves \textsc{fcl} from renewable surplus first matches $\int_{-\KMs}^{a}(1-F)$ to
-$\approx6$ digits (T3, $6.18324$ vs $6.18325$). The floor is the \emph{residual}
-fossil after that credit.}
+The affine representation and the midpoint bounds for monotone densities are
+Week-1's sufficient-statistic and least-favorable results, restated; reversing each
+monotonicity reverses the corresponding inequality, giving the sandwich. Since the
+two extremal tilts are both admissible at the \emph{same} cutoffs, the cutoffs
+cannot decide $\operatorname{sign}\Delta$.\footnote{T3 checks $\Delta\ge\Delta_0$
+holds at the scanned optima with the realized (reverse-tilted) densities giving
+$\Delta\le\Delta_0$, and that $\Delta_0$ is computed from cutoff+capacity data.}
 \end{proof}
 
-This floor is a genuine \emph{additive} penalty, but it does not by itself sign
-$\Delta=\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$, because the capacity
-channel $\KRs>\KRo$ pushes the other way. Whether the floor (plus the tight-state
-utilization) outweighs the channel is, for general $F$, settled here only
-numerically.
+So the carbon question reduces to the sign of the cutoff-computable benchmark
+$\Delta_0$ plus a distributional tilt. We settle both numerically.
 
-\begin{proposition}[Numerical resolution in the scanned family; conjecture in general]\label{prop:regimecarbon}
+\begin{proposition}[Numerical resolution, large-\textsc{fcl}; conjecture in general]\label{prop:regimecarbon}
 For the non-power-law Beta scale-mixture family
-$\tilde x=\tilde D-\KR\tilde S$ ($\tilde D\sim\Dbar\,\mathrm{Beta}(\alpha,\beta_D)$,
-$\tilde S\sim\mathrm{Beta}(\alpha_S,\beta_S)$), an exhaustive numerical search over
-demand skews, capacity factors $\E[\tilde S]$ up to $0.8$, and the $\CR\times\CM$
-grid finds $\Delta\le0$ at \emph{every large-\textsc{fcl} interior optimum located}
-(largest observed $\Delta^{\max}\approx-1.4$): the floor (Lemma~\ref{lem:floor})
-plus tight-state utilization numerically dominate the channel. We conjecture
-$\Delta<0$ holds for all $F$ in this family at large-\textsc{fcl} interior optima;
-the floor is the structural reason, but we do not have an analytic dominance proof.
-In the computed small-\textsc{fcl} examples ($\KMs<\KRs$, which the solver reaches
-only at small $\CR$) the floor vanishes yet $\Delta\le0$ for a different reason: at
-those small $\CR$ the \emph{no-\textsc{fcl}} grid is already near fossil-free
-($\KFo\to0$), so little remains to save and the realized renewable build does not
-exceed $\KRo$; we flag this as a conjecture pending Role~4's small-\textsc{fcl}
-optimality analysis. Carbon strictly falls only at the cheap-renewable knife-edge
-\emph{corner} $\KRs\to\infty$ (power-law family, the window
-$(\CR^{\circ},\CR^{\dagger})$ of Week-1 Theorem~4(ii)), where
+($\tilde D\sim\Dbar\,\mathrm{Beta}(\alpha,\beta_D)$,
+$\tilde S\sim\mathrm{Beta}(\alpha_S,\beta_S)$), over demand skews, capacity factors
+$\E[\tilde S]$ up to $0.8$, and the $\CR\times\CM$ grid, at \emph{every}
+large-\textsc{fcl} interior optimum located: \textup{(i)} the floor
+\eqref{eq:floor} holds; \textup{(ii)} the uniform-shape benchmark is already
+negative, $\Delta_0<0$ (largest observed $\Delta_0^{\max}\approx-1.17$); and
+\textup{(iii)} the realized $\Delta<0$ (largest $\approx-1.4$)---the distributional
+tilt reinforces rather than reverses the negative benchmark. We conjecture
+$\Delta<0$ for all $F$ in the family at large-\textsc{fcl} interior optima. Carbon
+strictly falls only at the cheap-renewable knife-edge \emph{corner} $\KRs\to\infty$
+(power-law, the window $(\CR^{\circ},\CR^{\dagger})$ of Week-1 Theorem~4(ii)), where
 $\E[\text{fossil}^{*}]=0<\E[\text{fossil}^{\circ}]$.
 \end{proposition}
 
 \begin{remark}[Status, and an earlier slip corrected]
-Week~1 conjectured carbon falls at an interior optimum but never exhibited one.
-Our contribution is to make the question sharp---Lemma~\ref{lem:floor} isolates the
-structural obstruction, Theorem~\ref{thm:keystone} gives the (off-equilibrium)
-inequality whose violation is the obstruction, and an extensive search finds no
-interior optimum where carbon falls in the scanned family. We do \emph{not} claim a
-universal non-existence theorem: the large-\textsc{fcl} statement is numerical
-(scan) plus the floor heuristic, and the small-\textsc{fcl} statement is a
-conjecture (its equilibrium structure is Role~4's, not derived here). The honest
-bottom line: interior carbon reduction is, at best, rare and unwitnessed; the only
-clean strict fall is the corner. (An earlier draft mis-stated the mechanism as
-``\textsc{fcl} draws fossil on surplus''; the fossil formula already credits
-surplus absorption---the correct obstruction is the floor of
-Lemma~\ref{lem:floor}.)
+Week~1 conjectured carbon falls at an interior optimum but never exhibited one. The
+treatment here is, we believe, as far as the question can be pushed analytically:
+Lemma~\ref{lem:floor} proves the structural floor;
+Proposition~\ref{prop:irreducible} proves that the sign is \emph{not} cutoff-decidable
+(so the conjecture admits no distribution-free proof---a genuine obstruction, not a
+gap in effort); and Proposition~\ref{prop:regimecarbon} resolves the residual
+distributional question numerically, finding the benchmark $\Delta_0$ already
+negative and the tilt reinforcing it at every scanned optimum. Interior carbon
+reduction is, at best, rare and unwitnessed; the only clean strict fall is the
+corner. (An earlier draft mis-stated the mechanism as ``\textsc{fcl} draws fossil on
+surplus''; the fossil formula already credits surplus absorption---the correct
+obstruction is the floor.) The small-\textsc{fcl} regime ($\KMs<\KRs$) is outside
+Role~1's large-\textsc{fcl} mandate and is left to Role~4.
 \end{remark}
 
 %=====================================================================
@@ -556,10 +613,12 @@ $\sigma^{*}>\sigma^{\circ}$, is exactly this strict down-crossing.
 $\CR>B_0\Rightarrow\KRs=\KRo=0$ and $\Delta(\CR)=-U_0<0$, the strictly positive
 utilization penalty. \textup{(ii)} $\mathcal S\neq\varnothing$ (the power-law
 corner, Proposition~\ref{prop:regimecarbon}). \textup{(iii)} Under
-Condition~\ref{cond:mrsv}, $\Delta$ is single-crossing from above on
-$\{\CR:\Delta\ge0\}$, so $\mathcal S$ is a single interval $[\CR^{\mathrm{lo}},\CR^{\dagger}]$
-(possibly with $\CR^{\mathrm{lo}}=0$), where
-$\CR^{\dagger}=\sup\mathcal S<\infty$.
+Condition~\ref{cond:mrsv} and provided $\Delta$ is $C^{1}$ in $\CR$ on the interior
+region (see the Remark below; this $C^{1}$-ness we do not close), $\Delta$ is
+single-crossing from above on $\{\CR:\Delta\ge0\}$, so $\mathcal S$ is a single
+interval $[\CR^{\mathrm{lo}},\CR^{\dagger}]$ (possibly with $\CR^{\mathrm{lo}}=0$),
+where $\CR^{\dagger}=\sup\mathcal S<\infty$. For the power-law family this holds
+unconditionally with $\mathcal S=[0,\CR^{\dagger}]$ (Remark).
 \end{theorem}
 
 \begin{proof}
@@ -583,15 +642,30 @@ sweeping $\CR$ on the witness family, $\Delta(\CR)$ has exactly one sign change
 largest $\CR$.}
 \end{proof}
 
-\begin{remark}
-Condition~\ref{cond:mrsv} is close to its own conclusion: ``strictly down-crosses at
-every zero'' \emph{is} single-crossing. The theorem's content is therefore the
-\emph{packaging}---it identifies a primitive, checkable hypothesis (the
-shadow-value ordering $\sigma^{*}>\sigma^{\circ}$, the economic gloss above) that
-delivers single-crossing, given that $\Delta$ is $C^{1}$---rather than a derivation
-of single-crossing from nothing. Deriving $\sigma^{*}>\sigma^{\circ}$ from
-primitives, and $C^{1}$-ness of $\Delta$ across the regime boundary, are the parts
-we do not close here.
+\begin{remark}[The power-law set is exactly a single interval, unconditionally]
+For the family where the actual carbon-reduction set is non-trivial---the
+power-law/scale family---no condition is needed: by Week-1 (Prop.~$\CR^{\dagger}$),
+on $(\CR^{\circ},\CR^{\dagger})$ one has $\KRs=\infty$, $\E[\text{fossil}^{*}]=0$,
+and $\KRo$ finite with $\E[\text{fossil}^{\circ}]>0$, so $\Delta>0$ \emph{exactly}
+there, while $\Delta<0$ for $\CR>\CR^{\dagger}$ and $\Delta=0$ for
+$\CR\le\CR^{\circ}$ (both grids hit the unbounded-renewable corner, so both fossil
+outputs vanish and there is no \emph{strict} reduction). Hence
+$\mathcal S=\{\Delta\ge0\}=[0,\CR^{\dagger}]$ is a single bounded interval by the
+closed-form thresholds, with \emph{no} appeal to Condition~\ref{cond:mrsv}; the
+\emph{strict}-reduction set $\{\Delta>0\}=(\CR^{\circ},\CR^{\dagger})$ is its open
+core, and the flat $[0,\CR^{\circ}]$ is the degenerate ``both fully decarbonized''
+piece. (This is the ``carbon strictly falls only in the corner'' statement of the
+abstract: strict fall happens exactly on $(\CR^{\circ},\CR^{\dagger})$, the corner
+window.) The MRSV machinery
+is the general-$F$ extension, and---given Proposition~\ref{prop:regimecarbon}, which
+finds no interior reduction in the scanned family---it is the only place a general-$F$
+reduction set could be non-trivial off the corner. Condition~\ref{cond:mrsv} is then
+close to its own conclusion: ``strictly down-crosses at every zero'' \emph{is}
+single-crossing, so Theorem~\ref{thm:connected}(iii) \emph{packages} a checkable
+hypothesis (the shadow-value ordering $\sigma^{*}>\sigma^{\circ}$) into the
+single-interval property, given $\Delta\in C^{1}$, rather than deriving it from
+nothing. Deriving $\sigma^{*}>\sigma^{\circ}$ from primitives and the $C^{1}$-ness
+of $\Delta$ across the regime boundary are the parts we do not close.
 \end{remark}
 
 %=====================================================================

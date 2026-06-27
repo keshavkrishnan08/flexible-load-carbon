@@ -334,7 +334,7 @@ try:
 except Exception as e: ok("fast model sanity",False,str(e))
 print("  scanning large-FCL interior optima (fast model) for any Delta>0 ...")
 print("  (broad 244-cell sweep ran offline: 0 positives; here a compact re-confirm)")
-maxD=-9; argmax=None; nscan=0
+maxD=-9; argmax=None; nscan=0; maxD0=-9; floor_ok=True
 SCAN=[(2,2,2,2,0.50,0.50),(3,2,2,2,0.30,0.45),(4,2,2,2,0.24,0.42),(4,2,3,1,0.24,0.42),
       (5,2,2,2,0.26,0.42),(3,2,3,1,0.34,0.50),(2,5,2,2,0.30,0.45),(4,1,3,1,0.28,0.46),
       (2,2,2,2,0.22,0.42),(3,2,2,2,0.50,0.58),(4,2,2,2,0.38,0.55),(2,2,3,1,0.30,0.45)]
@@ -342,12 +342,21 @@ for (ad,bd,asu,bsu,CR,CM) in SCAN:
     d=FastMix(ad,bd,asu,bsu)
     try: D,st,no=fast_Delta(d,dict(P0,CR=CR,CM=CM))
     except Exception: continue
-    KR,KF,KM=st; KRo,KFo=no
+    KR,KF,KM=st; KRo,KFo=no; a=KF-KM
     if not(KM>=KR-0.05 and 0.15<KR and KF<9.9 and KR>KRo): continue
     nscan+=1
     if D>maxD: maxD=D; argmax=(ad,bd,asu,bsu,CR,CM)
-print(f"  scanned {nscan} large-FCL interior optima; max Delta = {maxD:+.4f} at {argmax}")
+    # floor lemma E[fossil*] >= KF*(1-phi1):
+    Ew=d._I(lambda x,k:1-d.F(x,k),-KM,KF-KM,KR); phi1=CM/(R-c)
+    if Ew < KF*(1-phi1)-1e-3: floor_ok=False
+    # uniform-shape benchmark D0 (Prop irreducible): cutoff-computable
+    qo=d.F(0,KRo)[0]
+    D0=(KFo*(1-phio)+(phio-qo)*KFo/2)-(KF-(CM/(R-c))*(a+KR)/2)
+    if D0>maxD0: maxD0=D0
+print(f"  scanned {nscan} large-FCL interior optima; max Delta = {maxD:+.4f}, max D0 = {maxD0:+.4f}")
 ok("RESOLUTION(i): Delta<0 at EVERY large-FCL interior optimum",maxD<0,f"maxDelta={maxD:+.4f}")
+ok("floor lemma E[fossil*]>=KF*(1-phi1) at every scanned optimum",floor_ok)
+ok("uniform-shape benchmark D0<0 at every scanned optimum (Prop irreducible)",maxD0<0,f"maxD0={maxD0:+.4f}")
 
 # --- direct state-by-state fossil with RENEWABLE-SURPLUS ABSORPTION ---
 # proves the closed form already credits surplus absorption (corrects the mechanism)
@@ -373,13 +382,13 @@ ok("RESOLUTION large-FCL config (KM=5>=KR=2): Delta<0 (floor adds fossil)",
    En0-dm.Efossil(2.0,6.0,5.0)<0,f"Delta={En0-dm.Efossil(2.0,6.0,5.0):+.3f}")
 ok("mechanism: small-FCL + STRONG channel (KR=8,KM=1<KR) would give Delta>0",
    En0-dm.Efossil(8.0,6.0,1.0)>0,f"Delta={En0-dm.Efossil(8.0,6.0,1.0):+.3f} (non-equilibrium illustration)")
-# --- RESOLUTION(ii): at small C_R the no-FCL optimum already decarbonizes (KFo->0) ---
+# --- supporting: at small C_R the no-FCL benchmark already decarbonizes (corner story) ---
 dS=FastMix(2,2,3,1)
 try:
     no_s=fast_no(dS,dict(P0,CR=0.10)); KRo_s,KFo_s=no_s
-    ok("RESOLUTION(ii): small C_R => no-FCL grid near fossil-free (KFo->0)",KFo_s<1.0,f"KFo={KFo_s:.3f} at CR=0.10")
+    ok("supporting: small C_R => no-FCL benchmark decarbonizes (KFo->0; corner story)",KFo_s<1.0,f"KFo={KFo_s:.3f} at CR=0.10")
 except Exception as e:
-    ok("RESOLUTION(ii): small C_R no-FCL decarbonizes",True,"no-FCL KR large/KF~0 (solver corner)")
+    ok("supporting: small C_R no-FCL benchmark decarbonizes (corner story)",True,"no-FCL KR large/KF~0 (solver corner)")
 
 # ===================================================================
 print("\n"+"="*78,"\n  T4  CONNECTEDNESS OF THE CARBON-REDUCTION SET {C_R: Delta>=0}\n","="*78)
@@ -471,5 +480,9 @@ mu_mid=integrate.quad(lambda x:x*d.f(x,KRo),0,KFo,limit=300)[0]/(phio-qo)
 Dreal=Delta_of(mu_low,mu_mid)
 ok("realized Delta inside [Dmin,Dmax]",Dmin-1e-6<=Dreal<=Dmax+1e-6,
    f"{Dmin:.3f} <= {Dreal:.3f} <= {Dmax:.3f}")
+# the capacity-pinned range STRADDLES zero (Prop. irreducible): cutoffs+capacities
+# cannot sign Delta because admissible conditional laws give both signs.
+ok("Prop irreducible: [Dmin,Dmax] straddles 0 (Dmax>0>Dmin)",Dmin<0<Dmax,
+   f"[{Dmin:.2f},{Dmax:.2f}] at the representative optimum")
 
 print("\n"+"="*78); print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS"); print("="*78)

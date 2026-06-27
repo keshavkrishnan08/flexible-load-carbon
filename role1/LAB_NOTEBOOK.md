@@ -341,6 +341,32 @@ surplus first). Two findings:
   + floor + small-C_R checks to `verify_week2.py`.
 — R1
 
+## E20 · 2026-06-26 · Hardening pass: T3 made rigorous, conditions primitivized, scope tightened
+Second hostile-referee pass flagged T3 as a scan dressed as a theorem, plus
+condition/scope issues. Closed them (no math errors — honesty/rigor):
+- **T3 → real results.** (1) **Floor lemma** (PROVED): `E[fossil*] ≥ K_F*(1−φ1)`
+  and `≥ K_M*−K_R*` from the cutoffs. (2) **Irreducibility theorem** (PROVED):
+  Δ is affine in the two conditional means, which the distribution-free cutoffs do
+  NOT pin ⇒ *no* cutoff-only inequality can sign Δ — so Week-1's conjecture has no
+  distribution-free proof (a genuine obstruction, not lack of effort). (3) Residual
+  question = sign of the cutoff-computable **uniform-shape benchmark Δ0** + a tilt;
+  numerically **Δ0<0 (max −1.17)** and Δ<0 (max −1.4) at every scanned interior
+  optimum, the tilt reinforcing. This replaces "scan+conjecture" with
+  "proved floor + proved impossibility + numerical residual with a negative
+  benchmark." Verified [`verify_week2.py` T3: floor, Δ0<0].
+- **Scope (G2).** Excised all affirmative small-FCL claims from the deliverable;
+  small-FCL is Role 4's regime, stated as out-of-scope (one pointer), not a Role-1
+  conjecture. Everything stays in the large-FCL mandate.
+- **Conditions (G3).** Noted shift-ratio (gmono) and two-zone are primitive
+  conditions on F (+ a fully-primitive max-zone version). Schur: added primitive
+  content (renewable marginal value strictly decreasing along the locus; power-law
+  is the exact `Ψ'≡0` boundary). MRSV/T4: anchored on the EXACT power-law interval
+  `S=[0,C_R†]` (Week-1 closed forms, no condition needed); MRSV honestly scoped as
+  the general-F packaging (≈ its own conclusion; σ*>σ° and C¹-ness left open).
+- Abstract rewritten to "four proved + one (T3) = floor+impossibility proved,
+  residual numerical." PDF 9pp.
+— R1
+
 ---
 
 ## Verification ledger

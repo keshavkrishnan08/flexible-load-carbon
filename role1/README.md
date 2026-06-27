@@ -17,7 +17,7 @@ Prop. 4, footnote 6).
 |---|---|---|
 | Existence, uniqueness, contract optimality (recursive-triangular FOC; unique dispatch via strict `R>c`) | `role1_week2_theory.tex` §2 (Thm 1) | ✅ |
 | Shift-ratio condition uniform along the `C_M`-homotopy | §3 (Lemma 4) | ✅ |
-| Emission condition for general `F` (keystone): exact endogenous condition + sufficient bound; **resolves Week-1 conjecture NEGATIVE** — carbon falls at no finite interior optimum (large-FCL floor; small-FCL baseline already decarbonized), only at the cheap-renewable corner | §4 (Thm 2, Prop 3) | ✅ |
+| Emission keystone for general `F`: **floor lemma** (proved) + **irreducibility theorem** (proved: the carbon sign is not cutoff-decidable, so the Week-1 conjecture has no distribution-free proof) + numerical residual (uniform-shape benchmark Δ₀<0 and Δ<0 at every scanned large-FCL interior optimum). Carbon falls only at the cheap-renewable corner. Small-FCL is Role 4 (out of scope) | §4 (Thm 2, Lemma 4, Props 2–3) | ✅ |
 | Connectedness of the carbon-reduction set `{C_R: Δ≥0}` (bounded, non-empty, single interval) | §5 (Thm 3) | ✅ |
 | Sharp N&S channel condition (path integral) + tight two-sided bounds | §6 (Thm 4, Thm 5) | ✅ |
 
