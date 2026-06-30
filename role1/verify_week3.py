@@ -4,8 +4,8 @@ A1 Role 1 -- Week 3 verification suite.
 Confirms the optimal-contract decarbonization theory of role1_week3_theory.tex:
   Prop 1  surplus contract burns ZERO FCL fossil
   Thm 1   adopted => surplus channel>0 at KRo => KRc>KRo, KFc<=KFo, carbon STRICTLY falls
-          -- and the sign is DISTRIBUTION-FREE (holds across every family)
-  Cor 1   triple-win: Pi^c>Pi^o and blackout^c<blackout^o
+          -- and the sign needs NO SHAPE CONDITION (holds across every family/shape)
+  Cor 1   Pareto improvement: Pi^c>Pi^o, carbon down, blackout HELD (== 1-phio, both)
   Prop 2  exact saving formula == direct quadrature
   contrast: the Week-2 naive rule's fossil floor at the same primitives
 Self-contained (no import of verify_week2). Quadrature ground truth.
@@ -68,12 +68,17 @@ def surplus_opt(m,CR,CM,KRo):
     return KRc,KFc,KMc,capped
 
 # ---------------------------------------------------------------------
-print("="*74); print("  A1 ROLE 1 -- WEEK 3: optimal-contract decarbonization (distribution-free)"); print("="*74)
+print("="*74); print("  A1 ROLE 1 -- WEEK 3: optimal-contract decarbonization (no shape condition)"); print("="*74)
+class Mix:   # two-component Beta mixture (bimodal demand)
+    def __init__(self,d1,w1,d2): self.d1,self.w1,self.d2=d1,w1,d2
+    def cdf(self,x): return self.w1*self.d1.cdf(x)+(1-self.w1)*self.d2.cdf(x)
+    def pdf(self,x): return self.w1*self.d1.pdf(x)+(1-self.w1)*self.d2.pdf(x)
+    def mean(self): return self.w1*self.d1.mean()+(1-self.w1)*self.d2.mean()
 fams=[Model(stats.beta(2,2),stats.beta(2,2),"symmetric  D~B(2,2)"),
       Model(stats.beta(5,2),stats.beta(2,2),"left-skew  D~B(5,2)"),
       Model(stats.beta(2,5),stats.beta(2,2),"right-skew D~B(2,5)"),
-      Model(stats.beta(2,2),stats.beta(5,2),"high-CF S~B(5,2)"),
-      Model(stats.beta(3,3),stats.beta(2,3),"S~B(2,3)        ")]
+      Model(Mix(stats.beta(8,2),0.5,stats.beta(2,8)),stats.beta(2,2),"bimodal D mix"),
+      Model(stats.beta(2,2),stats.beta(5,2),"high-CF S~B(5,2)")]
 
 print(f"\n  phio={phio:.4f}  (R={R}, c={c}, b+p={b+p}, CF={CF})")
 allfall=True; alladopt=True
@@ -102,7 +107,7 @@ for m in fams:
     ok(f"   [{m.label.strip()}] exact saving formula == direct", abs(save_formula-save_direct)<1e-4, f"{save_formula:.4f} vs {save_direct:.4f}")
 
 print()
-ok("DISTRIBUTION-FREE: carbon falls in EVERY family (sign never flips)", allfall, "all 5 families decarbonize")
+ok("SHAPE-INDEPENDENT: carbon falls in EVERY family (sign never flips)", allfall, "all 5 shapes decarbonize: sym/left/right/bimodal/high-CF")
 ok("adoption holds in every family", alladopt, "")
 
 # ---- Prop 1: surplus contract burns zero FCL fossil (structural, any state) ----
@@ -131,14 +136,17 @@ def profit_surplus(m,KR,KF,KM,CR,CM):
     bo=integrate.quad(lambda xx:1-np.interp(xx,x,Fg),KF,Dbar,limit=200)[0]
     ED=Dbar*m.Dd.mean()
     return p*ED + rev - c*cf - (b+p)*bo - CF*KF - CR*KR - CM*KM
+# Cor 1 is a PARETO improvement: profit strictly UP, carbon DOWN, blackout HELD EQUAL
+# (both target phi^o, so 1-phi^o identical -- this is the corrected claim, not "lower").
 tw=True
 for m in fams[:3]:
     CR,KRo,KFo=solve_nofcl_target(m,2.0); q=m.F(0,KRo); CM=0.5*R*q
     KRc,KFc,KMc,_=surplus_opt(m,CR,CM,KRo)
     Po=profit_nofcl(m,KRo,KFo,CR); Pc=profit_surplus(m,KRc,KFc,KMc,CR,CM)
     blo=1-m.F(KFo,KRo); blc=1-m.F(KFc,KRc)
-    tw &= (Pc>Po-1e-6) and (blc<=blo+1e-6)
-    ok(f"   [{m.label.strip()}] triple-win: Pi^c>=Pi^o and blackout^c<=blackout^o", Pc>Po-1e-6 and blc<=blo+1e-6, f"dPi={Pc-Po:+.3f}, dBlackout={blc-blo:+.4f}")
-ok("Cor1: triple-win holds (profit up, reliability up, carbon down)", tw, "")
+    prof_up=Pc>Po+1e-6; rel_held=abs(blc-blo)<1e-3
+    tw &= prof_up and rel_held
+    ok(f"   [{m.label.strip()}] Pareto: Pi^c>Pi^o and blackout^c==blackout^o (held)", prof_up and rel_held, f"dPi={Pc-Po:+.3f}, blackout: {blc:.4f} vs {blo:.4f} (=1-phio)")
+ok("Cor1: Pareto improvement (profit UP, carbon DOWN, reliability HELD at 1-phio)", tw, "")
 
 print("\n"+"="*74); print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS"); print("="*74)
