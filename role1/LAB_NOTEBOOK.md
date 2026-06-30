@@ -443,6 +443,31 @@ KRc -> corner case handled; F_KR>0 needed in BOTH regions -> stated; Prop 2 mono
 -> derivative proof; non-IC dispatch disclosed. Commits 9625f86, 3b35597, dc4ebbd.
 — R1
 
+## E24 · 2026-06-30 · Week-3 0-1 extension — the optimal-contract family + carbon-profit frontier
+Massive in-scope extension (optimal contract + carbon only). Unifies Weeks 2 & 3.
+**The leap.** Naive (Wk2) and surplus-only (Wk3) were isolated contracts. New Sec
+embeds them in ONE one-parameter family: budget contract d_tau=min{(-x)+ + tau, KM,
+(KF-x)+}. tau=0 surplus-only, tau->inf naive.
+- Prop (proved): profit Pi(tau) non-decreasing (feasible-set monotonicity; flat where
+  KM/headroom binds).
+- Thm (frontier): (i) (Pi,C) traces a MONOTONE carbon-profit frontier; (ii) carbon
+  minimized at tau=0 -> surplus-only carbon-optimal IN THE FAMILY; (iii) carbon-min under
+  profit floor = inf{tau:Pi(tau)>=Pibar}.
+- Mechanism: dC/dtau = Phi'(>0 footprint) + G_KF*KF'(>=0, extra consumer fossil from
+  bigger KF) + G_KR*KR'(channel, helps only if KR'>0). TWO upward forces, one possible
+  offset. Global monotonicity ESTABLISHED NUMERICALLY (like Wk2's sign), mechanism shows why.
+- NO FREE LUNCH: every MWh of fossil the load burns raises carbon.
+**Numerically learned first (not assumed):** swept tau at the firm's re-optimized caps
+across regimes/shapes -> C(tau) monotone increasing in ALL (0.88->14.96), argmin tau=0.
+Did NOT find an interior tau* beating surplus-only -> reported the honest finding
+(surplus-only globally optimal in family), not a fabricated interior win.
+**Referee gauntlet (frontier section):** 2 BLOCKERS + 3 MAJOR + minors, ALL fixed:
+KF-dependent decomposition (was e(KR), now G(KR,KF), missing Leibniz term added);
+global-as-proved -> numerically-established; KR'(tau) sign honestly left numerical;
+(iii) uniqueness -> inf-def; abstract/remark de-claimed + scoped to family.
+verify_week3.py 37/37. PDF 7pp. Commits 20a5f10, be0dc05, a010643.
+— R1
+
 ---
 
 ## Verification ledger
