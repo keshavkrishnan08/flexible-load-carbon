@@ -152,7 +152,12 @@ fossil is minimizing $\E[(d(\tilde x)-(-\tilde x)_+)_+]$ pointwise. The integran
 $(d(x)-(-x)_+)_+$ is zero whenever $d(x)\le(-x)_+$ and strictly increasing in $d(x)$
 beyond that. Setting $d(x)=\min\{(-x)_+,\KM\}\le(-x)_+$ attains zero; any
 $d(x)>(-x)_+$ gives a strictly positive value. Hence $d^{c}$ is the state-by-state
-fossil minimizer, with \textsc{fcl} fossil $\equiv0$.
+fossil minimizer, with \textsc{fcl} fossil $\equiv0$. Among the zero-fossil schedules
+($d\le(-x)_+$), $d^{c}=\min\{(-x)_+,\KM\}$ is the one that runs the load to the full
+available surplus, so it maximizes \textsc{fcl} revenue $R\,\E[d]$ subject to zero
+fossil; it is therefore the carbon-optimal contract that the firm will actually operate
+(any $d<d^{c}$ earns less surplus revenue for the same zero footprint, and not
+operating at all, $d\equiv0$, forgoes the revenue that makes adoption worthwhile).
 \end{proof}
 
 So the carbon-optimal contract is the one a regulator who wants to keep the load's
@@ -227,8 +232,12 @@ renewable benefit, which equals $\CR$ at $\KRo$. Hence
 strictly, because $\FKR\ge0$ with $\FKR>0$ on a set of positive measure in
 $(-\KM,0)$ (more renewables raise the surplus probability). So $\Pi^{c}$ is still
 strictly increasing in $\KR$ at $\KRo$; by Condition~\ref{cond:reg} the renewable
-marginal value is strictly decreasing, so its zero $\KRc$ lies strictly to the right:
-$\KRc>\KRo$.
+marginal value is strictly decreasing, so if it reaches zero at a finite $\KR$ that
+zero $\KRc$ lies strictly to the right of $\KRo$. If instead the marginal value stays
+positive up to the renewable-capacity bound $\bar K_R$ (the surplus channel makes
+renewables so attractive that the unconstrained program is a corner---see
+Proposition~\ref{prop:saving}), the optimum is $\KRc=\bar K_R$. Either way
+$\KRc>\KRo$: the surplus contract strictly raises renewable investment.
 
 \emph{Step 2 ($\KFc\le\KFo$).} Both cutoffs satisfy $F(\cdot;\cdot)=\varphi^{\circ}$:
 $F(\KFc;\KRc)=F(\KFo;\KRo)=\varphi^{\circ}$. Since $F$ is increasing in $\KR$
@@ -275,7 +284,12 @@ Under the hypotheses of Theorem~\ref{thm:decarb}, relative to the no-\textsc{fcl
 benchmark the surplus contract \textup{(i)} strictly raises the utility's profit,
 \textup{(ii)} strictly lowers blackout probability, and \textup{(iii)} strictly
 lowers carbon. The regulator can therefore decarbonize while leaving the utility
-strictly better off than with no load at all.
+strictly better off than with no load at all. The surplus contract is
+regulator-imposed, not firm-optimal: left to itself the firm would also run the load on
+fossil headroom (the naive rule) and earn still more. But it strictly prefers operating
+under the surplus contract to having no load, so participation is individually rational
+and no subsidy is needed---the regulator gives up only the firm's extra
+\emph{fossil-powered} computing profit, which is exactly the carbon-causing margin.
 \end{corollary}
 
 \begin{proof}
