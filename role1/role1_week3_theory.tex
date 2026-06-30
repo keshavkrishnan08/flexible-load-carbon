@@ -360,10 +360,12 @@ Condition~\ref{cond:reg}). Differentiating, with $1-F(\KFc;\KRc)=1-\varphi^{\cir
 the moving upper limit,
 \[
   \frac{d\,\E[\fossil^{c}]}{d\KRc}
-  =\underbrace{(1-\varphi^{\circ})\frac{d\KFc}{d\KRc}}_{\le0,\ \ \KFc\downarrow}
+  =\underbrace{(1-\varphi^{\circ})\frac{d\KFc}{d\KRc}}_{\le0}
   \;-\;\underbrace{\int_0^{\KFc}\FKR(x;\KRc)\,dx}_{>0}\;<\;0 ,
 \]
-both terms working the same way ($\KFc\downarrow$ in $\KRc$ by Step 2, and $\FKR>0$), so
+where implicit differentiation of the cutoff identity $F(\KFc;\KRc)=\varphi^{\circ}$
+gives $d\KFc/d\KRc=-\FKR(\KFc)/f(\KFc)\le0$ (so the first term is $\le0$), and the
+second term is strictly positive by $\FKR>0$. Both work the same way, so
 $\E[\fossil^{c}]$ strictly decreases and $\Delta^{c}$ strictly increases in $\KRc$. As
 $\KRc\to\infty$, $F(x;\KRc)\to1$ for each fixed $x>0$ (renewables swamp demand), so by
 dominated convergence $\E[\fossil^{c}]\to0$ and $\Delta^{c}\to\E[\fossil^{\circ}]$.

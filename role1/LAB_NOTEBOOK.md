@@ -419,6 +419,30 @@ all numbers consistent. **Zero genuine errors.** Only 2 cosmetic wording fixes
 both applied. Suite 61/61, PDF 11pp.
 — R1
 
+## E23 · 2026-06-30 · A1 Week 3 — the optimal contract decarbonizes (positive resolution)
+Built the Week-3 Role-1 deliverable: `role1_week3_theory.tex` + `verify_week3.py`.
+**The result.** Week-2's negative (naive rule -> fossil floor -> carbon sign
+irreducibly distributional) is a property of the CONTRACT, not the technology. The
+surplus contract d^c(x)=min{(-x)+,KM} runs the FCL only on renewable surplus:
+- Prop 1: burns ZERO FCL fossil (fossil-minimizing dispatch). Floor gone by construction.
+- Thm 1 (keystone): adopted => surplus channel R∫_{-KM}^0 F_KR >0 at KRo => KRc>KRo
+  (or KRc at the renewable cap), KFc<=KFo, carbon STRICTLY falls. Needs NO condition on
+  the SHAPE of F (only single-peakedness + adoption + F_KR>0 support). Resolves Week-2's
+  shape-dependence positively.
+- Cor 1: PARETO improvement — profit UP, carbon DOWN, blackout HELD at 1-phio.
+- Prop 2: exact saving; contract pulls KR up, to full decarbonization in the cheap-ren limit.
+**How I got here honestly.** First tried to flip Week-2's INTERIOR result; the
+surplus contract kept driving KR to the corner, so no clean new-interior witness exists
+(I did NOT fabricate one). The real, provable positive is the shape-independent
+decarbonization above. Numerics: 33/33 across sym/left/right/bimodal/high-CF shapes.
+**Referee gauntlet.** Hostile MS referee found 1 blocker + 4 majors + minors — ALL
+real, ALL fixed: B1 blackout was NOT lower (held equal, 1-phio both) -> Pareto framing;
+"distribution-free" overclaim -> "no shape condition" w/ explicit hypotheses;
+"carbon-optimal contract" -> "fossil-minimizing dispatch" (no bilevel claim); interior
+KRc -> corner case handled; F_KR>0 needed in BOTH regions -> stated; Prop 2 monotonicity
+-> derivative proof; non-IC dispatch disclosed. Commits 9625f86, 3b35597, dc4ebbd.
+— R1
+
 ---
 
 ## Verification ledger
