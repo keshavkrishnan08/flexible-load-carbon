@@ -391,6 +391,34 @@ Pushed the three remaining open items as far as they go in-scope.
 - Third hostile-referee pass ("qualified yes") items all fixed. PDF 10pp.
 — R1
 
+## E22 · 2026-06-30 · 4th + 5th referee passes — 5 real defects fixed, then math re-derived clean
+**4th pass (hostile MS referee)** found genuine errors (not nitpicks); all fixed,
+no headline claim changed.
+- **M1 dispatch lemma was WRONG.** Feasible set `s+d<=K_F` banned renewable surplus
+  from powering the FCL, contradicting `d*=min{(K_F-x)_+,K_M}` on surplus states x<0
+  (d* can exceed K_F) and the surplus-first absorption the floor uses. Rewrote with
+  `d<=(K_F-x)_+`, payoff `R*d - c*(d-(-x)_+)_+`; two-segment slopes => unique. Suite
+  T1a now uses KM=8>KF=5 so d*>K_F is exercised.
+- **M2** "submodular => not concave" is false (submodular can be ND). Replaced with
+  the real reason: concavity lapses on the power-law knife-edge (Psi'=0, flat).
+- **M3** at FIXED q°, Dmax must carry (1-q°); old Dmax dropped it. Fixed; now attained
+  EXACTLY (3.0573=3.0573). Straddle [-6.43,+3.06], still straddles 0.
+- **M4** existence "gradient inward on faces" never used R<c+CF+CM. Replaced with
+  ray-coercivity: N(g)=(R-c)min(1,g)-g*CF-CM<0 for all g>0 IFF R<c+CF+CM. Suite checks
+  N<0 and that it flips when violated.
+- **M5** added in-file Lemma deriving cofactor identity via Cramer; triple-verified
+  [H^-1]_(KR,KM) = cof/detH = FD to 1.4e-4. Affine rep re-attributed to eq:fos.
+- Minors: defined U_0; removed false "det H->0 / improper" hedge; fixed placeholder
+  cites; Delta0=-1.09. Commit 4162f04.
+
+**5th pass (pure-math re-derivation, every identity from scratch):** ALL 10 items
+CORRECT — gradients, block Hessian, cofactor (Cramer index + sign), N(gamma)
+coercivity, keystone bound, D0=Delta_LB, floor, q°-fixed tight bounds, det M limit,
+all numbers consistent. **Zero genuine errors.** Only 2 cosmetic wording fixes
+(keystone coefficient phrasing; lambda-continuity rests on |detH|=|detM*Psi'|) —
+both applied. Suite 61/61, PDF 11pp.
+— R1
+
 ---
 
 ## Verification ledger

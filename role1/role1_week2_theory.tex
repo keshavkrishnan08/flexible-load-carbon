@@ -539,9 +539,10 @@ Under Condition~\ref{cond:zones}(a), a non-increasing density on $(-\KRs,a)$ has
 conditional mean at most the interval midpoint, $\mu^{*}_{\mathrm{low}}\le(a-\KRs)/2$
 (the standard fact: a density non-increasing on $[\ell,u]$ has mean $\le(\ell+u)/2$,
 with equality for the uniform);
-since the coefficient $-\CM/(R-c)$ on $\mu^{*}_{\mathrm{low}}$ in
-\eqref{eq:fos} is negative, $\E[\text{fossil}^{*}]\le\KFs-\frac{\CM}{R-c}(a-\frac{a-\KRs}{2})
-=\KFs-\frac{\CM}{R-c}\cdot\frac{a+\KRs}{2}$.
+since \eqref{eq:fos} carries the term $-\frac{\CM}{R-c}(a-\mu^{*}_{\mathrm{low}})$
+(decreasing in $\mu^{*}_{\mathrm{low}}$), bounding $a-\mu^{*}_{\mathrm{low}}$ below by
+$a-\frac{a-\KRs}{2}=\frac{a+\KRs}{2}$ gives the upper bound
+$\E[\text{fossil}^{*}]\le\KFs-\frac{\CM}{R-c}\cdot\frac{a+\KRs}{2}$.
 Under Condition~\ref{cond:zones}(b), a non-decreasing density on $(0,\KFo)$ has
 conditional mean at least the midpoint, $\mu^{\circ}_{\mathrm{mid}}\ge\KFo/2$,
 and since $\varphi^{\circ}-q^{\circ}>0$,
@@ -807,8 +808,10 @@ $|\det\Hcal|>0$. As $\CM'\uparrow\CMbar$ the first \textsc{fcl} unit's marginal
 profit vanishes, $\KMs\to0$, and the system collapses to the no-\textsc{fcl}
 optimum, $\KRs(\CM')\to\KRo$ (Week~1, continuity at the adoption boundary). At that
 boundary $a=\KFs-\KMs\to\KFs$, so the cofactor bracket $g(a)-g(\KFs)\to0$ while
-$\det\mathcal M\to(R-c)(\bp-R)f(\KFs)^2>0$ stays bounded away from $0$; hence
-$\lambda$ extends \emph{continuously} to $\CMbar$ with $\lambda(\CMbar^-)=0$, the
+$|\det\Hcal|=|\det\mathcal M\cdot\Psi'|$ stays bounded away from $0$
+($\det\mathcal M\to(R-c)(\bp-R)f(\KFs)^2>0$ and $\Psi'<0$ on the interior); hence
+the cofactor-over-determinant ratio $\lambda$ extends \emph{continuously} to
+$\CMbar$ with $\lambda(\CMbar^-)=0$, the
 integral $\int_{\CM}^{\CMbar}\lambda$ is \emph{proper}, and by \eqref{eq:ftc} it
 equals $\lim_{\CM'\uparrow\CMbar}[\KRs(\CM)-\KRs(\CM')]=\KRs(\CM)-\KRo$. Positivity of
 $\KRs(\CM)-\KRo$ is then equivalent to positivity of $\int_{\CM}^{\CMbar}\lambda$.
