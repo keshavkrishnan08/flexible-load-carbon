@@ -234,73 +234,70 @@ surplus program; it holds on the regular region and at the power-law boundary it
 the knife-edge.
 \end{condition}
 
-\begin{theorem}[Decarbonization, with no sign-determining shape condition]\label{thm:decarb}
-Suppose the load is adopted \eqref{eq:adopt} and Condition~\ref{cond:reg} holds. Then
-under the surplus contract
+The decarbonization theorem rests on a single monotone fact.
+
+\begin{lemma}[More renewables, less fossil]\label{lem:monofossil}
+Along the fossil-cutoff locus $\KF(\KR)=F^{-1}(\varphi^{\circ};\KR)$, the utility's own
+fossil output
+$e(\KR)\eqdef\int_0^{(\KF(\KR))_+}\!\big(1-F(x;\KR)\big)\,dx$
+is non-increasing in $\KR$, and strictly decreasing wherever $\KF(\KR)>0$:
 \[
-  \boxed{\;\KRc>\KRo\quad\text{and}\quad \E[\fossil^{c}]<\E[\fossil^{\circ}]\;}
+  e'(\KR)=\underbrace{(1-\varphi^{\circ})\,\KF'(\KR)}_{\le0}
+  -\underbrace{\int_0^{\KF(\KR)}\!\FKR(x;\KR)\,dx}_{>0}\;<\;0,
+  \qquad \KF'(\KR)=-\frac{\FKR(\KF;\KR)}{f(\KF;\KR)}\le0 .
 \]
-where $\KRc$ is the surplus optimum (an interior root of \eqref{eq:focR} if one exists,
-else the renewable-capacity bound $\bar K_R$; \S\ref{sec:decarb}). The conclusion uses
-only the standing positivity $\FKR>0$ on the interior support, Condition~\ref{cond:reg},
-and adoption. Of these, Condition~\ref{cond:reg} is a regularity hypothesis (it
-guarantees a well-defined optimum and can fail, e.g.\ at the power-law knife-edge); what
-the result establishes is that, \emph{given an optimum and adoption}, the \emph{sign} of
-the carbon change carries \emph{no} dependence on the shape, tails, or skew of $F$. This
-is the sharp contrast with Week~2, where (Remark~\ref{rem:resolve}) the conditional shape
-of $F$ decided the sign; the surplus contract removes that shape-dependence. (The
-\emph{magnitude} $\Delta^{c}$ still depends on shape; only the sign is freed.)
+\end{lemma}
+\begin{proof}
+Differentiate $e$ by Leibniz, using $1-F(\KF;\KR)=1-\varphi^{\circ}$ at the moving upper
+limit; $\KF'$ is the implicit derivative of $F(\KF(\KR);\KR)=\varphi^{\circ}$. Both terms
+are $\le0$, the integral strictly so by $\FKR>0$: building renewables both lowers the
+dispatchable-fossil cutoff and displaces fossil inside the served band. Where
+$\KF(\KR)\le0$ the integral is empty and $e\equiv0$, so $e$ is non-increasing throughout.
+\end{proof}
+
+\begin{theorem}[Decarbonization, with no sign-determining shape condition]\label{thm:decarb}
+Under Condition~\ref{cond:reg}, the surplus contract satisfies
+\[
+  \boxed{\;\KRc\ge\KRo\quad\text{and}\quad \E[\fossil^{c}]\le\E[\fossil^{\circ}],\;}
+\]
+both with \emph{strict} inequality exactly when the load is adopted \eqref{eq:adopt}. The
+carbon inequality is an immediate consequence of the renewable one: \emph{more renewables
+mean less fossil}. The conclusion uses only the standing positivity $\FKR>0$ on the
+interior support and the regularity Condition~\ref{cond:reg} (which guarantees a
+well-defined optimum and can fail, e.g.\ at the power-law knife-edge); given an optimum
+and adoption, the \emph{sign} of the carbon change carries \emph{no} dependence on the
+shape, tails, or skew of $F$. This is the sharp contrast with Week~2, where
+(Remark~\ref{rem:resolve}) the conditional shape of $F$ decided the sign; the surplus
+contract removes that shape-dependence. (Magnitude still depends on shape; only the sign
+is freed.)
 \end{theorem}
 
 \begin{proof}
-\emph{Step 1 ($\KRc>\KRo$).} Evaluate $\partial_{\KR}\Pi^{c}$ at the no-\textsc{fcl}
-optimum $(\KRo,\KFo)$, taking $\KM$ from \eqref{eq:focM} at $\KR=\KRo$ (which is
-$>0$ under \eqref{eq:adopt}). By \eqref{eq:focF} the fossil cutoff at $\KRo$ is
-$\KFo$, so the last two integrals in \eqref{eq:focR} are exactly the no-\textsc{fcl}
-renewable benefit, which equals $\CR$ at $\KRo$. Hence
+\emph{Renewables ($\KRc\ge\KRo$).} If the load is not adopted ($\KMc=0$) the surplus
+program is the no-\textsc{fcl} program and $\KRc=\KRo$. If it is adopted, evaluate the
+renewable marginal value \eqref{eq:focR} at $(\KRo,\KFo)$: by \eqref{eq:focF} the fossil
+cutoff there is $\KFo$, so its last two integrals are the no-\textsc{fcl} renewable
+benefit, which equals $\CR$ at $\KRo$. The remaining surplus-channel term is strictly
+positive,
 \[
-  \partial_{\KR}\Pi^{c}\big|_{\KRo}
-  = R\!\int_{-\KM}^{0}\!\FKR(x;\KRo)\,dx \;>\;0 ,
+  \partial_{\KR}\Pi^{c}\big|_{(\KRo,\KFo)}=R\!\int_{-\KM}^{0}\!\FKR(x;\KRo)\,dx>0
+  \qquad(\FKR>0\text{ on }(-\KM,0)),
 \]
-strictly, because $\FKR\ge0$ with $\FKR>0$ on a set of positive measure in
-$(-\KM,0)$ (more renewables raise the surplus probability). So $\Pi^{c}$ is still
-strictly increasing in $\KR$ at $\KRo$; by Condition~\ref{cond:reg} the renewable
-marginal value is strictly decreasing, so if it reaches zero at a finite $\KR$ that
-zero $\KRc$ lies strictly to the right of $\KRo$. If instead the marginal value stays
-positive up to the renewable-capacity bound $\bar K_R$ (the surplus channel makes
-renewables so attractive that the unconstrained program is a corner---see
-Proposition~\ref{prop:saving}), the optimum is $\KRc=\bar K_R$. Either way
-$\KRc>\KRo$: the surplus contract strictly raises renewable investment.
+so the renewable marginal value exceeds $\CR$ at $\KRo$; by Condition~\ref{cond:reg} it
+is strictly decreasing, so the surplus optimum---its zero if interior, otherwise the
+capacity bound $\bar K_R$---satisfies $\KRc>\KRo$.
 
-\emph{Step 2 ($\KFc\le\KFo$).} Both cutoffs satisfy $F(\cdot;\cdot)=\varphi^{\circ}$:
-$F(\KFc;\KRc)=F(\KFo;\KRo)=\varphi^{\circ}$. Since $F$ is increasing in $\KR$
-($\FKR\ge0$), $F(\KFo;\KRc)\ge F(\KFo;\KRo)=\varphi^{\circ}=F(\KFc;\KRc)$, and as
-$F(\cdot;\KRc)$ is increasing in $x$ this forces $\KFc\le\KFo$.
-
-\emph{Step 3 (carbon strictly falls).} Consider first the interior case
-$\KFc>0$, i.e.\ $F(0;\KRc)<\varphi^{\circ}$ (the surplus probability has not yet
-overtaken the reliability cutoff). By \eqref{eq:fosc} and
-$\E[\fossil^{\circ}]=\int_0^{\KFo}(1-F(x;\KRo))\,dx$,
-\[
-  \E[\fossil^{\circ}]-\E[\fossil^{c}]
-  =\int_0^{\KFo}\!\!(1-F(x;\KRo))\,dx-\int_0^{\KFc}\!\!(1-F(x;\KRc))\,dx .
-\]
-Write this as
-$\int_0^{\KFc}\![F(x;\KRc)-F(x;\KRo)]\,dx+\int_{\KFc}^{\KFo}(1-F(x;\KRo))\,dx$.
-The first integral is $\ge0$ because $\KRc>\KRo$ gives $F(\cdot;\KRc)\ge F(\cdot;\KRo)$,
-and $>0$ since $\FKR>0$ on a positive-measure subset of $(0,\KFc)$; the second is
-$\ge0$ since $\KFc\le\KFo$ and $1-F\ge0$. Hence the difference is strictly positive:
-$\E[\fossil^{c}]<\E[\fossil^{\circ}]$. In the remaining case $F(0;\KRc)\ge\varphi^{\circ}$
-the renewables are so abundant that the fossil cutoff is at or below $0$ and
-$\E[\fossil^{c}]=\int_0^{\KFc}(1-F)\,dx\to0$ (full decarbonization), so carbon falls a
-fortiori. Either way $\E[\fossil^{c}]<\E[\fossil^{\circ}]$. None of this used any feature
-of $F$ beyond the standing positivity $\FKR>0$ on the interior support (Step~1 uses it on
-the surplus side $(-\KM,0)$, Step~3 on the fossil side $(0,\KFc)$) and
-Condition~\ref{cond:reg}, so the conclusion holds with \emph{no sign-determining shape
-condition on $F$}.\footnote{Verified in \texttt{verify\_week3.py}: across Beta
-scale-mixtures (symmetric, left- and right-skewed, bimodal) the surplus-channel term
-is strictly positive at $\KRo$, $\KRc>\KRo$, $\KFc\le\KFo$, and
-$\E[\fossil^{c}]<\E[\fossil^{\circ}]$ at every adopted optimum---the sign never flips.}
+\emph{Carbon ($\E[\fossil^{c}]\le\E[\fossil^{\circ}]$).} Under the surplus contract the
+load burns no fossil (Prop.~\ref{prop:surplusopt}), so total fossil is exactly the
+utility's own output $e(\KRc)$, while the benchmark is $e(\KRo)$. By
+Lemma~\ref{lem:monofossil} $e$ is non-increasing and strictly decreasing while $\KF>0$;
+with $\KRc\ge\KRo$ this gives $e(\KRc)\le e(\KRo)$, strict whenever $\KRc>\KRo$, i.e.\
+whenever the load is adopted. That is the whole argument: the contract zeroes the load's
+fossil and weakly raises renewables, and more renewables mean less fossil.\footnote{Verified
+in \texttt{verify\_week3.py}: across symmetric, left- and right-skewed, bimodal, and
+high-capacity-factor shapes, the surplus-channel term is strictly positive at $\KRo$,
+$\KRc>\KRo$, and $\E[\fossil^{c}]<\E[\fossil^{\circ}]$ at every adopted optimum---the sign
+never flips.}
 \end{proof}
 
 \begin{remark}[Why this resolves Week 2]\label{rem:resolve}
@@ -343,7 +340,8 @@ target the same reliability, $F(\KFc;\KRc)=\varphi^{\circ}=F(\KFo;\KRo)$, so the
 blackout probability is $1-\varphi^{\circ}$ in both---identical. The surplus load never
 uses fossil, so it leaves the fossil-capacity trade-off, and hence the blackout target,
 untouched; the larger $\KRc$ is spent on \emph{lowering fossil capacity}
-($\KFc\le\KFo$, Step~2) rather than on extra reliability. Reliability is therefore held,
+($\KFc\le\KFo$, since the fossil cutoff falls in $\KR$ by Lemma~\ref{lem:monofossil})
+rather than on extra reliability. Reliability is therefore held,
 not improved---a clean tie, which is what makes the result a Pareto
 improvement.\footnote{Verified in \texttt{verify\_week3.py}: $\Pi^{c}>\Pi^{\circ}$ and
 blackout$^{c}=$blackout$^{\circ}$ (to numerical tolerance) at every adopted optimum.}
@@ -363,23 +361,13 @@ $\E[\fossil^{c}]\to0$, so $\Delta^{c}\to\E[\fossil^{\circ}]$.
 \end{proposition}
 
 \begin{proof}
-The identity is Step 3 of Theorem~\ref{thm:decarb}. Monotonicity: since
-$\Delta^{c}=\E[\fossil^{\circ}]-\E[\fossil^{c}]$ and $\E[\fossil^{\circ}]$ is fixed, it
-suffices that $\E[\fossil^{c}]=\int_0^{\KFc}(1-F(x;\KRc))\,dx$ is \emph{decreasing} in
-$\KRc$ (a larger adopted $\KMc$ enlarges the surplus channel and raises $\KRc$ by
-Condition~\ref{cond:reg}). Differentiating, with $1-F(\KFc;\KRc)=1-\varphi^{\circ}$ at
-the moving upper limit,
-\[
-  \frac{d\,\E[\fossil^{c}]}{d\KRc}
-  =\underbrace{(1-\varphi^{\circ})\frac{d\KFc}{d\KRc}}_{\le0}
-  \;-\;\underbrace{\int_0^{\KFc}\FKR(x;\KRc)\,dx}_{>0}\;<\;0 ,
-\]
-where implicit differentiation of the cutoff identity $F(\KFc;\KRc)=\varphi^{\circ}$
-gives $d\KFc/d\KRc=-\FKR(\KFc)/f(\KFc)\le0$ (so the first term is $\le0$), and the
-second term is strictly positive by $\FKR>0$. Both work the same way, so
-$\E[\fossil^{c}]$ strictly decreases and $\Delta^{c}$ strictly increases in $\KRc$. As
-$\KRc\to\infty$, $F(x;\KRc)\to1$ for each fixed $x>0$ (renewables swamp demand), so by
-dominated convergence $\E[\fossil^{c}]\to0$ and $\Delta^{c}\to\E[\fossil^{\circ}]$.
+In the interior case $\KFc>0$ the identity is the expansion of
+$e(\KRo)-e(\KRc)$ used in Theorem~\ref{thm:decarb}. Monotonicity is
+Lemma~\ref{lem:monofossil}: $\E[\fossil^{c}]=e(\KRc)$ is strictly decreasing in $\KRc$,
+and a larger adopted $\KMc$ enlarges the surplus channel and raises $\KRc$, so
+$\Delta^{c}=\E[\fossil^{\circ}]-e(\KRc)$ strictly increases. As $\KRc\to\infty$,
+$F(x;\KRc)\to1$ for each fixed $x>0$ (renewables swamp demand), so by dominated
+convergence $e(\KRc)\to0$ and $\Delta^{c}\to\E[\fossil^{\circ}]$ (full decarbonization).
 \end{proof}
 
 \begin{remark}[The contract incentivizes renewable build-out]
@@ -400,7 +388,8 @@ $\tilde x=\tilde D-\KR\tilde S$ spanning symmetric, left-skewed, right-skewed, a
 bimodal demand. The suite confirms, at every adopted optimum and across the family:
 the surplus contract burns zero \textsc{fcl} fossil (Prop.~\ref{prop:surplusopt}); the
 surplus-channel term in \eqref{eq:focR} is strictly positive at $\KRo$, giving
-$\KRc>\KRo$ (Step~1); $\KFc\le\KFo$ (Step~2); the strict carbon fall
+$\KRc>\KRo$; the fossil output $e(\KR)$ is strictly decreasing
+(Lemma~\ref{lem:monofossil}); and the strict carbon fall
 $\E[\fossil^{c}]<\E[\fossil^{\circ}]$ holds with the \emph{same sign for every shape in
 the family} (Theorem~\ref{thm:decarb}); the Pareto improvement $\Pi^{c}>\Pi^{\circ}$
 with blackout held equal, blackout$^{c}=$blackout$^{\circ}=1-\varphi^{\circ}$

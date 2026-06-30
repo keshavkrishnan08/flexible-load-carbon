@@ -110,6 +110,15 @@ print()
 ok("SHAPE-INDEPENDENT: carbon falls in EVERY family (sign never flips)", allfall, "all 5 shapes decarbonize: sym/left/right/bimodal/high-CF")
 ok("adoption holds in every family", alladopt, "")
 
+# ---- Lemma (monotone fossil): e(KR)=int_0^{(KF(KR))_+}(1-F) strictly decreasing in KR ----
+m=fams[0]
+def e_of(KR):
+    KF=max(m.Finv(phio,KR),0.0); return m.cons_fossil(KR,KF) if KF>0 else 0.0
+KRgrid=np.linspace(1.0,12.0,23); evals=[e_of(K) for K in KRgrid]
+mono_dec=all(evals[i+1]<evals[i]-1e-9 or evals[i+1]<1e-9 for i in range(len(evals)-1))
+ok("Lemma: fossil output e(KR) strictly decreasing in KR (more renewables, less fossil)",
+   mono_dec, f"e(1.0)={evals[0]:.3f} -> e(12)={evals[-1]:.3f}, monotone={mono_dec}")
+
 # ---- Prop 1: surplus contract burns zero FCL fossil (structural, any state) ----
 m=fams[0]; KR,KF,KM=3.0,6.0,4.0
 def fcl_fossil(d_func):
