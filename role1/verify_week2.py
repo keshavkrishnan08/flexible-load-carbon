@@ -137,22 +137,27 @@ print("="*78,"\n  T1  EXISTENCE / UNIQUENESS / DISPATCH OPTIMALITY\n","="*78)
 ok("Assumption 1 holds at calibration",assumption1(P0))
 
 # --- T1a: dispatch d*(x)=min((KF-x)_+,KM) is the UNIQUE within-period optimum ---
+# Correct model (surplus powers FCL): consumers served first; FCL feasible up to
+# (KF-x)_+ = surplus(-x)_+ + headroom (KF-(x)_+)_+; FCL fossil = (d-(-x)_+)_+.
+# Use KM=8 > KF=5 so the surplus channel binds and d* can EXCEED KF.
 print("\n  T1a  dispatch optimality via strict R>c  (grid search of per-state payoff)")
-R,c,b,p=P0['R'],P0['c'],P0['beta'],P0['p']; KF,KM=5.0,3.0
-def per_state_obj(x,s,dd):  # consumer served s, FCL served dd
-    return p*s - c*(s+dd) + R*dd - b*(max(x,0.)-s)
-worst=0.0
-for x in np.linspace(-4,8,25):
-    best=None; args=None
-    for s in np.linspace(0,min(max(x,0.),KF),60):
-        dmax=min(KM,KF-s)
-        for dd in np.linspace(0,max(dmax,0.),60):
-            val=per_state_obj(x,s,dd)
-            if best is None or val>best+1e-12: best=val; args=(s,dd)
-    d_star=min(max(KF-x,0.),KM); s_star=min(max(x,0.),KF)
-    worst=max(worst,abs(args[0]-s_star)+abs(args[1]-d_star))
-ok("argmax(grid) == (s*,d*) formula, all sampled x",worst<0.2,f"max|Delta|={worst:.3f} (grid step)")
-ok("strict slopes: R-c>0 and b+p-c>0 (uniqueness)",(R-c>0)and(b+p-c>0),f"R-c={R-c}, b+p-c={b+p-c}")
+R,c,b,p=P0['R'],P0['c'],P0['beta'],P0['p']; KF,KM=5.0,8.0
+def fcl_obj(x,dd):                       # FCL payoff: revenue R*d minus fossil it burns
+    surplus=max(-x,0.); fcl_fossil=max(dd-surplus,0.)
+    return R*dd - c*fcl_fossil
+worst=0.0; exceeded=False
+for x in np.linspace(-6,8,29):
+    dfeas=max(KF-x,0.)                   # FCL feasibility (KF-x)_+
+    best=None; argd=0.0
+    for dd in np.linspace(0,min(KM,dfeas),400):
+        val=fcl_obj(x,dd)
+        if best is None or val>best+1e-12: best=val; argd=dd
+    d_star=min(max(KF-x,0.),KM)
+    worst=max(worst,abs(argd-d_star))
+    if d_star>KF+1e-9: exceeded=True     # confirm surplus states use d*>KF
+ok("argmax(grid) == d*=min((KF-x)_+,KM), all sampled x (incl d*>KF)",worst<0.1,f"max|Delta|={worst:.3f} (grid step)")
+ok("surplus states exercise d*>KF (renewable-powered FCL)",exceeded,f"KM={KM}>KF={KF}, d* exceeds KF at deep surplus")
+ok("strict slopes: R-c>0 (fossil seg) and R>0 (surplus seg) => unique",(R-c>0)and(R>0),f"R-c={R-c}, R={R}")
 
 # --- T1b: coercivity -> a maximizer exists (own partial < 0 when own capacity large) ---
 print("\n  T1b  coercivity (existence): own partial strictly negative for large own K")
@@ -163,6 +168,14 @@ gKM=grad(dY,P0,[3.0,5.0,60.0])[2]      # KM->inf (KF-KM->-inf => F->0 => -CM)
 ok("dPi/dKR < 0 as KR->inf",gKR<0,f"={gKR:+.3f}")
 ok("dPi/dKF < 0 as KF->inf",gKF<0,f"={gKF:+.3f}")
 ok("dPi/dKM < 0 as KM->inf",gKM<0,f"={gKM:+.3f}")
+# mixed-ray KM-coefficient N(gamma)=(R-c)min(1,g)-g*CF-CM < 0 for all g>0  <=> R<c+CF+CM
+CF,CM=P0['CF'],P0['CM']
+Ngam=lambda g,Rv: (Rv-c)*min(1.0,g)-g*CF-CM
+gs=np.concatenate([np.linspace(0.05,1,20),np.linspace(1,8,20)])
+ok("coercivity: mixed-ray coeff N(gamma)<0 for all gamma>0 (uses R<c+CF+CM)",
+   all(Ngam(g,R)<0 for g in gs) and (R<c+CF+CM),f"max N={max(Ngam(g,R) for g in gs):+.3f}, R={R}<c+CF+CM={c+CF+CM}")
+ok("...and FLIPS to >0 somewhere if R>c+CF+CM (binding hypothesis)",
+   any(Ngam(g,c+CF+CM+0.5)>0 for g in gs),"N(gamma)>0 for some gamma when R raised past c+CF+CM")
 
 # --- T1c: recursive-triangular uniqueness ---
 print("\n  T1c  recursive-triangular structure + unique interior optimum")
@@ -478,17 +491,17 @@ star=solve_with(d,PT,[3,5,6],precise=True); no=solve_no(d,PT,[2,6])
 KR,KF,KM=star; KRo,KFo=no; a=KF-KM
 phio=(b+p-c-PT['CF'])/(b+p-c); qo=d.F(0,KRo)
 Dmin=KFo*(1-phio)-KF
-Dmax=KFo-KF+(PT['CM']/(R-c))*(a+KR)
-# Delta as explicit affine fn of the two conditional means (Thm suff-stat)
+Dmax=KFo*(1-qo)-KF+(PT['CM']/(R-c))*(a+KR)   # at FIXED qo: mu_mid up to KFo gives (phio-qo)KFo => KFo(1-qo)
+# Delta as explicit affine fn of the two conditional means (Thm suff-stat), qo fixed
 def Delta_of(mu_low,mu_mid):
     Efw=KF-(PT['CM']/(R-c))*(a-mu_low); Efn=KFo*(1-phio)+(phio-qo)*mu_mid
     return Efn-Efw
-# attaining sequences: conditional law -> point mass at an interval endpoint
+# attaining sequences: conditional law -> point mass at an interval endpoint (qo held fixed)
 ok("Delta_min attained as mu*_low->a, mu_mid->0",
    abs(Delta_of(a,0.0)-Dmin)<1e-9,f"Delta(a,0)={Delta_of(a,0.0):.4f}=Dmin={Dmin:.4f}")
-ok("Delta_max attained as mu*_low->-KR, mu_mid->KFo (qo->0 limit)",
-   abs(Delta_of(-KR,KFo)-Dmax)<1e-9 or Delta_of(-KR,KFo)<=Dmax+1e-9,
-   f"Delta(-KR,KFo)={Delta_of(-KR,KFo):.4f}, Dmax={Dmax:.4f}")
+ok("Delta_max attained EXACTLY as mu*_low->-KR, mu_mid->KFo (qo fixed)",
+   abs(Delta_of(-KR,KFo)-Dmax)<1e-9,
+   f"Delta(-KR,KFo)={Delta_of(-KR,KFo):.4f}=Dmax={Dmax:.4f}")
 # realized Delta lies strictly inside
 mu_low=integrate.quad(lambda x:x*d.f(x,KR),-KR,a,limit=300)[0]/d.F(a,KR)
 mu_mid=integrate.quad(lambda x:x*d.f(x,KRo),0,KFo,limit=300)[0]/(phio-qo)
