@@ -441,19 +441,22 @@ frontier: a larger fossil budget weakly buys firm profit at the cost of carbon;
 \item[\textup{(ii)}] carbon is minimized at $\tau=0$---the surplus contract is the
 carbon-optimal member of the family;
 \item[\textup{(iii)}] the carbon-minimizing contract subject to a firm-profit floor
-$\bar\Pi\in[\Pi^{c},\Pi^{*}]$ is $\tau^{*}=\inf\{\tau:\Pi(\tau)\ge\bar\Pi\}$ (the smallest
-budget that meets the floor); it is the unique floor-meeting minimizer iff the budget
-binds at $\bar\Pi$ (where $\Pi$ is strictly increasing). When the floor is slack
-($\bar\Pi\le\Pi(0)=\Pi^{c}$) it is surplus-only.
+$\bar\Pi\in[\Pi^{c},\Pi^{*}]$ is $\tau^{*}=\inf\{\tau:\Pi(\tau)\ge\bar\Pi\}$, the
+\emph{unique} carbon-minimizer (since $C$ is strictly increasing, every other
+floor-meeting budget has strictly higher carbon); the floor binds with equality,
+$\Pi(\tau^{*})=\bar\Pi$, iff $\Pi$ is strictly increasing at $\tau^{*}$. When the floor is
+slack ($\bar\Pi\le\Pi(0)=\Pi^{c}$), $\tau^{*}=0$ is surplus-only.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 Given $C$ strictly increasing: (ii) is immediate, and (i) follows with $\Pi$
-non-decreasing (Proposition~\ref{prop:profitmono}). (iii) Among $\tau$ meeting the floor,
-$\Pi(\tau)\ge\bar\Pi$, carbon is smallest at the smallest such $\tau$ by (ii), which is
-$\tau^{*}=\inf\{\tau:\Pi(\tau)\ge\bar\Pi\}$; the minimizer is unique exactly when $\Pi$ is
-strictly increasing at $\bar\Pi$ (otherwise a plateau of equally-profitable $\tau$ shares
-the floor, and $\tau^{*}$ is its left end). $\bar\Pi\le\Pi^{c}=\Pi(0)$ gives $\tau^{*}=0$.
+non-decreasing (Proposition~\ref{prop:profitmono}). (iii) The floor-feasible set is $\{\tau:\Pi(\tau)\ge\bar\Pi\}=[\tau^{*},\infty)$ with
+$\tau^{*}=\inf\{\tau:\Pi(\tau)\ge\bar\Pi\}$ ($\Pi$ non-decreasing). Since $C$ is strictly
+increasing, carbon is smallest at the left end $\tau^{*}$ and strictly larger at every
+other feasible $\tau$, so $\tau^{*}$ is the unique carbon-minimizer---whether or not the
+budget binds. The floor is met with equality at $\tau^{*}$ exactly when $\Pi$ is strictly
+increasing there; otherwise $\Pi(\tau^{*})>\bar\Pi$ on a profit plateau, but $\tau^{*}$ is
+still the unique minimizer. $\bar\Pi\le\Pi^{c}=\Pi(0)$ gives $\tau^{*}=0$.
 
 \emph{Why $C$ is increasing.} Differentiate \eqref{eq:Ctau}:
 \[
