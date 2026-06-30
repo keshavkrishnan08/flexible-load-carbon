@@ -158,4 +158,42 @@ for m in fams[:3]:
     ok(f"   [{m.label.strip()}] Pareto: Pi^c>Pi^o and blackout^c==blackout^o (held)", prof_up and rel_held, f"dPi={Pc-Po:+.3f}, blackout: {blc:.4f} vs {blo:.4f} (=1-phio)")
 ok("Cor1: Pareto improvement (profit UP, carbon DOWN, reliability HELD at 1-phio)", tw, "")
 
+# ============================================================================
+# Thm (frontier): the budget family d_tau = min{(-x)_+ + tau, KM, (KF-x)_+} nests
+# surplus-only (tau=0) and naive (tau=inf).  Verify: carbon C(tau) strictly INCREASING
+# (min at tau=0 => surplus-only is GLOBALLY carbon-optimal); profit Pi(tau) INCREASING
+# (the carbon-profit frontier); endpoints match Wk3 (tau=0) and Wk2-style naive.
+# ============================================================================
+print("\n  --- optimal-contract family / carbon-profit frontier (Sec family) ---")
+Dd2=stats.beta(2,2); Sd2=stats.beta(2,2); EDm=Dbar*Dd2.mean()
+gx2,gw2=np.polynomial.legendre.leggauss(40); ss=0.5*(gx2+1); wss=0.5*gw2*Sd2.pdf(ss)
+def fam_stats(KR,KF,KM,tau):
+    x=np.linspace(-KR,Dbar,1000); A=x[:,None]+KR*ss[None,:]
+    fxd=(np.where((A>0)&(A<Dbar),Dd2.pdf(np.clip(A,1e-9,Dbar-1e-9)/Dbar)/Dbar,0.0)*wss[None,:]).sum(1)
+    Z=np.trapz(fxd,x); fxd=fxd/Z if Z>0 else fxd
+    sx=np.maximum(-x,0.); cons=np.minimum(np.maximum(x,0.),KF); head=np.maximum(KF-np.maximum(x,0.),0.)
+    d=np.minimum(KM,sx+np.minimum(tau,head)); ff=np.maximum(d-sx,0.); blk=np.maximum(np.maximum(x,0.)-KF,0.)
+    E=lambda v:float(np.trapz(v*fxd,x)); return E(d),E(ff),E(cons),E(blk)
+def fam_opt(tau,CRv,CMv,x0):
+    def negp(k):
+        KR,KF,KM=k
+        if min(KR,KF,KM)<1e-3 or KR>Dbar*0.99: return 1e6
+        rev,ff,cons,blk=fam_stats(KR,KF,KM,tau)
+        return -(p*EDm+R*rev-c*(cons+ff)-(b+p)*blk-CF*KF-CRv*KR-CMv*KM)
+    r=optimize.minimize(negp,x0,method='Nelder-Mead',options={'xatol':1e-3,'fatol':1e-4,'maxiter':5000})
+    rev,ff,cons,blk=fam_stats(*r.x,tau); return r.x,(cons+ff),ff,-r.fun
+CRv,CMv=0.5,0.04; taus=[0.0,0.5,1.0,2.0,5.0,15.0]; rows=[]; base=(3,6,4)
+for tau in taus:
+    k,carb,ff,Pi=fam_opt(tau,CRv,CMv,base); base=k; rows.append((tau,carb,ff,Pi))
+C=[r[1] for r in rows]; Pi=[r[3] for r in rows]
+print("   tau:    "+"  ".join(f"{t:>6.1f}" for t in taus))
+print("   carbon: "+"  ".join(f"{c:>6.3f}" for c in C))
+print("   profit: "+"  ".join(f"{P:>6.3f}" for P in Pi))
+ok("frontier(ii): carbon C(tau) strictly INCREASING => min at tau=0 (surplus-only GLOBAL carbon-opt)",
+   all(C[i+1]>C[i]+1e-4 for i in range(len(C)-1)), f"argmin@tau={rows[min(range(len(C)),key=lambda i:C[i])][0]}")
+ok("frontier(i): profit Pi(tau) strictly INCREASING (carbon-profit trade-off)",
+   all(Pi[i+1]>Pi[i]+1e-4 for i in range(len(Pi)-1)), f"Pi: {Pi[0]:.2f}->{Pi[-1]:.2f}")
+ok("frontier: tau=0 FCL fossil==0 (surplus endpoint) and naive endpoint burns fossil",
+   rows[0][2]<1e-6 and rows[-1][2]>0.1, f"ff(0)={rows[0][2]:.4f}, ff(naive)={rows[-1][2]:.3f}")
+
 print("\n"+"="*74); print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS"); print("="*74)

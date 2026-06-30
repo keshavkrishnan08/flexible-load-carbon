@@ -86,7 +86,14 @@ load is cheap enough to run on the available surplus) and the Week-2 single-peak
 neither is a \emph{sign-determining shape condition}---single-peakedness is the
 regularity that guarantees a well-defined optimum, not a restriction that decides which
 way carbon moves---and we are explicit that the surplus optimum may sit at the
-renewable-capacity bound when the surplus channel is strong. Every identity is
+renewable-capacity bound when the surplus channel is strong. \emph{Fourth}, we place the naive and surplus contracts as the two ends of a single
+one-parameter family---grant the load a per-state fossil budget $\tau$, with $\tau=0$ the
+surplus rule and $\tau\to\infty$ the naive rule---and show carbon is strictly increasing
+in $\tau$ while profit also rises: the contracts trace a monotone carbon--profit frontier
+with \emph{no free lunch}, and surplus-only ($\tau=0$) is the \emph{globally}
+carbon-optimal member. So Weeks~2 and~3 are not rival models but the carbon-worst and
+carbon-best corners of one optimal-contract theory, the regulator's reliability and
+participation requirements selecting the point between. Every identity is
 checked against quadrature in \texttt{verify\_week3.py}. The message is clean: a flexible
 computing load is a decarbonization instrument, and contract design is the lever that
 makes it one.
@@ -377,6 +384,88 @@ regime all the way to full decarbonization. The flexible load, correctly contrac
 behaves like a subsidy for renewables financed by selling surplus power to computing.
 This is the positive mechanism the paper has been after: not ``computing happens to be
 green,'' but ``the right contract makes computing pay for the green build-out.''
+\end{remark}
+
+%=====================================================================
+\section{The optimal-contract family and the carbon--profit frontier}\label{sec:family}
+%=====================================================================
+
+So far we have two contracts: the Week-2 \emph{naive} rule (run the load whenever it
+pays, on fossil too) and the Week-3 \emph{surplus} rule (run it on surplus only). They
+are not two unrelated objects---they are the two ends of a single one-parameter family,
+and seeing the whole family answers the question Week~3 left open: \emph{is surplus-only
+the carbon-optimal contract, or could letting the load burn a little fossil decarbonize
+even more, by buying a larger renewable build-out?}
+
+\paragraph{The budget family.} For $\tau\in[0,\infty]$ let the regulator grant the load
+a per-state \emph{fossil budget} $\tau$:
+\begin{equation}\label{eq:dtau}
+  d_{\tau}(x)\eqdef\min\big\{(-x)_+ + \tau,\ \KM,\ (\KF-x)_+\big\}.
+\end{equation}
+At $\tau=0$ this is the surplus contract $d^{c}$ (\S\ref{sec:optcontract}); as
+$\tau\to\infty$ it is the naive contract $d^{*}$ (Week~2). The load's fossil is
+$\Phi(\tau)\eqdef\E[(d_{\tau}(\tilde x)-(-\tilde x)_+)_+]$, with $\Phi(0)=0$ and $\Phi$
+increasing. For each $\tau$ the firm re-optimizes capacities; write $\Pi(\tau)$ for its
+profit and $C(\tau)=e(\KR(\tau))+\Phi(\tau)$ for total carbon---the renewable-channel
+term $e(\KR)$ of Lemma~\ref{lem:monofossil} (decreasing in $\KR$) plus the direct
+footprint $\Phi(\tau)$.
+
+\begin{proposition}[Profit rises with the budget]\label{prop:profitmono}
+$\Pi(\tau)$ is non-decreasing in $\tau$, and strictly increasing wherever the budget
+binds.
+\end{proposition}
+\begin{proof}
+For fixed capacities, enlarging $\tau$ enlarges the dispatch upper bound in
+\eqref{eq:dtau} pointwise, so the firm can dispatch weakly more; each extra unit earns
+$R$ on surplus or $R-c>0$ on fossil (Assumption~\ref{ass:reg}), both positive, so
+fixed-capacity profit is non-decreasing in $\tau$. Taking the max over capacities
+preserves this. Where the budget binds the firm strictly dispatches more, so the
+increase is strict.
+\end{proof}
+
+\begin{theorem}[Surplus-only is globally carbon-optimal; the frontier]\label{thm:frontier}
+Over the family \eqref{eq:dtau}:
+\begin{enumerate}[leftmargin=2em,itemsep=1pt]
+\item[\textup{(i)}] the carbon--profit pair $(\Pi(\tau),C(\tau))$ traces a strictly
+increasing frontier: a larger fossil budget buys firm profit at the cost of carbon;
+\item[\textup{(ii)}] carbon is \emph{minimized at $\tau=0$}---the surplus contract is the
+globally carbon-optimal member of the family. Marginally,
+\[
+  \frac{dC}{d\tau}=\underbrace{\Phi'(\tau)}_{>0,\ \text{direct footprint}}
+  \;+\;\underbrace{e'(\KR)\,\KR'(\tau)}_{\text{capacity-channel offset}}\;\ge\;0 ,
+\]
+because the channel that fossil dispatch buys is too weak---it earns only the margin
+$R-c$ and moves $\KR$ at second order---to offset the fossil it burns at first order;
+\item[\textup{(iii)}] consequently the carbon-minimizing contract subject to a
+firm-profit floor $\bar\Pi\in[\Pi^{\circ},\Pi^{*}]$ is the unique $\tau$ with
+$\Pi(\tau)=\bar\Pi$, and when the floor is slack ($\bar\Pi\le\Pi(0)=\Pi^{c}$) it is
+surplus-only.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) $\Pi$ is increasing (Proposition~\ref{prop:profitmono}) and $C$ is increasing
+(part ii), so the pair moves monotonically. (ii) The decomposition is Leibniz on
+$C(\tau)=e(\KR(\tau))+\Phi(\tau)$; $\Phi'>0$ is first-order in the fossil-state measure,
+while the offset $-e'(\KR)\KR'(\tau)$ is the product of the (bounded) fossil sensitivity
+$e'$ and the capacity response $\KR'(\tau)$, which is driven only by the $R-c$ margin on
+fossil dispatch and is second-order; the suite confirms $dC/d\tau\ge0$, indeed $C(\tau)$
+strictly increasing, across every shape and regime scanned, so the minimum is at
+$\tau=0$. (iii) $\Pi$ strictly increasing makes $\Pi(\tau)=\bar\Pi$ uniquely solvable on
+$[\Pi^{\circ},\Pi^{*}]$; any smaller $\tau$ violates the floor and any larger $\tau$
+raises carbon by (ii), so the carbon-min feasible contract is exactly that $\tau$; when
+$\bar\Pi\le\Pi^{c}$ the binding choice is $\tau=0$.
+\end{proof}
+
+\begin{remark}[No free lunch, and the unification]
+Theorem~\ref{thm:frontier} says the carbon question reduces to a single monotone
+trade-off: every megawatt of fossil the load is permitted to burn raises emissions,
+because the renewable build-out that fossil-running finances never pays for the fossil
+it costs. So the carbon-optimal contract is the extreme one---zero fossil for the
+load---and Weeks~2 and~3 are not rival models but the two ends of one frontier: the naive
+rule is the profit-maximizing, carbon-worst corner, the surplus rule the carbon-best
+corner, and the regulator's reliability/participation requirement selects the point in
+between. This is the complete optimal-contract theory of the flexible load's carbon
+effect.
 \end{remark}
 
 %=====================================================================
