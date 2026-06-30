@@ -405,10 +405,17 @@ a per-state \emph{fossil budget} $\tau$:
 At $\tau=0$ this is the surplus contract $d^{c}$ (\S\ref{sec:optcontract}); as
 $\tau\to\infty$ it is the naive contract $d^{*}$ (Week~2). The load's fossil is
 $\Phi(\tau)\eqdef\E[(d_{\tau}(\tilde x)-(-\tilde x)_+)_+]$, with $\Phi(0)=0$ and $\Phi$
-increasing. For each $\tau$ the firm re-optimizes capacities; write $\Pi(\tau)$ for its
-profit and $C(\tau)=e(\KR(\tau))+\Phi(\tau)$ for total carbon---the renewable-channel
-term $e(\KR)$ of Lemma~\ref{lem:monofossil} (decreasing in $\KR$) plus the direct
-footprint $\Phi(\tau)$.
+increasing. For each $\tau$ the firm re-optimizes all three capacities
+$(\KR(\tau),\KF(\tau),\KM(\tau))$; write $\Pi(\tau)$ for its profit and
+\begin{equation}\label{eq:Ctau}
+  C(\tau)=\underbrace{G\big(\KR(\tau),\KF(\tau)\big)}_{\text{consumer fossil}}+\Phi(\tau),
+  \qquad G(\KR,\KF)\eqdef\int_0^{\KF}\!\big(1-F(x;\KR)\big)\,dx ,
+\end{equation}
+for total carbon: consumer fossil $G$ at the induced capacities plus the load's direct
+footprint $\Phi(\tau)$. At $\tau=0$, $\Phi=0$ and the fossil cutoff is $\varphi^{\circ}$,
+so $C(0)=e(\KRc)$ recovers the surplus value of Lemma~\ref{lem:monofossil}; for $\tau>0$
+the load draws fossil, so the firm builds \emph{more} fossil capacity ($\KF(\tau)$ rises)
+and $G$ must be evaluated at that larger $\KF$, not on the $\varphi^{\circ}$ locus.
 
 \begin{proposition}[Profit rises with the budget]\label{prop:profitmono}
 $\Pi(\tau)$ is non-decreasing in $\tau$, and strictly increasing wherever the budget
@@ -423,37 +430,44 @@ preserves this. Where the budget binds the firm strictly dispatches more, so the
 increase is strict.
 \end{proof}
 
-\begin{theorem}[Surplus-only is globally carbon-optimal; the frontier]\label{thm:frontier}
-Over the family \eqref{eq:dtau}:
+\begin{theorem}[The carbon--profit frontier; surplus-only minimizes carbon]\label{thm:frontier}
+Let $C(\tau)$ be strictly increasing in $\tau$ (established below). Then over the
+family \eqref{eq:dtau}:
 \begin{enumerate}[leftmargin=2em,itemsep=1pt]
 \item[\textup{(i)}] the carbon--profit pair $(\Pi(\tau),C(\tau))$ traces a strictly
 increasing frontier: a larger fossil budget buys firm profit at the cost of carbon;
-\item[\textup{(ii)}] carbon is \emph{minimized at $\tau=0$}---the surplus contract is the
-globally carbon-optimal member of the family. Marginally,
-\[
-  \frac{dC}{d\tau}=\underbrace{\Phi'(\tau)}_{>0,\ \text{direct footprint}}
-  \;+\;\underbrace{e'(\KR)\,\KR'(\tau)}_{\text{capacity-channel offset}}\;\ge\;0 ,
-\]
-because the channel that fossil dispatch buys is too weak---it earns only the margin
-$R-c$ and moves $\KR$ at second order---to offset the fossil it burns at first order;
-\item[\textup{(iii)}] consequently the carbon-minimizing contract subject to a
-firm-profit floor $\bar\Pi\in[\Pi^{\circ},\Pi^{*}]$ is the unique $\tau$ with
-$\Pi(\tau)=\bar\Pi$, and when the floor is slack ($\bar\Pi\le\Pi(0)=\Pi^{c}$) it is
-surplus-only.
+\item[\textup{(ii)}] carbon is minimized at $\tau=0$---the surplus contract is the
+carbon-optimal member of the family;
+\item[\textup{(iii)}] the carbon-minimizing contract subject to a firm-profit floor
+$\bar\Pi$ is the unique $\tau$ with $\Pi(\tau)=\bar\Pi$ (on the range where the budget
+binds, where $\Pi$ is strictly increasing by Proposition~\ref{prop:profitmono}); when the
+floor is slack ($\bar\Pi\le\Pi(0)=\Pi^{c}$) it is surplus-only.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-(i) $\Pi$ is increasing (Proposition~\ref{prop:profitmono}) and $C$ is increasing
-(part ii), so the pair moves monotonically. (ii) The decomposition is Leibniz on
-$C(\tau)=e(\KR(\tau))+\Phi(\tau)$; $\Phi'>0$ is first-order in the fossil-state measure,
-while the offset $-e'(\KR)\KR'(\tau)$ is the product of the (bounded) fossil sensitivity
-$e'$ and the capacity response $\KR'(\tau)$, which is driven only by the $R-c$ margin on
-fossil dispatch and is second-order; the suite confirms $dC/d\tau\ge0$, indeed $C(\tau)$
-strictly increasing, across every shape and regime scanned, so the minimum is at
-$\tau=0$. (iii) $\Pi$ strictly increasing makes $\Pi(\tau)=\bar\Pi$ uniquely solvable on
-$[\Pi^{\circ},\Pi^{*}]$; any smaller $\tau$ violates the floor and any larger $\tau$
-raises carbon by (ii), so the carbon-min feasible contract is exactly that $\tau$; when
-$\bar\Pi\le\Pi^{c}$ the binding choice is $\tau=0$.
+Given $C$ strictly increasing: (ii) is immediate, and (i) follows with
+$\Pi$ increasing (Proposition~\ref{prop:profitmono}). (iii) On the binding range $\Pi$ is
+strictly increasing, so $\Pi(\tau)=\bar\Pi$ has a unique solution; a smaller $\tau$
+violates the floor and a larger one raises carbon by (ii), so that $\tau$ is the
+carbon-min feasible contract; $\bar\Pi\le\Pi^{c}$ gives $\tau=0$.
+
+\emph{Why $C$ is increasing.} Differentiate \eqref{eq:Ctau}:
+\[
+  \frac{dC}{d\tau}=\underbrace{\Phi'(\tau)}_{>0}
+  +\underbrace{G_{\KF}\,\KF'(\tau)}_{\ge0}
+  +\underbrace{G_{\KR}\,\KR'(\tau)}_{\text{channel}},
+  \qquad G_{\KF}=1-F(\KF)\ge0,\ \ G_{\KR}=-\!\int_0^{\KF}\!\FKR<0 .
+\]
+\emph{Two} forces push carbon up: the direct footprint $\Phi'>0$ (first order in the
+fossil-state measure), and the extra consumer fossil from the larger fossil capacity the
+load now needs ($\KF'(\tau)\ge0$, so $G_{\KF}\KF'\ge0$). The \emph{only} countervailing
+force is the renewable channel $G_{\KR}\KR'(\tau)$: it helps only if fossil dispatch
+raises $\KR$ ($\KR'>0$), and even then it works through the weak $R-c$ fossil margin. The
+suite confirms the two upward forces dominate---$C(\tau)$ is strictly increasing across
+every shape and regime scanned (and a fortiori $\tau=0$ is the minimum). We therefore
+establish the monotonicity numerically, exactly as Week~2 resolved its sign question;
+the marginal decomposition shows \emph{why} (the channel a fossil budget buys never pays
+for the fossil it burns).
 \end{proof}
 
 \begin{remark}[No free lunch, and the unification]
