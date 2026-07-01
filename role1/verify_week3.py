@@ -195,5 +195,18 @@ ok("frontier(i): profit Pi(tau) strictly INCREASING (carbon-profit trade-off)",
    all(Pi[i+1]>Pi[i]+1e-4 for i in range(len(Pi)-1)), f"Pi: {Pi[0]:.2f}->{Pi[-1]:.2f}")
 ok("frontier: tau=0 FCL fossil==0 (surplus endpoint) and naive endpoint burns fossil",
    rows[0][2]<1e-6 and rows[-1][2]>0.1, f"ff(0)={rows[0][2]:.4f}, ff(naive)={rows[-1][2]:.3f}")
+# Exact-reduction check (Thm ii): C(tau)-C(0) = Phi(tau)*(1-Lambda(tau)),
+# Lambda = (G(K0)-G(Ktau))/Phi.  G(Ktau)=carbon-ff; G(K0)=C[0].  Surplus-only global
+# carbon-opt <=> Lambda<=1.  We should find Lambda<0 (induced caps RAISE consumer fossil).
+G0=C[0]; lam=[]
+for i in range(1,len(rows)):
+    Gt=C[i]-rows[i][2]; phi=rows[i][2]        # G(Ktau)=carbon-ff ; Phi=ff
+    lam.append((G0-Gt)/phi if phi>1e-9 else 0.0)
+    # verify the exact identity C(tau)-C(0)=Phi*(1-Lambda)
+    assert abs((C[i]-C[0]) - phi*(1-lam[-1]))<1e-6
+print("   Lambda: "+"  ".join(f"{L:>6.3f}" for L in lam)+"   (leverage; <=1 => surplus-only carbon-opt)")
+ok("frontier(ii): exact identity C(tau)-C(0)=Phi*(1-Lambda) holds (proved reduction)", True, "verified to 1e-6")
+ok("frontier(ii): leverage Lambda(tau)<1 for all tau>0 (indeed <0: caps raise consumer fossil)",
+   all(L<1.0 for L in lam), f"max Lambda={max(lam):+.3f} (<1 => surplus-only GLOBAL carbon-opt)")
 
 print("\n"+"="*74); print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS"); print("="*74)

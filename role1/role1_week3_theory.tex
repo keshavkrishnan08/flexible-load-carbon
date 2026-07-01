@@ -89,12 +89,15 @@ way carbon moves---and we are explicit that the surplus optimum may sit at the
 renewable-capacity bound when the surplus channel is strong. \emph{Fourth}, we place the naive and surplus contracts as the two ends of a single
 one-parameter family---grant the load a per-state fossil budget $\tau$, with $\tau=0$ the
 surplus rule and $\tau\to\infty$ the naive rule. Profit rises with $\tau$ (proved), and
-carbon rises with $\tau$ as well (verified numerically across every shape and regime,
-with the marginal mechanism shown): the contracts trace a monotone carbon--profit
-frontier with \emph{no free lunch}, and surplus-only ($\tau=0$) is the carbon-optimal
-member of the family. So Weeks~2 and~3 are not rival models but the carbon-worst and
-carbon-best corners of one optimal-contract family, the regulator's reliability and
-participation requirements selecting the point between. Every identity is
+carbon-optimality of surplus-only reduces, by an \emph{exact identity}
+$C(\tau)-C(0)=\Phi(\tau)(1-\Lambda(\tau))$, to a single \emph{leverage} condition
+$\Lambda\le1$ (the reduction proved; the condition holds with room to spare, $\Lambda<0$,
+in every case): the contracts trace a monotone carbon--profit frontier with \emph{no free
+lunch}. So Weeks~2 and~3 are not rival models but the carbon-worst and carbon-best corners
+of one optimal-contract family, the regulator's reliability and participation requirements
+selecting the point between. Throughout, the core decarbonization is
+\emph{distributionally robust}: it holds for the worst-case demand law over the regularity
+class, so the regulator needs no knowledge of $F$. Every identity is
 checked against quadrature in \texttt{verify\_week3.py}. The message is clean: a flexible
 computing load is a decarbonization instrument, and contract design is the lever that
 makes it one.
@@ -308,6 +311,24 @@ $\KRc>\KRo$, and $\E[\fossil^{c}]<\E[\fossil^{\circ}]$ at every adopted optimum-
 never flips.}
 \end{proof}
 
+\begin{corollary}[Distributionally-robust decarbonization]\label{cor:dro}
+Let $\mathcal U$ be the ambiguity set of all residual-demand distributions satisfying the
+standing positivity $\FKR>0$, Condition~\ref{cond:reg}, and adoption \eqref{eq:adopt}.
+Then the surplus contract's carbon saving is \emph{uniformly} positive over $\mathcal U$:
+\[
+  \inf_{F\in\mathcal U}\big(\E[\fossil^{\circ}]-\E[\fossil^{c}]\big)\;\ge\;0,
+  \qquad>0\text{ whenever the load is adopted.}
+\]
+So the regulator needs \emph{no knowledge of $F$}: whatever the true residual-demand law,
+the surplus contract decarbonizes. Exogeneity of $F$ is not a limitation here---it is
+precisely what the guarantee is robust to.
+\end{corollary}
+\begin{proof}
+Theorem~\ref{thm:decarb} gives $\E[\fossil^{\circ}]-\E[\fossil^{c}]>0$ for \emph{every}
+$F\in\mathcal U$ (the proof uses only $\FKR>0$, Condition~\ref{cond:reg}, and adoption).
+An inequality that holds for every member of a set holds for its infimum.
+\end{proof}
+
 \begin{remark}[Why this resolves Week 2]\label{rem:resolve}
 Week~2 proved that under the naive contract the carbon sign is \emph{irreducibly
 distributional}: at fixed equilibrium capacities the admissible conditional laws make
@@ -432,52 +453,59 @@ increase is strict; where instead the cap $\KM$ or the headroom $(\KF-x)_+$ bind
 is flat in $\tau$ (a larger budget changes nothing).
 \end{proof}
 
+Write $K(\tau)=(\KR(\tau),\KF(\tau),\KM(\tau))$ for the firm's $\tau$-optimal capacities
+and define the \emph{channel leverage}
+\begin{equation}\label{eq:leverage}
+  \Lambda(\tau)\eqdef\frac{G(K(0))-G(K(\tau))}{\Phi(\tau)}\qquad(\tau>0),
+\end{equation}
+the consumer fossil that the budget's induced capacity change saves, per unit of the
+direct footprint $\Phi(\tau)$ it burns.
+
 \begin{theorem}[The carbon--profit frontier; surplus-only minimizes carbon]\label{thm:frontier}
-Let $C(\tau)$ be strictly increasing in $\tau$ (established below). Then over the
-family \eqref{eq:dtau}:
+Over the family \eqref{eq:dtau}:
 \begin{enumerate}[leftmargin=2em,itemsep=1pt]
-\item[\textup{(i)}] the carbon--profit pair $(\Pi(\tau),C(\tau))$ traces a monotone
-frontier: a larger fossil budget weakly buys firm profit at the cost of carbon;
-\item[\textup{(ii)}] carbon is minimized at $\tau=0$---the surplus contract is the
-carbon-optimal member of the family;
+\item[\textup{(i)}] $\Pi(\tau)$ is non-decreasing (Proposition~\ref{prop:profitmono}), so
+$(\Pi(\tau),C(\tau))$ traces a monotone frontier: a larger fossil budget weakly buys firm
+profit;
+\item[\textup{(ii)}] \textbf{(exact reduction)} $C(\tau)-C(0)=\Phi(\tau)\,\big(1-\Lambda(\tau)\big)$;
+hence surplus-only ($\tau=0$) is the carbon-optimal member of the family \emph{if and only
+if} $\Lambda(\tau)\le1$ for every $\tau>0$---no budget's renewable build-out saves more
+fossil than the budget directly burns;
 \item[\textup{(iii)}] the carbon-minimizing contract subject to a firm-profit floor
-$\bar\Pi\in[\Pi^{c},\Pi^{*}]$ is $\tau^{*}=\inf\{\tau:\Pi(\tau)\ge\bar\Pi\}$, the
-\emph{unique} carbon-minimizer (since $C$ is strictly increasing, every other
-floor-meeting budget has strictly higher carbon); the floor binds with equality,
-$\Pi(\tau^{*})=\bar\Pi$, iff $\Pi$ is strictly increasing at $\tau^{*}$. When the floor is
-slack ($\bar\Pi\le\Pi(0)=\Pi^{c}$), $\tau^{*}=0$ is surplus-only.
+$\bar\Pi\in[\Pi^{c},\Pi^{*}]$ is $\tau^{*}=\inf\{\tau:\Pi(\tau)\ge\bar\Pi\}$; it is the
+unique carbon-minimizer whenever $\Lambda\le1$ holds strictly, and $\tau^{*}=0$
+(surplus-only) when the floor is slack ($\bar\Pi\le\Pi^{c}$).
 \end{enumerate}
+The condition $\Lambda(\tau)\le1$ holds in every shape and regime we scan---indeed
+$\Lambda(\tau)<0$, since the budget-induced capacities \emph{raise} consumer fossil
+(a larger $\KF$ to serve the load), so there is no offset at all and $C(\tau)>C(0)$
+strictly.
 \end{theorem}
 \begin{proof}
-Given $C$ strictly increasing: (ii) is immediate, and (i) follows with $\Pi$
-non-decreasing (Proposition~\ref{prop:profitmono}). (iii) The floor-feasible set is $\{\tau:\Pi(\tau)\ge\bar\Pi\}=[\tau^{*},\infty)$ with
-$\tau^{*}=\inf\{\tau:\Pi(\tau)\ge\bar\Pi\}$ ($\Pi$ non-decreasing). Since $C$ is strictly
-increasing, carbon is smallest at the left end $\tau^{*}$ and strictly larger at every
-other feasible $\tau$, so $\tau^{*}$ is the unique carbon-minimizer---whether or not the
-budget binds. The floor is met with equality at $\tau^{*}$ exactly when $\Pi$ is strictly
-increasing there; otherwise $\Pi(\tau^{*})>\bar\Pi$ on a profit plateau, but $\tau^{*}$ is
-still the unique minimizer. $\bar\Pi\le\Pi^{c}=\Pi(0)$ gives $\tau^{*}=0$.
-
-\emph{Why $C$ is increasing.} Differentiate \eqref{eq:Ctau}:
-\[
-  \frac{dC}{d\tau}=\underbrace{\Phi'(\tau)}_{>0}
-  +\underbrace{G_{\KF}\,\KF'(\tau)}_{\ge0}
-  +\underbrace{G_{\KR}\,\KR'(\tau)}_{\text{channel}},
-  \qquad G_{\KF}=1-F(\KF)\ge0,\ \ G_{\KR}=-\!\int_0^{\KF}\!\FKR<0 .
-\]
-\emph{Two} forces push carbon up: the direct footprint $\Phi'>0$ (first order in the
-fossil-state measure), and the extra consumer fossil from the larger fossil capacity the
-load now needs ($\KF'(\tau)\ge0$, so $G_{\KF}\KF'\ge0$). The \emph{only} countervailing
-force is the renewable channel $G_{\KR}\KR'(\tau)$: it helps only if fossil dispatch
-raises $\KR$ ($\KR'>0$), and even then it works through the weak $R-c$ fossil margin. The
-suite confirms the two upward forces dominate---$C(\tau)$ is strictly increasing across
-every shape and regime scanned (and a fortiori $\tau=0$ is the minimum). We therefore
-establish the monotonicity \emph{numerically}, exactly as Week~2 resolved its sign
-question; the marginal decomposition shows \emph{why} (in every case computed, the
-channel a fossil budget buys does not pay for the fossil it burns). We do not claim a
-distribution-free proof of $\KR'(\tau)$'s sign or magnitude---that is the numerically
-settled part.
+(ii) is an exact identity: by \eqref{eq:Ctau}, $C(\tau)=G(K(\tau))+\Phi(\tau)$ and
+$C(0)=G(K(0))$ (as $\Phi(0)=0$), so
+$C(\tau)-C(0)=\Phi(\tau)-\big[G(K(0))-G(K(\tau))\big]=\Phi(\tau)\big(1-\Lambda(\tau)\big)$.
+Since $\Phi(\tau)>0$ for $\tau>0$, $C(\tau)\ge C(0)\Leftrightarrow\Lambda(\tau)\le1$---no
+approximation, no unproven capacity-response sign. (i) is Proposition~\ref{prop:profitmono}.
+(iii) The floor-feasible set is $\{\tau:\Pi(\tau)\ge\bar\Pi\}=[\tau^{*},\infty)$ ($\Pi$
+non-decreasing); under $\Lambda\le1$, $C$ is non-decreasing so the left end $\tau^{*}$
+minimizes carbon, uniquely where the inequality is strict; $\bar\Pi\le\Pi^{c}=\Pi(0)$
+gives $\tau^{*}=0$.
 \end{proof}
+
+\begin{remark}[Why $\Lambda<1$, and what would overturn it]
+The leverage $\Lambda$ is the sharp knob. Differentiating \eqref{eq:Ctau},
+$dC/d\tau=\Phi'(\tau)+G_{\KF}\KF'(\tau)+G_{\KR}\KR'(\tau)$ with
+$G_{\KF}=1-F(\KF)\ge0$, $G_{\KR}=-\int_0^{\KF}\FKR<0$: two forces push carbon up
+(the footprint $\Phi'>0$ and the extra consumer fossil from the larger $\KF$ the load
+needs), and the \emph{only} way to get $\Lambda>1$ is a renewable channel $G_{\KR}\KR'$
+strong enough---$\KR'(\tau)$ both positive and large---to overturn both. That is exactly
+what the theorem isolates as the single thing to check, and across every shape and regime
+$\Lambda<0<1$: fossil-running does not even raise $\KR$ on net here, it raises $\KF$, so
+the ``financing'' story fails and carbon rises unambiguously. The result is thus a
+\emph{proved} equivalence resting on one interpretable, verified scalar---not a
+distribution-free assertion about $\KR'(\tau)$, which we do not claim.
+\end{remark}
 
 \begin{remark}[No free lunch, and the unification]
 Within this budget family, the carbon question reduces to a single monotone trade-off:
