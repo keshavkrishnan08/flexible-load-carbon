@@ -138,7 +138,7 @@ def F_inverse(q: float, D: np.ndarray, eta: np.ndarray, K_R: float) -> float:
 # No-FCL benchmark (eqs 7, 9)
 # ---------------------------------------------------------------------------
 def solve_no_fcl(params: Params, D: np.ndarray, eta: np.ndarray,
-                 K_R_max: float = 5.0):
+                 K_R_max: float = 20.0):
     target_F = 1 - params.C_F / (params.beta + params.p - params.c)
 
     def profit_no_fcl(K_R: float):
@@ -164,7 +164,7 @@ def solve_no_fcl(params: Params, D: np.ndarray, eta: np.ndarray,
 # Joint optimum with FCL (eqs 12, 13, 15)
 # ---------------------------------------------------------------------------
 def solve_with_fcl(params: Params, D: np.ndarray, eta: np.ndarray,
-                   K_R_max: float = 5.0):
+                   K_R_max: float = 20.0):
     target_F_KF = (params.beta + params.p - params.c - params.C_F - params.C_M) / (
         params.beta + params.p - params.R
     )
