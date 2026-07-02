@@ -1,0 +1,17 @@
+distribution,theta,wedge_base,dW_dtheta,sign
+uniform,C_M,10.6688,-2.54874,-
+uniform,C_R,10.6688,0.0,0
+beta_a05_b3_right,C_M,0.5955,-1.21937,-
+beta_a05_b3_right,C_R,0.5955,0.0,0
+beta_a2_b5_right,C_M,3.8965,-1.46259,-
+beta_a2_b5_right,C_R,3.8965,0.0,0
+beta_a2_b2_symmetric,C_M,9.0996,-1.6328,-
+beta_a2_b2_symmetric,C_R,9.0996,0.0,0
+beta_a5_b2_left,C_M,12.6565,-1.84322,-
+beta_a5_b2_left,C_R,12.6565,0.0,0
+lognormal,C_M,1.5446,-0.82956,-
+lognormal,C_R,1.5446,0.0,0
+exponential,C_M,5.8936,-2.3604,-
+exponential,C_R,5.8936,0.0,0
+pareto,C_M,0.0,0.0,0
+pareto,C_R,0.0,0.0,0
