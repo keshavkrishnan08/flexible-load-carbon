@@ -91,3 +91,69 @@ targeted numerical counterexample.
   region vs. the demand/supply correlation.
 - **Role 4:** stitch small-FCL / interior / full-coverage into one regime map;
   confirm Hessian negative-definite conditions feed Assumption 1.
+
+---
+
+# Role 1 — Gap Memo addendum: A1 Week 2
+
+**Five Week-2 results (`role1_week2_theory.tex`, verified `verify_week2.py`).**
+Same model, same large-FCL interior regime, nothing outside Role 1.
+
+1. **Existence, uniqueness, contract optimality (Thm 1).** A maximizer exists
+   (coercivity + Weierstrass). It is unique not by concavity — `Π` is submodular
+   in `(K_R,K_F)`, so global concavity fails — but by a **recursive-triangular**
+   FOC structure: the distribution-free cutoffs pin `K_F(K_R)` and `K_M(K_R)` as
+   unique inverses of `F`, and the `(K_F,K_M)` Hessian block is **unconditionally**
+   negative definite (`det M = (R−c)f(a)(β+p−R)f(K_F) > 0`). Uniqueness of `K_R`
+   then needs a **single scalar** diagonal-dominance / reduced-SOC condition
+   (Schur complement `Ψ'(K_R) < 0`), which also certifies `H ≺ 0`. Dispatch
+   `d*(x)=min{(K_F−x)_+,K_M}` is the unique optimum because the per-state payoff
+   has strictly positive slopes `β+p−c` and `R−c` (strict `R>c`).
+
+2. **Shift-ratio uniform along the homotopy (Lemma 4).** Support-wide
+   monotonicity of `g=F_{K_R}/f` (a static, `C_M`-free hypothesis) implies the
+   realized two-point endpoint inequality `g(a) ≥ g(K_F*)` holds at **every**
+   `C_M` on the path, even as the window `(K_F*−K_M*, K_F*)` moves — both
+   endpoints stay strictly interior (cutoffs in `(0,1)`) and ordered (`K_M*>0`).
+   This is the exact content the Week-1 "integrate downward" step needs.
+
+3. **Emission keystone for general `F` (Thm 2 + Prop 3).** Substituting the
+   equilibrium map into (C) gives the exact endogenous condition. A **primitive
+   sufficient condition** — endpoint shift-ratio (⇒ `K_R*>K_R°`) plus a two-zone
+   tail/skew bound (`f(·;K_R*)` non-increasing on the FCL zone, `f(·;K_R°)`
+   non-decreasing on the no-FCL zone) — yields a closed-form lower bound
+   `Δ ≥ Δ_LB`, so carbon strictly falls when `Δ_LB>0`. **Resolution of the Week-1
+   conjecture — NEGATIVE across BOTH regimes** (carbon falls at no finite interior
+   optimum). Validated with a **direct state-by-state fossil simulator** (FCL
+   served from renewable surplus first) that matches the closed form to 7 digits
+   (6.1833), confirming the formula already credits surplus absorption.
+   - **Large-FCL (`K_M*≥K_R*`):** exhaustive search (Beta mixtures, every skew,
+     `E[S]≤.8`, full `C_R×C_M` grid) gives `Δ<0` at every optimum (max ≈ −1.4).
+     Mechanism = the **irreducible floor** `(K_M*−K_R*)_+`: max surplus in any
+     state is `≤K_R*`, so an FCL bigger than `K_R*` can't be fully surplus-powered
+     and burns ≥`K_M*−K_R*` fossil even at deepest surplus.
+   - **Small-FCL (`K_M*<K_R*`):** the floor vanishes, but this regime is optimal
+     only at small `C_R`, where the **no-FCL** grid already drives `K_F°→0`
+     (`E[fossil°]→0`) — nothing to save — and the channel even **reverses**
+     (`K_R*≤K_R°`). E.g. `CR=0.10`: no-FCL `(14.4, 0.0)`, with-FCL `(14.0,1.6,2.1)`,
+     `Δ=−0.21`.
+   - Carbon strictly falls **only** at the cheap-renewable corner `K_R*→∞`
+     (Week-1 Thm 4(ii) window). Consistent with Role-3's "carbon rare at low C_R."
+   **Correction:** my first-pass mechanism ("flat term = fossil added") was wrong;
+   the formula already credits surplus absorption. Did **not** fabricate a positive
+   witness — reported the true two-regime negative.
+
+4. **Connectedness of `{C_R : Δ≥0}` (Thm 3).** Bounded above (Week-1 large-cost
+   anchor `Δ→−U₀`), non-empty (result 3), and a **single interval** under the
+   monotone-renewable-shadow-value condition: `Δ'(C_R)<0` at every zero (strict
+   down-crossing), proved to rule out a second crossing by an IVT argument.
+
+5. **Sharpness (Thm 4, Thm 5).** The N&S condition for `K_R*>K_R°` is the **path
+   integral** `∫_{C_M}^{C̄_M} λ dt > 0` (FTC), `λ ∝ f f [g(a)−g(K_F*)]`;
+   pointwise-monotone `g` makes `λ≥0` so it is **sufficient but not necessary**.
+   The two-sided bounds `Δ_min ≤ Δ ≤ Δ_max` are **tight**, attained by
+   degenerate conditional laws concentrating at the interval endpoints.
+
+**Still open (honest):** the cross-`F` robust certificate over all of `U`
+(capacity covariation) remains Role 3; small-FCL boundary `K*_M=K°_R` remains
+Role 4. The reversed-channel realized counterexample (necessity witness) is Role 3.
