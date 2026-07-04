@@ -83,3 +83,54 @@ backend rather than reimplementing it.
   tests/test_necessity.py, tests/test_screening.py
 - run_analysis_week2.py, MECHANISM_REGIMES.md
 - Full suite: 41 passing (17 Week 1 + 24 Week 2). Week 1 modules untouched.
+
+---
+
+## Week 3 — Theory Hardening and Regimes, across regimes (additive)
+
+### Task (verbatim, the Week 3 Role 4 assignment)
+1. Extend the contract and characterization across regimes. Carry the optimal
+   contract and the characterization into the small-FCL regime and across the
+   regime boundary; prove the schedule and the carbon functional stitch
+   continuously, or locate and explain the discontinuity.
+2. Harden the optimality and robust proofs. Supply the measure-theoretic
+   scaffolding the variational and minimax arguments need — existence and
+   measurability of the optimal schedule, IC/IR constraint qualification, and a
+   minimax theorem whose compactness/convexity hypotheses are verified for the
+   ambiguity set. Stress-test Assumption 1 against each new result.
+3. Regime-map the new objects. Where the optimal contract changes form and where
+   the phase-diagram boundaries cross regime lines; deliver the stitched carbon
+   phase diagram over the full cost plane spanning both FCL regimes.
+4. Reconcile the team. Integrate the four roles' Week-3 outputs, cross-check
+   every shared object (contract, carbon functional, robust optimum), flag
+   divergence.
+
+### Key results (all verified; see REGIME_STITCHING.md)
+- Bullet 1: d* is regime-free; carbon functional E[fossil](K_M) is C¹ across the
+  boundary K_M=K_R; the marginal value is continuous but kinks — Π is C¹ not C²,
+  with ∂²Π/∂K_M² jumping by c·f(−K_R)=c/(D̄+K_R) as the small-FCL surplus term
+  c·F(−K_M) switches on (F(−K_R)=0). Optimum passes through C_M^cross
+  continuously; carbon does not jump at the regime change.
+- Bullet 2: existence (compact box, Weierstrass) and the Sion minimax saddle
+  (U convex, Δ linear in F, least-favorable = uniform) both hold only when
+  C_R ≥ C_R† — Assumption 1 ALONE is insufficient (Week-1 corner-at-infinity now
+  governs the robust problem too). d* is a continuous ⇒ Borel-measurable
+  selection of the Carathéodory argmax; screening IC/IR CQ holds (monotone d^SB
+  restores global IC, IR binds at bottom).
+- Bullet 3: C_R†(C_M) is one analytic (convex, min at C̄_M) boundary, same closed
+  form both regimes; carbon-down region is connected and spans both FCL regimes
+  (does not fracture at C_M^cross); regime line crosses the boundary once at
+  (0.354, 0.771). Ordering C_M^fc<C_M^cross<C̄_M<C̄_M^b = 0<0.354<0.5<0.793.
+- Bullet 4: contract == backend (dev 0), carbon functional == backend (rel 2e−9),
+  robust optimum consistent with Role 1 where C_R≥C_R†. Flags: robust CAPACITY
+  problem ill-posed on the carbon window C_R<C_R†; general-F Step 3 still
+  conditional; Roles 2/3 Week-3 not yet pushed (deferred).
+
+### Week 3 files (additive)
+- role4/regime_stitch.py, role4/hardening.py, role4/regime_phase.py,
+  role4/reconcile_week3.py
+- tests/test_regime_stitch.py, tests/test_hardening.py,
+  tests/test_regime_phase.py, tests/test_reconcile_week3.py
+- run_analysis_week3.py, REGIME_STITCHING.md
+- Week-3 suite: 24 passing. Full suite 66 (17 + 25 + 24) with Weeks 1–2 in place.
+  Weeks 1–2 modules untouched.

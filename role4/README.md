@@ -92,3 +92,40 @@ tests/               +4 files (test_instrument/unified_regime/necessity/screenin
 run_analysis_week2.py figures + a four-bullet Week-2 summary print
 MECHANISM_REGIMES.md  the Week-2 writeup (start here for Week 2)
 ```
+
+## Week 3 — Theory Hardening and Regimes (across regimes)
+Read **`REGIME_STITCHING.md`** (organized bullet-by-bullet, every claim
+cross-referenced to its test):
+
+1. **Contract & carbon functional stitch across the FCL regime boundary** —
+   `d*` is regime-free and the carbon functional is `C¹` across `K_M=K_R`; the
+   only non-smoothness is a *located* kink in `∂²Π/∂K_M²` of size `c/(D̄+K_R)`
+   as the small-FCL surplus term switches on (`role4/regime_stitch.py`).
+2. **Measure-theoretic hardening** — existence (Weierstrass on the compact box),
+   measurability of `d*`, IC/IR constraint qualification, and the Sion minimax
+   for the ambiguity set; existence and the saddle need `C_R ≥ C_R†`, not just
+   Assumption 1 (`role4/hardening.py`).
+3. **Stitched carbon phase diagram** — one *connected* carbon-down region
+   spanning both FCL regimes, smooth boundary `C_R†(C_M)` (convex, min at `C̄_M`)
+   crossed once by the regime-form line `C_M^cross` (`role4/regime_phase.py`).
+4. **Reconcile the team** — the contract, carbon functional, and robust optimum
+   cross-checked against Role 1 and the backend; the ill-posed-robust-on-the-
+   carbon-window divergence flagged (`role4/reconcile_week3.py`).
+
+```bash
+.venv/bin/python -m pytest tests/ -q          # 41 passing here (17 + 24);
+                                              # 66 with Week 2 in place (17+25+24)
+.venv/bin/python run_analysis_week3.py        # regime_stitch.png, phase_full.png/.csv
+```
+
+Week 3 layout (additive):
+```
+role4/
+  regime_stitch.py    Week-3 bullet 1: contract + carbon functional across K_M=K_R
+  hardening.py        Week-3 bullet 2: existence/measurability/IC-IR CQ/Sion minimax
+  regime_phase.py     Week-3 bullet 3: stitched carbon phase diagram (both regimes)
+  reconcile_week3.py  Week-3 bullet 4: cross-role reconciliation + divergence flags
+tests/                +4 files (test_regime_stitch/hardening/regime_phase/reconcile_week3)
+run_analysis_week3.py figures + a four-bullet Week-3 summary print
+REGIME_STITCHING.md   the Week-3 writeup (start here for Week 3)
+```
