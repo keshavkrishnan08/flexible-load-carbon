@@ -48,7 +48,7 @@ class FiniteOptimumResult:
     grad_norm: float | None = None
     shift_ratio_KF: float | None = None       # g(K_F*)
     shift_ratio_gap: float | None = None       # g(K_F*-K_M*)
-    shift_ratio_condition_holds: bool | None = None  # g(K_F*) >= g(K_F*-K_M*)
+    shift_ratio_condition_holds: bool | None = None  # g(K_F*-K_M*) >= g(K_F*)
     KR_increased: bool | None = None           # K_R* > K_R^o ?
     carbon_lower: bool | None = None
     carbon_change: float | None = None         # with_fcl.carbon - no_fcl.carbon
@@ -147,9 +147,13 @@ def find_finite_interior_optimum(
     no_fcl = solve_no_fcl(dist, params, KR_max=last_scale * D, KF_max=0.5 * last_scale * D)
 
     K_F_star, K_M_star, K_R_star = last_res.K_F, last_res.K_M, last_res.K_R
+    # Role 1's endpoint condition for the capacity channel K_R* > K_R^o:
+    # g(a) >= g(K_F*), where a = K_F* - K_M* is the LOWER dispatch endpoint
+    # and g(x) = F_KR(x)/f(x). Since g is non-increasing and a < K_F*, this
+    # holds under regularity, consistent with K_R* > K_R^o.
     g_KF = g_ratio(dist, K_F_star, K_R_star)
     g_gap = g_ratio(dist, K_F_star - K_M_star, K_R_star)
-    shift_condition = bool(g_KF >= g_gap) if np.isfinite(g_KF) and np.isfinite(g_gap) else None
+    shift_condition = bool(g_gap >= g_KF) if np.isfinite(g_KF) and np.isfinite(g_gap) else None
 
     return FiniteOptimumResult(
         found=True,
