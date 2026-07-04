@@ -1,16 +1,22 @@
 """
-Role 3 Week 2 — Bullet 3: Reversed-channel counterexample.
+Role 3 Week 2 — Bullet 3: Attempted reversed-channel construction.
 
-Goal: construct a residual-demand distribution where the realised endpoint
-shift-ratio condition FAILS,
-    g(K_F*) < g(K_F* - K_M*),
-and SHOW numerically that K_R* < K_R^o (channel reverses), certifying the
-endpoint inequality is *necessary*, not merely sufficient.
+Correct endpoint shift-ratio condition (Role 1, verified):
+    g(K_F* - K_M*) >= g(K_F*),      i.e.   g(a) >= g(K_F*),  a = K_F* - K_M*,
+which is SUFFICIENT for the capacity channel K_R* > K_R^o. It holds whenever
+g is non-increasing. A GENUINE reversal of the channel needs g INCREASING at
+the upper endpoint, i.e.  g(K_F*) > g(a).
 
-Construction: bimodal D = 0.5 * Beta(8,2) + 0.5 * Beta(2,8) (mixture of a
-strongly left-skewed and a strongly right-skewed mode). f has a deep valley
-near the centre, so the shift-ratio g(x) is non-monotone and dips at the
-upper threshold K_F*.
+Goal: try to break the channel with a residual-demand distribution whose
+density valley makes g non-monotone. Construction: bimodal
+D = 0.5 * Beta(8,2) + 0.5 * Beta(2,8).
+
+Finding (honest): this construction does NOT reverse the channel. At the
+joint optimum g(a) still (barely) exceeds g(K_F*), the endpoint condition
+still holds, and K_R* >= K_R^o. So the bimodal mixture is not a
+counterexample; it does not certify necessity. The pointwise endpoint
+condition is sufficient, and the sharp condition is positivity of the path
+integral of g*f over the FCL window [a, K_F*].
 """
 from __future__ import annotations
 import csv, sys
@@ -44,8 +50,8 @@ def main():
 
     K_R0, K_F0 = solve_no_fcl(base, D, eta)
     K_R, K_F, K_M = solve_with_fcl(base, D, eta)
-    g_hi = shift_ratio_g(D, eta, K_R, K_F)
-    g_lo = shift_ratio_g(D, eta, K_R, K_F - K_M)
+    g_at_KF = shift_ratio_g(D, eta, K_R, K_F)          # g(K_F*)
+    g_at_a  = shift_ratio_g(D, eta, K_R, K_F - K_M)     # g(a), a = K_F* - K_M*
 
     no = outcomes(base, D, eta, K_R0, K_F0, 0.0)
     yes = outcomes(base, D, eta, K_R, K_F, K_M)
@@ -57,9 +63,11 @@ def main():
         "K_R_no_fcl": round(K_R0, 4),
         "K_R_fcl":    round(K_R, 4),
         "K_R_lower_than_benchmark": bool(K_R < K_R0 - 1e-4),
-        "g_at_K_F":            round(g_hi, 4),
-        "g_at_K_F_minus_K_M":  round(g_lo, 4),
-        "endpoint_condition_holds": bool(g_hi >= g_lo - 1e-4),
+        "channel_reversed": bool(K_R < K_R0 - 1e-4),
+        "g_at_K_F":            round(g_at_KF, 4),
+        "g_at_K_F_minus_K_M":  round(g_at_a, 4),
+        # Endpoint condition holds iff lower endpoint carries the larger ratio.
+        "endpoint_condition_holds": bool(g_at_a >= g_at_KF - 1e-4),
         "carbon_no_fcl": round(no["carbon"], 5),
         "carbon_fcl":    round(yes["carbon"], 5),
         "delta_carbon":  round(yes["carbon"] - no["carbon"], 5),

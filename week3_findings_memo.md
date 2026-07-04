@@ -29,11 +29,16 @@ Sign of dW/dtheta where W = Carbon_myopic - Carbon_optimal:
   - Max |carbon gap|: 7.0578
 
 ## Bullet 4: Fragility map
-  - Endpoint-condition holds in 16/17 Beta(a, 5-a) scenarios
-  - Endpoint flip located at a* ≈ 0.5
+Endpoint condition g(a) >= g(K_F*), a = K_F* - K_M*:
+  - Holds in 17/17 Beta(a, 5-a) scenarios
+  - Endpoint flip in this family: no flip (g non-increasing on this family)
+  - The real knife-edge here is the ADOPTION boundary C_M = C_M_bar
+    (K_M* collapses to 0); the endpoint condition does NOT flip
+    within a single-mode family (breaking it needs g increasing).
 
 ## Sync with Role 1
 - Every distribution-free sign in Bullet 1 is a candidate for Role 1's characterization theorem.
 - The wedge W collapses to 0 as C_M ↑ C_M_bar and grows in C_R — consistent with the contract characterization.
 - Robust-nominal carbon gap is monotone in the ambiguity radius; the LR-path certificate matches Role 1's minimax statement.
-- The Beta(a, 5-a) flip point a* gives the sharpness witness for Role 4's regime boundary.
+- The endpoint condition g(a) >= g(K_F*) holds across the whole Beta(a, 5-a) family;
+  the genuine regime boundary for Role 4 is the adoption knife-edge C_M = C_M_bar.

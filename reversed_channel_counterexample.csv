@@ -1,2 +1,2 @@
-construction,K_F_star,K_M_star,K_R_no_fcl,K_R_fcl,K_R_lower_than_benchmark,g_at_K_F,g_at_K_F_minus_K_M,endpoint_condition_holds,carbon_no_fcl,carbon_fcl,delta_carbon
-"0.5*Beta(8,2)+0.5*Beta(2,8) (bimodal)",0.9591,0.1588,0.0011,0.0018,False,0.5045,0.5061,False,14.92376,18.98327,4.05951
+construction,K_F_star,K_M_star,K_R_no_fcl,K_R_fcl,K_R_lower_than_benchmark,channel_reversed,g_at_K_F,g_at_K_F_minus_K_M,endpoint_condition_holds,carbon_no_fcl,carbon_fcl,delta_carbon
+"0.5*Beta(8,2)+0.5*Beta(2,8) (bimodal)",0.9591,0.1588,0.0011,0.0018,False,False,0.5045,0.5061,True,14.92376,18.98327,4.05951

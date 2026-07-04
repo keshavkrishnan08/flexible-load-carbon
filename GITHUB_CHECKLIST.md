@@ -9,7 +9,7 @@ Target: `Role-3` branch of `dhruvkamath-dev/team-a1`, under `role3/week3/`.
   - Bullet 1 distribution-free signs feed Role 1's characterization theorem.
   - Bullet 2 wedge sign matches Role 1's carbon decomposition.
   - Bullet 3 LR-path certificate matches Role 1's minimax statement.
-  - Bullet 4 endpoint flip a* ≈ 0.5 is the sharpness witness Role 4 needs.
+  - Bullet 4: endpoint condition g(a) ≥ g(K_F*) holds across the whole Beta(a,5−a) family (no flip); the genuine knife-edge for Role 4 is the adoption boundary C̄_M.
 
 ## Files to upload
 
@@ -45,7 +45,7 @@ Target: `Role-3` branch of `dhruvkamath-dev/team-a1`, under `role3/week3/`.
 | 1 | Sign ∂J/∂θ for {R,c,β,p,C_F,C_R,C_M}; boundary movement | ✅ 6/7 signs distribution-free across 8 dists |
 | 2 | Wedge W monotone: dW/dC_M ≤ 0, dW/dC_R ≤ 0 | ✅ 7/8 in C_M, 8/8 in C_R |
 | 3 | Wasserstein Beta ambiguity: LR-path sign invariant | ✅ invariant; max price of robustness = 0.125 |
-| 4 | Adoption knife-edge at C̄_M; endpoint shift-ratio flip | ✅ K_M*: 0.16→0 at C̄_M; a* ≈ 0.5 |
+| 4 | Adoption knife-edge at C̄_M; endpoint shift-ratio check | ✅ K_M*: 0.16→0 at C̄_M; g(a) ≥ g(K_F*) holds 17/17, no flip |
 
 ## Push steps
 1. `git checkout Role-3`

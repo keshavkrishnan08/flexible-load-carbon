@@ -5,8 +5,10 @@ Signs the partial derivatives
     d(Carbon_FCL - Carbon_noFCL) / d theta     for theta in {R, beta, p, C_M}
 via central finite differences on the joint optimum (eqs 12, 13, 15), and
 confirms the capacity-substitution claim K_R* > K_R^o under the endpoint
-shift-ratio condition  g(K_F*) >= g(K_F* - K_M*),
-where g(x) = F_{K_R}(x) / f(x) at the realised thresholds.
+shift-ratio condition  g(K_F* - K_M*) >= g(K_F*),
+where g(x) = F_{K_R}(x) / f(x) at the realised thresholds. The lower
+dispatch endpoint a = K_F* - K_M* must carry the LARGER shift ratio; since
+g is non-increasing under the regularity assumption and a < K_F*, this holds.
 """
 from __future__ import annotations
 import csv, sys
@@ -72,16 +74,17 @@ def main():
             D, eta = draw(p, dist)
             K_R0, K_F0 = solve_no_fcl(p, D, eta)
             K_R, K_F, K_M = solve_with_fcl(p, D, eta)
-            g_hi = shift_ratio_g(D, eta, K_R, K_F)
-            g_lo = shift_ratio_g(D, eta, K_R, K_F - K_M)
-            endpoint_ok = (not np.isnan(g_hi) and not np.isnan(g_lo)
-                            and g_hi >= g_lo - 1e-4)
+            g_at_KF = shift_ratio_g(D, eta, K_R, K_F)              # g(K_F*)
+            g_at_a  = shift_ratio_g(D, eta, K_R, K_F - K_M)        # g(a), a=K_F*-K_M*
+            # Endpoint condition: lower endpoint carries the larger shift ratio.
+            endpoint_ok = (not np.isnan(g_at_KF) and not np.isnan(g_at_a)
+                            and g_at_a >= g_at_KF - 1e-4)
             rows_sub.append({"distribution": dist, "C_R": C_R,
                               "K_R_no_fcl": round(K_R0, 4),
                               "K_R_fcl":    round(K_R, 4),
                               "K_R_higher": bool(K_R > K_R0 - 1e-4),
-                              "g_at_K_F":   round(g_hi, 4) if not np.isnan(g_hi) else "nan",
-                              "g_at_K_F_minus_K_M": round(g_lo, 4) if not np.isnan(g_lo) else "nan",
+                              "g_at_K_F":   round(g_at_KF, 4) if not np.isnan(g_at_KF) else "nan",
+                              "g_at_K_F_minus_K_M": round(g_at_a, 4) if not np.isnan(g_at_a) else "nan",
                               "endpoint_condition_holds": bool(endpoint_ok)})
     _write_csv(RES / "capacity_substitution_endpoint.csv", rows_sub)
     return rows_cs, rows_sub

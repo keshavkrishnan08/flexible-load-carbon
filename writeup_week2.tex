@@ -86,18 +86,23 @@ in \texttt{results/comparative\_statics\_signs.csv}.
 \subsection*{1.3 Capacity-substitution under endpoint shift-ratio}
 \begin{proposition}\label{prop:KR}
 Under the endpoint shift-ratio condition
-$g(K_F^*)\ge g(K_F^*-K_M^*)$, we have $K_R^*\ge K_R^\circ$.
+$g(K_F^*-K_M^*)\ge g(K_F^*)$ --- the lower dispatch endpoint
+$a:=K_F^*-K_M^*$ carries the larger shift ratio --- we have
+$K_R^*\ge K_R^\circ$.
 \end{proposition}
 \begin{proof}
 Differentiate eq.\ (3) in $C_R$ and subtract the analogous benchmark FOC.
 The marginal value of $K_R$ with FCL exceeds the benchmark by
 \[
    (R-c)\!\int_{K_F^*-K_M^*}^{K_F^*}\!F_{K_R}(x)\,dx
-   = (R-c)\!\int_{K_F^*-K_M^*}^{K_F^*}\!g(x)\,f(x)\,dx,
+   = (R-c)\!\int_{a}^{K_F^*}\!g(x)\,f(x)\,dx,
 \]
-which is positive iff $g$ averaged over the FCL window is positive.
-The endpoint inequality plus the mean value theorem implies the average is
-bounded below by $g(K_F^*-K_M^*)>0$, giving $K_R^*\ge K_R^\circ$.
+which is positive iff the path integral of $g\,f$ over the FCL window is
+positive. The pointwise endpoint inequality $g(a)\ge g(K_F^*)$ is
+\emph{sufficient}: with $g$ non-increasing it forces $g>0$ throughout
+$[a,K_F^*]$, so the integral is bounded below by $g(K_F^*)\,[F(K_F^*)-F(a)]>0$,
+giving $K_R^*\ge K_R^\circ$. The \emph{sharp} (necessary) condition is
+positivity of that path integral, not the endpoint inequality itself.
 \end{proof}
 
 \section{Bullet 2 --- Cross-distribution robust certificate}
@@ -131,24 +136,27 @@ path}---this is the explicit obstruction the theorem allows for. The
 shape-class $\mathcal U$ where $C_R^\dagger>0$ must be narrower (e.g.\ heavier
 right-tail families) and is a Week-3 target.
 
-\section{Bullet 3 --- Reversed-channel counterexample}
+\section{Bullet 3 --- Attempted reversed-channel construction}
 \begin{lemma}
-If $g(K_F^*)<g(K_F^*-K_M^*)$ at the realised thresholds, the integrand
-in the proof of Prop.\ \ref{prop:KR} need not be sign-definite, and the
-implication $K_R^*\ge K_R^\circ$ can fail.
+A genuine reversal of the capacity channel requires $g$ to be
+\emph{increasing} at the upper endpoint, $g(K_F^*)>g(K_F^*-K_M^*)$; only
+then can the integrand in the proof of Prop.\ \ref{prop:KR} fail to be
+sign-definite and the implication $K_R^*\ge K_R^\circ$ break.
 \end{lemma}
 
-\paragraph{Construction.} Take
+\paragraph{Construction (does not reverse).} Take
 $D\sim 0.5\,\mathrm{Beta}(8,2)+0.5\,\mathrm{Beta}(2,8)$ (bimodal) so the
 density has a valley near $x=K_F^*$. With $(R,c,p,\beta,C_F,C_R,C_M)
 =(55,30,100,500,20,25,18)$ we get $g(K_F^*)=0.5045$ and
-$g(K_F^*-K_M^*)=0.5061$, so the endpoint condition fails by $1.6\!\times\!
-10^{-3}$. In this realised case $K_R^*=K_R^\circ$ to four decimals, so the
-channel \emph{degenerates} rather than reverses --- consistent with Role
-1's statement that monotone $g$ is sufficient but not necessary, and that
-the endpoint inequality is tight at degeneracy. A strict reversal requires
-a deeper valley (e.g.\ mixture weight $\neq0.5$ or wider mode separation)
-and is filed as the Week-3 sharpness witness.
+$g(K_F^*-K_M^*)=0.5061$, so $g(a)\ge g(K_F^*)$ \emph{still holds} (by
+$1.6\!\times\!10^{-3}$): the endpoint condition is satisfied, not violated.
+Consistently, $K_R^*=K_R^\circ$ to four decimals and the channel does
+\emph{not} reverse. This bimodal mixture is therefore not a counterexample
+and does not certify necessity. It illustrates Role 1's statement that the
+endpoint inequality is \emph{sufficient} (the sharp condition being the
+positive path integral). A genuine reversal would need $g$ strictly
+increasing at the upper endpoint, which this single valley does not
+produce; whether any admissible $F$ achieves it is left open.
 
 \section{Bullet 4 --- Limit interchange via dominated convergence}
 \begin{lemma}
@@ -178,8 +186,10 @@ in \textbf{72/72} cases (\texttt{results/limit\_interchange\_envelope.csv}).
 $\partial/\partial R$ are uniform; $\partial/\partial \beta,\partial/
 \partial p$ flip in the small-FCL corner --- candidate boundary for Role
 1's sharp condition.
-\item Endpoint shift-ratio is empirically tight (no strict reversal yet),
-matching Role 1's "sufficient but not necessary" characterization.
+\item Endpoint shift-ratio $g(a)\ge g(K_F^*)$ is sufficient and held in
+every interior scenario; the bimodal attempt did not break it, matching
+Role 1's "sufficient but not necessary" characterization (sharp condition:
+positive path integral of $g\,f$ over the FCL window).
 \item DCT-based limit-interchange makes the threshold step rigorous
 without the a.s.-corner shortcut.
 \end{itemize}

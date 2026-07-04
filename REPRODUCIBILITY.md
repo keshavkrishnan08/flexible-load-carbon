@@ -21,9 +21,9 @@ byte-identical CSVs (MD5 verified).
 db07b3ba2ba6c61e554203b44573ca10  characterization_comparative_statics.csv
 ad1d39297419678334aa463aacdc324f  contract_wedge_by_shape.csv
 ac378448e3fcb96d0e7d7ab1d5e5f650  contract_wedge_comparative_statics.csv
-b6f77cbc56423bb39032d7e2defaf924  fragility_adoption_boundary.csv
-c8eb88df644c8d1e89d5d95f2a841af9  fragility_endpoint_boundary.csv
-4770d0d167a861ee674f42b75aad0759  fragility_summary.csv
+7894448505e00a82e27ab80953ea2959  fragility_adoption_boundary.csv
+a5ccba3573e2a3fd72524d7538e16441  fragility_endpoint_boundary.csv
+24b3917e6d35873cfdb5c8204e06b2f0  fragility_summary.csv
 330cd4316d8b981c5eb8540025806646  robustness_gap_vs_radius.csv
 4666be517d0b219b6a58be2eb623ae4a  robustness_summary.csv
 ```
@@ -43,4 +43,4 @@ c8eb88df644c8d1e89d5d95f2a841af9  fragility_endpoint_boundary.csv
 | ∂W/∂C_R invariant | Lemma 1 | 8/8 |
 | LR-path sign invariance | Thm 1 | True |
 | Adoption knife-edge witness | Prop 3 | K_M* 0.16 → 0 |
-| Endpoint flip a* ≈ 0.5 | Prop 4 | 16/17 hold |
+| Endpoint g(a) ≥ g(K_F*) (a = K_F*−K_M*) | Prop 4 | 17/17 hold, no flip |

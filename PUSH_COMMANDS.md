@@ -71,7 +71,7 @@ git commit -m "Role 3 — Week 3: characterization comp-statics, contract wedge,
 - Bullet 1: signs of dJ/d{R,c,beta,p,C_F,C_R,C_M} (6/7 distribution-free, 8 dists)
 - Bullet 2: wedge W monotone -- 7/8 in C_M, 8/8 in C_R
 - Bullet 3: Wasserstein-Beta ambiguity; LR-path sign invariant; price of robustness bounded
-- Bullet 4: adoption knife-edge at C_M_bar; endpoint shift-ratio flip at a* ~ 0.5
+- Bullet 4: adoption knife-edge at C_M_bar; endpoint condition g(a) >= g(K_F*) holds 17/17 (no flip on single-mode family)
 - LaTeX writeup with proofs (Prop 1-4 + Lemma + Theorem)
 - Deterministic (MD5-stable) CSV artifacts + reproducibility report"
 ```

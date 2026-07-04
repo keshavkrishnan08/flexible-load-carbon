@@ -13,10 +13,11 @@
 
 \section{Signed characterization comparative statics}
 Let $J(\theta) := \mathrm{Carbon}_{\text{FCL}}(\theta) - \mathrm{Carbon}_{\text{no-FCL}}(\theta)$
-be the carbon functional at the joint optimum. Write $x = D - K_R \eta$ and
-$g(y) = F(y;K_R)$ for the residual CDF; the FCL first-order conditions
-(eqs.~12--13, Week~1) fix $g(K_F^\ast) = \bar q_F$ and
-$g(K_F^\ast - K_M^\ast) = \bar q_{F-M}$, where
+be the carbon functional at the joint optimum. Write $x = D - K_R \eta$,
+let $F(\cdot;K_R)$ be the residual CDF with density $f$, and define the
+\emph{shift ratio} $g(x) := F_{K_R}(x;K_R)/f(x;K_R)$. The FCL first-order
+conditions (eqs.~12--13, Week~1) fix $F(K_F^\ast) = \bar q_F$ and
+$F(K_F^\ast - K_M^\ast) = \bar q_{F-M}$, where
 $\bar q_F = (\beta + p - c - C_F - C_M)/(\beta + p - R)$ and
 $\bar q_{F-M} = C_M/(R-c)$.
 
@@ -38,7 +39,7 @@ positive $K_M^\ast$,
 Applying the envelope theorem to $\Pi_{\text{FCL}}$,
 $\partial \mathrm{Carbon}_{\text{FCL}}/\partial \theta
 = c \cdot E[\mathbf 1_{x+d^\ast \in (0,K_F^\ast)} \cdot \partial (x+d^\ast)/\partial \theta]
-+ c \, \partial K_F^\ast/\partial \theta \cdot g(K_F^\ast)(1-g(K_F^\ast))/f(K_F^\ast)$
++ c \, \partial K_F^\ast/\partial \theta \cdot F(K_F^\ast)(1-F(K_F^\ast))/f(K_F^\ast)$
 (and similarly for no-FCL). Differentiating the two FOCs gives
 $\partial K_F^\ast/\partial R = -1/(f\,(\beta+p-R))\cdot \bar q_F > 0$,
 $\partial K_F^\ast/\partial c < 0$, and $\partial K_M^\ast/\partial C_M < 0$.
@@ -70,7 +71,7 @@ $\partial W/\partial C_M \le 0$ and $\partial W/\partial C_R \ge 0$.
 \end{lemma}
 
 \begin{proof}
-$K_M^\ast$ is decreasing in $C_M$ (FOC $g(K_F-K_M) = C_M/(R-c)$),
+$K_M^\ast$ is decreasing in $C_M$ (FOC $F(K_F-K_M) = C_M/(R-c)$),
 which shrinks the support on which $d_M \ne d_C$. Conversely, higher $C_R$
 lowers $K_R^\ast$, shifts residual demand rightward, and expands the
 region on which the myopic rule fails to substitute fossil.
@@ -115,14 +116,20 @@ The numerical witness table \texttt{fragility\_adoption\_boundary.csv}
 shows $K_M^\ast$ collapsing from $0.16$ to $0$ across $\bar C_M \pm 0.3$
 with carbon jumping by the predicted magnitude.
 
-\begin{proposition}[Endpoint shift-ratio boundary]\label{prop:endpoint}
-On the Beta$(a,5-a)$ family, the endpoint inequality
-$g(K_F^\ast) \ge g(K_F^\ast - K_M^\ast)$ holds for all $a > a^\ast$ and
-fails for $a \le a^\ast$; empirically $a^\ast \approx 0.5$.
+\begin{proposition}[Endpoint shift-ratio condition]\label{prop:endpoint}
+The capacity channel $K_R^\ast > K_R^\circ$ is driven by the endpoint
+condition $g(K_F^\ast - K_M^\ast) \ge g(K_F^\ast)$: the lower dispatch
+endpoint carries the larger shift ratio. Under the regularity assumption
+$g$ is non-increasing, so on the single-mode Beta$(a,5-a)$ family the
+condition holds for \emph{every} $a$ --- there is no flip. Breaking it
+would require $g$ increasing at the upper endpoint, which a single-mode
+family cannot produce.
 \end{proposition}
 
-The two witnesses on either side of $a^\ast$ are recorded in
-\texttt{fragility\_endpoint\_boundary.csv}.
+The scan across the Beta$(a,5-a)$ family (with $g$ the true shift ratio
+$F_{K_R}/f$) is recorded in \texttt{fragility\_endpoint\_boundary.csv};
+the condition holds throughout, so the only genuine knife-edge in this
+section is the adoption boundary of Prop.~\ref{prop:adoption}.
 
 \section*{Summary of verified claims}
 \begin{itemize}
