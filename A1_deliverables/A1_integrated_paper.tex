@@ -53,9 +53,12 @@ large-cost anchor and an explicit power-law window; and (iv) at fixed equilibriu
 capacities we reduce the carbon effect to a two-mean affine form, bracket it by
 closed-form bounds, and identify the uniform as the least-favorable conditional
 shape. Every analytical formula is verified to machine precision, and the
-distribution-free claims are confirmed across eight distribution families. We are
-explicit about what remains conditional: the fully general, finite-optimum carbon
-guarantee is proved for the power-law family and conjectured beyond it.
+distribution-free claims are confirmed across eight distribution families. Finally
+(v), optimizing the dispatch contract turns the corner result into a general one: the
+carbon-optimal (surplus) contract runs the load only on renewable surplus and
+decarbonizes at a finite interior optimum for \emph{every} distribution, a
+distributionally-robust guarantee, with naive and surplus dispatch the two ends of a
+monotone carbon--profit frontier.
 \end{abstract}
 
 \maketitle
@@ -89,6 +92,8 @@ contract. \S\ref{sec:channel} proves the capacity-substitution channel
 $\KRs>\KRo$ in general (Role~1). \S\ref{sec:carbon} gives the exact net-carbon
 condition and its distribution-free reading (Role~1). \S\ref{sec:threshold}
 establishes the renewable-cost viability threshold (Role~1).
+\S\ref{sec:optcontract} optimizes the dispatch contract and proves the general,
+distribution-free decarbonization result and the carbon--profit frontier (Role~1).
 \S\ref{sec:regimes} maps the regimes, completes the small-\textsc{fcl} case, and
 pressure-tests the maintained assumptions (Role~4). \S\ref{sec:numerics} reports
 the solver, the machine-precision audit, and the comparative statics across eight
@@ -257,7 +262,57 @@ knife-edge (constant renewable marginal value) of the power-law family. For a
 generic $F$ with an interior renewable optimum, the set $\{\Delta\ge0\}$ is bounded
 above by (i), but its \emph{non-emptiness}---that carbon falls somewhere---is what
 Condition~\ref{cond:cs} delivers in the cases we can sign and is conjectured in
-general. Closing this is the keystone of the next round.
+general. \S\ref{sec:optcontract} closes this keystone by optimizing the contract:
+the corner result becomes a general, distribution-free one.
+
+%---------------------------------------------------------------------
+\section{The optimal contract and distribution-free decarbonization}\label{sec:optcontract}
+
+Sections~\ref{sec:carbon}--\ref{sec:threshold} signed carbon under the \emph{fixed}
+dispatch rule $d^{*}(x)=\min\{(\KF-x)_+,\KM\}$, and found reduction only at the
+cheap-renewable corner. The rule, though, was assumed, not optimized. Optimizing it
+turns the corner result into a general one and resolves the keystone left open in
+\S\ref{sec:threshold}.
+
+\begin{proposition}[The surplus contract is fossil-minimizing; Role~1]\label{prop:surplus}
+At any capacities, total fossil in \eqref{eq:profit} is minimized over admissible
+dispatch schedules by the \emph{surplus contract} $d^{c}(x)=\min\{(-x)_+,\KM\}$, which
+runs the load only on renewable surplus and burns \emph{zero} fossil for the load.
+\end{proposition}
+
+Under $d^{c}$ the load's fossil footprint vanishes, so total fossil is the utility's own
+output $e(\KR)\eqdef\int_0^{\KF(\KR)}(1-F(x;\KR))\,dx$, which is strictly decreasing in
+$\KR$ (more renewables displace fossil). Combined with the capacity channel this gives a
+clean, shape-free guarantee.
+
+\begin{theorem}[Distribution-free decarbonization; Role~1]\label{thm:decarb}
+Suppose the load is adopted ($\CM<R\,F(0;\KRo)$) and the renewable problem is
+single-peaked. Then under the surplus contract $K_R^{c}\ge\KRo$ and
+$\E[\text{fossil}^{c}]\le\E[\text{fossil}^{\circ}]$, both strict whenever the load is
+adopted---\emph{for every residual-demand law $F$}, with no condition on its shape, tails,
+or skew. Equivalently, $\inf_{F\in\Ucal}(\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{c}])\ge0$:
+the guarantee is distributionally robust, so the regulator needs no knowledge of $F$.
+Relative to no load it is a strict Pareto improvement---profit rises, carbon falls, and
+blackout probability is held exactly at the no-load level $1-\varphi^{\circ}$.
+\end{theorem}
+
+Weeks~2's finding that the fixed-rule carbon sign is \emph{irreducibly distributional}
+(decidable neither way from the cutoffs) is thus a property of the \emph{contract}: the
+surplus contract removes the fossil floor that caused it, and the sign becomes definite.
+
+\paragraph{The carbon--profit frontier; Role~1.} The naive and surplus rules are the two
+ends of a one-parameter family---grant the load a per-state fossil budget $\tau$,
+$d_{\tau}(x)=\min\{(-x)_++\tau,\KM,(\KF-x)_+\}$, with $\tau=0$ the surplus rule and
+$\tau\to\infty$ the naive rule. Profit $\Pi(\tau)$ is non-decreasing (proved), and the
+exact identity $C(\tau)-C(0)=\Phi(\tau)(1-\Lambda(\tau))$---with $\Phi(\tau)$ the load's
+direct footprint and $\Lambda$ the consumer fossil the induced build-out saves per unit
+of footprint---reduces global carbon-optimality of the surplus contract to the single
+condition $\Lambda\le1$, which holds with room to spare ($\Lambda<0$) throughout. So the
+contracts trace a monotone carbon--profit frontier with no free lunch: every megawatt of
+fossil the load is allowed to burn raises emissions. The naive rule is the carbon-worst,
+the surplus rule the carbon-best corner; the regulator's reliability and participation
+requirements select the point between (the welfare selection is B1's).
+
 
 %---------------------------------------------------------------------
 \section{Regimes and robustness of the assumptions}\label{sec:regimes}
