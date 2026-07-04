@@ -21,11 +21,6 @@
   and costs on which it holds and the boundary where it fails -- completing the
   optimal-contract-family result.
 
-- **Give the distributionally-robust characterization.** Combine the functional with an
-  ambiguity set of demand laws: characterize the worst-case distribution and the
-  robust-optimal contract in terms of the functional, with a closed form on the power-law
-  family and a price of robustness.
-
 - **Draw the carbon phase diagram from the functional.** Partition the primitive space
   (costs and distribution shape) into carbon-up, carbon-neutral, and carbon-down regions
   whose analytic boundaries are the level sets of the functional and the viability
@@ -75,6 +70,12 @@
 - **Sign the contract-family comparative statics.** Characterize how the optimal budget
   and the leverage move with costs and with the shape of the distribution, in particular
   near the boundary where surplus-only ceases to be globally optimal.
+
+- **Give the distributionally-robust characterization.** Combine Role 1's functional with
+  an ambiguity set of demand laws: characterize the worst-case distribution and the
+  robust-optimal contract in terms of the functional, with a closed form on the power-law
+  family and a price of robustness -- the robustness capstone that turns the
+  shape-independent guarantee into a proved worst-case optimum.
 
 ## Role 4 (Theory Hardening and Regimes)
 
