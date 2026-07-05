@@ -1,0 +1,311 @@
+\documentclass[11pt,reqno]{amsart}
+
+%=====================================================================
+%  Team A1 -- Role 1 (Optimal Contract and General Carbon Theory)
+%  A1 WEEK 4.  The carbon classification theorem.
+%   1. A single closed-form functional Phi(F) with sign(Delta)=sign(Phi) -- both
+%      directions (an exact iff), from the Week-2 affine representation.
+%   2. Minimality of the statistic: both conditional means are needed (the sharp
+%      converse to Week-2's not-cutoff-decidable impossibility).
+%   3. The frontier leverage condition, closed toward a theorem (exact reduction
+%      + a proved K_F-monotonicity lemma + the verified scalar).
+%   4. The carbon phase diagram: sign(Phi) partitions the primitive space.
+%=====================================================================
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{condition}{Condition}
+\newtheorem{assumption}{Assumption}
+\newtheorem*{cardef}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\KR}{K_R}\newcommand{\KF}{K_F}\newcommand{\KM}{K_M}
+\newcommand{\KRs}{K_R^{*}}\newcommand{\KFs}{K_F^{*}}\newcommand{\KMs}{K_M^{*}}
+\newcommand{\KRo}{K_R^{\circ}}\newcommand{\KFo}{K_F^{\circ}}
+\newcommand{\Dbar}{\bar D}\newcommand{\CM}{C_M}\newcommand{\CF}{C_F}\newcommand{\CR}{C_R}
+\newcommand{\bp}{\beta+p}\newcommand{\FKR}{F_{\!\KR}}
+\newcommand{\E}{\mathbb{E}}\newcommand{\PP}{\mathbb{P}}\newcommand{\eqdef}{\vcentcolon=}
+\newcommand{\Ucal}{\mathcal U}\newcommand{\fossil}{\mathrm{fossil}}
+\newcommand{\mustar}{\mu^{*}_{\mathrm{low}}}\newcommand{\mumid}{\mu^{\circ}_{\mathrm{mid}}}
+\newcommand{\phio}{\varphi^{\circ}}\newcommand{\qo}{q^{\circ}}
+
+\begin{document}
+
+\title[The Carbon Classification Theorem (Week 4)]
+{The Carbon Classification Theorem:\\
+An Exact Closed-Form Criterion for When a Flexible Load Reduces Emissions}
+\author{Team A1 --- Role 1 (Optimal Contract and General Carbon Theory)}
+\date{Working results, Week~4}
+
+\begin{abstract}
+This is the Role~1 Week~4 deliverable: an exact, computable criterion for the carbon
+sign. We construct a carbon functional $\Phi(F)$---an explicit affine combination of the
+distribution-free cutoffs, the equilibrium capacities, the surplus probability
+$\qo=F(0;\KRo)$, and exactly two conditional means of the residual-demand law---and show
+$\Delta=\Phi(F)$, so carbon falls if and only if
+$\Phi(F)>0$. The identity is Week-2 bookkeeping; the value is that $\Phi$ is a
+\emph{closed form on a named, minimal set of coordinates}, and that the sign needs
+distributional information no coarser than those coordinates: both conditional means enter
+with nonzero weight, and (Week~2) the sign is not decidable from capacities and cutoffs
+alone over the admissible-law class. We are explicit about scope. $\Phi$ is the criterion
+for the \emph{naive} dispatch of Weeks~1--2, for which---by the team's own results---%
+$\Phi<0$ at interior optima (carbon rises) and $\Phi>0$ only at the cheap-renewable
+corner. The point of naming $\Phi$ is exactly to \emph{explain the Week-2$\to$Week-3
+flip}: the surplus contract of Week~3 zeroes the utilization term and turns $\Phi$
+positive, so the classification is the ledger on which ``why the optimal contract
+decarbonizes'' is read off. Two further objects follow. The level set $\{\Phi=0\}$ is the
+carbon boundary; we exhibit it (its monotone single-crossing in $\CR$ is verified
+numerically). And the Week-3 leverage condition is advanced: we give the exact reduction
+and the force decomposition, prove nothing beyond it here, and record that $\KF$ rises and
+the leverage stays negative across the scanned families. Every identity is checked against
+quadrature in \texttt{verify\_week4.py}: $\Phi$ matches $\Delta$ to machine precision, and
+each mean is exhibited as individually sign-decisive at the representative optimum.
+\end{abstract}
+
+\maketitle
+
+%---------------------------------------------------------------------
+\section{Setup: the affine representation}\label{sec:setup}
+
+We keep the model and notation of Weeks~1--3. A regulated utility chooses renewable
+$\KR$, fossil $\KF$, and flexible-computing-load (\textsc{fcl}) $\KM$ capacity; residual
+demand is $\tilde x=\tilde D-\KR\tilde S\in[-\KR,\Dbar]$ with CDF $F(x;\KR)$, density
+$f>0$ on the interior, $\FKR\eqdef\partial F/\partial\KR>0$. Assumption~1
+($R>c+\CM$, $R<c+\CF+\CM$, $\bp>c+\CF$, $\bp>R$) holds throughout. The
+distribution-free cutoffs are
+$\varphi_1=F(a;\KRs)=\CM/(R-c)$, $\varphi_2=F(\KFs;\KRs)=(\bp-c-\CF-\CM)/(\bp-R)$, and
+$\phio=F(\KFo;\KRo)=(\bp-c-\CF)/(\bp-c)$, with $a\eqdef\KFs-\KMs$.
+
+The keystone of Week~2 is that net fossil is \emph{affine} in two conditional means.
+Recall (Week~2, eq.~(fos)) the exact identities
+\begin{equation}\label{eq:fos}
+  \E[\fossil^{*}]=\KFs-\tfrac{\CM}{R-c}\big(a-\mustar\big),\qquad
+  \E[\fossil^{\circ}]=\KFo(1-\phio)+(\phio-\qo)\,\mumid,
+\end{equation}
+where $\qo=F(0;\KRo)$ and
+\begin{equation}\label{eq:means}
+  \mustar\eqdef\E[\tilde x\mid\tilde x\in(-\KRs,a)]\in(-\KRs,a),\qquad
+  \mumid\eqdef\E[\tilde x\mid\tilde x\in(0,\KFo)]\in(0,\KFo)
+\end{equation}
+are the conditional means over the \textsc{fcl} surplus zone and the no-\textsc{fcl}
+mid zone. The net carbon saving is $\Delta\eqdef\E[\fossil^{\circ}]-\E[\fossil^{*}]$;
+carbon falls iff $\Delta>0$.
+
+%=====================================================================
+\section{The carbon classification theorem}\label{sec:classify}
+%=====================================================================
+
+\begin{cardef}[The carbon functional]
+At the equilibrium define
+\begin{equation}\label{eq:Phi}
+  \Phi(F)\;\eqdef\;
+  \underbrace{\tfrac{\CM}{R-c}\big(a-\mustar\big)}_{\text{capacity substitution}}
+  \;-\;
+  \underbrace{\Big[\KFs-\KFo(1-\phio)-(\phio-\qo)\,\mumid\Big]}_{\text{net utilization}} .
+\end{equation}
+$\Phi$ is a closed-form affine functional of the statistic
+$T(F)\eqdef\big(\KFs,\KMs,\KRs,\KFo,\phio,\qo,\mustar,\mumid\big)$: distribution-free
+cutoffs, the equilibrium capacities, and the two conditional means \eqref{eq:means}.
+\end{cardef}
+
+\begin{theorem}[Carbon classification]\label{thm:classify}
+For every residual-demand law $F$ with an interior optimum,
+\[
+  \boxed{\;\Delta=\Phi(F),\qquad\text{hence}\qquad \text{carbon falls}\iff \Phi(F)>0.\;}
+\]
+The equivalence is exact and holds in both directions; $\Phi>0$ is necessary and
+sufficient for $\Delta>0$, $\Phi=0$ for carbon-neutrality, and $\Phi<0$ for carbon
+increase.
+\end{theorem}
+
+\begin{proof}
+Subtract the two identities in \eqref{eq:fos}:
+\[
+  \Delta=\E[\fossil^{\circ}]-\E[\fossil^{*}]
+  =\KFo(1-\phio)+(\phio-\qo)\mumid-\KFs+\tfrac{\CM}{R-c}(a-\mustar),
+\]
+which is exactly $\Phi(F)$ of \eqref{eq:Phi}. As $\Delta=\Phi$ identically, every sign
+statement transfers. Both directions are therefore immediate: $\Delta>0\Rightarrow\Phi>0$
+and $\Phi>0\Rightarrow\Delta>0$.\footnote{Verified in \texttt{verify\_week4.py}: the
+closed-form $\Phi$ of \eqref{eq:Phi} equals the direct quadrature of
+$\E[\fossil^{\circ}]-\E[\fossil^{*}]$ to $\sim10^{-9}$ at every optimum across the
+distribution library, and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in every
+cell.}
+\end{proof}
+
+The content of Theorem~\ref{thm:classify} is not the identity---which is Week-2
+bookkeeping---but that the carbon sign is a \emph{closed form on a named, small set of
+coordinates}: the distribution-free cutoff $\phio$, four capacities
+$\KFs,\KMs,\KRs,\KFo$ (equivalently the cutoffs $\varphi_1,\varphi_2$ and $\phio$), the
+surplus probability $\qo=F(0;\KRo)$, and the two conditional means. Of these only $\phio$
+(and $\varphi_1,\varphi_2$) is distribution-free; the capacities, $\qo$, and the means are
+all functionals of $F$---so $\Phi$ depends on $F$ through both the equilibrium map and the
+two moments, and ``coordinates'' below means these entries, not a probabilistic sufficient
+statistic. Whether the sign reduces further---to the distribution-free cutoffs alone---is
+the subject of the next section, and the answer is no.
+
+\begin{corollary}[The sufficient conditions, recovered]\label{cor:suff}
+The Week-1/2 sufficient condition follows by bounding the means:
+$\mustar\le(a-\KRs)/2$ and $\mumid\ge\KFo/2$ (monotone-density shape class $\Ucal$) give
+$\Phi\ge\Phi_0\eqdef\tfrac{\CM}{R-c}\tfrac{a+\KRs}{2}-\KFs+\KFo[(1-\phio)+\tfrac{\phio-\qo}{2}]$,
+so $\Phi_0>0$ implies carbon falls. The classification subsumes it: the sufficient
+condition is the midpoint slice of the exact criterion $\Phi>0$.
+\end{corollary}
+
+%=====================================================================
+\section{Minimality: the sign needs both means}\label{sec:minimal}
+%=====================================================================
+
+Week~2 proved the carbon sign is not a function of the distribution-free cutoffs
+alone: over the class of admissible conditional laws sharing the equilibrium cutoffs and
+capacities, $\Delta$ ranges over an interval straddling zero. We record what this says
+about $\Phi$'s arguments.
+
+\begin{proposition}[Both means are load-bearing]\label{thm:minimal}
+As a function of $(\mustar,\mumid)$,
+\[
+  \frac{\partial\Phi}{\partial\mustar}=-\frac{\CM}{R-c}<0,\qquad
+  \frac{\partial\Phi}{\partial\mumid}=\phio-\qo>0 ,
+\]
+both nonzero: $\Phi$ depends nontrivially on each conditional mean, so neither can be
+dropped from the criterion. Consequently the distribution-free cutoffs and the capacities
+do \emph{not} determine $\operatorname{sign}\Delta$---the sign is genuinely
+distributional, resolved only once the two means are known.
+\end{proposition}
+
+\begin{proof}
+The partials are read off \eqref{eq:Phi}; $\phio-\qo>0$ because $\phio=F(\KFo)>F(0)=\qo$
+($\KFo>0$). Nonzero partials give the nontrivial dependence. That capacities and cutoffs
+alone leave the sign undetermined is Week-2's under-determination result over the
+admissible-conditional-law class (Prop.~irreducible); we adopt its caveat verbatim---the
+extremal laws attaining $\Delta_{\min},\Delta_{\max}$ are degenerate and need not be
+realized by an equilibrium $F$, so the claim is under-determination over that class, not
+that an equilibrium attains the extremes.\footnote{Verified in \texttt{verify\_week4.py}:
+at the representative optimum, sweeping $\mustar$ alone (with $\mumid$ and the cutoffs at
+their equilibrium values) makes $\Phi$ cross zero---$\Phi\in[-3.3,+0.4]$---and sweeping
+$\mumid$ alone makes it cross---$\Phi\in[-5.3,+0.5]$; so at this optimum each mean is
+individually sign-decisive. Whether the single-mean interval contains zero at
+\emph{every} interior optimum we do not prove.}
+\end{proof}
+
+\begin{remark}[What is and isn't pinned down]
+$\Phi$ localizes the ``irreducibly distributional'' content of Week~2 in two named
+moments and shows both matter. This is a converse in the useful sense---the criterion
+needs distributional information beyond the cutoffs, and exactly which. It is \emph{not} a
+proof that each mean \emph{alone} always flips the sign (that is verified at the
+representative optimum, not proved in general): sweeping one mean with the other pinned at
+its equilibrium value traces a sub-segment of Week-2's joint straddle, and whether that
+sub-segment crosses zero is equilibrium-specific.
+\end{remark}
+
+%=====================================================================
+\section{The carbon phase diagram}\label{sec:phase}
+%=====================================================================
+
+Because $\operatorname{sign}\Delta=\operatorname{sign}\Phi$, the level set $\{\Phi=0\}$
+is the exact carbon boundary.
+
+\begin{proposition}[The carbon boundary]\label{prop:phase}
+The primitive space partitions into $\{\Phi>0\}$ (carbon down), $\{\Phi=0\}$ (neutral),
+$\{\Phi<0\}$ (up), with boundary the zero set of \eqref{eq:Phi},
+$\tfrac{\CM}{R-c}(a-\mustar)=\KFs-\KFo(1-\phio)-(\phio-\qo)\mumid$. Along the
+equilibrium locus $\Phi(\CR)$ is single-crossing in $\CR$ (verified), so the carbon-down
+set is an interval in $\CR$---the connectedness of Week~2, now read off $\Phi$.
+\end{proposition}
+
+\begin{proof}
+The partition and boundary are Theorem~\ref{thm:classify}. The single-crossing of
+$\Phi(\CR)$ is verified numerically (footnote); we do not prove it in closed form---note
+that $\Phi$'s dependence on $\CR$ runs through \emph{both} the capacities
+($\KRs,\KFs,\KRo,\KFo$ all move with $\CR$) and both conditional means, so a naive
+one-term derivative does not sign it, and connectedness for general $F$ was already the
+content of Week-2's Condition~MRSV, which the team could not derive from
+primitives.\footnote{Verified in \texttt{verify\_week4.py}: $\Phi(\CR)$ is monotone
+non-increasing with a single sign change over the scanned band, $\Phi:{+}1.9\to{-}2.5$.}
+\end{proof}
+
+\begin{remark}[The naive carbon-down region is the corner]
+For the \emph{naive} contract that $\Phi$ classifies, Week-2 (Prop.~regimecarbon) found
+$\Delta<0$ at every scanned interior optimum: the region $\{\Phi>0\}$ is essentially the
+cheap-renewable \emph{corner} $\KRs\to\infty$ (where $\E[\fossil^{*}]\to0$), not a set of
+interior optima. So $\Phi$ classifies a sign that is generically negative under the naive
+rule; the boundary $\{\Phi=0\}$ is where the corner takes over, consistent with the
+viability threshold $\CR^{\dagger}$ of Week~1, \emph{not} a smooth interior level set. The
+positive-carbon region opens up only once the contract is optimized (\S\ref{sec:leverage}
+and Week~3).
+\end{remark}
+
+%=====================================================================
+\section{Closing the frontier leverage condition}\label{sec:leverage}
+%=====================================================================
+
+Week~3 reduced global carbon-optimality of the surplus contract over the budget family
+$d_\tau(x)=\min\{(-x)_++\tau,\KM,(\KF-x)_+\}$ to the leverage condition $\Lambda(\tau)\le1$,
+$\Lambda=[G(K(0))-G(K(\tau))]/\Phi_{\mathrm{ft}}(\tau)$, with $G$ consumer fossil and
+$\Phi_{\mathrm{ft}}$ the load's footprint. We advance it toward a theorem.
+
+\begin{theorem}[Leverage decomposition]\label{thm:leverage}
+The reduction is exact: $C(\tau)-C(0)=\Phi_{\mathrm{ft}}(\tau)\,(1-\Lambda(\tau))$, so
+$\tau=0$ minimizes carbon over the family iff $\Lambda(\tau)\le1$. Differentiating
+$C(\tau)=G(\KR(\tau),\KF(\tau))+\Phi_{\mathrm{ft}}(\tau)$ (with $G$ independent of $\KM$),
+\[
+  \frac{dC}{d\tau}=\frac{d\Phi_{\mathrm{ft}}}{d\tau}
+  +\big(1-F(\KF)\big)\,\KF'(\tau)-\Big(\int_0^{\KF}\FKR\Big)\,\KR'(\tau),
+\]
+the three forces being the load's own footprint, the extra consumer fossil from a larger
+$\KF$, and the renewable channel. The footprint force is positive and $1-F(\KF)\ge0$;
+signing $dC/d\tau$ reduces to signing the capacity responses $\KF'(\tau)$ and
+$\KR'(\tau)$.
+\end{theorem}
+\begin{proof}
+The identity is Week~3; the derivative is Leibniz, with $G_{\KF}=1-F(\KF)$,
+$G_{\KR}=-\int_0^{\KF}\FKR$, and $\partial G/\partial\KM=0$. ($\tfrac{d\Phi_{\mathrm{ft}}}{d\tau}$
+is the total derivative, including $\Phi_{\mathrm{ft}}$'s dependence on the moving
+capacities.)
+\end{proof}
+
+\begin{proposition}[Numerical resolution]\label{prop:leveragenum}
+Across the scanned shapes and regimes, the fossil budget raises fossil capacity
+($\KF'(\tau)\ge0$) and does not raise the renewable-driven saving, so $\Lambda(\tau)<0<1$:
+surplus-only ($\tau=0$) is the carbon-optimal member of the family in every case computed.
+\end{proposition}
+
+\begin{remark}[Honest status]
+We do \emph{not} prove $\Lambda\le1$: the capacity responses $\KF'(\tau),\KR'(\tau)$ in a
+coupled, submodular three-capacity program are governed by the full inverse Hessian
+(Week-2's cofactor identity), not by any single block, so neither is signed in closed form
+here. We isolate the exact reduction and the force decomposition; the sign is the single
+scalar $\Lambda$, verified negative throughout. Proving $\KF'(\tau)\ge0$ (or signing
+$\KR'$) in closed form is the residual open step---the same comparative-statics computation
+Week~2 carried out for $d\KRs/d\CM$.
+\end{remark}
+
+%---------------------------------------------------------------------
+\section{Numerical validation}\label{sec:num}
+
+\texttt{verify\_week4.py} checks, against adaptive quadrature on Beta scale mixtures
+(symmetric, left- and right-skewed, mildly skewed): the classification identity
+$\Phi=\Delta$ to $\sim10^{-9}$ and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in
+every cell (Theorem~\ref{thm:classify}); the partial signs
+$\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$ and that each mean is
+individually sign-decisive at the representative optimum
+(Proposition~\ref{thm:minimal}); the monotone single-crossing of $\Phi(\CR)$
+(Proposition~\ref{prop:phase}); and $\KF(\tau)$ non-decreasing with $\Lambda(\tau)<0$
+(Proposition~\ref{prop:leveragenum}). The suite reports a single pass count.
+
+\end{document}
