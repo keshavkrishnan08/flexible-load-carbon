@@ -92,7 +92,7 @@ surplus rule and $\tau\to\infty$ the naive rule. Profit rises with $\tau$ (prove
 carbon-optimality of surplus-only reduces, by an \emph{exact identity}
 $C(\tau)-C(0)=\Phi(\tau)(1-\Lambda(\tau))$, to a single \emph{leverage} condition
 $\Lambda\le1$ (the reduction proved; the condition holds with room to spare, $\Lambda<0$,
-in every case): the contracts trace a monotone carbon--profit frontier with \emph{no free
+in every case we scan): the contracts trace a monotone carbon--profit frontier with \emph{no free
 lunch}. So Weeks~2 and~3 are not rival models but the carbon-worst and carbon-best corners
 of one optimal-contract family, the regulator's reliability and participation requirements
 selecting the point between. Throughout, the core decarbonization is
@@ -223,7 +223,7 @@ the \textsc{fcl} contributing the surplus revenue $R\,\E[\min\{(-\tilde x)_+,\KM
      &&\Longrightarrow\quad F(-\KMc;\KRc)=\tfrac{\CM}{R},\label{eq:focM}\\
   \partial_{\KF}\Pi^{c}&=(\bp-c)\big(1-F(\KF;\KR)\big)-\CF=0
      &&\Longrightarrow\quad F(\KFc;\KRc)=\varphi^{\circ},\label{eq:focF}\\
-  \partial_{\KR}\Pi^{c}&=\underbrace{R\!\!\int_{-\KM}^{0}\!\!\FKR\,dx}_{\ge0,\ \text{surplus channel}}
+  \partial_{\KR}\Pi^{c}&=\underbrace{R\!\!\int_{-\KM}^{0}\!\!\FKR\,dx}_{>0\ \text{(adopted)},\ \text{surplus channel}}
      +\,c\!\!\int_{0}^{\KF}\!\!\FKR\,dx+(\bp)\!\!\int_{\KF}^{\Dbar}\!\!\FKR\,dx-\CR=0.\label{eq:focR}
 \end{align}
 Two facts jump out. The fossil cutoff \eqref{eq:focF} is \emph{identical} to the
@@ -314,10 +314,11 @@ never flips.}
 \begin{corollary}[Distributionally-robust decarbonization]\label{cor:dro}
 Let $\mathcal U$ be the ambiguity set of all residual-demand distributions satisfying the
 standing positivity $\FKR>0$, Condition~\ref{cond:reg}, and adoption \eqref{eq:adopt}.
-Then the surplus contract's carbon saving is \emph{uniformly} positive over $\mathcal U$:
+Then the surplus contract's carbon saving is worst-case \emph{nonnegative} over $\mathcal U$,
+and strictly positive for each adopted law:
 \[
   \inf_{F\in\mathcal U}\big(\E[\fossil^{\circ}]-\E[\fossil^{c}]\big)\;\ge\;0,
-  \qquad>0\text{ whenever the load is adopted.}
+  \qquad \E[\fossil^{\circ}]-\E[\fossil^{c}]>0\ \text{ for every } F\in\mathcal U.
 \]
 So the regulator needs \emph{no knowledge of $F$}: whatever the true residual-demand law,
 the surplus contract decarbonizes. Exogeneity of $F$ is not a limitation here---it is
@@ -326,7 +327,12 @@ precisely what the guarantee is robust to.
 \begin{proof}
 Theorem~\ref{thm:decarb} gives $\E[\fossil^{\circ}]-\E[\fossil^{c}]>0$ for \emph{every}
 $F\in\mathcal U$ (the proof uses only $\FKR>0$, Condition~\ref{cond:reg}, and adoption).
-An inequality that holds for every member of a set holds for its infimum.
+A strict inequality holding for every member of a set gives $\inf\ge0$ (pointwise strictness
+need not transfer to the infimum: as $F$ approaches marginal adoption, $K_M^{c}\to0$ and the
+saving $\to0$, so the infimum can equal $0$). A uniform positive lower bound would need an
+adoption margin bounded away from the threshold; we claim only the worst-case nonnegativity
+and pointwise strict positivity, which is what the regulator's no-knowledge guarantee
+requires.
 \end{proof}
 
 \begin{remark}[Why this resolves Week 2]\label{rem:resolve}
