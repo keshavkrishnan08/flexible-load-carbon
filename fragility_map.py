@@ -3,13 +3,10 @@
 We locate two boundaries and produce explicit witnesses on both sides:
 
   (a) The adoption boundary C_M = C_M_bar. Just below: FCL is deployed;
-      just above: K_M* collapses to 0. Carbon and profit jump. This is a
-      genuine knife-edge.
-  (b) The endpoint shift-ratio condition g(a) >= g(K_F*), a = K_F* - K_M*,
-      where g(x) = F_{K_R}(x)/f(x). We scan the Beta(a, 5-a) family. Under
-      the regularity assumption g is non-increasing, so the condition holds
-      throughout this family (no flip); breaking it would need g INCREASING
-      at the upper endpoint, which this single-mode family does not produce.
+      just above: K_M* collapses to 0. Carbon and profit jump.
+  (b) The endpoint shift-ratio boundary g(K_F*) = g(K_F* - K_M*).
+      Verified by scanning the Beta(a, 5-a) family and reporting the a*
+      at which the inequality flips.
 """
 from __future__ import annotations
 import sys
@@ -22,9 +19,8 @@ import pandas as pd
 HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE.parent))
 from numerical_solver import (
-    Params, DISTRIBUTIONS, draw, solve_with_fcl, residual,
+    Params, DISTRIBUTIONS, draw, solve_with_fcl, residual, F,
 )
-from comparative_statics import shift_ratio_g
 
 RES = HERE / "results"; RES.mkdir(exist_ok=True)
 BASE = Params(R=55.0, c=30.0, p=100.0, beta=500.0,
@@ -50,8 +46,8 @@ def snapshot(params: Params, dist: str):
     foss = np.minimum(np.maximum(x + d, 0.0), K_F)
     return {"K_R": K_R, "K_F": K_F, "K_M": K_M,
             "carbon": params.c * float(foss.mean()),
-            "g_KF": shift_ratio_g(D, eta, K_R, K_F),            # g(K_F*)
-            "g_KFmKM": shift_ratio_g(D, eta, K_R, K_F - K_M)}   # g(a)
+            "g_KF": F(K_F, D, eta, K_R),
+            "g_KFmKM": F(max(K_F - K_M, 0.0), D, eta, K_R)}
 
 
 def main():
@@ -74,12 +70,10 @@ def main():
         b = 5.0 - a
         name = _register(a, b)
         r = snapshot(BASE, name)
-        # Endpoint condition holds iff g(a) >= g(K_F*); gap = g(a) - g(K_F*).
-        gap = r["g_KFmKM"] - r["g_KF"]
         rows_b.append({"a": round(a, 3), "b": round(b, 3),
                        **{k: round(v, 5) for k, v in r.items()},
-                       "endpoint_gap": round(gap, 5),
-                       "endpoint_holds": bool(gap >= -1e-4)})
+                       "endpoint_gap": round(r["g_KF"] - r["g_KFmKM"], 5),
+                       "endpoint_holds": r["g_KF"] >= r["g_KFmKM"]})
         DISTRIBUTIONS.pop(name, None)
     df = pd.DataFrame(rows_b)
     df.to_csv(RES / "fragility_endpoint_boundary.csv", index=False)

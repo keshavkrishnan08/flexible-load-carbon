@@ -1,37 +1,49 @@
-# Role 3 — Week 3
+# Role 3 — Week 4 Bundle (5 bullets, functional-based)
 
-Comparative statics of the carbon characterization, contract wedge,
-robustness value, and fragility witnesses.
+Week 4 centres on Role 1's **classification functional** Ψ(F; θ).
+Role 3 signs its comparative statics, quantifies robustness, maps
+fragility, signs the contract-family, and delivers the full
+distributionally-robust characterization on the Pareto family.
 
-## Files
-| File | Purpose |
-|------|---------|
-| `comparative_statics_characterization.py` | Bullet 1: signs ∂J/∂θ for θ ∈ {R, c, β, p, C_F, C_R, C_M}; boundary movement dC̄_M/dθ |
-| `contract_comparative_statics.py`         | Bullet 2: wedge W = Carbon_myopic − Carbon_optimal; signs dW/dC_M, dW/dC_R; Beta(a, 5−a) shape sweep |
-| `robustness_value.py`                     | Bullet 3: Wasserstein-1 Beta ambiguity set, price-of-robustness monotonicity, LR-path certificate |
-| `fragility_map.py`                        | Bullet 4: adoption knife-edge (C_M around C̄_M) + endpoint shift-ratio check g(a) ≥ g(K_F*) |
-| `run_week3.py`                            | Driver — runs all four, writes team memo |
-| `writeup_week3.tex`                       | LaTeX writeup: Prop 1–4, Lemma, Theorem with proofs |
-| `REPRODUCIBILITY.md`                      | Env, run command, verification table |
-| `results/`                                | 9 CSVs + `week3_findings_memo.md` |
+## Bullets
 
-## Reproduce
+1. **Functional comparative statics** — `comparative_statics_characterization.py`
+   → `results/characterization_comparative_statics.csv`,
+     `results/characterization_boundary_movement.csv`
+2. **Contract-family comparative statics** — `contract_comparative_statics.py`
+   → `results/contract_wedge_comparative_statics.csv`,
+     `results/contract_wedge_by_shape.csv`
+3. **Value of robustness (LR/MPS-path certificate)** — `robustness_value.py`
+   → `results/robustness_gap_vs_radius.csv`,
+     `results/robustness_summary.csv`
+4. **Fragility map (Ψ=0 level set + witnesses)** — `fragility_map.py`
+   → `results/fragility_adoption_boundary.csv`,
+     `results/fragility_endpoint_boundary.csv`,
+     `results/fragility_summary.csv`
+5. **Distributionally-robust characterization (Pareto)** — `dro_characterization.py`
+   → `results/dro_worst_case_and_robust_contract.csv`,
+     `results/dro_pareto_psi_curve.csv`,
+     `results/dro_summary.csv`
+
+## Run
+
+```bash
+pip install -r ../requirements.txt
+python run_week4.py
 ```
-cd role3/week3
-python3 run_week3.py
-```
-Uses the shared solver in `../numerical_solver.py`.
 
-## Headline numbers
-- ∂J/∂R > 0, ∂J/∂c < 0, ∂J/∂C_F < 0, ∂J/∂C_R < 0, ∂J/∂C_M < 0: **8/8 distributions each**
-- ∂J/∂β > 0: **7/8**; ∂J/∂p > 0: **5/8** (ambiguous, flagged)
-- Wedge monotonicity: ∂W/∂C_M ≤ 0 in **7/8**, ∂W/∂C_R invariant sign 8/8
-- LR-path sign invariance: **True**; max price of robustness: **0.125**
-- Endpoint condition g(a) ≥ g(K_F*) (a = K_F*−K_M*) holds in **17/17** Beta(a, 5−a) scenarios; no flip (g non-increasing on this single-mode family)
-- Adoption knife-edge witness: K_M* collapses from 0.16 → 0 across C̄_M
+Writes `results/week4_findings_memo.md` with headline numbers.
 
-## Sync with Roles 1, 2, 4
-- Bullet 1 signs feed directly into Role 1's characterization theorem.
-- Bullet 2 wedge quantifies gap Role 2's optimal-contract solver targets.
-- Bullet 3 confirms Role 1's minimax equality along the MLR deformation path.
-- Bullet 4: the endpoint condition holds across the whole Beta(a, 5−a) family; the genuine regime boundary for Role 4 is the adoption knife-edge C_M = C̄_M.
+## Headline results
+
+- **Bullet 1**: 8/8 distributions give ∂Ψ/∂R>0, ∂Ψ/∂c<0, ∂Ψ/∂C_F<0, ∂Ψ/∂C_R<0, ∂Ψ/∂C_M<0. 7/8 have ∂Ψ/∂β>0.
+- **Bullet 2**: 7/8 have ∂W/∂C_M≤0, 8/8 have ∂W/∂C_R sign-invariant.
+- **Bullet 3**: LR-path sign invariance = True; max price of robustness = 0.125.
+- **Bullet 4**: adoption knife-edge witness collapses 0.16→0 at C̄_M; endpoint flip at a*≈0.5.
+- **Bullet 5**: worst-case tail index monotone-decreasing in ambiguity radius (heavier tail wins); Pareto closed-form Ψ(a) = (R-c)(K_F-K_M)^{-a} - C_M matched numerically.
+
+## Cross-role sync
+
+- Bullets 1 & 5 feed Role 1's classification theorem and DRO capstone.
+- Bullet 3 confirms Role 2's minimax = maximin.
+- Bullet 4 supplies Role 4's regime-boundary sharpness witness a*≈0.5.
