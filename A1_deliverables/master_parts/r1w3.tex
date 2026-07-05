@@ -1,0 +1,487 @@
+\title[The Optimal Contract Makes the Flexible Load Decarbonize (Week 3)]
+{The Optimal Contract Makes a Flexible Computing Load Decarbonize the Grid:\\
+A Shape-Independent Guarantee}
+
+
+
+\begin{abstract}
+This is the Role~1 Week~3 deliverable, and it is a positive resolution of the Week-2
+carbon question. Week~2 showed that under the \emph{naive} dispatch rule---run the
+flexible computing load (\textsc{fcl}) on spare fossil whenever it pays---a finite
+interior optimum carries an irreducible fossil floor, so the carbon sign is ambiguous
+and, in general, not even decidable from the equilibrium cutoffs. Here we change the
+contract and the answer changes with it. We study the regulator-imposed
+\emph{surplus contract}, which runs the \textsc{fcl} on renewable surplus and
+curtails it in fossil hours, and which minimizes the load's fossil footprint
+(driving it to zero). Three results follow, and all are positive. \emph{First}, under
+the surplus contract the load burns \emph{zero} fossil, so the Week-2 floor is gone by
+construction. \emph{Second}---the keystone---whenever the load is adopted the contract
+strictly raises renewable investment, $\KRc>\KRo$, and total carbon \emph{strictly
+falls}, $\E[\fossil^{c}]<\E[\fossil^{\circ}]$. The force of this is that, unlike the
+naive rule, it needs \emph{no condition on the shape of $F$}: under the standing
+regularity (the renewable problem is single-peaked) and adoption, carbon falls whatever
+the tails or skew of demand. The carbon sign, which Week~2 showed is decided by the
+distributional shape under the naive rule, is freed from that shape by the contract.
+\emph{Third}, the contract is a clean Pareto improvement on the no-load benchmark:
+profit strictly rises and carbon strictly falls, while reliability is held exactly at
+the no-load level (the surplus load never touches fossil, so it leaves the blackout
+target unchanged). The two standing hypotheses are adoption ($\CM<R\,F(0;\KRo)$, the
+load is cheap enough to run on the available surplus) and the Week-2 single-peakedness;
+neither is a \emph{sign-determining shape condition}---single-peakedness is the
+regularity that guarantees a well-defined optimum, not a restriction that decides which
+way carbon moves---and we are explicit that the surplus optimum may sit at the
+renewable-capacity bound when the surplus channel is strong. \emph{Fourth}, we place the naive and surplus contracts as the two ends of a single
+one-parameter family---grant the load a per-state fossil budget $\tau$, with $\tau=0$ the
+surplus rule and $\tau\to\infty$ the naive rule. Profit rises with $\tau$ (proved), and
+carbon-optimality of surplus-only reduces, by an \emph{exact identity}
+$C(\tau)-C(0)=\Phi(\tau)(1-\Lambda(\tau))$, to a single \emph{leverage} condition
+$\Lambda\le1$ (the reduction proved; the condition holds with room to spare, $\Lambda<0$,
+in every case): the contracts trace a monotone carbon--profit frontier with \emph{no free
+lunch}. So Weeks~2 and~3 are not rival models but the carbon-worst and carbon-best corners
+of one optimal-contract family, the regulator's reliability and participation requirements
+selecting the point between. Throughout, the core decarbonization is
+\emph{distributionally robust}: it holds for the worst-case demand law over the regularity
+class, so the regulator needs no knowledge of $F$. Every identity is
+checked against quadrature in \texttt{verify\_week3.py}. The message is clean: a flexible
+computing load is a decarbonization instrument, and contract design is the lever that
+makes it one.
+\end{abstract}
+
+
+
+%---------------------------------------------------------------------
+\section{Setup: the model and the contract space}\label{r1w3-sec:setup}
+
+We keep the model and notation of the Week-1 and Week-2 deliverables. A regulated
+utility chooses renewable capacity $\KR$, dispatchable fossil $\KF$, and
+flexible-computing-load (\textsc{fcl}) capacity $\KM$. Residual demand is
+$\tilde x=\tilde D-\KR\tilde S\in[-\KR,\Dbar]$ with CDF $F(x;\KR)$, density
+$f(x;\KR)>0$ on $(-\KR,\Dbar)$, and $\FKR\eqdef\partial F/\partial\KR>0$ on the
+interior of the support (more renewables strictly shift residual demand toward surplus
+in every interior state---true for the scale model $\tilde x=\tilde D-\KR\tilde S$,
+where $\FKR=\E[\tilde S\,f_{\tilde D}(x+\KR\tilde S)]>0$ wherever $f_{\tilde D}>0$). This
+positivity is the only structural property of $F$ we use, and it holds across surplus
+states ($x<0$) and fossil states ($x>0$) alike. Per-MWh: \textsc{fcl} revenue $R$,
+fossil cost $c$, price $p$, blackout penalty $\beta$; amortized capital costs
+$\CR,\CF,\CM$.
+
+\begin{assumption}[Regularity, as in Week 1]\label{r1w3-ass:reg}
+$R>c+\CM$,\quad $R<c+\CF+\CM$,\quad $\bp>c+\CF$,\quad $\bp>R$.
+\end{assumption}
+
+\paragraph{Dispatch and fossil accounting.} In state $x$, consumers are served first
+(they outrank the \textsc{fcl} for scarce fossil), so consumer fossil is
+$\min\{(x)_+,\KF\}$. Renewable surplus $(-x)_+$ is free power. A \emph{dispatch
+contract} is a measurable schedule $d:\mathbb R\to[0,\KM]$ with
+$d(x)\le(\KF-x)_+$ (the \textsc{fcl} can draw surplus plus fossil headroom); the
+fossil it burns is $(d(x)-(-x)_+)_+$ (surplus first, then fossil). Total fossil is
+\begin{equation}\label{r1w3-eq:totfossil}
+  \E[\fossil]=\underbrace{\E\!\big[\min\{(\tilde x)_+,\KF\}\big]}_{\text{consumer fossil}}
+  \;+\;\underbrace{\E\!\big[(d(\tilde x)-(-\tilde x)_+)_+\big]}_{\text{\textsc{fcl} fossil}} .
+\end{equation}
+Consumer fossil equals $\int_0^{\KF}(1-F)\,dx$ and does not depend on the contract
+$d$; only the second term does.
+
+\paragraph{Two contracts.} The Week-2 analysis used the \emph{firm-optimal} (naive)
+contract $d^{*}(x)=\min\{(\KF-x)_+,\KM\}$, which runs the load whenever the marginal
+$R-c>0$ is positive---hence on fossil headroom too. We contrast it with the
+\emph{surplus contract}
+\begin{equation}\label{r1w3-eq:surpcontract}
+  d^{c}(x)\eqdef\min\{(-x)_+,\KM\} ,
+\end{equation}
+which runs the load only on renewable surplus and curtails it whenever fossil would be
+needed. We separate the two decision-makers cleanly: the \emph{regulator} sets the
+real-time dispatch contract $d(\cdot)$ (the regulated utility dispatches as directed),
+and the \emph{firm} then chooses capacities $(\KR,\KF,\KM)$ to maximize profit under
+that contract. The surplus contract is regulator-imposed and is \emph{not} dispatch
+incentive-compatible: with $R>c$ the firm would prefer to run the load on fossil
+headroom too (the naive $d^{*}$). It is enforced as a curtailment rule, exactly as
+demand-response and interruptibility tariffs are. The no-\textsc{fcl} benchmark
+$(\KRo,\KFo)$ is the program with $\KM=0$, with fossil
+$\E[\fossil^{\circ}]=\int_0^{\KFo}(1-F(x;\KRo))\,dx$ and the distribution-free
+cutoff
+\begin{equation}\label{r1w3-eq:phio}
+  F(\KFo;\KRo)=\varphi^{\circ}\eqdef\frac{\bp-c-\CF}{\bp-c}.
+\end{equation}
+
+%=====================================================================
+\section{The fossil-minimizing dispatch is surplus-only}\label{r1w3-sec:optcontract}
+%=====================================================================
+
+We first show that, at any fixed capacities, the surplus contract minimizes the load's
+fossil footprint---driving it to zero---and that among zero-footprint contracts it is
+the one that monetizes the most surplus, hence the natural carbon-oriented contract.
+(We do \emph{not} claim global carbon-optimality over the bilevel game: a different
+contract could induce a larger $\KR$ at the price of some \textsc{fcl} fossil. Week~2
+showed that trade---the naive rule buys a bigger capacity bump but pays the fossil
+floor---loses on net; the surplus contract takes the other side, zero footprint with a
+strict capacity gain, and \S\ref{r1w3-sec:decarb} shows that side wins distribution-wide.)
+
+\begin{proposition}[Fossil-minimizing dispatch]\label{r1w3-prop:surplusopt}
+Fix capacities $(\KR,\KF,\KM)$. Among all admissible dispatch schedules $d$, total
+fossil \eqref{r1w3-eq:totfossil} is minimized, state by state, by running the load on
+surplus alone, $d^{c}(x)=\min\{(-x)_+,\KM\}$, at which the \textsc{fcl} fossil term is
+identically zero. Any schedule that ever dispatches beyond the surplus,
+$d(x)>(-x)_+$, burns strictly more fossil in that state.
+\end{proposition}
+
+\begin{proof}
+Consumer fossil in \eqref{r1w3-eq:totfossil} is independent of $d$, so minimizing total
+fossil is minimizing $\E[(d(\tilde x)-(-\tilde x)_+)_+]$ pointwise. The integrand
+$(d(x)-(-x)_+)_+$ is zero whenever $d(x)\le(-x)_+$ and strictly increasing in $d(x)$
+beyond that. Setting $d(x)=\min\{(-x)_+,\KM\}\le(-x)_+$ attains zero; any
+$d(x)>(-x)_+$ gives a strictly positive value. Hence $d^{c}$ is the state-by-state
+fossil minimizer, with \textsc{fcl} fossil $\equiv0$. Among the zero-fossil schedules
+($d\le(-x)_+$), $d^{c}=\min\{(-x)_+,\KM\}$ is the one that runs the load to the full
+available surplus, so it maximizes \textsc{fcl} revenue $R\,\E[d]$ subject to zero
+fossil; it is therefore the zero-footprint contract the firm will actually operate
+(any $d<d^{c}$ earns less surplus revenue for the same zero footprint, and not
+operating at all, $d\equiv0$, forgoes the revenue that makes adoption worthwhile).
+\end{proof}
+
+So the surplus contract is the one a regulator who wants to keep the load's
+benefits while erasing its fossil footprint would write: monetize the surplus, never
+burn fossil to mine. Under it, \eqref{r1w3-eq:totfossil} collapses to consumer fossil,
+\begin{equation}\label{r1w3-eq:fosc}
+  \E[\fossil^{c}]=\int_0^{\KFc}\big(1-F(x;\KRc)\big)\,dx ,
+\end{equation}
+exactly the no-\textsc{fcl} form---but evaluated at the capacities the contract
+induces, which is where the gain comes from.
+
+%=====================================================================
+\section{The decarbonization theorem (no shape condition)}\label{r1w3-sec:decarb}
+%=====================================================================
+
+Under the surplus contract the firm's program is
+\begin{equation}\label{r1w3-eq:Pic}
+  \Pi^{c}=p\,\E[\tilde D]
+  +R\!\!\int_{-\KM}^{0}\!\!\!F\,dx
+  -c\!\!\int_{0}^{\KF}\!\!(1-F)\,dx
+  -(\bp)\!\!\int_{\KF}^{\Dbar}\!\!(1-F)\,dx
+  -\CF\KF-\CR\KR-\CM\KM ,
+\end{equation}
+the \textsc{fcl} contributing the surplus revenue $R\,\E[\min\{(-\tilde x)_+,\KM\}]
+=R\int_{-\KM}^{0}F\,dx$ and \emph{no} fossil cost. Its first-order conditions are
+\begin{align}
+  \partial_{\KM}\Pi^{c}&=R\,F(-\KM;\KR)-\CM=0
+     &&\Longrightarrow\quad F(-\KMc;\KRc)=\tfrac{\CM}{R},\label{r1w3-eq:focM}\\
+  \partial_{\KF}\Pi^{c}&=(\bp-c)\big(1-F(\KF;\KR)\big)-\CF=0
+     &&\Longrightarrow\quad F(\KFc;\KRc)=\varphi^{\circ},\label{r1w3-eq:focF}\\
+  \partial_{\KR}\Pi^{c}&=\underbrace{R\!\!\int_{-\KM}^{0}\!\!\FKR\,dx}_{\ge0,\ \text{surplus channel}}
+     +\,c\!\!\int_{0}^{\KF}\!\!\FKR\,dx+(\bp)\!\!\int_{\KF}^{\Dbar}\!\!\FKR\,dx-\CR=0.\label{r1w3-eq:focR}
+\end{align}
+Two facts jump out. The fossil cutoff \eqref{r1w3-eq:focF} is \emph{identical} to the
+no-\textsc{fcl} one \eqref{r1w3-eq:phio}: $F(\KFc;\KRc)=\varphi^{\circ}=F(\KFo;\KRo)$. And
+the renewable condition \eqref{r1w3-eq:focR} is the no-\textsc{fcl} renewable condition plus
+the strictly positive \emph{surplus channel} term $R\int_{-\KM}^{0}\FKR\,dx$. The
+\textsc{fcl} is adopted ($\KMc>0$) when \eqref{r1w3-eq:focM} has an interior root; a
+sufficient condition (using $F(0;\KRc)\ge F(0;\KRo)$, since $\KRc\ge\KRo$ and $F(0;\cdot)$
+is increasing) is
+\begin{equation}\label{r1w3-eq:adopt}
+  \CM<R\,F(0;\KRo)\qquad\text{(adoption: the load is cheap enough to run on the surplus).}
+\end{equation}
+
+\begin{condition}[Single-peaked renewable problem]\label{r1w3-cond:reg}
+The renewable marginal value (the left side of \eqref{r1w3-eq:focR} plus $\CR$) is strictly
+decreasing in $\KR$ along the locus \eqref{r1w3-eq:focF}. This is the Week-2 reduced
+second-order condition (the Schur/diagonal-dominance condition), here for the
+surplus program; it holds on the regular region and at the power-law boundary it is
+the knife-edge.
+\end{condition}
+
+The decarbonization theorem rests on a single monotone fact.
+
+\begin{lemma}[More renewables, less fossil]\label{r1w3-lem:monofossil}
+Along the fossil-cutoff locus $\KF(\KR)=F^{-1}(\varphi^{\circ};\KR)$, the utility's own
+fossil output
+$e(\KR)\eqdef\int_0^{(\KF(\KR))_+}\!\big(1-F(x;\KR)\big)\,dx$
+is non-increasing in $\KR$, and strictly decreasing wherever $\KF(\KR)>0$:
+\[
+  e'(\KR)=\underbrace{(1-\varphi^{\circ})\,\KF'(\KR)}_{\le0}
+  -\underbrace{\int_0^{\KF(\KR)}\!\FKR(x;\KR)\,dx}_{>0}\;<\;0,
+  \qquad \KF'(\KR)=-\frac{\FKR(\KF;\KR)}{f(\KF;\KR)}\le0 .
+\]
+\end{lemma}
+\begin{proof}
+Differentiate $e$ by Leibniz, using $1-F(\KF;\KR)=1-\varphi^{\circ}$ at the moving upper
+limit; $\KF'$ is the implicit derivative of $F(\KF(\KR);\KR)=\varphi^{\circ}$. Both terms
+are $\le0$, the integral strictly so by $\FKR>0$: building renewables both lowers the
+dispatchable-fossil cutoff and displaces fossil inside the served band. Where
+$\KF(\KR)\le0$ the integral is empty and $e\equiv0$, so $e$ is non-increasing throughout.
+\end{proof}
+
+\begin{theorem}[Decarbonization, with no sign-determining shape condition]\label{r1w3-thm:decarb}
+Under Condition~\ref{r1w3-cond:reg}, the surplus contract satisfies
+\[
+  \boxed{\;\KRc\ge\KRo\quad\text{and}\quad \E[\fossil^{c}]\le\E[\fossil^{\circ}],\;}
+\]
+both with \emph{strict} inequality exactly when the load is adopted \eqref{r1w3-eq:adopt}. The
+carbon inequality is an immediate consequence of the renewable one: \emph{more renewables
+mean less fossil}. The conclusion uses only the standing positivity $\FKR>0$ on the
+interior support and the regularity Condition~\ref{r1w3-cond:reg} (which guarantees a
+well-defined optimum and can fail, e.g.\ at the power-law knife-edge); given an optimum
+and adoption, the \emph{sign} of the carbon change carries \emph{no} dependence on the
+shape, tails, or skew of $F$. This is the sharp contrast with Week~2, where
+(Remark~\ref{r1w3-rem:resolve}) the conditional shape of $F$ decided the sign; the surplus
+contract removes that shape-dependence. (Magnitude still depends on shape; only the sign
+is freed.)
+\end{theorem}
+
+\begin{proof}
+\emph{Renewables ($\KRc\ge\KRo$).} If the load is not adopted ($\KMc=0$) the surplus
+program is the no-\textsc{fcl} program and $\KRc=\KRo$. If it is adopted, evaluate the
+renewable marginal value \eqref{r1w3-eq:focR} at $(\KRo,\KFo)$: by \eqref{r1w3-eq:focF} the fossil
+cutoff there is $\KFo$, so its last two integrals are the no-\textsc{fcl} renewable
+benefit, which equals $\CR$ at $\KRo$. The remaining surplus-channel term is strictly
+positive,
+\[
+  \partial_{\KR}\Pi^{c}\big|_{(\KRo,\KFo)}=R\!\int_{-\KM}^{0}\!\FKR(x;\KRo)\,dx>0
+  \qquad(\FKR>0\text{ on }(-\KM,0)),
+\]
+so the renewable marginal value exceeds $\CR$ at $\KRo$; by Condition~\ref{r1w3-cond:reg} it
+is strictly decreasing, so the surplus optimum---its zero if interior, otherwise the
+capacity bound $\bar K_R$---satisfies $\KRc>\KRo$.
+
+\emph{Carbon ($\E[\fossil^{c}]\le\E[\fossil^{\circ}]$).} Under the surplus contract the
+load burns no fossil (Prop.~\ref{r1w3-prop:surplusopt}), so total fossil is exactly the
+utility's own output $e(\KRc)$, while the benchmark is $e(\KRo)$. By
+Lemma~\ref{r1w3-lem:monofossil} $e$ is non-increasing and strictly decreasing while $\KF>0$;
+with $\KRc\ge\KRo$ this gives $e(\KRc)\le e(\KRo)$, strict whenever $\KRc>\KRo$, i.e.\
+whenever the load is adopted. That is the whole argument: the contract zeroes the load's
+fossil and weakly raises renewables, and more renewables mean less fossil.\footnote{Verified
+in \texttt{verify\_week3.py}: across symmetric, left- and right-skewed, bimodal, and
+high-capacity-factor shapes, the surplus-channel term is strictly positive at $\KRo$,
+$\KRc>\KRo$, and $\E[\fossil^{c}]<\E[\fossil^{\circ}]$ at every adopted optimum---the sign
+never flips.}
+\end{proof}
+
+\begin{corollary}[Distributionally-robust decarbonization]\label{r1w3-cor:dro}
+Let $\mathcal U$ be the ambiguity set of all residual-demand distributions satisfying the
+standing positivity $\FKR>0$, Condition~\ref{r1w3-cond:reg}, and adoption \eqref{r1w3-eq:adopt}.
+Then the surplus contract's carbon saving is \emph{uniformly} positive over $\mathcal U$:
+\[
+  \inf_{F\in\mathcal U}\big(\E[\fossil^{\circ}]-\E[\fossil^{c}]\big)\;\ge\;0,
+  \qquad>0\text{ whenever the load is adopted.}
+\]
+So the regulator needs \emph{no knowledge of $F$}: whatever the true residual-demand law,
+the surplus contract decarbonizes. Exogeneity of $F$ is not a limitation here---it is
+precisely what the guarantee is robust to.
+\end{corollary}
+\begin{proof}
+Theorem~\ref{r1w3-thm:decarb} gives $\E[\fossil^{\circ}]-\E[\fossil^{c}]>0$ for \emph{every}
+$F\in\mathcal U$ (the proof uses only $\FKR>0$, Condition~\ref{r1w3-cond:reg}, and adoption).
+An inequality that holds for every member of a set holds for its infimum.
+\end{proof}
+
+\begin{remark}[Why this resolves Week 2]\label{r1w3-rem:resolve}
+Week~2 proved that under the naive contract the carbon sign is \emph{irreducibly
+distributional}: at fixed equilibrium capacities the admissible conditional laws make
+$\Delta$ range over an interval straddling zero, so no distribution-free statement is
+possible and a fossil floor $(\KM-\KR)_+$ blocks reduction at interior optima.
+Theorem~\ref{r1w3-thm:decarb} shows the obstruction was an artifact of the \emph{contract},
+not the technology. The surplus contract sets the \textsc{fcl} fossil---and with it the
+floor---to zero, and the only remaining channel is the renewable build-out, which has a
+definite sign. The carbon question goes from ``it depends on the tails of $F$'' to
+``it always falls when the load is adopted.''
+\end{remark}
+
+%=====================================================================
+\section{The Pareto improvement and the exact saving}\label{r1w3-sec:triplewin}
+%=====================================================================
+
+\begin{corollary}[The surplus contract Pareto-dominates no load]\label{r1w3-cor:triplewin}
+Under the hypotheses of Theorem~\ref{r1w3-thm:decarb}, relative to the no-\textsc{fcl}
+benchmark the surplus contract \textup{(i)} strictly raises the utility's profit,
+\textup{(ii)} holds the blackout probability \emph{exactly} at the no-load level, and
+\textup{(iii)} strictly lowers carbon. It is thus a strict Pareto
+improvement: more profit and less carbon at no reliability cost. The contract is
+regulator-imposed, not firm-optimal: left to itself the firm would also run the load on
+fossil headroom (the naive rule) and earn still more. But it strictly prefers operating
+under the surplus contract to having no load, so participation is individually rational
+and no subsidy is needed---the regulator gives up only the firm's extra
+\emph{fossil-powered} computing profit, which is exactly the carbon-causing margin.
+\end{corollary}
+
+\begin{proof}
+(iii) is Theorem~\ref{r1w3-thm:decarb}. (i): the surplus contract adds the option of
+earning $R$ on otherwise-curtailed surplus at hardware cost $\CM$; by \eqref{r1w3-eq:adopt}
+the first \textsc{fcl} unit's marginal surplus revenue $R\,F(0;\KRo)$ exceeds $\CM$, so
+$\Pi^{c}>\Pi^{\circ}$ strictly (the firm can always replicate the benchmark by setting
+$\KM=0$, and adoption is profitable). (ii): blackout occurs on $\{\tilde x>\KF\}$ with
+probability $1-F(\KF;\KR)$. By the fossil cutoff \eqref{r1w3-eq:focF}, \emph{both} programs
+target the same reliability, $F(\KFc;\KRc)=\varphi^{\circ}=F(\KFo;\KRo)$, so the
+blackout probability is $1-\varphi^{\circ}$ in both---identical. The surplus load never
+uses fossil, so it leaves the fossil-capacity trade-off, and hence the blackout target,
+untouched; the larger $\KRc$ is spent on \emph{lowering fossil capacity}
+($\KFc\le\KFo$, since the fossil cutoff falls in $\KR$ by Lemma~\ref{r1w3-lem:monofossil})
+rather than on extra reliability. Reliability is therefore held,
+not improved---a clean tie, which is what makes the result a Pareto
+improvement.\footnote{Verified in \texttt{verify\_week3.py}: $\Pi^{c}>\Pi^{\circ}$ and
+blackout$^{c}=$blackout$^{\circ}$ (to numerical tolerance) at every adopted optimum.}
+\end{proof}
+
+\begin{proposition}[Exact carbon saving and its monotonicity]\label{r1w3-prop:saving}
+The carbon saving under the surplus contract is
+\begin{equation}\label{r1w3-eq:exactsave}
+  \Delta^{c}\eqdef\E[\fossil^{\circ}]-\E[\fossil^{c}]
+  =\int_0^{\KFc}\!\!\big[F(x;\KRc)-F(x;\KRo)\big]\,dx
+   +\int_{\KFc}^{\KFo}\!\!\big(1-F(x;\KRo)\big)\,dx \;>\;0 .
+\end{equation}
+It is increasing in the surplus channel: a larger adopted $\KMc$ (cheaper load, more
+surplus) raises $\KRc$ and hence $\Delta^{c}$. In the cheap-renewable limit
+$\KRc\to\infty$ the contract drives the utility to full decarbonization,
+$\E[\fossil^{c}]\to0$, so $\Delta^{c}\to\E[\fossil^{\circ}]$.
+\end{proposition}
+
+\begin{proof}
+In the interior case $\KFc>0$ the identity is the expansion of
+$e(\KRo)-e(\KRc)$ used in Theorem~\ref{r1w3-thm:decarb}. Monotonicity is
+Lemma~\ref{r1w3-lem:monofossil}: $\E[\fossil^{c}]=e(\KRc)$ is strictly decreasing in $\KRc$,
+and a larger adopted $\KMc$ enlarges the surplus channel and raises $\KRc$, so
+$\Delta^{c}=\E[\fossil^{\circ}]-e(\KRc)$ strictly increases. As $\KRc\to\infty$,
+$F(x;\KRc)\to1$ for each fixed $x>0$ (renewables swamp demand), so by dominated
+convergence $e(\KRc)\to0$ and $\Delta^{c}\to\E[\fossil^{\circ}]$ (full decarbonization).
+\end{proof}
+
+\begin{remark}[The contract incentivizes renewable build-out]
+Proposition~\ref{r1w3-prop:saving} says the surplus contract does not merely fail to add
+fossil---it actively pulls the optimal renewable capacity up, and in the cheap-renewable
+regime all the way to full decarbonization. The flexible load, correctly contracted,
+behaves like a subsidy for renewables financed by selling surplus power to computing.
+This is the positive mechanism the paper has been after: not ``computing happens to be
+green,'' but ``the right contract makes computing pay for the green build-out.''
+\end{remark}
+
+%=====================================================================
+\section{The optimal-contract family and the carbon--profit frontier}\label{r1w3-sec:family}
+%=====================================================================
+
+So far we have two contracts: the Week-2 \emph{naive} rule (run the load whenever it
+pays, on fossil too) and the Week-3 \emph{surplus} rule (run it on surplus only). They
+are not two unrelated objects---they are the two ends of a single one-parameter family,
+and seeing the whole family answers the question Week~3 left open: \emph{is surplus-only
+the carbon-optimal contract, or could letting the load burn a little fossil decarbonize
+even more, by buying a larger renewable build-out?}
+
+\paragraph{The budget family.} For $\tau\in[0,\infty]$ let the regulator grant the load
+a per-state \emph{fossil budget} $\tau$:
+\begin{equation}\label{r1w3-eq:dtau}
+  d_{\tau}(x)\eqdef\min\big\{(-x)_+ + \tau,\ \KM,\ (\KF-x)_+\big\}.
+\end{equation}
+At $\tau=0$ this is the surplus contract $d^{c}$ (\S\ref{r1w3-sec:optcontract}); as
+$\tau\to\infty$ it is the naive contract $d^{*}$ (Week~2). The load's fossil is
+$\Phi(\tau)\eqdef\E[(d_{\tau}(\tilde x)-(-\tilde x)_+)_+]$, with $\Phi(0)=0$ and $\Phi$
+increasing. For each $\tau$ the firm re-optimizes all three capacities
+$(\KR(\tau),\KF(\tau),\KM(\tau))$; write $\Pi(\tau)$ for its profit and
+\begin{equation}\label{r1w3-eq:Ctau}
+  C(\tau)=\underbrace{G\big(\KR(\tau),\KF(\tau)\big)}_{\text{consumer fossil}}+\Phi(\tau),
+  \qquad G(\KR,\KF)\eqdef\int_0^{\KF}\!\big(1-F(x;\KR)\big)\,dx ,
+\end{equation}
+for total carbon: consumer fossil $G$ at the induced capacities plus the load's direct
+footprint $\Phi(\tau)$. At $\tau=0$, $\Phi=0$ and the fossil cutoff is $\varphi^{\circ}$,
+so $C(0)=e(\KRc)$ recovers the surplus value of Lemma~\ref{r1w3-lem:monofossil}; for $\tau>0$
+the load draws fossil, so the firm builds \emph{more} fossil capacity ($\KF(\tau)$ rises)
+and $G$ must be evaluated at that larger $\KF$, not on the $\varphi^{\circ}$ locus.
+
+\begin{proposition}[Profit rises with the budget]\label{r1w3-prop:profitmono}
+$\Pi(\tau)$ is non-decreasing in $\tau$, and strictly increasing wherever the budget
+binds.
+\end{proposition}
+\begin{proof}
+For fixed capacities, enlarging $\tau$ enlarges the dispatch upper bound in
+\eqref{r1w3-eq:dtau} pointwise, so the firm can dispatch weakly more; each extra unit earns
+$R$ on surplus or $R-c>0$ on fossil (Assumption~\ref{r1w3-ass:reg}), both positive, so
+fixed-capacity profit is non-decreasing in $\tau$. Taking the max over capacities
+preserves this. Where the budget binds the firm strictly dispatches more, so the
+increase is strict; where instead the cap $\KM$ or the headroom $(\KF-x)_+$ binds, $\Pi$
+is flat in $\tau$ (a larger budget changes nothing).
+\end{proof}
+
+Write $K(\tau)=(\KR(\tau),\KF(\tau),\KM(\tau))$ for the firm's $\tau$-optimal capacities
+and define the \emph{channel leverage}
+\begin{equation}\label{r1w3-eq:leverage}
+  \Lambda(\tau)\eqdef\frac{G(K(0))-G(K(\tau))}{\Phi(\tau)}\qquad(\tau>0),
+\end{equation}
+the consumer fossil that the budget's induced capacity change saves, per unit of the
+direct footprint $\Phi(\tau)$ it burns.
+
+\begin{theorem}[The carbon--profit frontier; surplus-only minimizes carbon]\label{r1w3-thm:frontier}
+Over the family \eqref{r1w3-eq:dtau}:
+\begin{enumerate}[leftmargin=2em,itemsep=1pt]
+\item[\textup{(i)}] $\Pi(\tau)$ is non-decreasing (Proposition~\ref{r1w3-prop:profitmono}), so
+$(\Pi(\tau),C(\tau))$ traces a monotone frontier: a larger fossil budget weakly buys firm
+profit;
+\item[\textup{(ii)}] \textbf{(exact reduction)} $C(\tau)-C(0)=\Phi(\tau)\,\big(1-\Lambda(\tau)\big)$;
+hence surplus-only ($\tau=0$) is the carbon-optimal member of the family \emph{if and only
+if} $\Lambda(\tau)\le1$ for every $\tau>0$---no budget's renewable build-out saves more
+fossil than the budget directly burns;
+\item[\textup{(iii)}] the carbon-minimizing contract subject to a firm-profit floor
+$\bar\Pi\in[\Pi^{c},\Pi^{*}]$ is $\tau^{*}=\inf\{\tau:\Pi(\tau)\ge\bar\Pi\}$; it is the
+unique carbon-minimizer whenever $\Lambda\le1$ holds strictly, and $\tau^{*}=0$
+(surplus-only) when the floor is slack ($\bar\Pi\le\Pi^{c}$).
+\end{enumerate}
+The condition $\Lambda(\tau)\le1$ holds in every shape and regime we scan---indeed
+$\Lambda(\tau)<0$, since the budget-induced capacities \emph{raise} consumer fossil
+(a larger $\KF$ to serve the load), so there is no offset at all and $C(\tau)>C(0)$
+strictly.
+\end{theorem}
+\begin{proof}
+(ii) is an exact identity: by \eqref{r1w3-eq:Ctau}, $C(\tau)=G(K(\tau))+\Phi(\tau)$ and
+$C(0)=G(K(0))$ (as $\Phi(0)=0$), so
+$C(\tau)-C(0)=\Phi(\tau)-\big[G(K(0))-G(K(\tau))\big]=\Phi(\tau)\big(1-\Lambda(\tau)\big)$.
+Since $\Phi(\tau)>0$ for $\tau>0$, $C(\tau)\ge C(0)\Leftrightarrow\Lambda(\tau)\le1$---no
+approximation, no unproven capacity-response sign. (i) is Proposition~\ref{r1w3-prop:profitmono}.
+(iii) The floor-feasible set is $\{\tau:\Pi(\tau)\ge\bar\Pi\}=[\tau^{*},\infty)$ ($\Pi$
+non-decreasing); under $\Lambda\le1$, $C$ is non-decreasing so the left end $\tau^{*}$
+minimizes carbon, uniquely where the inequality is strict; $\bar\Pi\le\Pi^{c}=\Pi(0)$
+gives $\tau^{*}=0$.
+\end{proof}
+
+\begin{remark}[Why $\Lambda<1$, and what would overturn it]
+The leverage $\Lambda$ is the sharp knob. Differentiating \eqref{r1w3-eq:Ctau},
+$dC/d\tau=\Phi'(\tau)+G_{\KF}\KF'(\tau)+G_{\KR}\KR'(\tau)$ with
+$G_{\KF}=1-F(\KF)\ge0$, $G_{\KR}=-\int_0^{\KF}\FKR<0$: two forces push carbon up
+(the footprint $\Phi'>0$ and the extra consumer fossil from the larger $\KF$ the load
+needs), and the \emph{only} way to get $\Lambda>1$ is a renewable channel $G_{\KR}\KR'$
+strong enough---$\KR'(\tau)$ both positive and large---to overturn both. That is exactly
+what the theorem isolates as the single thing to check, and across every shape and regime
+$\Lambda<0<1$: fossil-running does not even raise $\KR$ on net here, it raises $\KF$, so
+the ``financing'' story fails and carbon rises unambiguously. The result is thus a
+\emph{proved} equivalence resting on one interpretable, verified scalar---not a
+distribution-free assertion about $\KR'(\tau)$, which we do not claim.
+\end{remark}
+
+\begin{remark}[No free lunch, and the unification]
+Within this budget family, the carbon question reduces to a single monotone trade-off:
+every megawatt of fossil the load is permitted to burn raises emissions, because---in
+every case we compute---the renewable build-out that fossil-running finances does not
+pay for the fossil it costs. So the carbon-optimal contract in the family is the extreme
+one, zero fossil for the load, and Weeks~2 and~3 are not rival models but the two ends of
+one frontier: the naive rule is the profit-maximizing, carbon-worst corner, the surplus
+rule the carbon-best corner. We characterize this positive menu---the carbon and firm
+profit of each contract; \emph{which} point a planner should select (the welfare and
+private-vs-social question, and the blackout--emissions trade-off) is a
+reliability-and-welfare matter left to the companion workstream, not an A1 claim. (We
+also claim optimality \emph{within the family}, not over all conceivable contracts; the
+broader bilevel question is flagged in \S\ref{r1w3-sec:optcontract}.) This rounds out the
+optimal-contract account of the flexible load's carbon effect.
+\end{remark}
+
+%=====================================================================
+\section{Numerical validation}\label{r1w3-sec:num}
+
+All claims are checked in \texttt{verify\_week3.py} against adaptive quadrature of the
+profit integrals, on non-power-law Beta scale mixtures
+$\tilde x=\tilde D-\KR\tilde S$ spanning symmetric, left-skewed, right-skewed, and
+bimodal demand. The suite confirms, at every adopted optimum and across the family:
+the surplus contract burns zero \textsc{fcl} fossil (Prop.~\ref{r1w3-prop:surplusopt}); the
+surplus-channel term in \eqref{r1w3-eq:focR} is strictly positive at $\KRo$, giving
+$\KRc>\KRo$; the fossil output $e(\KR)$ is strictly decreasing
+(Lemma~\ref{r1w3-lem:monofossil}); and the strict carbon fall
+$\E[\fossil^{c}]<\E[\fossil^{\circ}]$ holds with the \emph{same sign for every shape in
+the family} (Theorem~\ref{r1w3-thm:decarb}); the Pareto improvement $\Pi^{c}>\Pi^{\circ}$
+with blackout held equal, blackout$^{c}=$blackout$^{\circ}=1-\varphi^{\circ}$
+(Cor.~\ref{r1w3-cor:triplewin}); and the exact saving \eqref{r1w3-eq:exactsave} matches the direct
+quadrature. As a contrast the suite also
+reports the Week-2 naive-rule fossil at the same primitives, exhibiting the floor that
+the contract removes. The suite reports a single pass count.

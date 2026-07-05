@@ -1,0 +1,125 @@
+\documentclass[11pt,reqno]{report}
+
+%=====================================================================
+%  TEAM A1 -- MASTER COMPILATION
+%  "Flexible Computing Loads, Grid Resilience, and Carbon Emissions"
+%  Every role, every week, every proof, every step -- assembled verbatim
+%  from the individual deliverables into one document.
+%    Part I   Role 1  (Optimal Contract and General Carbon Theory)   Wk 1-4
+%    Part II  Role 2  (Solver and Numerical Methods)                 Wk 1-3
+%    Part III Role 3  (Comparative Statics and Robustness)           Wk 2-3
+%    Part IV  Role 4  (Theory Hardening and Regimes)
+%    Part V   Integrated paper (synthesis of all four roles)
+%=====================================================================
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,
+            urlcolor=blue!55!black]{hyperref}
+
+% ---- theorem environments, numbered within chapter (per role-week) ----
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem*{cardef}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem*{remark*}{Remark}
+
+% ---- the per-doc abstracts render inline as a "Summary" block ----
+\renewenvironment{abstract}{\par\medskip\noindent\textbf{\small Summary.}\itshape\small\quad}{\upshape\par\medskip}
+
+% ---- unified macro set (union across all four Role-1 weekly deliverables) ----
+\newcommand{\KR}{K_R}
+\newcommand{\KF}{K_F}
+\newcommand{\KM}{K_M}
+\newcommand{\KRs}{K_R^{*}}
+\newcommand{\KFs}{K_F^{*}}
+\newcommand{\KMs}{K_M^{*}}
+\newcommand{\KRo}{K_R^{\circ}}
+\newcommand{\KFo}{K_F^{\circ}}
+\newcommand{\Dbar}{\bar D}
+\newcommand{\CM}{C_M}
+\newcommand{\CF}{C_F}
+\newcommand{\CR}{C_R}
+\newcommand{\CMbar}{\bar C_M}
+\newcommand{\bp}{\beta+p}
+\newcommand{\FKR}{F_{\!\KR}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\eqdef}{\vcentcolon=}
+\newcommand{\Ucal}{\mathcal U}
+\newcommand{\Hcal}{\mathcal H}
+\newcommand{\cof}{\operatorname{cof}}
+\newcommand{\KRc}{K_R^{c}}
+\newcommand{\KFc}{K_F^{c}}
+\newcommand{\KMc}{K_M^{c}}
+\newcommand{\fossil}{\mathrm{fossil}}
+\newcommand{\mustar}{\mu^{*}_{\mathrm{low}}}
+\newcommand{\mumid}{\mu^{\circ}_{\mathrm{mid}}}
+\newcommand{\phio}{\varphi^{\circ}}
+\newcommand{\qo}{q^{\circ}}
+% extras some fragments may reference
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\dstar}{d^{*}}
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\eps}{\varepsilon}
+
+\title{\textbf{Team A1 --- Complete Theory Compilation}\\[4pt]
+\large Flexible Computing Loads, Grid Resilience, and Carbon Emissions\\[6pt]
+\normalsize Every role, every week, every proof, every step}
+\author{Team A1 (Roles 1--4)}
+\date{Weeks 1--4, working compilation}
+
+\begin{document}
+\maketitle
+{\small\tableofcontents}
+
+\part{Role 1 --- Optimal Contract and General Carbon Theory}
+\chapter{Week 1: Setup, unified FOC, and the uniform ground truth}
+\input{master_parts/r1w1}
+\chapter{Week 2: Existence, uniqueness, and the general-\texorpdfstring{$F$}{F} emission theory}
+\input{master_parts/r1w2}
+\chapter{Week 3: The optimal (surplus) contract and distribution-free decarbonization}
+\input{master_parts/r1w3}
+\chapter{Week 4: The carbon classification theorem}
+\input{master_parts/r1w4}
+\chapter{Exploratory: the optimal contract and emission frontier in general \texorpdfstring{$F$}{F}}
+\input{master_parts/r1ex_contract}
+\chapter{Exploratory: the robust certificate and detail-free implementation}
+\input{master_parts/r1ex_robust}
+
+\part{Role 2 --- Solver and Numerical Methods}
+\chapter{The solver, closed forms, Hessian certification, and dispatch LP (Weeks 1--3)}
+\input{master_parts/role2_part}
+
+\part{Role 3 --- Comparative Statics and Robustness}
+\chapter{Week 2: Comparative statics and the robust certificate}
+\input{master_parts/r3w2}
+\chapter{Week 3: Optimal-contract comparative statics and the price of robustness}
+\input{master_parts/r3w3}
+\chapter{Integrated paper section (Role 3 contribution)}
+\input{master_parts/r3ps}
+
+\part{Role 4 --- Theory Hardening and Regimes}
+\chapter{Theory hardening, regime mapping, and cross-role reconciliation}
+\input{master_parts/role4_part}
+
+\part{Integrated Paper --- Synthesis of All Four Roles}
+\chapter{The integrated A1 paper}
+\input{master_parts/integrated}
+
+\end{document}
