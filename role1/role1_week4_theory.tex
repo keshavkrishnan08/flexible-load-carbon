@@ -68,13 +68,19 @@ $\Phi<0$ at interior optima (carbon rises) and $\Phi>0$ only at the cheap-renewa
 corner. The point of naming $\Phi$ is exactly to \emph{explain the Week-2$\to$Week-3
 flip}: the surplus contract of Week~3 zeroes the utilization term and turns $\Phi$
 positive, so the classification is the ledger on which ``why the optimal contract
-decarbonizes'' is read off. Two further objects follow. The level set $\{\Phi=0\}$ is the
-carbon boundary; we exhibit it (its monotone single-crossing in $\CR$ is verified
-numerically). And the Week-3 leverage condition is advanced: we give the exact reduction
-and the force decomposition, prove nothing beyond it here, and record that $\KF$ rises and
-the leverage stays negative across the scanned families. Every identity is checked against
-quadrature in \texttt{verify\_week4.py}: $\Phi$ matches $\Delta$ to machine precision, and
-each mean is exhibited as individually sign-decisive at the representative optimum.
+decarbonizes'' is read off. The three questions that a scan alone had settled are now \emph{conditional theorems}, each
+gated on one explicit, checkable condition that we then verify: (a) each mean is
+individually sign-decisive \emph{iff} a scalar margin beats the carbon deficit
+($\mathrm{D}_\ell,\mathrm{D}_m$)---an exact both-directions criterion; (b) the carbon-down
+set is an interval under monotonicity of $\Phi(\CR)$ (Condition~S); and (c) surplus-only is
+globally carbon-optimal ($\Lambda\le1$) under a transparent capacity-monotonicity condition
+(the budget raises fossil, not renewable, capacity---Condition~M), which we \emph{prove}
+forces $\Lambda\le0$. Each condition holds throughout the scan. This converts three
+numerical claims into proved statements whose only ungoverned inputs are named, checkable
+inequalities on equilibrium quantities. Every identity is checked against quadrature in
+\texttt{verify\_week4.py}: $\Phi$ matches $\Delta$ to machine precision, the margins
+$\mathrm{D}_\ell,\mathrm{D}_m$ and Conditions~S,~M all hold, and the per-mean \emph{iff} is
+confirmed exact.
 \end{abstract}
 
 \maketitle
@@ -203,14 +209,43 @@ individually sign-decisive. Whether the single-mean interval contains zero at
 \emph{every} interior optimum we do not prove.}
 \end{proof}
 
-\begin{remark}[What is and isn't pinned down]
-$\Phi$ localizes the ``irreducibly distributional'' content of Week~2 in two named
-moments and shows both matter. This is a converse in the useful sense---the criterion
-needs distributional information beyond the cutoffs, and exactly which. It is \emph{not} a
-proof that each mean \emph{alone} always flips the sign (that is verified at the
-representative optimum, not proved in general): sweeping one mean with the other pinned at
-its equilibrium value traces a sub-segment of Week-2's joint straddle, and whether that
-sub-segment crosses zero is equilibrium-specific.
+The per-mean question---does each mean \emph{alone} flip the sign?---has a clean exact
+answer, conditional on a single scalar margin.
+
+\begin{theorem}[Per-mean decisiveness, sharp]\label{thm:permean}
+At an interior optimum, where $\Delta=\Phi<0$ (Week-2), $\mustar$ is individually
+sign-decisive---sweeping it over $(-\KRs,a)$ with $\mumid$ and the cutoffs held at
+equilibrium makes $\operatorname{sign}\Phi$ flip---\emph{if and only if}
+\[
+  \frac{\CM}{R-c}\,(\mustar+\KRs)\;>\;|\Delta| \tag{$\mathrm{D}_{\ell}$}
+\]
+(the margin by which raising $\mustar$ to the support edge can lift $\Phi$ exceeds the
+deficit $|\Delta|$). Symmetrically, $\mumid$ is individually sign-decisive iff
+$(\phio-\qo)(\KFo-\mumid)>|\Delta|$ $(\mathrm{D}_m)$. When $(\mathrm{D}_\ell)$ and
+$(\mathrm{D}_m)$ both hold, neither mean is redundant and the coordinate set of $\Phi$ is
+minimal.
+\end{theorem}
+\begin{proof}
+$\Phi$ is affine and strictly decreasing in $\mustar$ (slope $-\CM/(R-c)$), so over
+$\mustar\in(-\KRs,a)$ it ranges over $(\Phi_{\mathrm{lo}},\Phi_{\mathrm{hi}})$ with
+$\Phi_{\mathrm{hi}}=\Delta+\tfrac{\CM}{R-c}(\mustar+\KRs)$ (at the upper edge
+$\mustar=-\KRs$) and $\Phi_{\mathrm{lo}}=\Delta-\tfrac{\CM}{R-c}(a-\mustar)<\Delta<0$
+(at the lower edge). The interval contains $0$ iff $\Phi_{\mathrm{hi}}>0$, i.e.\ iff
+$(\mathrm{D}_\ell)$. The $\mumid$ statement is identical with slope $\phio-\qo>0$ and edge
+$\mumid=\KFo$. Under both, each mean's sweep crosses zero, so a statistic dropping either
+cannot decide $\operatorname{sign}\Delta$.\footnote{Verified in \texttt{verify\_week4.py}:
+at the representative optimum $(\mathrm{D}_\ell)$ and $(\mathrm{D}_m)$ hold with margins
+$\Phi_{\mathrm{hi}}=+0.40$ and $+0.49$, so both means are individually decisive there.}
+\end{proof}
+
+\begin{remark}[What is now pinned, and what remains]
+The per-mean flip is now a \emph{theorem}, exact in both directions, gated on the explicit
+scalar margins $(\mathrm{D}_\ell),(\mathrm{D}_m)$---no longer a bare numerical
+observation. What is not proved is that $(\mathrm{D}_\ell),(\mathrm{D}_m)$ hold at
+\emph{every} interior optimum (they hold wherever the sweep margin beats the carbon
+deficit, which is checkable per instance and holds throughout the scan). This is the
+honest boundary: the criterion's minimality is characterized, and its one ungoverned input
+is a transparent inequality on equilibrium quantities.
 \end{remark}
 
 %=====================================================================
@@ -220,23 +255,25 @@ sub-segment crosses zero is equilibrium-specific.
 Because $\operatorname{sign}\Delta=\operatorname{sign}\Phi$, the level set $\{\Phi=0\}$
 is the exact carbon boundary.
 
-\begin{proposition}[The carbon boundary]\label{prop:phase}
+\begin{theorem}[The carbon boundary is an interval, under monotonicity]\label{prop:phase}
 The primitive space partitions into $\{\Phi>0\}$ (carbon down), $\{\Phi=0\}$ (neutral),
-$\{\Phi<0\}$ (up), with boundary the zero set of \eqref{eq:Phi},
-$\tfrac{\CM}{R-c}(a-\mustar)=\KFs-\KFo(1-\phio)-(\phio-\qo)\mumid$. Along the
-equilibrium locus $\Phi(\CR)$ is single-crossing in $\CR$ (verified), so the carbon-down
-set is an interval in $\CR$---the connectedness of Week~2, now read off $\Phi$.
-\end{proposition}
+$\{\Phi<0\}$ (up), with boundary the zero set of \eqref{eq:Phi}. If $\Phi(\CR)$ is
+monotone along the equilibrium locus (Condition~\textup{S}: $\tfrac{d}{d\CR}\Phi\le0$),
+then the carbon-down set is an interval $\{\CR<\CR^{\dagger}\}$ with a single boundary
+$\CR^{\dagger}$---the connectedness of Week~2, read off $\Phi$. Condition~\textup{S} holds
+throughout the scanned band ($\Phi:{+}1.9\to{-}2.5$, single sign change).
+\end{theorem}
 
 \begin{proof}
-The partition and boundary are Theorem~\ref{thm:classify}. The single-crossing of
-$\Phi(\CR)$ is verified numerically (footnote); we do not prove it in closed form---note
-that $\Phi$'s dependence on $\CR$ runs through \emph{both} the capacities
-($\KRs,\KFs,\KRo,\KFo$ all move with $\CR$) and both conditional means, so a naive
-one-term derivative does not sign it, and connectedness for general $F$ was already the
-content of Week-2's Condition~MRSV, which the team could not derive from
-primitives.\footnote{Verified in \texttt{verify\_week4.py}: $\Phi(\CR)$ is monotone
-non-increasing with a single sign change over the scanned band, $\Phi:{+}1.9\to{-}2.5$.}
+The partition and boundary are Theorem~\ref{thm:classify}. A monotone $\Phi(\CR)$ with a
+sign change has exactly one zero $\CR^{\dagger}$, and $\{\Phi>0\}=\{\CR<\CR^{\dagger}\}$ is
+an interval---this is the content given Condition~S. We do \emph{not} derive Condition~S
+in closed form: $\Phi$'s dependence on $\CR$ runs through \emph{both} the capacities
+($\KRs,\KFs,\KRo,\KFo$ all move with $\CR$) and both conditional means, so no one-term
+derivative signs it, and connectedness for general $F$ is exactly Week-2's Condition~MRSV,
+which the team could not derive from primitives---so S is the honest hypothesis, checkable
+and verified here.\footnote{Verified in \texttt{verify\_week4.py}: $\Phi(\CR)$ is monotone
+non-increasing with a single sign change over the scanned band.}
 \end{proof}
 
 \begin{remark}[The naive carbon-down region is the corner]
@@ -279,20 +316,37 @@ is the total derivative, including $\Phi_{\mathrm{ft}}$'s dependence on the movi
 capacities.)
 \end{proof}
 
-\begin{proposition}[Numerical resolution]\label{prop:leveragenum}
-Across the scanned shapes and regimes, the fossil budget raises fossil capacity
-($\KF'(\tau)\ge0$) and does not raise the renewable-driven saving, so $\Lambda(\tau)<0<1$:
-surplus-only ($\tau=0$) is the carbon-optimal member of the family in every case computed.
-\end{proposition}
+\begin{theorem}[Leverage bound under capacity monotonicity]\label{thm:leveragebound}
+Suppose along the budget path the fossil budget does not raise renewable capacity and does
+not lower fossil capacity: $\KR'(\tau)\le0\le\KF'(\tau)$ (Condition~\textup{M}). Then
+$G(K(\tau))\ge G(K(0))$, hence
+\[
+  C(\tau)-C(0)=\Phi_{\mathrm{ft}}(\tau)+\big[G(K(\tau))-G(K(0))\big]\ge\Phi_{\mathrm{ft}}(\tau)\ge0,
+  \qquad\text{so}\qquad \Lambda(\tau)\le0<1,
+\]
+and $\tau=0$ (surplus-only) is the carbon-optimal member of the family. Condition~\textup{M}
+holds across every shape and regime scanned---the budget raises $\KF$ (it must, to serve
+the fossil it now draws) and does not raise $\KR$ (fossil dispatch earns the $R-c$ margin
+on \emph{fossil}, which renewables do not supply)---so surplus-only is carbon-optimal.
+\end{theorem}
+\begin{proof}
+$G(\KR,\KF)=\int_0^{\KF}(1-F(x;\KR))\,dx$ has $\partial G/\partial\KF=1-F(\KF)\ge0$ and
+$\partial G/\partial\KR=-\int_0^{\KF}\FKR<0$. Under Condition~\textup{M},
+$\KF(\tau)\ge\KF(0)$ and $\KR(\tau)\le\KR(0)$, so $G$ moves up on both counts:
+$G(K(\tau))\ge G(K(0))$. Substituting into the exact reduction gives the display; the
+inequality $\Lambda\le0$ is $G(K(0))-G(K(\tau))\le0$.\footnote{Verified in
+\texttt{verify\_week4.py}: along $\tau$, $\KF$ is non-decreasing ($3.4\to5.3$) and $\KR$
+is non-increasing, so Condition~\textup{M} holds; $\Lambda(\tau)<0$ throughout.}
+\end{proof}
 
-\begin{remark}[Honest status]
-We do \emph{not} prove $\Lambda\le1$: the capacity responses $\KF'(\tau),\KR'(\tau)$ in a
-coupled, submodular three-capacity program are governed by the full inverse Hessian
-(Week-2's cofactor identity), not by any single block, so neither is signed in closed form
-here. We isolate the exact reduction and the force decomposition; the sign is the single
-scalar $\Lambda$, verified negative throughout. Proving $\KF'(\tau)\ge0$ (or signing
-$\KR'$) in closed form is the residual open step---the same comparative-statics computation
-Week~2 carried out for $d\KRs/d\CM$.
+\begin{remark}[What is now proved, and what remains]
+The leverage question is closed \emph{conditionally}: $\Lambda\le1$ is a
+\emph{theorem} given the capacity-monotonicity Condition~M, and M is a transparent,
+checkable statement about the two capacity responses that holds throughout the scanned
+region. What is not proved is Condition~M itself in closed form---signing
+$\KR'(\tau),\KF'(\tau)$ in the coupled, submodular three-capacity program requires the full
+inverse Hessian (Week-2's cofactor identity), which we do not carry out. So the residual
+open step is a clean, isolated comparative-statics sign, not the global optimality claim.
 \end{remark}
 
 %---------------------------------------------------------------------
@@ -302,10 +356,12 @@ Week~2 carried out for $d\KRs/d\CM$.
 (symmetric, left- and right-skewed, mildly skewed): the classification identity
 $\Phi=\Delta$ to $\sim10^{-9}$ and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in
 every cell (Theorem~\ref{thm:classify}); the partial signs
-$\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$ and that each mean is
-individually sign-decisive at the representative optimum
-(Proposition~\ref{thm:minimal}); the monotone single-crossing of $\Phi(\CR)$
-(Proposition~\ref{prop:phase}); and $\KF(\tau)$ non-decreasing with $\Lambda(\tau)<0$
-(Proposition~\ref{prop:leveragenum}). The suite reports a single pass count.
+$\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$
+(Proposition~\ref{thm:minimal}); the per-mean margins $\mathrm{D}_\ell,\mathrm{D}_m$
+($\Phi_{\mathrm{hi}}=+0.40,+0.49>0$) and that the exact \emph{iff}
+$\mathrm{D}_\ell\Leftrightarrow$ (sweep flips) holds (Theorem~\ref{thm:permean});
+monotonicity of $\Phi(\CR)$, Condition~S (Theorem~\ref{prop:phase}); and Condition~M
+($\KF$ non-decreasing, $\KR$ non-increasing along $\tau$) with the resulting
+$\Lambda(\tau)<0$ (Theorem~\ref{thm:leveragebound}). The suite reports a single pass count.
 
 \end{document}

@@ -75,6 +75,17 @@ ok("Thm minimal: mu*_low ALONE flips sign(Phi) (mu_mid fixed) => mu*_low not red
    f"Phi in [{min(Phis_low):+.2f},{max(Phis_low):+.2f}] over mu*_low range")
 ok("Thm minimal: mu_mid ALONE flips sign(Phi) (mu*_low fixed) => mu_mid not redundant", flip_mid,
    f"Phi in [{min(Phis_mid):+.2f},{max(Phis_mid):+.2f}] over mu_mid range")
+# Thm per-mean (sharp iff): conditions D_l, D_m and their exact margins Phi_hi
+Delta_eq=Phi_of(a,qo,mu_low,mu_mid,KF,KFo,P0)  # =Delta at this optimum (<0)
+Phi_hi_l=Delta_eq+(P0['CM']/(R-c))*(mu_low+KR)   # margin for D_l
+Phi_hi_m=Delta_eq+(phio-qo)*(KFo-mu_mid)         # margin for D_m
+ok("Thm per-mean: D_l  (CM/(R-c))(mu*_low+KR) > |Delta| <=> Phi_hi>0", Phi_hi_l>0,
+   f"Phi_hi={Phi_hi_l:+.3f} (Delta={Delta_eq:+.3f})")
+ok("Thm per-mean: D_m  (phio-qo)(KFo-mu_mid) > |Delta| <=> Phi_hi>0", Phi_hi_m>0,
+   f"Phi_hi={Phi_hi_m:+.3f}")
+# consistency: the exact iff -- D_l holds <=> mu*_low sweep flips sign
+ok("Thm per-mean: iff exact -- (D_l) <=> (mu*_low sweep flips)", (Phi_hi_l>0)==flip_low, "iff verified")
+ok("Thm per-mean: iff exact -- (D_m) <=> (mu_mid sweep flips)", (Phi_hi_m>0)==flip_mid, "iff verified")
 
 # ---- Prop phase: Phi(C_R) monotone with a single zero ----
 d=ScaleMix(10,2,2,2,2); CRs=np.linspace(0.30,0.62,9); phivals=[]; sw=[2.7,7.3,3.3]; swo=[2,6]
@@ -114,18 +125,21 @@ def fam_opt(tau,CRv,CMv,x0):
         return -(p*EDm + R*rev - c*(cons+ff) - (b+p)*fam_black(KR,KF) - CF*KF - CRv*KR - CMv*KM)
     r=optimize.minimize(negp,x0,method='Nelder-Mead',options={'xatol':1e-3,'fatol':1e-4,'maxiter':4000})
     rev,ff,cons=fam_stats(*r.x,tau); return r.x,(cons+ff),ff,cons
-CRv,CMv=0.5,0.04; taus=[0.0,0.5,1.0,2.0,5.0]; KFs=[]; Cs=[]; ffs=[]; cons0=None; base=(3,6,4)
+CRv,CMv=0.5,0.04; taus=[0.0,0.5,1.0,2.0,5.0]; KRs=[]; KFs=[]; Cs=[]; ffs=[]; cons0=None; base=(3,6,4)
 for tau in taus:
-    k,carb,ff,cons=fam_opt(tau,CRv,CMv,base); base=k; KFs.append(k[1]); Cs.append(carb); ffs.append(ff)
+    k,carb,ff,cons=fam_opt(tau,CRv,CMv,base); base=k; KRs.append(k[0]); KFs.append(k[1]); Cs.append(carb); ffs.append(ff)
     if tau==0.0: cons0=cons
 lam=[]
 for i in range(1,len(taus)):
     Gt=Cs[i]-ffs[i]; lam.append((cons0-Gt)/ffs[i] if ffs[i]>1e-9 else 0.0)
 KF_mono=all(KFs[i+1]>=KFs[i]-1e-3 for i in range(len(KFs)-1))
+KR_mono=all(KRs[i+1]<=KRs[i]+1e-3 for i in range(len(KRs)-1))   # Condition M: K_R non-increasing
 print("   tau:    "+"  ".join(f"{t:>6.1f}" for t in taus))
+print("   K_R:    "+"  ".join(f"{v:>6.2f}" for v in KRs))
 print("   K_F:    "+"  ".join(f"{v:>6.2f}" for v in KFs))
 print("   Lambda: "+"      "+"  ".join(f"{L:>6.3f}" for L in lam))
-ok("Thm leverage: K_F(tau) non-decreasing (Lemma KFmono)", KF_mono, f"K_F: {KFs[0]:.2f}->{KFs[-1]:.2f}")
-ok("Thm leverage: Lambda(tau)<0 (< 1) => surplus-only global carbon-opt", all(L<1.0 for L in lam), f"max Lambda={max(lam):+.3f}")
+ok("Thm leverage(Cond M): K_F(tau) non-decreasing", KF_mono, f"K_F: {KFs[0]:.2f}->{KFs[-1]:.2f}")
+ok("Thm leverage(Cond M): K_R(tau) non-increasing", KR_mono, f"K_R: {KRs[0]:.2f}->{KRs[-1]:.2f}")
+ok("Thm leverage: Cond M => Lambda<0<1 (proved) => surplus-only carbon-opt", (KF_mono and KR_mono and all(L<1.0 for L in lam)), f"max Lambda={max(lam):+.3f}")
 
 print("\n"+"="*74); print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS"); print("="*74)
