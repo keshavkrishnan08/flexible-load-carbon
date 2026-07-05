@@ -22,8 +22,10 @@ deep-surplus states than in tight states. The power-law family satisfies the
 shift-ratio condition for every shape parameter, which is exactly why footnote~6's
 extension goes through. \emph{Third}, we give the exact net-carbon inequality,
 decompose it into a distribution-free \emph{utilization} effect and a
-sign-controlled \emph{capacity-substitution} effect, and state a clean sufficient
-condition for the carbon part of the triple win. \emph{Fourth}, we give a
+sign-controlled \emph{capacity-substitution} effect, and give a shape comparison to the
+uniform at matched cutoffs (which bounds the saving but---as Week~2 shows the uniform's
+interior value is negative---does not by itself sign interior carbon reduction).
+\emph{Fourth}, we give a
 distribution-free reading of the effect: \emph{at fixed equilibrium capacities} the
 carbon change is affine in two conditional means, is bracketed by closed-form
 \emph{magnitude bounds} computable from cutoff data, and---among distributions
@@ -208,6 +210,18 @@ $\KR$ is optimal at equality. Equivalently $\KRs=\infty$ iff
 \end{equation}
 which is \emph{exactly} the bracket printed in paper eq.\ (24).
 \end{proposition}
+
+\begin{remark}[The $\KRs=\infty$ corner is a small-\textsc{fcl} statement]\label{r1w1-rem:knifecaveat}
+Formula \eqref{r1w1-eq:mv} is the marginal value on the \emph{large}-\textsc{fcl} portion of
+the re-optimization locus. Along that locus $\KMs/\KRs\to(1-\varphi_1)-\tfrac{c+\CF+\CM-R}{\bp-R}<1$,
+so $\KMs<\KRs$ for large $\KR$: the locus \emph{leaves} the large-\textsc{fcl} regime before
+$\KR=\infty$. The genuine $\KR\to\infty$ corner is therefore governed by the
+small-\textsc{fcl} asymptotic slope (Appendix~G / Role~4), which agrees with \eqref{r1w1-eq:mv}
+on the families we compute but is, strictly, a small-\textsc{fcl} extrapolation. Downstream
+results that invoke the $\KRs=\infty$ corner ($\CR^{\dagger}=\mathrm{MV}$, the strict-fall
+window) inherit this dependence; they are proved here for the power/uniform families and
+verified numerically, with the general regime-stitching deferred to Role~4.
+\end{remark}
 
 \begin{proof}
 For the power law one computes $\FKR(x)=f(x)\,(\Dbar-x)/Q$, hence the shift ratio
@@ -434,17 +448,22 @@ The \textbf{capacity-substitution effect} is carried by the right side through
 $\KRs>\KRo$ (Theorem~\ref{r1w1-thm:capacity}), which lowers $\E[\text{fossil}^{*}]$ by
 shifting the residual-demand distribution left. The net sign is which one wins.
 
-\begin{corollary}[Sufficient distributional conditions]\label{r1w1-cor:suff}
-The carbon part of the triple win holds for all $\CM<\CMbar$ under any $F$ with
+\begin{corollary}[Shape comparison to the uniform, at matched cutoffs]\label{r1w1-cor:suff}
+For any $F$ with
 \begin{enumerate}[label=(\alph*),leftmargin=2.4em]
   \item $f(\cdot;\KRs)$ non-increasing on $(-\KRs,\KFs-\KMs)$ \;(equiv.\ $F(\cdot;\KRs)$ concave there), and
-  \item $f(\cdot;\KRo)$ non-decreasing on $(0,\KFo)$ \;(equiv.\ $F(\cdot;\KRo)$ convex there).
+  \item $f(\cdot;\KRo)$ non-decreasing on $(0,\KFo)$ \;(equiv.\ $F(\cdot;\KRo)$ convex there),
 \end{enumerate}
-Under (a), $\mu^{*}_{\mathrm{low}}\le(\KFs-\KMs-\KRs)/2$, so \textsc{fcl} fossil
-output is no larger than under the uniform; under (b),
-$\mu^{\circ}_{\mathrm{mid}}\ge\KFo/2$, so no-\textsc{fcl} output is no smaller.
-Together (C) holds at least as strongly as under the uniform, and the threshold
-$\CMbar$ is preserved. The uniform satisfies (a)--(b) with equality.
+we have $\mu^{*}_{\mathrm{low}}\le(\KFs-\KMs-\KRs)/2$ (so \textsc{fcl} fossil output is no
+larger than under the uniform) and $\mu^{\circ}_{\mathrm{mid}}\ge\KFo/2$ (so no-\textsc{fcl}
+output is no smaller). Hence the net saving $\Delta$ is \emph{at least} its uniform value at
+the same distribution-free cutoffs. \textbf{This is a shape comparison, not a proof of
+carbon reduction.} It signs $\Delta>0$ only where the uniform benchmark already does---and
+Week~2 shows the uniform's \emph{interior} value $\Delta_0<0$ (carbon falls under the
+uniform only at its corner $\KRs\to\infty$, where $\E[\text{fossil}^{*}]\to0$). So (a)--(b)
+bound $\Delta$ from below but do \emph{not} by themselves establish interior carbon
+reduction; that requires the optimized (surplus) contract of Week~3 or the corner analysis.
+The uniform satisfies (a)--(b) with equality.
 \end{corollary}
 
 \begin{remark}[Why no level-feedback term is missing]\label{r1w1-rem:feedback}
@@ -458,8 +477,10 @@ dependence on $F$ in the limits. Second, the one level effect that does survive,
 the renewable shift $\KRs>\KRo$, is signed once and for all by
 Theorem~\ref{r1w1-thm:capacity}; it enters \eqref{r1w1-eq:fos1} only through the leftward
 relocation of mass, which (a) already accounts for. Hence (C) together with
-Theorem~\ref{r1w1-thm:capacity} is a \emph{complete} characterization---no
-second-order feedback term is dropped.
+Theorem~\ref{r1w1-thm:capacity} is an \emph{exact} identity at fixed cutoffs---no
+second-order feedback term is dropped. (It is not a distribution-free \emph{sign}: Week~2
+shows the sign of $\Delta$ across $F$ is not decidable from the cutoffs and capacities
+alone.)
 \end{remark}
 
 Write $\Delta(\CR)\eqdef\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]$ for the
@@ -509,13 +530,16 @@ $F(\KFs)=\frac{\bp-c-\CF-\CM}{\bp-R}\ge\varphi^{\circ}=F(\KFo)$ when $\CM\le\CMb
 (equality at $\CMbar$, larger as $\CM$ falls; Lemma~\ref{r1w1-lem:cutoffs}). Both push
 the same way, so $\E[\text{fossil}^{*}]>\E[\text{fossil}^{\circ}]$ and
 $\Delta=-U_0<0$. This uses no distributional assumption.
-\emph{(ii)} In the knife-edge regime the renewable marginal value is a constant
-$\mathrm{MV}_{\!*}$ along the locus, so $\KRs=\infty$ iff $\CR<\CR^{\dagger}\eqdef\mathrm{MV}_{\!*}$;
-likewise the no-\textsc{fcl} value is a constant $\mathrm{MV}_{\!\circ}$ with $\KRo=\infty$
-iff $\CR<\CR^{\circ}\eqdef\mathrm{MV}_{\!\circ}$. Since \eqref{r1w1-eq:gR} weights the
-dispatch region by $R$ where the no-\textsc{fcl} FOC weights it by $c<R$,
-$\mathrm{MV}_{\!*}>\mathrm{MV}_{\!\circ}$, i.e.\ $\CR^{\dagger}>\CR^{\circ}$ (for the
-power-law family this is the explicit comparison of Proposition~\ref{r1w1-prop:CRdag}).
+\emph{(ii)} In the knife-edge regime the with-\textsc{fcl} renewable marginal value is a
+constant $\mathrm{MV}_{\!*}$ along the locus, so $\KRs=\infty$ iff
+$\CR<\CR^{\dagger}\eqdef\mathrm{MV}_{\!*}$. The no-\textsc{fcl} renewable value
+$\mathrm{MV}_{\!\circ}(\KRo)$ is \emph{not} constant---it is strictly decreasing in $\KRo$
+with infimum $\CR^{\circ}\eqdef\lim_{\KRo\to\infty}\mathrm{MV}_{\!\circ}$---so $\KRo=\infty$
+iff $\CR<\CR^{\circ}$ (and the no-\textsc{fcl} problem has a finite interior $\KRo$ for
+$\CR>\CR^{\circ}$). Since \eqref{r1w1-eq:gR} weights the dispatch band by $R$ where the
+no-\textsc{fcl} FOC weights it by $c<R$, $\mathrm{MV}_{\!*}(\KR)>\mathrm{MV}_{\!\circ}(\KR)$
+at every $\KR$, hence $\CR^{\dagger}=\mathrm{MV}_{\!*}>\CR^{\circ}$ (for the power-law family
+this is the explicit comparison of Proposition~\ref{r1w1-prop:CRdag}).
 For $\CR\in(\CR^{\circ},\CR^{\dagger})$: $\KRs=\infty$ with $\PP(\tilde S>0)=1$ sends
 $\tilde x\to-\infty$ a.s.\ so $\E[\text{fossil}^{*}]=0$, while $\KRo$ is finite and
 $\E[\text{fossil}^{\circ}]>0$.
@@ -546,12 +570,20 @@ carbon strictly falls for all $\CM<\CMbar$ on this nonempty $\CR$-window.
 \begin{proof}
 $\CR^{\dagger}=\mathrm{MV}$ is Proposition~\ref{r1w1-prop:knife}: $\KRs=\infty$ iff
 $\mathrm{MV}>\CR$. The no-\textsc{fcl} optimum \eqref{r1w1-eq:noKFKR} is finite and
-positive iff $0<2\CR-\CF^2/(\bp-c)$, i.e.\ $\CR>\CR^{\circ}$. That
-$\CR^{\circ}<\CR^{\dagger}$ follows from
-$\CR^{\dagger}\ge\tfrac12 c>0$ and $\CR^{\circ}=\CF^2/(2(\bp-c))$, with strict
-gap under Assumption~\ref{r1w1-ass:reg}; e.g.\ at the calibration of \S\ref{r1w1-sec:num},
-$\CR^{\circ}=0.040<\CR^{\dagger}=0.344$. \emph{(Both thresholds verified
-numerically.)}
+positive iff $0<2\CR-\CF^2/(\bp-c)$, i.e.\ $\CR>\CR^{\circ}$, where
+$\CR^{\circ}=\CF^2/(2(\bp-c))$ is the \emph{limit} of the (strictly decreasing) no-\textsc{fcl}
+renewable marginal value $\mathrm{MV}_{\!\circ}(\KRo)$ as $\KRo\to\infty$ (only the
+blackout-hedge term survives; the no-\textsc{fcl} value is \emph{not} constant---it
+decreases to $\CR^{\circ}$). For $\CR^{\circ}<\CR^{\dagger}$ we use pointwise domination
+rather than a single-term bound (no one term of $\mathrm{MV}_{\!*}$ dominates $\CR^{\circ}$
+across all parameters): at any common $\KR$ the with-\textsc{fcl} renewable marginal value
+exceeds the no-\textsc{fcl} one, because \eqref{r1w1-eq:gR} redispatches the band
+$(\KF-\KM,\KF)$ at rate $R$ where the no-\textsc{fcl} FOC weights it by $c<R$, so
+$\mathrm{MV}_{\!*}(\KR)>\mathrm{MV}_{\!\circ}(\KR)$ for every $\KR$. Since $\mathrm{MV}_{\!*}$
+is constant on the knife-edge locus and $\mathrm{MV}_{\!\circ}(\KR)\downarrow\CR^{\circ}$, we
+get $\CR^{\dagger}=\mathrm{MV}_{\!*}\ge\CR^{\circ}$, strict because $R>c$ on a
+positive-measure band. Verified at the \S\ref{r1w1-sec:num} calibration,
+$\CR^{\circ}=0.040<\CR^{\dagger}=0.344$.
 \end{proof}
 
 %---------------------------------------------------------------------

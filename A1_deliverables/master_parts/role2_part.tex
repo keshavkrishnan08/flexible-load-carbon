@@ -95,17 +95,20 @@ factor of $2$ is a benign grouping difference that does not affect its sign.
 
 The central Week-1 finding is negative and structural.
 
-\begin{proposition}[No finite optimum under uniform/power]
+\begin{proposition}[No interior optimum in the runaway sub-regime]
 \label{prop:r2-no-finite-opt}
 Under the uniform family (and its power-law generalization
-$F=((x+K_R)/Q)^{\alpha}$), the with-FCL profit \eqref{eq:r2-profit} has no finite
-global maximum: it increases without bound as $K_R$ and $K_M$ grow together.
-This traces directly to Assumption~1's inequality $R<c+C_F+C_M$, which forces the
-coefficient of $Q$ in the closed form for $K_F^{*}$ to be strictly negative, so
-$K_F^{*}$ is guaranteed to cross zero (becoming economically invalid) at some
-finite $K_R$ for \emph{every} admissible parameter set. Hence eq.~24's positive
-case, ``$K_R^{*}=\infty$,'' is a one-directional first-order signal, not an
-attainable interior point.
+$F=((x+K_R)/Q)^{\alpha}$), whenever $C_R<C_R^{\dagger}$ (equivalently the knife-edge
+$\Delta_{24}>0$), the with-FCL profit \eqref{eq:r2-profit} has no finite interior
+maximum: it increases without bound as $K_R$ and $K_M$ grow together. Under
+Assumption~1's inequality $R<c+C_F+C_M$, the \emph{net coefficient of $K_R$} in the
+closed form $K_F^{*}=\varphi_2 Q-K_R=\varphi_2\bar D-(1-\varphi_2)K_R$ is
+$-(1-\varphi_2)<0$, so the interior stationary curve $K_F^{*}$ crosses zero at some
+finite $K_R$: the positive case ``$K_R^{*}=\infty$'' of eq.~24 is a one-directional
+first-order signal, not an attainable interior point. For $C_R>C_R^{\dagger}$
+($\Delta_{24}<0$) the profit is instead maximized at the bounded corner $K_R^{*}=0$
+(consistent with Role~4's boundedness threshold); the unboundedness is a property of
+the cheap-renewable sub-regime, not universal.
 \end{proposition}
 
 The unboundedness was confirmed numerically (the joint profit keeps rising at
@@ -317,11 +320,13 @@ tightest bound, recovering $z_i=\min\{K_F,\max(x_i+d_i,0)\}$ exactly.
 \begin{lemma}[Firm-optimal dispatch is greedy]
 \label{lem:r2-lemma1}
 The firm-optimal contract maximizes $\sum_i w_i\bigl(R\,d_i-c\,z_i\bigr)$ over all
-admissible $d(\cdot)$. Its unique solution is the greedy rule
-$d^{*}(x)=\min\{\max(K_F-x,0),\,K_M\}$ of eq.~3: for $R>c$ the objective both
-minimizes $z_i$ (so $z_i=\max(0,x_i+d_i)$) and maximizes $d_i$, giving $d_i=K_M$
-in the full-dispatch region $x_i+K_M\le K_F$ and $d_i=K_F-x_i$ in the gap-filling
-zone.
+admissible $d(\cdot)$ subject to the consumer-priority cap $x_i+d_i\le K_F$ (mining
+is served only into the headroom below the fossil ceiling; served mining $d_i$ never
+displaces consumer supply). Under that cap $z_i=\max(0,x_i+d_i)$ and the objective is
+increasing in $d_i$, so its unique solution is the greedy rule
+$d^{*}(x)=\min\{\max(K_F-x,0),\,K_M\}$ of eq.~3: for $R>c$ it maximizes served $d_i$,
+giving $d_i=K_M$ in the full-dispatch region $x_i+K_M\le K_F$ and $d_i=K_F-x_i$ in the
+gap-filling zone where the cap binds.
 \end{lemma}
 
 The LP solution reproduced the greedy schedule to a relative carbon error below

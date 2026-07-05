@@ -15,20 +15,23 @@ positive $K_M^\ast$,
 \operatorname{sign}\!\left(\frac{\partial J}{\partial \theta}\right)
 =
 \begin{cases}
-+,& \theta \in \{R,\beta\},\\
++,& \theta = R,\\
 -,& \theta \in \{c, C_F, C_R, C_M\},\\
-\text{ambiguous},& \theta = p.
+\text{ambiguous (numerically $+$)},& \theta \in \{\beta, p\}.
 \end{cases}
 \]
+Here the $\beta$ sign is not distribution-free---consistent with the Week-2 note, it is
+positive numerically (in $7/8$ scanned cells) but not signed in general.
 \end{proposition}
 
 \begin{proof}[Proof sketch]
 Applying the envelope theorem to $\Pi_{\text{FCL}}$,
 $\partial \mathrm{Carbon}_{\text{FCL}}/\partial \theta
 = c \cdot E[\mathbf 1_{x+d^\ast \in (0,K_F^\ast)} \cdot \partial (x+d^\ast)/\partial \theta]
-+ c \, \partial K_F^\ast/\partial \theta \cdot F(K_F^\ast)(1-F(K_F^\ast))/f(K_F^\ast)$
-(and similarly for no-FCL). Differentiating the two FOCs gives
-$\partial K_F^\ast/\partial R = -1/(f\,(\beta+p-R))\cdot \bar q_F > 0$,
++ c \,\bigl(1-F(K_F^\ast)\bigr)\,\partial K_F^\ast/\partial \theta$
+(since $\partial/\partial K_F\,\mathbb E[\min(x_+,K_F)]=\Pr(x>K_F)=1-F(K_F)$;
+and similarly for no-FCL). Differentiating the two FOCs gives
+$\partial K_F^\ast/\partial R = \bar q_F/(f\,(\beta+p-R)) > 0$,
 $\partial K_F^\ast/\partial c < 0$, and $\partial K_M^\ast/\partial C_M < 0$.
 Substituting into the difference $J$ collapses the ambiguous terms because
 the no-FCL problem is independent of $R$, $C_M$; the remaining sign follows
@@ -93,15 +96,20 @@ in the aggregated column with a $10^{-3}$ tolerance.
 \end{proof}
 
 \section{Fragility map}
-\begin{proposition}[Adoption knife-edge]\label{r3w3-prop:adoption}
-At $C_M = \bar C_M$, $K_M^\ast$ is left-continuous with $K_M^\ast(\bar C_M^-)>0$
-and $K_M^\ast(\bar C_M^+) = 0$. Carbon jumps upward by
-$c \cdot E[d^\ast|_{\bar C_M^-}]$ across the threshold.
+\begin{proposition}[Adoption boundary: a kink, not a jump]\label{r3w3-prop:adoption}
+As $C_M \uparrow \bar C_M$, the $K_M$ FOC $F(K_F^\ast-K_M^\ast)=C_M/(R-c)$ forces
+$F(K_F^\ast-K_M^\ast)\uparrow\varphi^{\circ}=F(K_F^{\circ})$ while $K_F^\ast\to K_F^{\circ}$,
+so $K_M^\ast\to 0$ \emph{continuously} ($K_M^\ast(\bar C_M^-)=0$). Consequently carbon,
+profit, and all capacities are \emph{continuous} through $\bar C_M$; the adoption boundary
+is a \emph{kink} (a discontinuity in the derivative $\partial K_M^\ast/\partial C_M$, which
+drops to $0$ for $C_M>\bar C_M$), not a jump. There is no discontinuous carbon change at
+the threshold. This matches the continuity of the FOC root in $C_M$ used in the
+dominated-convergence argument of the Week-2 note.
 \end{proposition}
 
 The numerical witness table \texttt{fragility\_adoption\_boundary.csv}
-shows $K_M^\ast$ collapsing from $0.16$ to $0$ across $\bar C_M \pm 0.3$
-with carbon jumping by the predicted magnitude.
+shows $K_M^\ast$ sliding smoothly from $0.16$ to $0$ across $\bar C_M \pm 0.3$
+--- a continuous decline over a $0.6$-wide window, confirming the kink (no jump).
 
 \begin{proposition}[Endpoint shift-ratio condition]\label{r3w3-prop:endpoint}
 The capacity channel $K_R^\ast > K_R^\circ$ is driven by the endpoint

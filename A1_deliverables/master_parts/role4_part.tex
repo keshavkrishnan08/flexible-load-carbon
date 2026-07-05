@@ -72,8 +72,9 @@ F(K_F^\circ;\,K_R^\circ) \;=\; \varphi_o \;=\; \frac{\beta+p-c-C_F}{\beta+p-c},
 1-\varphi_o \;=\; \frac{C_F}{\beta+p-c}.
 \end{equation}
 Both interior cutoffs lie in $(0,1)$: $\varphi_1\in(0,1)$ iff $R>c+C_M$
-(Assumption~A1), and $\varphi_2\in(0,1)$ iff $\beta+p>R$ and $R<c+C_F+C_M$
-(Assumptions~A4, A2).
+(Assumption~A1), and $\varphi_2\in(0,1)$ under $\beta+p>R$ and $R<c+C_F+C_M$
+(Assumptions~A4, A2) together with $\beta+p>c+C_F+C_M$ (which makes the numerator
+positive, so $\varphi_2>0$).
 \end{lemma}
 
 \begin{proof}
@@ -85,8 +86,9 @@ leaving $(R-c)F(K_F-K_M)+ (\beta+p-c)\,(1-F(K_F)) - \dots$; solving with eq.~(12
 substituted gives $\varphi_2$ and eq.~(14) as its complement. Eq.~(15) is direct
 Leibniz differentiation in $K_R$, with $F_{K_R}=\partial F/\partial K_R$. Since $R>c$,
 the FCL dispatch band $(K_F-K_M,\,K_F)$ is weighted by $R$ rather than $c$; because
-$F_{K_R}\le 0$ (more renewables shift residual demand down), the extra $R$-weight makes
-$\partial\Pi/\partial K_R$ larger with FCL than without, so $K_R^*\ge K_R^\circ$. The
+$F_{K_R}\ge 0$ (more renewables shift residual demand down stochastically, so the CDF
+$F(x;K_R)$ rises pointwise), the extra $R$-weight makes $\partial\Pi/\partial K_R$
+larger with FCL than without, so $K_R^*\ge K_R^\circ$. The
 interval claims are immediate from the closed forms.
 \end{proof}
 
