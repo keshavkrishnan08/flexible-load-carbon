@@ -1,0 +1,4 @@
+matplotlib==3.11.0
+numpy==2.5.0
+pytest==9.1.1
+scipy==1.18.0
