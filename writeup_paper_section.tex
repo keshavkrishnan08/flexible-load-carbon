@@ -69,9 +69,9 @@ introducing FCL strictly increases the utility's profit and strictly decreases b
 \end{proposition}
 
 \begin{proof}
-\emph{Profit.} The FCL planner's program nests the no-FCL one ($K_M=0$ is feasible). Optimality therefore weakly raises profit; the strict inequality follows because at $K_M=0$ the gradient of the Lagrangian in $K_M$ equals $(R-c)\bigl[1-F(K_F^{\circ})\bigr]-C_M$, which is positive iff $C_M<\bar C_M$, so the optimum has $K_M^{\star}>0$ and profit strictly rises.
+\emph{Profit.} The FCL planner's program nests the no-FCL one ($K_M=0$ is feasible). Optimality therefore weakly raises profit; the strict inequality follows because at $K_M=0$ the gradient of the Lagrangian in $K_M$ equals $(R-c)\,F(K_F^{\circ})-C_M$, which (since $\bar C_M=(R-c)\varphi^{\circ}=(R-c)F(K_F^{\circ})$) is positive iff $C_M<\bar C_M$, so the optimum has $K_M^{\star}>0$ and profit strictly rises.
 
-\emph{Blackout.} Comparing \eqref{eq:KF} and \eqref{eq:KFno}: the right-hand side of \eqref{eq:KF} exceeds that of \eqref{eq:KFno} in the interior regime, so the target quantile is higher and $K_F^{\star}>K_F^{\circ}$ when $K_R$ is held fixed. Lemma~\ref{lem:sub} only reinforces this through $K_R^{\star}\ge K_R^{\circ}$. Hence $\Pr(x>K_F^{\star})<\Pr(x>K_F^{\circ})$.
+\emph{Blackout.} Comparing \eqref{eq:KF} and \eqref{eq:KFno}: in the interior regime $C_M<\bar C_M$ the right-hand side of \eqref{eq:KF} exceeds that of \eqref{eq:KFno} (the quantile inequality is equivalent to $C_M<\bar C_M$), so the target quantile is higher and $K_F^{\star}>K_F^{\circ}$ when $K_R$ is held fixed. Lemma~\ref{lem:sub} only reinforces this through $K_R^{\star}\ge K_R^{\circ}$. Hence $\Pr(x>K_F^{\star})<\Pr(x>K_F^{\circ})$.
 \end{proof}
 
 \begin{lemma}[Capacity substitution]\label{lem:sub}
@@ -86,10 +86,10 @@ Comparing renewable FOCs: the FCL version adds a strictly positive term $(R-c)\m
 Let fossil emissions per scenario equal $c\min(x_+,K_F)$. Then
 \begin{align}
 \Delta\text{Carbon}
-&= \underbrace{c\,\mathbb E[d(x)\mathbf 1\{x<K_F^{\star}\}]}_{\text{Term I: FCL load adds fossil}} \notag\\
+&= \underbrace{c\,\mathbb E\bigl[(x+d(x))_+ - x_+\bigr]}_{\text{Term I: fossil the FCL load adds}} \notag\\
 &\quad - \underbrace{c\bigl[\mathbb E\min(x_+^{\circ},K_F^{\circ})-\mathbb E\min(x_+^{\star},K_F^{\star})\bigr]}_{\text{Term II: utilisation \& capacity substitution}}. \label{eq:carbon}
 \end{align}
-Term~II is non-negative when $K_R^{\star}>K_R^{\circ}$ (Lemma~\ref{lem:sub}); the sign of $\Delta$Carbon depends on the balance with Term~I, which scales with the right tail of $F$.
+Term~I is the \emph{net} extra fossil the load draws, $(x+d)_+-x_+$; it vanishes on the surplus zone $x<0$ up to $d\le(-x)_+$ (there the load runs on renewables and burns no fossil), so it does not overcount emissions where dispatch is green. Term~II is non-negative when $K_R^{\star}>K_R^{\circ}$ (Lemma~\ref{lem:sub}); the sign of $\Delta$Carbon depends on the balance with Term~I, which scales with the right tail of $F$.
 
 \section{Section 5.3 (Case C, short run)}
 \begin{corollary}\label{cor:caseC}

@@ -5,7 +5,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{Corollary}
-\title{Role 3 --- Week 3: Comparative Statics and Robustness}
+\title{Role 3 --- Week 4: Comparative Statics and Robustness}
 \author{Team A1}
 \date{}
 \begin{document}
@@ -13,10 +13,11 @@
 
 \section{Signed characterization comparative statics}
 Let $J(\theta) := \mathrm{Carbon}_{\text{FCL}}(\theta) - \mathrm{Carbon}_{\text{no-FCL}}(\theta)$
-be the carbon functional at the joint optimum. Write $x = D - K_R \eta$ and
-$g(y) = F(y;K_R)$ for the residual CDF; the FCL first-order conditions
-(eqs.~12--13, Week~1) fix $g(K_F^\ast) = \bar q_F$ and
-$g(K_F^\ast - K_M^\ast) = \bar q_{F-M}$, where
+be the carbon functional at the joint optimum. Write $x = D - K_R \eta$, let
+$F(y;K_R)$ be the residual CDF, and reserve $g(x)=F_{K_R}(x)/f(x)$ for the shift ratio
+(as in Roles~1--2). The FCL first-order conditions
+(eqs.~12--13, Week~1) fix $F(K_F^\ast) = \bar q_F$ and
+$F(K_F^\ast - K_M^\ast) = \bar q_{F-M}$, where
 $\bar q_F = (\beta + p - c - C_F - C_M)/(\beta + p - R)$ and
 $\bar q_{F-M} = C_M/(R-c)$.
 
@@ -27,26 +28,32 @@ positive $K_M^\ast$,
 \operatorname{sign}\!\left(\frac{\partial J}{\partial \theta}\right)
 =
 \begin{cases}
-+,& \theta \in \{R,\beta\},\\
++,& \theta = R,\\
 -,& \theta \in \{c, C_F, C_R, C_M\},\\
-\text{ambiguous},& \theta = p.
+\text{ambiguous (numerically $+$)},& \theta \in \{\beta, p\}.
 \end{cases}
 \]
+The signs for $\{R,c,C_F,C_R,C_M\}$ are distribution-free (provable via the FOC
+comparative statics below); the $\beta$ sign is \emph{not} distribution-free---it is
+positive numerically ($\ge 7/8$ cells) but not signed in general, consistent with Role~1's
+finding that the carbon direction is governed by the distributional functional
+$\Phi(F)$ (carbon falls iff $\Phi(F)>0$).
 \end{proposition}
 
 \begin{proof}[Proof sketch]
 Applying the envelope theorem to $\Pi_{\text{FCL}}$,
 $\partial \mathrm{Carbon}_{\text{FCL}}/\partial \theta
 = c \cdot E[\mathbf 1_{x+d^\ast \in (0,K_F^\ast)} \cdot \partial (x+d^\ast)/\partial \theta]
-+ c \, \partial K_F^\ast/\partial \theta \cdot g(K_F^\ast)(1-g(K_F^\ast))/f(K_F^\ast)$
-(and similarly for no-FCL). Differentiating the two FOCs gives
-$\partial K_F^\ast/\partial R = -1/(f\,(\beta+p-R))\cdot \bar q_F > 0$,
++ c \,\bigl(1-F(K_F^\ast)\bigr)\, \partial K_F^\ast/\partial \theta$
+(since $\partial_{K_F}\,E[\min(x_+,K_F)]=\Pr(x>K_F)=1-F(K_F)$; and similarly for no-FCL). Differentiating the two FOCs gives
+$\partial K_F^\ast/\partial R = \bar q_F/(f\,(\beta+p-R)) > 0$,
 $\partial K_F^\ast/\partial c < 0$, and $\partial K_M^\ast/\partial C_M < 0$.
 Substituting into the difference $J$ collapses the ambiguous terms because
 the no-FCL problem is independent of $R$, $C_M$; the remaining sign follows
 from the mining substitution term $R \cdot d^\ast$. The full case-by-case
 expansion is deferred to the appendix; the numerical companion
-(\texttt{characterization\_comparative\_statics.csv}) verifies each sign in
+(\texttt{characterization\_comparative\_statics.csv}) confirms the
+distribution-free signs in every cell and the $\beta$ sign in
 $\ge 7/8$ of the tested distributions.
 \end{proof}
 
@@ -65,60 +72,71 @@ $d_M(x) = \min(\max(K_F^\ast - x,0), K_M^\ast)$ and
 $d_C(x) = \min(\max(x,0), K_M^\ast)$. Define the \emph{wedge}
 $W = c\,E[\text{fossil}_M - \text{fossil}_C] \ge 0$.
 
-\begin{lemma}[Wedge monotonicity]\label{lem:wedge}
-$\partial W/\partial C_M \le 0$ and $\partial W/\partial C_R \ge 0$.
+\begin{lemma}[Wedge monotonicity, under a regular tail]\label{lem:wedge}
+For residual-demand laws with a non-increasing shift ratio (regular families; excludes
+heavy Pareto tails), $\partial W/\partial C_M \le 0$ and $\partial W/\partial C_R \ge 0$.
 \end{lemma}
 
 \begin{proof}
-$K_M^\ast$ is decreasing in $C_M$ (FOC $g(K_F-K_M) = C_M/(R-c)$),
+$K_M^\ast$ is decreasing in $C_M$ (FOC $F(K_F-K_M) = C_M/(R-c)$),
 which shrinks the support on which $d_M \ne d_C$. Conversely, higher $C_R$
 lowers $K_R^\ast$, shifts residual demand rightward, and expands the
 region on which the myopic rule fails to substitute fossil.
 \end{proof}
 
 The numerical run in
-\texttt{contract\_wedge\_comparative\_statics.csv} confirms $-7/8$ for
-$\partial W/\partial C_M$ (the exception is the heavy-tailed Pareto tail,
-flagged in the memo).
+\texttt{contract\_wedge\_comparative\_statics.csv} confirms
+$\partial W/\partial C_M\le0$ in $7/8$ cells; the lone exception is the heavy-tailed
+Pareto case, which is exactly why the Lemma carries the regular-tail hypothesis
+(without it the inequality can fail).
 
 \section{Value of robustness}
-Let $\mathcal F(r) = \{\mathrm{Beta}(a_0+s, b_0-s) : |s| \le r\}$ be an
-ambiguity set indexed by Wasserstein-1 radius $r$. Define the robust joint
+Let $\mathcal F(r) = \{\mathrm{Beta}(a_0+s, b_0-s) : |s| \le r,\ b_0-s>0\}$ be a
+one-parameter ambiguity set indexed by the \emph{shift bound} $r$ along an MLR
+path (not a Wasserstein-$1$ ball: $W_1$ of the shifted law from $F_0$ is not $|s|$,
+and a genuine $W_1$ set is nonparametric---we make no $W_1$ claim). The sets nest,
+$\mathcal F(r)\subset\mathcal F(r')$ for $r<r'$. Define the robust joint
 problem $\max_{K}\min_{F \in \mathcal F(r)} \Pi(K;F)$.
 
-\begin{theorem}[Price of robustness]\label{thm:robust}
+\begin{theorem}[Price of robustness is monotone]\label{thm:robust}
 On the Beta family, the price of robustness $\rho(r) :=
 \Pi(K^\ast(F_0); F_0) - \max_K \min_{F \in \mathcal F(r)} \Pi(K;F)$
-is nondecreasing in $r$, and the carbon gap
-$\Delta_c(r) := \mathrm{Carbon}_{\text{robust}} - \mathrm{Carbon}_{\text{nominal}}$
-has a sign invariant along the MLR path.
+is nondecreasing in $r$.
 \end{theorem}
 
-\begin{proof}[Proof sketch]
-Monotonicity of $\rho$ is a standard envelope argument: enlarging
-$\mathcal F(r)$ weakly worsens the inner minimum. Along the MLR path the
-capacity FOCs are quantile-monotone (Week~2 Theorem~2.1), so the sign of
-$\Delta_c$ is inherited from $s=0$. The numerical run
-(\texttt{robustness\_gap\_vs\_radius.csv}) confirms sign invariance
-across the full $[0,1.2]$ radius grid; monotonicity of $\rho$ is confirmed
-in the aggregated column with a $10^{-3}$ tolerance.
+\begin{proof}
+Monotonicity of $\rho$ follows from set inclusion: for $r<r'$,
+$\mathcal F(r)\subset\mathcal F(r')$, so the inner minimum is weakly smaller and the
+robust value weakly worse, hence $\rho(r)\le\rho(r')$.
 \end{proof}
 
+\noindent\emph{(Numerical observation.)} Along the MLR path the carbon gap
+$\Delta_c(r) := \mathrm{Carbon}_{\text{robust}} - \mathrm{Carbon}_{\text{nominal}}$ keeps a
+constant sign across the scanned $[0,1.2]$ grid
+(\texttt{robustness\_gap\_vs\_radius.csv}); this is a numerical finding, not proved
+(at $r=0$ robust${}={}$nominal so $\Delta_c(0)=0$, and there is no sign to ``inherit'').
+
 \section{Fragility map}
-\begin{proposition}[Adoption knife-edge]\label{prop:adoption}
-At $C_M = \bar C_M$, $K_M^\ast$ is left-continuous with $K_M^\ast(\bar C_M^-)>0$
-and $K_M^\ast(\bar C_M^+) = 0$. Carbon jumps upward by
-$c \cdot E[d^\ast|_{\bar C_M^-}]$ across the threshold.
+\begin{proposition}[Adoption boundary: a kink, not a jump]\label{prop:adoption}
+As $C_M \uparrow \bar C_M$, the $K_M$ FOC $F(K_F^\ast-K_M^\ast)=C_M/(R-c)$ forces
+$F(K_F^\ast-K_M^\ast)\uparrow\varphi^{\circ}=F(K_F^{\circ})$ while $K_F^\ast\to K_F^{\circ}$,
+so $K_M^\ast\to 0$ \emph{continuously} ($K_M^\ast(\bar C_M^-)=0$). Carbon, profit, and all
+capacities are therefore \emph{continuous} through $\bar C_M$; the adoption boundary is a
+\emph{kink} (a discontinuity in $\partial K_M^\ast/\partial C_M$, which drops to $0$ for
+$C_M>\bar C_M$), not a jump. There is no discontinuous carbon change at the threshold.
 \end{proposition}
 
 The numerical witness table \texttt{fragility\_adoption\_boundary.csv}
-shows $K_M^\ast$ collapsing from $0.16$ to $0$ across $\bar C_M \pm 0.3$
-with carbon jumping by the predicted magnitude.
+shows $K_M^\ast$ sliding smoothly from $0.16$ to $0$ across $\bar C_M \pm 0.3$ ---
+a continuous decline over a $0.6$-wide window, confirming the kink (no jump).
 
 \begin{proposition}[Endpoint shift-ratio boundary]\label{prop:endpoint}
-On the Beta$(a,5-a)$ family, the endpoint inequality
-$g(K_F^\ast) \ge g(K_F^\ast - K_M^\ast)$ holds for all $a > a^\ast$ and
-fails for $a \le a^\ast$; empirically $a^\ast \approx 0.5$.
+With the shift ratio $g(x)=F_{K_R}(x)/f(x)$, the capacity channel $K_R^\ast>K_R^{\circ}$
+is driven by the endpoint inequality
+$g(K_F^\ast - K_M^\ast) \ge g(K_F^\ast)$ (lower dispatch endpoint carries the larger shift
+ratio), which holds automatically wherever $g$ is non-increasing (regular families). On the
+Beta$(a,5-a)$ family it holds for all $a>a^\ast$ and fails only where $g$ turns increasing;
+empirically $a^\ast \approx 0.5$.
 \end{proposition}
 
 The two witnesses on either side of $a^\ast$ are recorded in
