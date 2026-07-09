@@ -79,9 +79,12 @@ heavy Pareto tails), $\partial W/\partial C_M \le 0$ and $\partial W/\partial C_
 
 \begin{proof}
 $K_M^\ast$ is decreasing in $C_M$ (FOC $F(K_F-K_M) = C_M/(R-c)$),
-which shrinks the support on which $d_M \ne d_C$. Conversely, higher $C_R$
-lowers $K_R^\ast$, shifts residual demand rightward, and expands the
-region on which the myopic rule fails to substitute fossil.
+which shrinks the support on which $d_M \ne d_C$. The regular-tail hypothesis
+enters here: with a non-increasing shift ratio the wedge integrand is single-peaked in
+$x$, so shrinking the mismatch support strictly lowers $W$; without it (heavy Pareto tail)
+mass can migrate into the tail of the mismatch region faster than the support shrinks, and
+the sign can flip. Conversely, higher $C_R$ lowers $K_R^\ast$, shifts residual demand
+rightward, and expands the region on which the myopic rule fails to substitute fossil.
 \end{proof}
 
 The numerical run in
@@ -144,11 +147,14 @@ The two witnesses on either side of $a^\ast$ are recorded in
 
 \section*{Summary of verified claims}
 \begin{itemize}
-\item Proposition~\ref{prop:signs}: 6/7 primitives have a distribution-free
-sign (all except $p$, which is small-FCL sensitive).
-\item Lemma~\ref{lem:wedge}: confirmed in 7/8 (C\_M) and 8/8 (C\_R) distributions.
-\item Theorem~\ref{thm:robust}: LR-path sign invariance confirmed; price of
-robustness bounded by $0.125$ in the tested grid.
+\item Proposition~\ref{prop:signs}: 5/7 primitives have a distribution-free
+sign (all except $\beta$ and $p$; $\beta$ is positive numerically but not
+distribution-free, $p$ is small-FCL sensitive).
+\item Lemma~\ref{lem:wedge}: confirmed in 7/8 (C\_M) and 8/8 (C\_R) distributions
+(the $C_M$ exception is the heavy-tail Pareto case the regular-tail hypothesis excludes).
+\item Theorem~\ref{thm:robust}: price of robustness \emph{monotone} in $r$ (proved by
+set inclusion); separately, the LR-path carbon-gap sign invariance holds numerically
+(a numerical observation, not a theorem), with price of robustness $\le 0.125$ in the tested grid.
 \item Propositions~\ref{prop:adoption} and~\ref{prop:endpoint}: explicit
 witnesses supplied.
 \end{itemize}
