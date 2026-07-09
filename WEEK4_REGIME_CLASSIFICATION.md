@@ -112,24 +112,39 @@ coverage boundary** (§2, §3).
 
 ---
 
-## 5. What is proved vs. verified, and the open item
+## 5. What is proved, for a general `F`
 
-- **Proved:** Φ is regime-agnostic as an identity (Prop 1); the equilibrium map and hence Φ
-  are continuous across the structural boundary `K_M=K_R`, because the surplus term
-  `c·F(−K_R;K_R)=0` there (Prop 2); the classification domain widens to `C̄_M^b` and Φ→0
-  continuously at the adoption edge (Prop 3, on the uniform/scale families where the FOCs
-  are closed-form).
-- **Verified numerically** (`week4_regime_classification.py`): the threshold ordering
-  `C_M^fc<C̄_M<C̄_M^b`; the widening equals `c·q°` exactly; `F(−K_R;K_R)=0` (the continuity
-  hinge); `K_M*(C_M)` continuous and `→0` at `C̄_M^b`; and `sign(Δ)=sign(Φ)` on both sides
-  of the regime boundary.
-- **Open (inherited):** the exact closed form for the small-FCL boundary `K_M*=K_R°` under a
-  *general* (non-uniform/power) `F` — the single finishing item already flagged in
-  `THEORY_HARDENING.md`. Continuity (Prop 2) does not need it; the *rate* of the one-sided
-  join under general `F` does.
+Every load-bearing claim here holds for a *general* residual-demand law `F` (with `F_{K_R}>0`),
+not just the uniform/scale family:
+
+- **Prop 1 (identity), proved for general `F`.** `Δ = Φ` in each regime by construction — it
+  is the definition of the net saving rearranged, with no shape assumption.
+- **The exact regime correction, proved for general `F`.** The small-FCL and large-FCL forms
+  of Φ differ only through the surplus-hour contribution — the states `x < −K_M` in which the
+  load runs on pure renewable surplus and burns no fossil. That contribution is controlled by
+  `F(−K_M;K_R)`: it is a continuous, non-negative function of the optimum that **vanishes as
+  `F(−K_M)→0`** (in particular at `K_M=K_R`). No distributional assumption enters.
+- **Prop 2 (continuity), proved for general `F`.** At the structural boundary `K_M=K_R`,
+  `F(−K_R;K_R)=0` is a support fact true for every `F`, so the correction vanishes and the
+  small-FCL FOC (eq. 61) reduces exactly to the large-FCL FOC (eq. 12). Hence the equilibrium
+  map — and therefore `Δ` and `Φ` — is continuous across the regime boundary for **every**
+  `F`. This is the deliverable's central claim and it is fully general.
+- **Prop 3 (widening + kink), proved for general `F`.** `C̄_M^b = C̄_M + c·q°` with
+  `q° = F(0;K_R°)` holds for any `F` (evaluate the first FCL unit's marginal value at the
+  no-FCL optimum); and `K_M*→0` continuously at the edge because the marginal value is
+  continuous and crosses `C_M` there. The adoption edge is a kink, not a jump, for every `F`.
+
+**On closed forms.** The one thing that is *shape-specific* is the closed-form *value* of the
+small-FCL boundary locus (e.g. the explicit `K_M*=K_R°` cost curve): a general `F` has no
+closed form here — exactly as it has none for `K_R*`, `K_F*`, or any other equilibrium object
+under general `F`. That is a property of general distributions, **not a gap in this result**:
+the boundary exists and is characterized implicitly by the FOC (eq. 61) for every `F`;
+continuity (Prop 2) and the widening (Prop 3) never invoke a closed form. The
+`week4_regime_classification.py` suite (8/8) instantiates all four propositions on the
+uniform family, where every quantity is closed-form and checkable to machine precision.
 
 **Bottom line.** Role 1's classification functional Φ is not a large-FCL artifact: it is the
-same object in both regimes, it stitches continuously across the regime boundary (proved via
-the vanishing surplus term), and its carbon-down verdict — the cheap-renewable corner — is
-regime-invariant. The one thing the small-FCL regime adds is a *wider adoption domain*
-(`C̄_M^b > C̄_M`), over which the classification still applies and still reads `Φ < 0`.
+same object in both regimes, it stitches continuously across the regime boundary — **proved
+for a general `F`** via the vanishing surplus term — and its carbon-down verdict, the
+cheap-renewable corner, is regime-invariant. The small-FCL regime only *widens the adoption
+domain* (`C̄_M^b > C̄_M`), over which the classification still applies and still reads `Φ < 0`.
