@@ -52,8 +52,8 @@ The functional Ψ from Proposition 4 (large-FCL regime K*_M > K*_R):
 
     Carbon improves ↔ Ψ > 0.
 
-where μ*_low = conditional mean of x in [K*_F−K*_M, K*_F−K*_R] (full-dispatch
-zone), μ°_mid = conditional mean in [0, K°_F] (no-FCL fossil zone).
+where μ*_low = conditional mean of x in [−K*_R, K*_F−K*_M] (full-dispatch
+zone; the code uses this correct domain), μ°_mid = conditional mean in [0, K°_F] (no-FCL fossil zone).
 
 Sweep across the full distribution library (Uniform, Power, Beta mixtures,
 bimodal, lognormal-primitive) and confirm sign(Ψ) = sign(carbon_change) in

@@ -20,8 +20,10 @@ From Proposition 4's equations (44) and (45):
 where:
   φ° = F(K°_F ; K°_R)  = reliability at the no-FCL benchmark
   q° = F(0   ; K°_R)  = P(surplus | no-FCL benchmark)
-  μ*_low = ∫_{K*_F-K*_M}^{K*_F-K*_R}  x·f(x;K*_R)dx / (C_M/(R-c))
-          (conditional mean of x in the FCL *full-dispatch zone*)
+  μ*_low = ∫_{-K*_R}^{K*_F-K*_M}  x·f(x;K*_R)dx / (C_M/(R-c))
+          (conditional mean of x in the FCL full-dispatch zone [-K*_R, K*_F-K*_M];
+           the code below uses this correct domain -- an earlier draft used the
+           gap-filling zone [K*_F-K*_M, K*_F-K*_R], which was the bug Role 1 flagged)
   μ°_mid = ∫_0^{K°_F}                  x·f(x;K°_R)dx / (φ°−q°)
           (conditional mean of x in the no-FCL *fossil zone*)
 
