@@ -143,8 +143,15 @@ def test_shift_ratio_condition_vs_KR_increase_finding(dist):
     result = find_finite_interior_optimum(dist, _params(CR=25.0))
 
     assert result.found
-    assert result.shift_ratio_condition_holds is False
+    # CORRECTED DIRECTION g(a) >= g(K_F*): the condition HOLDS here
+    # (g(a)=0.3137 >= g(K_F*)=0.2613).  Role 1's mechanism genuinely fires,
+    # K_R* > K_R^o -- and carbon STILL rises.  This is the sharpest Week-2
+    # counterexample.  An earlier revision evaluated the reversed inequality,
+    # which swapped this point with the sigma=0.6 point below.
+    assert result.shift_ratio_condition_holds is True
     assert result.KR_increased is True
+    assert not result.carbon_lower
+    assert result.carbon_change > 0
 
 
 def test_shift_ratio_condition_holding_still_does_not_save_carbon():
@@ -167,7 +174,11 @@ def test_shift_ratio_condition_holding_still_does_not_save_carbon():
 
     assert result.found
     assert result.certificate.negative_definite
-    assert result.shift_ratio_condition_holds is True
+    # CORRECTED DIRECTION: here g is INCREASING across the band (irregular
+    # case), so g(a) >= g(K_F*) FAILS.  K_R* still exceeds K_R^o, which is
+    # consistent -- the condition is only claimed sufficient.  This point does
+    # NOT exhibit the condition's own mechanism; the C_R=25 point does.
+    assert result.shift_ratio_condition_holds is False
     assert result.KR_increased is True
     assert not result.carbon_lower
     assert result.carbon_change > 0

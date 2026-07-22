@@ -423,9 +423,10 @@ def g_ratio(dist: ResidualDemand, x, K_R):
     """The "shift ratio" g(x) = F_{K_R}(x;K_R) / f(x;K_R) (Week 2 CONTEXT2.md
     Section 1): how much a marginal unit of K_R moves the CDF at x,
     normalized by the local density. This is the building block of the
-    endpoint shift-ratio condition g(K_F*) >= g(K_F*-K_M*) that Role 1's
+    endpoint shift-ratio condition g(K_F*-K_M*) >= g(K_F*) that Role 1's
     Task-2 sufficient condition for K*_R > K_R^o is stated in terms of
-    (see fcl_solver/proposition1.py's shift_ratio_condition).
+    (lower dispatch endpoint carries the larger shift ratio; g non-increasing
+    on regular families).  See fcl_solver/finite_optimum.py for the check.
 
     Returns NaN where f(x;K_R)==0 (g is not meaningfully defined where the
     density vanishes, e.g. exactly at -K_R or D_bar in the Uniform family).
