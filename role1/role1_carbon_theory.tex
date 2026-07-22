@@ -269,11 +269,24 @@ Formula \eqref{eq:mv} is the marginal value on the \emph{large}-\textsc{fcl} por
 the re-optimization locus. Along that locus $\KMs/\KRs\to(1-\varphi_1)-\tfrac{c+\CF+\CM-R}{\bp-R}<1$,
 so $\KMs<\KRs$ for large $\KR$: the locus \emph{leaves} the large-\textsc{fcl} regime before
 $\KR=\infty$. The genuine $\KR\to\infty$ corner is therefore governed by the
-small-\textsc{fcl} asymptotic slope (Appendix~G / Role~4), which agrees with \eqref{eq:mv}
-on the families we compute but is, strictly, a small-\textsc{fcl} extrapolation. Downstream
-results that invoke the $\KRs=\infty$ corner ($\CR^{\dagger}=\mathrm{MV}$, the strict-fall
-window) inherit this dependence; they are proved here for the power/uniform families and
-verified numerically, with the general regime-stitching deferred to Role~4.
+small-\textsc{fcl} asymptotic slope (Appendix~G / Role~4), and it does \emph{not} agree
+with \eqref{eq:mv}. Numerically, at the calibration of \S\ref{sec:num} the marginal value
+is constant at $\mathrm{MV}=0.3444$ only while the locus remains large-\textsc{fcl}
+($\KR\lesssim6.3$); past the regime crossing it declines strictly, to the asymptote
+$\approx0.1322$. Hence
+\[
+  \CR^{\dagger}\;=\;\lim_{\KR\to\infty}\mathrm{MV}(\KR)\;\approx\;0.1322
+  \qquad\text{not}\qquad \mathrm{MV}=0.3444 ,
+\]
+an overstatement by a factor of $\approx2.6$. The correct strict-fall window is therefore
+$(\CR^{\circ},\CR^{\dagger})\approx(0.0400,\,0.1322)$, not $(0.0400,\,0.3444)$: on
+$(0.1322,0.3444)$ the renewable optimum is \emph{finite}, so $\E[\text{fossil}^{*}]>0$ and
+the corner argument does not apply. \textbf{The non-emptiness conclusion survives}---the
+corrected window is still non-empty---but every quoted value of $\CR^{\dagger}$, and any
+magnitude computed on the over-wide window, must use the small-\textsc{fcl} asymptote.
+Downstream results that invoke the $\KRs=\infty$ corner inherit this correction; they are
+proved here for the power/uniform families, with the general regime-stitching deferred to
+Role~4.
 \end{remark}
 
 \begin{proof}

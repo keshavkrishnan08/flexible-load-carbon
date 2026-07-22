@@ -1,0 +1,11 @@
+**When Does Flexible Computing Reduce Carbon? An Exact Classification and an Identification Limit**
+
+Keshav Krishnan
+
+Mentor: Professor Jiasun Li, Department of Finance, Costello College of Business, George Mason University
+
+**Abstract**
+
+Bitcoin mining and AI training data centers are the fastest-growing electricity loads in the United States, and whether they raise or lower carbon emissions is genuinely unsettled: careful studies reach opposite conclusions, often for the same technology in different regions. That disagreement is usually read as a data problem. I argue it is structural. I model a regulated utility that jointly chooses renewable, fossil, and flexible computing capacity under stochastic residual demand, solving dispatch and investment together rather than in sequence. Three equilibrium cutoffs turn out to be distribution-free, pure ratios of prices and costs that hold whatever the shape of demand, and the net carbon change admits an exact closed form: emissions fall if and only if a single functional of the residual-demand law is positive. That functional splits the effect into a utilization channel, where computing keeps fossil plants running in spare hours, and a capacity-substitution channel, where computing revenue funds renewable build-out. The main result is negative, and I think clarifying. The functional cannot be evaluated from the distribution-free cutoffs and the installed capacities alone. It depends on two conditional means of the demand distribution, so two grids that match in every quantity a regulator actually observes, capacities and reliability included, can carry opposite carbon signs. The region-dependence in the empirical record is therefore not noise to be averaged away; it is what the theory predicts. I also show that the fossil-minimizing dispatch runs the load only on renewable surplus, and that a one-parameter family of contracts spanning that rule and the unconstrained one satisfies an exact identity reducing carbon-optimality to a single leverage term. The policy reading is that the carbon case for flexible computing rests on contract terms and on distributional facts that grid-level statistics do not reveal.
+
+**Keywords:** flexible computing loads, Bitcoin mining, data centers, curtailment contracts, capacity investment, carbon emissions, identification, electricity markets.

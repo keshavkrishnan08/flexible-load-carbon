@@ -1,0 +1,184 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[T1]{fontenc}\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}\usepackage{microtype}\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue!55!black]{hyperref}
+\theoremstyle{plain}\newtheorem{theorem}{Theorem}\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\KR}{K_R}\newcommand{\KF}{K_F}\newcommand{\KM}{K_M}
+\newcommand{\KRo}{K_R^{\circ}}\newcommand{\KFo}{K_F^{\circ}}
+\newcommand{\CM}{C_M}\newcommand{\CF}{C_F}\newcommand{\CR}{C_R}\newcommand{\Dbar}{\bar D}
+\newcommand{\bp}{\beta+p}\newcommand{\E}{\mathbb{E}}\newcommand{\phio}{\varphi^{\circ}}
+\newcommand{\qo}{q^{\circ}}\newcommand{\FKR}{F_{\!\KR}}\newcommand{\eqdef}{\vcentcolon=}
+\setlength{\parskip}{3pt}
+\begin{document}
+
+\title[Prices versus Quantities for Greening Flexible Computing]
+{Prices versus Quantities for Greening Flexible Computing:\\
+Allocation Equivalence, Revenue Divergence, and the Long-Run Ranking}
+\author{Team A1 --- Role 1}
+\date{Draft for \S5.3}
+
+\begin{abstract}
+Two instruments can stop a flexible computing load from burning fossil fuel: a carbon tax
+$\tau$ on fossil output, and a dispatch cap that permits the load to run only on realized
+renewable surplus. At their respective greening thresholds the two are
+\emph{allocation-equivalent}: identical computing, identical zero carbon from the load, and
+--- as the Guide observes --- an identical marginal-entrant condition. We show the
+equivalence is fragile in exactly the dimension the policy debate cares about. The tax
+delivers strictly positive revenue to renewables in the hours the load induces; the cap
+delivers none. Because that revenue enters the renewable first-order condition additively,
+the two instruments induce \emph{different} equilibrium renewable capacity, and the
+resulting consumer carbon is strictly ordered. Short-run equivalence therefore does not
+survive endogenous investment, and the ranking favours the price instrument for a reason
+Weitzman's calculus does not see: not relative slope uncertainty, but who is paid. We also
+close the boundary problem: at the greening tax exactly, producers are indifferent and the
+equilibrium quantity is a correspondence, not a point; the $\tau\downarrow\bar\tau$ limit
+selects the fossil-off equilibrium, which is the selection the comparison requires.
+\end{abstract}
+\maketitle
+
+\section{Setting}
+We work in the deregulated (spot) environment, where the relevant computing margin is
+$R-c-\tau$ rather than $R-p-\tau$. A tax $\tau$ per fossil MWh raises the effective fuel
+cost to $c+\tau$; every formula of the baseline applies under that substitution. In
+particular the no-load fossil FOC $(\bp-c-\tau)[1-F(\KFo)]=\CF$ gives the benchmark
+reliability
+\[
+  \phio(\tau)=1-\frac{\CF}{\bp-c-\tau},
+\]
+and we maintain $\bp>R+\CF$ so this stays positive up to
+\[
+  \bar\tau\eqdef R-c,
+\]
+the tax at which a miner-valued MWh no longer covers taxed fuel. Write $\qo(\tau)=F(0;\KRo(\tau))$
+for the no-load surplus probability. The \emph{cap} (renewable-only contract) is
+$d(x)\le(-x)_+$: the load may run only on realized surplus.
+
+\section{Allocation equivalence at the greening thresholds}
+
+\begin{lemma}[Viability splits into a taxed and a tax-exempt part]\label{lem:split}
+Under the tax the first entrant is dispatched whenever spare capacity exists. In surplus
+states (probability $\qo$) it buys at $P=0$ and keeps $R$; in fossil-topped states
+(probability $\phio(\tau)-\qo$) it buys at $c+\tau$ and keeps $R-c-\tau$. Hence
+\[
+  \bar\CM(\tau)=\underbrace{(R-c-\tau)\big[\phio(\tau)-\qo\big]}_{\text{fossil-hour part}}
+  \;+\;\underbrace{R\,\qo}_{\text{surplus part}} .
+\]
+\end{lemma}
+
+\begin{theorem}[Allocation equivalence]\label{thm:equiv}
+At $\tau=\bar\tau$ the fossil-hour part of $\bar\CM$ vanishes and
+$\bar\CM(\bar\tau)=R\,\qo$, which is exactly the cap's entry threshold: under either
+instrument the first entrant earns $R$ in surplus hours only. Consequently, at
+$(\tau=\bar\tau)$ versus (cap), holding capacities fixed:
+\textup{(i)} the computing dispatch schedule coincides ($d=(-x)_+\wedge\KM$),
+\textup{(ii)} carbon attributable to the load is zero under both, and
+\textup{(iii)} the marginal-entrant condition is the same, so the same computing capacity
+enters. The two instruments admit the same computing at the margin.
+\end{theorem}
+\begin{proof}
+(i) At $\tau=\bar\tau$ fossil-served computing earns $R-c-\bar\tau=0$ and is weakly
+dominated; the selection of Theorem~\ref{thm:selection} removes it, leaving surplus-only
+dispatch, which is the cap's schedule. (ii) Immediate from (i): the load draws no fossil.
+(iii) Lemma~\ref{lem:split} at $\tau=\bar\tau$ gives $\bar\CM(\bar\tau)=R\qo$; under the cap
+the entrant runs only in surplus hours and earns $R$ there, so its threshold is $R\qo$ as well.
+\end{proof}
+
+\section{The boundary: indifference, and the selection that resolves it}
+
+At $\tau=\bar\tau$ producers are exactly indifferent about serving computing from fossil, so
+the market-clearing \emph{quantity} is not pinned by optimization alone. This is the gap
+flagged in review, and it must be closed before Theorem~\ref{thm:equiv} can be used.
+
+\begin{theorem}[Price is unique, quantity is a correspondence, and the limit selects]\label{thm:selection}
+Fix capacities and a state $x\in(-\KM,0]$ with fossil headroom.
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.2em]
+  \item For $\tau<\bar\tau$: fossil tops up at marginal cost $c+\tau<R$, so $P=c+\tau$ and
+        fossil-served computing is strictly profitable; the equilibrium is unique.
+  \item At $\tau=\bar\tau$: $c+\tau=R$, so the clearing price is \emph{unique}, $P=R$; but
+        every fossil-to-computing quantity in $[0,\,\KM-(-x)_+]$ is consistent with producer
+        indifference and market clearing. The equilibrium \emph{quantity} is a correspondence.
+  \item For $\tau>\bar\tau$: fossil-served computing is strictly unprofitable, so the unique
+        equilibrium has fossil-to-computing quantity $0$.
+\end{enumerate}
+Consequently the correspondence at $\bar\tau$ is the upper limit of (a) and the lower limit
+of (c), and the refinement $\tau\downarrow\bar\tau$ selects the fossil-off point. We adopt
+that selection throughout; equivalently, one may state all results for $\tau>\bar\tau$ and
+pass to the limit, which is the conservative reading.
+\end{theorem}
+\begin{proof}
+(a) and (c) are immediate from the sign of $R-c-\tau$. For (b), at $c+\tau=R$ a fossil
+generator earns exactly zero on a computing MWh and a miner earns exactly zero, so any
+split clears; the price cannot exceed $R$ (demand vanishes above it) nor fall below $c+\tau$
+(supply vanishes below it), and these coincide, pinning $P=R$. The limit statement follows
+because the fossil-off quantity is the unique selection on $(\bar\tau,\infty)$ and the
+correspondence is upper hemicontinuous at $\bar\tau$.
+\end{proof}
+
+\begin{remark}
+The same argument disposes of the companion objection that ``the price never leaves $0$''
+under the cap. Under the cap, miner demand in surplus states equals the zero-marginal-cost
+surplus exactly, so any $P\in[0,R]$ clears; the competitive selection is $P=0$ because
+supply is perfectly elastic at zero up to the surplus. That is a selection, not an
+implication, and we flag it as such.
+\end{remark}
+
+\section{Revenue divergence, and why the equivalence dies in the long run}
+
+\begin{proposition}[Revenue divergence]\label{prop:revenue}
+Per unit of renewable capacity per hour, the two instruments deliver
+\[
+  \text{tax:}\quad \E\big[\tilde S\,\min\{c+\tau,R\}\,\mathbf 1_{\{-\KM<\tilde x\le 0\}}\big]>0,
+  \qquad\text{cap:}\quad 0 .
+\]
+The tax's pass-through to renewable revenue is nondecreasing in $\tau$ and saturates at
+$\bar\tau$; the cap leaves surplus-hour prices at zero by construction, because miner demand
+there exactly equals the zero-marginal-cost surplus.
+\end{proposition}
+
+This is the crux. The two instruments buy the same allocation at different prices, and the
+difference is paid to renewable capacity.
+
+\begin{theorem}[Long-run non-equivalence and a strict ranking]\label{thm:longrun}
+Let $\KR^{\mathrm{tax}}$ and $\KR^{\mathrm{cap}}$ denote equilibrium renewable capacity under
+the greening tax and under the cap. The renewable first-order conditions differ by exactly
+the strictly positive term of Proposition~\ref{prop:revenue}; hence, whenever the renewable
+marginal value is strictly decreasing \textup{(}the standing single-peakedness\textup{)},
+\[
+  \boxed{\ \KR^{\mathrm{tax}}>\KR^{\mathrm{cap}},\qquad\text{and therefore}\qquad
+  \E[\text{fossil}^{\mathrm{tax}}]<\E[\text{fossil}^{\mathrm{cap}}].\ }
+\]
+Allocation equivalence at fixed capacities does \emph{not} survive endogenous investment:
+the instruments are strictly ranked, and the price instrument dominates.
+\end{theorem}
+\begin{proof}
+Both instruments induce the same computing dispatch (Theorem~\ref{thm:equiv}), so the
+consumer-side terms of the renewable FOC coincide. The tax adds the surplus-hour revenue of
+Proposition~\ref{prop:revenue}, which is strictly positive whenever $\KM>0$ and
+$\Pr(-\KM<\tilde x\le0)>0$. Evaluating the tax economy's renewable marginal value at
+$\KR^{\mathrm{cap}}$ therefore exceeds $\CR$; by single-peakedness the tax optimum lies
+strictly to the right. The carbon conclusion follows from
+$e(\KR)=\int_0^{\KF(\KR)}(1-F)$ being strictly decreasing in $\KR$.
+\end{proof}
+
+\begin{corollary}[What the ranking is \emph{not}]
+The ranking is not an efficiency comparison in Weitzman's sense: it does not turn on the
+relative slopes of marginal benefit and marginal cost under uncertainty. Both instruments
+implement the same allocation. The wedge is \emph{distributional} --- who receives the
+scarcity rent in surplus hours --- and it becomes an efficiency difference only because that
+rent is also the marginal return to renewable investment. A quantity instrument that
+rebated the same rent to renewables would replicate the tax.
+\end{corollary}
+
+\begin{remark}[Policy reading]
+New York's moratorium on fossil-fired proof-of-work mining, which exempts renewable-powered
+operations, is a cap. Theorem~\ref{thm:longrun} says that such a rule buys the same
+short-run decarbonization as the equivalent carbon price and forgoes the renewable
+build-out the price would have financed. The cap is the feasible near-term instrument at a
+known cost, and the cost is quantified here rather than asserted.
+\end{remark}
+
+\end{document}
