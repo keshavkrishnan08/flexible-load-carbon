@@ -3,13 +3,14 @@
 %=====================================================================
 %  Team A1 -- Role 1 (Optimal Contract and General Carbon Theory)
 %  A1 WEEK 4.  The carbon classification theorem.
-%   1. A single closed-form functional Phi(F) with sign(Delta)=sign(Phi) -- both
-%      directions (an exact iff), from the Week-2 affine representation.
+%   1. A closed-form functional Phi(F) with Delta=Phi ON THE LARGE-FCL REGIME
+%      (K_M>=K_R).  Outside it Phi can carry the WRONG SIGN -- see rem:regime.
 %   2. Minimality of the statistic: both conditional means are needed (the sharp
 %      converse to Week-2's not-cutoff-decidable impossibility).
 %   3. The frontier leverage condition, closed toward a theorem (exact reduction
 %      + a proved K_F-monotonicity lemma + the verified scalar).
-%   4. The carbon phase diagram: sign(Phi) partitions the primitive space.
+%   4. WITHDRAWN: the carbon phase diagram.  Its Phi>0 cells were all small-FCL,
+%      where the identity is invalid; true Delta is negative there (rem:phaseretracted).
 %=====================================================================
 
 \usepackage[T1]{fontenc}
@@ -57,8 +58,12 @@ This is the Role~1 Week~4 deliverable: an exact, computable criterion for the ca
 sign. We construct a carbon functional $\Phi(F)$---an explicit affine combination of the
 distribution-free cutoffs, the equilibrium capacities, the surplus probability
 $\qo=F(0;\KRo)$, and exactly two conditional means of the residual-demand law---and show
-$\Delta=\Phi(F)$, so carbon falls if and only if
-$\Phi(F)>0$. The identity is Week-2 bookkeeping; the value is that $\Phi$ is a
+$\Delta=\Phi(F)$ \emph{on the large-\textsc{fcl} regime} $\KMs\ge\KRs$, so there carbon
+falls if and only if $\Phi(F)>0$. The regime hypothesis is essential, not cosmetic:
+outside it the integration by parts picks up a $\KMs F(-\KMs)$ term and $\Phi$ can carry
+the \emph{wrong sign}---at $\CR=0.34$ the closed form reports $+1.905$ while the true
+$\Delta$ is $-0.135$ (Remark~\ref{rem:regime}).
+The identity is Week-2 bookkeeping; the value is that $\Phi$ is a
 \emph{closed form on a named, minimal set of coordinates}, and that the sign needs
 distributional information no coarser than those coordinates: both conditional means enter
 with nonzero weight, and (Week~2) the sign is not decidable from capacities and cutoffs
@@ -71,16 +76,17 @@ positive, so the classification is the ledger on which ``why the optimal contrac
 decarbonizes'' is read off. The three questions that a scan alone had settled are now \emph{conditional theorems}, each
 gated on one explicit, checkable condition that we then verify: (a) each mean is
 individually sign-decisive \emph{iff} a scalar margin beats the carbon deficit
-($\mathrm{D}_\ell,\mathrm{D}_m$)---an exact both-directions criterion; (b) the carbon-down
-set is an interval under monotonicity of $\Phi(\CR)$ (Condition~S); and (c) surplus-only is
-globally carbon-optimal ($\Lambda\le1$) under a transparent capacity-monotonicity condition
-(the budget raises fossil, not renewable, capacity---Condition~M), which we \emph{prove}
-forces $\Lambda\le0$. Each condition holds throughout the scan. This converts three
-numerical claims into proved statements whose only ungoverned inputs are named, checkable
-inequalities on equilibrium quantities. Every identity is checked against quadrature in
-\texttt{verify\_week4.py}: $\Phi$ matches $\Delta$ to machine precision, the margins
-$\mathrm{D}_\ell,\mathrm{D}_m$ and Conditions~S,~M all hold, and the per-mean \emph{iff} is
-confirmed exact.
+($\mathrm{D}_\ell,\mathrm{D}_m$)---an exact both-directions criterion; and (b) surplus-only
+is globally carbon-optimal ($\Lambda\le1$) under a transparent capacity-monotonicity
+condition (the budget raises fossil, not renewable, capacity---Condition~M), which we
+\emph{prove} forces $\Lambda\le0$. A third claim---that $\{\Phi=0\}$ is a carbon boundary
+and the carbon-down set an interval under a monotonicity Condition~S---is
+\textbf{withdrawn} (Remark~\ref{rem:phaseretracted}): every cell in which the supporting
+sweep reported $\Phi>0$ lies in the small-\textsc{fcl} regime where \eqref{eq:Phi} is not
+the correct identity, and the true $\Delta$ is negative in all of them. Consequently the
+``only if'' branch of the classification is never exercised on the present evidence:
+across every cell we can solve, $\Delta<0$. Verification in \texttt{verify\_week4.py}
+now carries a regime guard and raises rather than returning a wrong-signed $\Phi$.
 \end{abstract}
 
 \maketitle
@@ -129,15 +135,40 @@ $T(F)\eqdef\big(\KFs,\KMs,\KRs,\KFo,\phio,\qo,\mustar,\mumid\big)$: distribution
 cutoffs, the equilibrium capacities, and the two conditional means \eqref{eq:means}.
 \end{cardef}
 
-\begin{theorem}[Carbon classification]\label{thm:classify}
-For every residual-demand law $F$ with an interior optimum,
+\begin{theorem}[Carbon classification, large-\textsc{fcl} regime]\label{thm:classify}
+Let $F$ have an interior optimum \emph{in the large-\textsc{fcl} regime},
+$\KMs\ge\KRs$---equivalently $F(-\KMs;\KRs)=0$. Then
 \[
   \boxed{\;\Delta=\Phi(F),\qquad\text{hence}\qquad \text{carbon falls}\iff \Phi(F)>0.\;}
 \]
-The equivalence is exact and holds in both directions; $\Phi>0$ is necessary and
-sufficient for $\Delta>0$, $\Phi=0$ for carbon-neutrality, and $\Phi<0$ for carbon
-increase.
+The equivalence is exact on that regime and holds in both directions.
 \end{theorem}
+
+\begin{remark}[The hypothesis is not cosmetic: outside it, $\Phi$ can carry the wrong sign]
+\label{rem:regime}
+$\Phi$ as defined in \eqref{eq:Phi} is the large-\textsc{fcl} identity: the lower limit
+$-\KRs$ and the normalizer $F(a)$ are correct only when $F(-\KMs)=0$. In small-\textsc{fcl}
+the integration by parts of \eqref{eq:fos} picks up an extra $\KMs F(-\KMs)$ term, and the
+discrepancy is $O(F(-\KMs))$---large enough to flip the sign. Solving the equilibrium
+across $\CR$ and comparing the closed form against direct quadrature:
+\begin{center}\small
+\begin{tabular}{cccrrr}
+\toprule
+$\CR$ & regime & $F(-\KMs)$ & $\Phi$ & $\Delta$ & $|\Phi-\Delta|$\\
+\midrule
+$0.34$ & small-\textsc{fcl} & $0.2706$ & $+1.905$ & $-0.135$ & $2.04$\\
+$0.36$ & small-\textsc{fcl} & $0.1872$ & $+0.280$ & $-0.577$ & $0.857$\\
+$0.40$ & small-\textsc{fcl} & $0.0832$ & $-0.707$ & $-0.950$ & $0.242$\\
+$0.46$ & small-\textsc{fcl} & $0.0057$ & $-1.546$ & $-1.556$ & $0.0096$\\
+$0.52$ & large-\textsc{fcl} & $0.0000$ & $-2.358$ & $-2.358$ & $2.7\times10^{-8}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The error tracks $F(-\KMs)$ exactly, and at the two smallest $\CR$ the closed form reports
+carbon \emph{falling} when it is in fact \emph{rising}. Any use of $\Phi$ must therefore
+carry the regime hypothesis; \texttt{verify\_week4.py} now raises rather than returning a
+wrong-signed value.
+\end{remark}
 
 \begin{proof}
 Subtract the two identities in \eqref{eq:fos}:
@@ -252,39 +283,26 @@ is a transparent inequality on equilibrium quantities.
 \section{The carbon phase diagram}\label{sec:phase}
 %=====================================================================
 
-Because $\operatorname{sign}\Delta=\operatorname{sign}\Phi$, the level set $\{\Phi=0\}$
-is the exact carbon boundary.
+\begin{remark}[Retracted: the carbon boundary was an artifact of the regime]
+\label{rem:phaseretracted}
+An earlier draft stated a phase-diagram theorem: that $\{\Phi=0\}$ is the exact carbon
+boundary and, under a monotonicity hypothesis (Condition~S), the carbon-down set is an
+interval $\{\CR<\CR^{\dagger}\}$; the supporting evidence was a sweep reporting $\Phi$
+falling monotonically from $+1.9$ to $-2.5$ with a single sign change.
 
-\begin{theorem}[The carbon boundary is an interval, under monotonicity]\label{prop:phase}
-The primitive space partitions into $\{\Phi>0\}$ (carbon down), $\{\Phi=0\}$ (neutral),
-$\{\Phi<0\}$ (up), with boundary the zero set of \eqref{eq:Phi}. If $\Phi(\CR)$ is
-monotone along the equilibrium locus (Condition~\textup{S}: $\tfrac{d}{d\CR}\Phi\le0$),
-then the carbon-down set is an interval $\{\CR<\CR^{\dagger}\}$ with a single boundary
-$\CR^{\dagger}$---the connectedness of Week~2, read off $\Phi$. Condition~\textup{S} holds
-throughout the scanned band ($\Phi:{+}1.9\to{-}2.5$, single sign change).
-\end{theorem}
+\textbf{That result is withdrawn.} By Remark~\ref{rem:regime}, every cell in which the
+sweep reported $\Phi>0$ lies in the \emph{small}-\textsc{fcl} regime, where \eqref{eq:Phi}
+is not the correct identity; the true $\Delta$ computed by quadrature is \emph{negative}
+in all of them. There is therefore no observed carbon-down region on this family, and
+$\{\Phi=0\}$ separates nothing: the apparent boundary was the point at which a
+large-\textsc{fcl} formula, applied out of regime, changed sign.
 
-\begin{proof}
-The partition and boundary are Theorem~\ref{thm:classify}. A monotone $\Phi(\CR)$ with a
-sign change has exactly one zero $\CR^{\dagger}$, and $\{\Phi>0\}=\{\CR<\CR^{\dagger}\}$ is
-an interval---this is the content given Condition~S. We do \emph{not} derive Condition~S
-in closed form: $\Phi$'s dependence on $\CR$ runs through \emph{both} the capacities
-($\KRs,\KFs,\KRo,\KFo$ all move with $\CR$) and both conditional means, so no one-term
-derivative signs it, and connectedness for general $F$ is exactly Week-2's Condition~MRSV,
-which the team could not derive from primitives---so S is the honest hypothesis, checkable
-and verified here.\footnote{Verified in \texttt{verify\_week4.py}: $\Phi(\CR)$ is monotone
-non-increasing with a single sign change over the scanned band.}
-\end{proof}
-
-\begin{remark}[The naive carbon-down region is the corner]
-For the \emph{naive} contract that $\Phi$ classifies, Week-2 (Prop.~regimecarbon) found
-$\Delta<0$ at every scanned interior optimum: the region $\{\Phi>0\}$ is essentially the
-cheap-renewable \emph{corner} $\KRs\to\infty$ (where $\E[\fossil^{*}]\to0$), not a set of
-interior optima. So $\Phi$ classifies a sign that is generically negative under the naive
-rule; the boundary $\{\Phi=0\}$ is where the corner takes over, consistent with the
-viability threshold $\CR^{\dagger}$ of Week~1, \emph{not} a smooth interior level set. The
-positive-carbon region opens up only once the contract is optimized (\S\ref{sec:leverage}
-and Week~3).
+Two consequences. First, Condition~S is vacuous as stated, since the monotone crossing it
+described does not exist once $\Phi$ is evaluated only where it is valid. Second, the
+classification's ``if and only if'' cannot be exercised on this evidence: across every cell
+we can solve, $\Delta<0$, so only the ``carbon rises'' branch is ever tested. We state the
+identity of Theorem~\ref{thm:classify} on its regime and make no claim about a boundary
+until a genuine carbon-improving equilibrium is exhibited.
 \end{remark}
 
 %=====================================================================
@@ -360,7 +378,7 @@ $\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$
 (Proposition~\ref{thm:minimal}); the per-mean margins $\mathrm{D}_\ell,\mathrm{D}_m$
 ($\Phi_{\mathrm{hi}}=+0.40,+0.49>0$) and that the exact \emph{iff}
 $\mathrm{D}_\ell\Leftrightarrow$ (sweep flips) holds (Theorem~\ref{thm:permean});
-monotonicity of $\Phi(\CR)$, Condition~S (Theorem~\ref{prop:phase}); and Condition~M
+and Condition~M
 ($\KF$ non-decreasing, $\KR$ non-increasing along $\tau$) with the resulting
 $\Lambda(\tau)<0$ (Theorem~\ref{thm:leveragebound}). The suite reports a single pass count.
 
