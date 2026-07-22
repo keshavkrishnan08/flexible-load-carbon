@@ -1,0 +1,145 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[T1]{fontenc}\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}\usepackage{microtype}\usepackage{booktabs}
+\usepackage[colorlinks=true,linkcolor=blue!55!black]{hyperref}
+\theoremstyle{plain}\newtheorem{proposition}{Proposition}\newtheorem{corollary}[proposition]{Corollary}
+\theoremstyle{remark}\newtheorem{remark}[proposition]{Remark}
+\newcommand{\CM}{C_M}\newcommand{\CF}{C_F}\newcommand{\bp}{\beta+p}
+\newcommand{\phio}{\varphi^{\circ}}\newcommand{\CMbar}{\bar C_M}\newcommand{\eqdef}{\vcentcolon=}
+\setlength{\parskip}{3pt}
+\begin{document}
+\title[Theory behind the calibration]{Theory Behind the Calibration:\\
+Break-Even Separability and Threshold Insensitivity}
+\author{Team A1 --- Role 1}
+\date{Supporting \S7}
+\begin{abstract}
+The calibration section states two facts it does not prove. First, that the break-even
+Bitcoin price is \emph{additively separable}, with machine efficiency $\varepsilon$ setting
+a power-bill floor and the hardware premium depending only on $q/T$ and ``not on
+$\varepsilon$ at all\dots the two effects cancel exactly.'' Second, that the entry
+threshold $\CMbar$ is insensitive to the outage penalty once $\bp\gg c+\CF$. Both are used
+to license headline numbers---the \$65k cheapest entry point, the \$43.6k power-bill floor,
+and a deliberately conservative $\bp=\$200$/MWh. We prove both, and verify that the proved
+formulas reproduce every cell of the calibration table.
+\end{abstract}
+\maketitle
+
+\section{Setup}
+A machine of efficiency $\varepsilon$ (J/TH) earns, per MWh consumed,
+$R(\varepsilon)=\chi P_{\mathrm{BTC}}/\varepsilon$ with
+$\chi\eqdef b\cdot3.6\times10^{9}/(t_B H)$ fixed by network conditions ($b$ the block
+reward, $t_B$ the block interval, $H$ the network hash rate). Hardware at $q$ \$/TH
+amortized over $T$ years costs, per MW per hour,
+\[
+  \CM(\varepsilon,q,T)\;=\;\frac{q\cdot 10^{6}/\varepsilon}{8760\,T},
+\]
+since one MW packs $10^{6}/\varepsilon$ TH/s. Entry occurs iff $\CM<\CMbar=(R-p)\phio$.
+
+\section{Break-even separability}
+
+\begin{proposition}[The break-even price is additively separable, and the hardware premium
+does not depend on efficiency]\label{prop:sep}
+Entry occurs iff $P_{\mathrm{BTC}}>P^{*}$, where
+\[
+  \boxed{\;P^{*}(\varepsilon,q,T)\;=\;\underbrace{\frac{p}{\chi}\,\varepsilon}_{\text{power-bill floor}}
+  \;+\;\underbrace{\frac{10^{6}}{8760\,\phio\,\chi}\cdot\frac{q}{T}}_{\text{hardware premium}}\;}
+\]
+The two terms are additively separable; the hardware premium depends on $q/T$ alone and is
+\emph{exactly} independent of $\varepsilon$.
+\end{proposition}
+\begin{proof}
+Entry is $(R-p)\phio>\CM$, i.e.
+$\big(\chi P_{\mathrm{BTC}}/\varepsilon-p\big)\phio>q\cdot10^{6}/(\varepsilon\,8760\,T)$.
+Multiply both sides by $\varepsilon/\phio>0$:
+\[
+  \chi P_{\mathrm{BTC}}-p\,\varepsilon\;>\;\frac{q\cdot10^{6}}{8760\,\phio\,T},
+\]
+and divide by $\chi>0$. The $\varepsilon$ appearing on the right has cancelled because
+\emph{both} sides of the entry condition are proportional to $1/\varepsilon$: a more
+efficient machine earns proportionally more per MWh ($R\propto1/\varepsilon$) and also
+packs proportionally more terahash into a MW, so it costs proportionally more per MW
+($\CM\propto1/\varepsilon$). The ratio that decides entry is efficiency-free; only the
+\emph{power bill}, which is charged per MWh rather than per terahash, retains $\varepsilon$.
+\end{proof}
+
+\begin{corollary}[Efficiency competes down the floor; hardware markets set the premium]
+$\partial P^{*}/\partial\varepsilon=p/\chi>0$ and $\partial P^{*}/\partial q>0$,
+$\partial P^{*}/\partial T<0$, with $\partial^{2}P^{*}/\partial\varepsilon\,\partial(q/T)=0$.
+Efficiency gains and hardware-price declines therefore lower the break-even price through
+\emph{independent} channels, and a firm cannot trade one against the other.
+\end{corollary}
+
+\section{Numerical validation}
+Taking $p=\$50$/MWh and $\phio=145/155$, and calibrating $\chi$ from the reported
+efficiency coefficient, we recover $\chi=0.019739$ and
+\[
+  \frac{p}{\chi}=2533.0,\qquad \frac{10^{6}}{8760\,\phio\,\chi}=6181.9,
+\]
+against the stated $2{,}533$ and $6{,}183$. Proposition~\ref{prop:sep} then reproduces the
+calibration table exactly:
+
+\begin{center}\small
+\begin{tabular}{llrrrr}
+\toprule
+& $q$ (\$/TH) & $T=2$ & $T=3$ & $T=4$ & $T=5$\\
+\midrule
+Fleet average ($\varepsilon=17.2$) & 25 & \$121k & \$95k & \$82k & \$74k\\
+                                   & 35 & \$152k & \$116k & \$98k & \$87k\\
+                                   & 40 & \$167k & \$126k & \$105k & \$93k\\
+Frontier ($\varepsilon=13.5$)      & 25 & \$111k & \$86k & \$73k & \textbf{\$65k}\\
+                                   & 35 & \$142k & \$106k & \$88k & \$77k\\
+                                   & 40 & \$158k & \$117k & \$96k & \$84k\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The $q\to0$ limit gives the power-bill floor $2533\times17.2=\$43.6$k at fleet-average
+efficiency, and the cheapest cell---frontier hardware, favourable prices, patient
+five-year amortization---is $\$65$k, both as stated.
+
+\section{Threshold insensitivity}
+
+\begin{proposition}[$\CMbar$ is insensitive to the outage penalty once $\bp\gg c+\CF$]
+\label{prop:insens}
+With $\phio=1-\CF/(\bp-c)$ and $\CMbar=(R-p)\phio$,
+\[
+  \frac{\partial\,\CMbar}{\partial(\bp)}=\frac{(R-p)\,\CF}{(\bp-c)^{2}}>0,
+  \qquad \CMbar\uparrow(R-p)\ \text{ as }\ \bp\to\infty,
+\]
+so the threshold is increasing but at a rate falling like $(\bp)^{-2}$, and it is bounded
+above by the miner margin $R-p$ regardless of how the outage penalty is set.
+\end{proposition}
+\begin{proof}
+Differentiate $\phio$ and multiply by $R-p$; the limit is $\phio\to1$.
+\end{proof}
+
+At the calibration ($R-p=19$, $c=45$, $\CF=10$):
+
+\begin{center}\small
+\begin{tabular}{rrrr}
+\toprule
+$\bp$ & $\phio$ & $\CMbar$ & $\partial\CMbar/\partial(\bp)$\\
+\midrule
+100 & 0.8182 & 15.545 & 0.0628\\
+200 & 0.9355 & 17.774 & 0.0079\\
+400 & 0.9718 & 18.465 & 0.0015\\
+1000 & 0.9895 & 18.801 & 0.0002\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+At $\bp=\$200$/MWh a further \$100/MWh of assumed outage cost moves $\CMbar$ by under
+\$0.80/MWh, against a threshold near \$18/MWh. Proposition~\ref{prop:insens} is what
+licenses the deliberately conservative choice of $\bp$: the entry margin is a fact about
+$R-p$, not about how the regulator values lost load.
+
+\begin{remark}[What this does and does not settle]
+These two propositions validate the calibration's \emph{internal} logic---the functional
+form of $P^{*}$ and the robustness of $\CMbar$. They say nothing about the input values.
+In particular the tariff $p=\$50$/MWh is an assumption, not a measurement; rebuilding it
+from utility-level data moves $\CMbar=(R-p)\phio$ one-for-one and is the single most
+consequential empirical check on the entry threshold.
+\end{remark}
+
+\end{document}
