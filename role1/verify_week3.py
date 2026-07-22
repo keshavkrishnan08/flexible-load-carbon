@@ -202,10 +202,16 @@ G0=C[0]; lam=[]
 for i in range(1,len(rows)):
     Gt=C[i]-rows[i][2]; phi=rows[i][2]        # G(Ktau)=carbon-ff ; Phi=ff
     lam.append((G0-Gt)/phi if phi>1e-9 else 0.0)
-    # verify the exact identity C(tau)-C(0)=Phi*(1-Lambda)
-    assert abs((C[i]-C[0]) - phi*(1-lam[-1]))<1e-6
+    # NOTE: C(tau)-C(0) = Phi*(1-Lambda) is DEFINITIONAL here, because Lambda is
+    # defined as (G0-Gt)/Phi with Gt = C[i]-Phi.  Asserting it verifies arithmetic,
+    # not the model, so we do not dress it up as a check (see B4 fix below).
 print("   Lambda: "+"  ".join(f"{L:>6.3f}" for L in lam)+"   (leverage; <=1 => surplus-only carbon-opt)")
-ok("frontier(ii): exact identity C(tau)-C(0)=Phi*(1-Lambda) holds (proved reduction)", True, "verified to 1e-6")
+# B4 FIX: this previously passed the literal True with the label "exact identity
+# ... holds", which could not fail and was backed by no comparison.  The identity is
+# definitional (Lambda := (G0-Gt)/Phi), so it is reported, not asserted.  The
+# substantive claim -- Lambda < 1 -- is the check on the next line.
+print("   [NOTE] C(tau)-C(0)=Phi*(1-Lambda) is definitional (Lambda := (G0-Gt)/Phi); "
+      "not asserted as a test.  The substantive claim is Lambda<1 below.")
 ok("frontier(ii): leverage Lambda(tau)<1 for all tau>0 (indeed <0: caps raise consumer fossil)",
    all(L<1.0 for L in lam), f"max Lambda={max(lam):+.3f} (<1 => surplus-only GLOBAL carbon-opt)")
 

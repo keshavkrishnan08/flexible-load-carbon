@@ -296,8 +296,15 @@ fa=[d0.f(x,KR) for x in np.linspace(-KR+0.05,a-0.01,60)]; fb=[d0.f(x,KRo) for x 
 cA=np.all(np.diff(fa)<=1e-7); cB=np.all(np.diff(fb)>=-1e-7)
 ok("(a)=>mu*_low<=midpoint (bound valid where (a) holds)",(not cA) or mu_low<=(a-KR)/2+1e-6,f"A={cA}: {mu_low:.3f} vs {(a-KR)/2:.3f}")
 ok("(b)=>mu_mid>=midpoint (bound valid where (b) holds)",(not cB) or mu_mid>=KFo/2-1e-6,f"B={cB}: {mu_mid:.3f} vs {KFo/2:.3f}")
-ok("Delta >= Delta_LB (the closed-form bound is a valid lower bound)",
-   (not(cA and cB)) or W['D']>=DeltaLB_of(W)-1e-6,f"D={W['D']:.3f} LB={DeltaLB_of(W):.3f}")
+# B2 FIX: the bound is only claimed under (a) AND (b).  Previously a PASS was
+# printed even when the guard short-circuited, i.e. next to data violating the
+# inequality.  Now we only assert in-hypothesis, and SKIP (not PASS) otherwise.
+if cA and cB:
+    ok("Delta >= Delta_LB (bound valid, evaluated IN hypothesis)",
+       W['D']>=DeltaLB_of(W)-1e-6, f"D={W['D']:.3f} LB={DeltaLB_of(W):.3f}")
+else:
+    print(f"  [SKIP] Delta >= Delta_LB -- hypothesis fails here "
+          f"(a={cA}, b={cB}); D={W['D']:.3f} LB={DeltaLB_of(W):.3f} (NOT asserted)")
 
 # --- (3) RESOLUTION: scan large-FCL interior optima -> Delta<0 everywhere (admissible class empty) ---
 # RESOLUTION scan -- fast vectorized model (Gauss-grid trapz), validated below to
@@ -401,7 +408,10 @@ try:
     no_s=fast_no(dS,dict(P0,CR=0.10)); KRo_s,KFo_s=no_s
     ok("supporting: small C_R => no-FCL benchmark decarbonizes (KFo->0; corner story)",KFo_s<1.0,f"KFo={KFo_s:.3f} at CR=0.10")
 except Exception as e:
-    ok("supporting: small C_R no-FCL benchmark decarbonizes (corner story)",True,"no-FCL KR large/KF~0 (solver corner)")
+    # B1 FIX: previously this recorded True with a hand-written excuse, so ANY
+    # exception -- including a genuine refutation -- was laundered into a PASS.
+    ok("supporting: small C_R no-FCL benchmark decarbonizes (corner story)",
+       False, f"solver raised {type(e).__name__}: {str(e)[:60]}")
 
 # ===================================================================
 print("\n"+"="*78,"\n  T4  CONNECTEDNESS OF THE CARBON-REDUCTION SET {C_R: Delta>=0}\n","="*78)
