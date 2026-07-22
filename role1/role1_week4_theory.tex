@@ -84,8 +84,9 @@ and the carbon-down set an interval under a monotonicity Condition~S---is
 \textbf{withdrawn} (Remark~\ref{rem:phaseretracted}): every cell in which the supporting
 sweep reported $\Phi>0$ lies in the small-\textsc{fcl} regime where \eqref{eq:Phi} is not
 the correct identity, and the true $\Delta$ is negative in all of them. Consequently the
-``only if'' branch of the classification is never exercised on the present evidence:
-across every cell we can solve, $\Delta<0$. Verification in \texttt{verify\_week4.py}
+``only if'' branch is not merely untested: we searched $(\CR,\CM,R)$ and found no
+decarbonizing equilibrium, with $\Delta$ bounded away from zero ($\le-1.21$) on the
+large-\textsc{fcl} regime where $\Phi$ is valid (Remark~\ref{rem:emptybranch}). Verification in \texttt{verify\_week4.py}
 now carries a regime guard and raises rather than returning a wrong-signed $\Phi$.
 \end{abstract}
 
@@ -303,6 +304,40 @@ classification's ``if and only if'' cannot be exercised on this evidence: across
 we can solve, $\Delta<0$, so only the ``carbon rises'' branch is ever tested. We state the
 identity of Theorem~\ref{thm:classify} on its regime and make no claim about a boundary
 until a genuine carbon-improving equilibrium is exhibited.
+\end{remark}
+
+\begin{remark}[The carbon-down branch appears empty on the domain of validity]
+\label{rem:emptybranch}
+Withdrawing the boundary raises the obvious question: is the ``carbon falls'' branch of
+Theorem~\ref{thm:classify} ever realized? We searched for one. Sweeping $(\CR,\CM,R)$ over a
+$60$-point grid, discarding points violating Assumption~1 and those where the solver failed
+to converge, leaves $16$ solved equilibria:
+\begin{center}\small
+\begin{tabular}{lccc}
+\toprule
+regime & cells & $\Delta$ range & cells with $\Delta>0$\\
+\midrule
+large-\textsc{fcl} (where $\Phi$ is valid) & $7$ & $[-3.249,\,-1.208]$ & $0$\\
+small-\textsc{fcl} (where $\Phi$ is not)   & $9$ & $[-1.573,\,-0.049]$ & $0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Two things are worth reading off. First, no equilibrium in the sample decarbonizes, so the
+``only if'' direction is not merely untested---we looked, and did not find a case. Second,
+and more informative, the two regimes behave differently: in small-\textsc{fcl} the saving
+creeps toward zero from below ($-0.049$ at the closest point, consistent with approaching
+the cheap-renewable corner), whereas in large-\textsc{fcl}---the regime on which
+Theorem~\ref{thm:classify} is stated---$\Delta$ is bounded away from zero, never exceeding
+$-1.21$. On the classification's own domain of validity the carbon-down branch is not close
+to being reached.
+
+We state this as evidence, not as a theorem. Sixteen solved equilibria is a thin sample
+($24$ of $60$ points failed to converge), and absence of a witness is not a proof of
+emptiness. But it is the right shape of statement: the naive rule's decarbonizing region, if
+it exists at all, lies where $\Phi$ does not apply---the corner that Week~1's knife-edge remark already identified as a
+small-\textsc{fcl} phenomenon. That is
+consistent with, and sharpens, the reading that carbon reduction under the naive rule is a
+corner artifact rather than an interior possibility.
 \end{remark}
 
 %=====================================================================
