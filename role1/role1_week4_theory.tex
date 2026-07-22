@@ -389,8 +389,45 @@ $\KF(\tau)\ge\KF(0)$ and $\KR(\tau)\le\KR(0)$, so $G$ moves up on both counts:
 $G(K(\tau))\ge G(K(0))$. Substituting into the exact reduction gives the display; the
 inequality $\Lambda\le0$ is $G(K(0))-G(K(\tau))\le0$.\footnote{Verified in
 \texttt{verify\_week4.py}: along $\tau$, $\KF$ is non-decreasing ($3.4\to5.3$) and $\KR$
-is non-increasing, so Condition~\textup{M} holds; $\Lambda(\tau)<0$ throughout.}
+was non-increasing---but only because it sat at the optimizer's capacity barrier. At a
+genuine interior optimum ($\CR=\CM=0.5$, no barrier binding) Condition~M \emph{fails}:
+$\KR$ \emph{rises} with $\tau$ ($1.753\to2.655$) and $\Lambda\in[0.139,0.218]>0$. The
+conclusion nevertheless survives, $\Lambda<1$; see Remark~\ref{rem:condMfails}.}
 \end{proof}
+
+\begin{remark}[Condition M fails at interior optima; the conclusion survives anyway]
+\label{rem:condMfails}
+Condition~M was originally reported as holding ``throughout the scan,'' with $\Lambda<0$.
+That was an artifact: the optimizer's renewable barrier ($\KR\le0.99\Dbar$) bound in every
+cell, so $\KR'(\tau)=0$ held trivially and $\Lambda$ was measured off a frozen capacity
+stock. Removing the barrier and solving at a genuine interior optimum ($\CR=\CM=0.5$)
+gives the opposite picture:
+\begin{center}\small
+\begin{tabular}{lrrrrr}
+\toprule
+$\tau$ & $0.0$ & $0.5$ & $1.0$ & $2.0$ & $5.0$\\
+\midrule
+$\KR(\tau)$ & $1.753$ & $1.964$ & $2.102$ & $2.321$ & $2.655$\\
+$\Lambda(\tau)$ & --- & $0.218$ & $0.174$ & $0.140$ & $0.139$\\
+carbon & $4.023$ & $4.348$ & $4.700$ & $5.389$ & $6.193$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Three corrections follow. \textup{(i)} Condition~M is \emph{false} here---the fossil budget
+\emph{raises} renewable capacity, which is precisely the channel the condition assumes away.
+\textup{(ii)} $\Lambda$ is \emph{positive}, not negative: the induced build-out really does
+offset part of the load's footprint, roughly $14$--$22\%$ of it. The earlier claim that
+fossil-running ``does not even raise $\KR$'' was the barrier speaking.
+\textup{(iii)} The \emph{conclusion} is unharmed: $\Lambda<1$ at every $\tau$, so
+surplus-only remains the carbon-optimal member of the family, and carbon rises monotonically
+in $\tau$.
+
+Theorem~\ref{thm:leveragebound} is therefore sound but its hypothesis is not the operative
+one: Condition~M is sufficient for $\Lambda\le0$, and what actually holds at interior optima
+is the weaker and more interesting statement that the offset is partial. The honest economic
+content is not ``the build-out finances nothing'' but ``the build-out finances about a fifth,
+and a fifth is not enough.''
+\end{remark}
 
 \begin{remark}[What is now proved, and what remains]
 The leverage question is closed \emph{conditionally}: $\Lambda\le1$ is a
@@ -415,6 +452,7 @@ $\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$
 $\mathrm{D}_\ell\Leftrightarrow$ (sweep flips) holds (Theorem~\ref{thm:permean});
 and Condition~M
 ($\KF$ non-decreasing, $\KR$ non-increasing along $\tau$) with the resulting
-$\Lambda(\tau)<0$ (Theorem~\ref{thm:leveragebound}). The suite reports a single pass count.
+$\Lambda(\tau)<1$ (Theorem~\ref{thm:leveragebound}), with the interior-optimum correction of
+Remark~\ref{rem:condMfails}. The suite reports a single pass count.
 
 \end{document}
