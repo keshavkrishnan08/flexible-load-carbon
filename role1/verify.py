@@ -50,8 +50,18 @@ def gR(d,P,KR,KF,KM):
     t2,_=integrate.quad(lambda x:d.FKR(x,KR),-KM,KF-KM,limit=60)
     t3,_=integrate.quad(lambda x:d.FKR(x,KR),KF,d.Dbar,limit=60)
     return R*t1+c*t2+(b+p)*t3-CR
+def _fsolve_checked(fn,x0,xtol,tag):
+    """fsolve that REFUSES to return a non-solution.  Bare fsolve returns its last
+    iterate whatever happened; every downstream 'verification' then runs on a point
+    that does not solve the FOCs.  Raise instead."""
+    sol,info,ier,msg=optimize.fsolve(fn,x0,xtol=xtol,full_output=True)
+    res=float(np.max(np.abs(np.asarray(fn(sol),dtype=float))))
+    if ier!=1 or not np.all(np.isfinite(sol)) or res>1e-6:
+        raise RuntimeError(f"{tag}: fsolve did not converge (ier={ier}, max|F|={res:.3e}): {msg.strip()}")
+    return sol
+
 def solve_with(d,P,x0):
-    return optimize.fsolve(lambda v:[gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)],x0,xtol=1e-11)
+    return _fsolve_checked(lambda v:[gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)],x0,1e-11,'solve_with')
 def solve_no(d,P,x0):
     R,c,b,p,CF,CR=P['R'],P['c'],P['beta'],P['p'],P['CF'],P['CR']
     def foc(v):
@@ -60,7 +70,7 @@ def solve_no(d,P,x0):
         t1,_=integrate.quad(lambda x:d.FKR(x,KR),0,KF,limit=60)
         t2,_=integrate.quad(lambda x:d.FKR(x,KR),KF,d.Dbar,limit=60)
         return [e1,c*t1+(b+p)*t2-CR]
-    return optimize.fsolve(foc,x0,xtol=1e-11)
+    return _fsolve_checked(foc,x0,1e-11,'solve_no')
 
 print("="*72)
 print("V1  Closed forms at FIXED K_R  (uniform & power-law) vs quadrature")

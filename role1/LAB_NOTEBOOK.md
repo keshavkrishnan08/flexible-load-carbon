@@ -483,7 +483,7 @@ verify_week3.py 37/37. PDF 7pp. Commits 20a5f10, be0dc05, a010643.
 | 2026-06-24 | Correlation carbon-sign (quarantined→Role 3) | `exploratory_cross_role/verify_correlation.py` | monotone, sign-flips |
 | 2026-06-26 | **A1 Week 2** — all five tasks (T1–T5) vs quadrature of Π | `verify_week2.py` | **49/49 PASS** |
 | 2026-06-26 | Recursive-triangular uniqueness: det M closed form, Schur<0, H≺0, unique Ψ zero | `verify_week2.py` T1 | exact (≤1e-15) |
-| 2026-06-26 | Emission conjecture resolved NEGATIVE: Δ<0 at every large-FCL interior optimum | `verify_week2.py` T3 + offline ws2/ws3 (244 cells) | max Δ≈−1.40<0 |
+| 2026-06-26 | Emission conjecture resolved NEGATIVE: Δ<0 at every large-FCL interior optimum | `verify_week2.py` T3 (in repo). NOTE: the cited 244-cell ws2/ws3 sweep ran offline and its script is NOT in this repo, so that portion is not reproducible here; the reproducible evidence is the 60-point grid in ROLE1_SCOPE.md (16 solved, 0 with Δ>0). | max Δ≈−1.40<0 |
 | 2026-06-26 | Corner non-emptiness C_R°<C_R†; FTC path-integral = ΔK_R; bounds tight | `verify_week2.py` T4,T5 | 4.21≈4.13; Δmin/Δmax attained |
 
 ## Open problems / handoffs

@@ -181,7 +181,7 @@ which is exactly $\Phi(F)$ of \eqref{eq:Phi}. As $\Delta=\Phi$ identically, ever
 statement transfers. Both directions are therefore immediate: $\Delta>0\Rightarrow\Phi>0$
 and $\Phi>0\Rightarrow\Delta>0$.\footnote{Verified in \texttt{verify\_week4.py}: the
 closed-form $\Phi$ of \eqref{eq:Phi} equals the direct quadrature of
-$\E[\fossil^{\circ}]-\E[\fossil^{*}]$ to $\sim10^{-9}$ at every optimum across the
+$\E[\fossil^{\circ}]-\E[\fossil^{*}]$ to $\sim3\times10^{-8}$ (quadrature-limited) at every optimum across the
 distribution library, and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in every
 cell.}
 \end{proof}
@@ -395,6 +395,39 @@ $\KR$ \emph{rises} with $\tau$ ($1.753\to2.655$) and $\Lambda\in[0.139,0.218]>0$
 conclusion nevertheless survives, $\Lambda<1$; see Remark~\ref{rem:condMfails}.}
 \end{proof}
 
+\begin{remark}[One boundary governs two results: the knife-edge and the carbon identity
+share the large-\textsc{fcl} hypothesis]
+\label{rem:oneboundary}
+The large-\textsc{fcl} condition $\KM\ge\KR$ can look like a patch bolted onto
+Theorem~\ref{thm:classify} to make the algebra close. It is not. The same boundary governs
+the Week-1 knife-edge, and we found this by asserting the knife-edge rather than merely
+printing it.
+
+Along the uniform/power-law locus at the standard parameters, the marginal value of
+renewable capacity is
+\[
+  \mathrm{MV}(1)=\mathrm{MV}(4)=0.344444,\qquad \mathrm{MV}(8)=0.317438,
+\]
+so the knife-edge---$\mathrm{MV}$ independent of $\KR$---holds at $\KR=1,4$ and visibly
+fails at $\KR=8$. The locus explains why: it delivers $\KM=4.278\ge1$ and $\KM=5.444\ge4$,
+both large-\textsc{fcl} with $F(-\KM)=0$, but $\KM=7.000<8$ at the third point, where
+$F(-\KM)=0.0556>0$. The knife-edge does not degrade near the boundary; it holds exactly on
+one side and fails on the other.
+
+The mechanism is common to both results. Every large-\textsc{fcl} statement in this paper
+rests on the load being deep enough to absorb the entire renewable surplus, $F(-\KM)=0$, so
+that the lower limit of the fossil integral is the support endpoint rather than an interior
+point. When that fails, an extra $\KM F(-\KM)$ term enters---it is what breaks the
+integration by parts behind $\Phi$ (Remark~\ref{rem:regime}) and what breaks the
+cancellation behind $\mathrm{MV}$. So $\KM\ge\KR$ is the model's single regime boundary, and
+the honest way to read the paper is that its sharp results are results \emph{about the
+surplus-absorbing regime}, stated as such, rather than general claims carrying a caveat.
+
+Both halves are now asserted in \texttt{verify\_exact.py}: the knife-edge is checked to hold
+across the large-\textsc{fcl} points and separately checked to \emph{break} at the
+small-\textsc{fcl} point, so neither the result nor its boundary can rot silently.
+\end{remark}
+
 \begin{remark}[Condition M fails at interior optima; the conclusion survives anyway]
 \label{rem:condMfails}
 Condition~M was originally reported as holding ``throughout the scan,'' with $\Lambda<0$.
@@ -444,7 +477,7 @@ open step is a clean, isolated comparative-statics sign, not the global optimali
 
 \texttt{verify\_week4.py} checks, against adaptive quadrature on Beta scale mixtures
 (symmetric, left- and right-skewed, mildly skewed): the classification identity
-$\Phi=\Delta$ to $\sim10^{-9}$ and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in
+$\Phi=\Delta$ to $\sim3\times10^{-8}$ and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in
 every cell (Theorem~\ref{thm:classify}); the partial signs
 $\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$
 (Proposition~\ref{thm:minimal}); the per-mean margins $\mathrm{D}_\ell,\mathrm{D}_m$

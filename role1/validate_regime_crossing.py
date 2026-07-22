@@ -37,7 +37,18 @@ def gF(d,P,KR,KF,KM):
     R,c,b,p,CF=P['R'],P['c'],P['beta'],P['p'],P['CF']; Fk=d.F(KF,KR); Fg=d.F(KF-KM,KR)
     return R*(Fk-Fg)-c*(1-Fg)+(b+p)*(1-Fk)-CF
 def grad(d,P,v): return np.array([gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)])
-def solve_with(d,P,x0): return optimize.fsolve(lambda v:grad(d,P,v),x0,xtol=1e-11)
+def _fsolve_checked(fn,x0,xtol,tag):
+    """fsolve that REFUSES to return a non-solution.  Bare fsolve returns its last
+    iterate whatever happened; every downstream 'verification' then runs on a point
+    that does not solve the FOCs.  Raise instead."""
+    sol,info,ier,msg=optimize.fsolve(fn,x0,xtol=xtol,full_output=True)
+    res=float(np.max(np.abs(np.asarray(fn(sol),dtype=float))))
+    if ier!=1 or not np.all(np.isfinite(sol)) or res>1e-6:
+        raise RuntimeError(f"{tag}: fsolve did not converge (ier={ier}, max|F|={res:.3e}): {msg.strip()}")
+    return sol
+
+def solve_with(d,P,x0):
+    return _fsolve_checked(lambda v:grad(d,P,v),x0,1e-11,'solve_with')
 def fd_hess(d,P,v,h=1e-4):
     H=np.zeros((3,3))
     for i in range(3):

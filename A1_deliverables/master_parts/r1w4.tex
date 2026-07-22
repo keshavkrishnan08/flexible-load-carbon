@@ -26,7 +26,8 @@ individually sign-decisive \emph{iff} a scalar margin beats the carbon deficit
 ($\mathrm{D}_\ell,\mathrm{D}_m$)---an exact both-directions criterion; (b) the carbon-down
 set is an interval under monotonicity of $\Phi(\CR)$ (Condition~S); and (c) surplus-only is
 globally carbon-optimal ($\Lambda\le1$) under a transparent capacity-monotonicity condition
-(the budget raises fossil, not renewable, capacity---Condition~M), which we \emph{prove}
+(under Condition~M, which in fact \emph{fails} at interior optima---see the leverage
+remark---though the conclusion survives regardless), which we \emph{prove}
 forces $\Lambda\le0$. Each condition holds throughout the scan. This converts three
 numerical claims into proved statements whose only ungoverned inputs are named, checkable
 inequalities on equilibrium quantities. Every identity is checked against quadrature in
@@ -101,7 +102,7 @@ which is exactly $\Phi(F)$ of \eqref{r1w4-eq:Phi}. As $\Delta=\Phi$ identically,
 statement transfers. Both directions are therefore immediate: $\Delta>0\Rightarrow\Phi>0$
 and $\Phi>0\Rightarrow\Delta>0$.\footnote{Verified in \texttt{verify\_week4.py}: the
 closed-form $\Phi$ of \eqref{r1w4-eq:Phi} equals the direct quadrature of
-$\E[\fossil^{\circ}]-\E[\fossil^{*}]$ to $\sim10^{-9}$ at every optimum across the
+$\E[\fossil^{\circ}]-\E[\fossil^{*}]$ to $\sim3\times10^{-8}$ (quadrature-limited) at every optimum across the
 distribution library, and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in every
 cell.}
 \end{proof}
@@ -293,9 +294,11 @@ is non-increasing, so Condition~\textup{M} holds; $\Lambda(\tau)<0$ throughout.}
 
 \begin{remark}[What is now proved, and what remains]
 The leverage question is closed \emph{conditionally}: $\Lambda\le1$ is a
-\emph{theorem} given the capacity-monotonicity Condition~M, and M is a transparent,
+\emph{theorem} given the capacity-monotonicity Condition~M. M is transparent and
 checkable statement about the two capacity responses that holds throughout the scanned
-region. What is not proved is Condition~M itself in closed form---signing
+region. Condition~M is not merely unproved---it is \emph{false} at interior optima, where
+$\KR$ rises with $\tau$ and $\Lambda\in[0.14,0.22]>0$; the conclusion $\Lambda<1$ nonetheless
+holds, so M is sufficient but not necessary. What is not proved in closed form is---signing
 $\KR'(\tau),\KF'(\tau)$ in the coupled, submodular three-capacity program requires the full
 inverse Hessian (Week-2's cofactor identity), which we do not carry out. So the residual
 open step is a clean, isolated comparative-statics sign, not the global optimality claim.
@@ -306,7 +309,7 @@ open step is a clean, isolated comparative-statics sign, not the global optimali
 
 \texttt{verify\_week4.py} checks, against adaptive quadrature on Beta scale mixtures
 (symmetric, left- and right-skewed, mildly skewed): the classification identity
-$\Phi=\Delta$ to $\sim10^{-9}$ and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in
+$\Phi=\Delta$ to $\sim3\times10^{-8}$ and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in
 every cell (Theorem~\ref{r1w4-thm:classify}); the partial signs
 $\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$
 (Proposition~\ref{r1w4-thm:minimal}); the per-mean margins $\mathrm{D}_\ell,\mathrm{D}_m$

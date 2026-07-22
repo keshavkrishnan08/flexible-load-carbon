@@ -31,13 +31,45 @@ trivial, and it has not been done.
 |---|---|---|---|
 | 1 | Distribution-free cutoffs `φ₁=C_M/(R−c)`, `φ₂`, `φ°=(β+p−c−C_F)/(β+p−c)` | Assumption 1, interior optimum | **Proved.** Independently re-derived. `φ°` is a newsvendor critical fractile. |
 | 2 | Existence and uniqueness via recursive-triangular FOC structure | Assumption 1, regularity, reduced SOC (Condition Schur) | **Proved.** The strongest block; residuals at 1e-16, Hessian and Schur complement negative definite. Condition Schur is checkable, not derived from primitives. |
-| 3 | `Δ = Φ(F)`, so carbon falls iff `Φ>0` | **`K_M* ≥ K_R*` (large-FCL)** | **Proved on that regime.** The hypothesis is essential: outside it Φ can carry the wrong sign (at `C_R=0.34`, Φ=+1.905 vs true Δ=−0.135). |
+| 3 | `Δ = Φ(F)`, so carbon falls iff `Φ>0` | **`K_M* ≥ K_R*` (large-FCL)** | **Proved on that regime.** The hypothesis is essential: outside it Φ can carry the wrong sign (at `C_R=0.34`, Φ=+1.905 vs true Δ=−0.135). Not an ad-hoc patch — see "One regime boundary" below. |
 | 4 | Per-mean decisiveness (sharp iff, margins `D_ℓ`, `D_m`) | Interior optimum with `Δ<0` | **Proved**, gated on two explicit scalar margins, both verified at the representative optimum. |
 | 5 | Surplus contract is fossil-minimizing | None | **Proved**, but it is a lemma and near-definitional. Also stated in the Guide (§4, §5.3) before Role 1 wrote it. |
 | 6 | Surplus contract raises `K_R` and lowers carbon | Adoption + single-peakedness | **Proved.** One added positive term in the `K_R` FOC. Crowded by prior work; defense is scope, not conclusion. |
-| 7 | Frontier identity `C(τ)−C(0)=Φ_ft(1−Λ)`; surplus-only carbon-optimal | **Condition M** (`K_R'≤0≤K_F'`) | Identity is definitional. The ranking is **proved under Condition M**, which is verified numerically, not derived. |
+| 7 | Frontier identity `C(τ)−C(0)=Φ_ft(1−Λ)`; surplus-only carbon-optimal | **Condition M** (`K_R'≤0≤K_F'`) — *sufficient, not necessary, and false at interior optima* | Identity is definitional. The ranking is **proved under Condition M**. But Condition M **fails** where `K_R` is genuinely interior: `K_R` *rises* with τ (1.753→2.655) and `Λ∈[0.139,0.218]>0`. The earlier "verified numerically" was degenerate — `K_R` was pinned at the barrier, so `K_R'=0` trivially. The **conclusion** (`Λ<1`, surplus-only carbon-optimal) survives. |
 | 8 | §5.3: allocation equivalence, boundary selection, revenue divergence, long-run strict ranking | Deregulated setting; `τ̄=R−c` | **Proved.** The newest and least pre-empted work. |
 | 9 | Calibration: break-even separability; `C̄_M` insensitivity | None | **Proved**, and reproduces the Guide's coefficients (2533.0, 6181.9) and every table cell. |
+
+## One regime boundary, two results
+
+The large-FCL condition `K_M ≥ K_R` is not a patch bolted onto the carbon theorem to make
+the algebra close. It is the model's single regime boundary, and it governs the Week-1
+knife-edge too.
+
+Along the uniform/power-law locus, the marginal value of renewable capacity is
+
+| `K_R` | 1 | 4 | 8 |
+|---|---|---|---|
+| MV | 0.344444 | 0.344444 | **0.317438** |
+| `K_M` | 4.278 | 5.444 | 7.000 |
+| `K_M ≥ K_R`? | yes | yes | **no** |
+| `F(−K_M)` | 0 | 0 | **0.0556** |
+
+The knife-edge holds exactly at the two large-FCL points and fails at the small-FCL one.
+Verified across three distributions (α = 1.0, 0.5, 2.0): spread on large-FCL is 4e-09,
+8e-08, 2e-10; departure at small-FCL is 2.7e-02, 1.2e-01, 1.5e-03. It does not degrade
+gracefully near the boundary — it holds on one side and breaks on the other.
+
+Same mechanism both times. Every sharp result here needs the load deep enough to absorb the
+whole renewable surplus, `F(−K_M)=0`, so the fossil integral's lower limit is the support
+endpoint rather than an interior point. When that fails an extra `K_M·F(−K_M)` term appears:
+it breaks the integration by parts behind `Φ`, and it breaks the cancellation behind `MV`.
+
+So the honest reading of Role 1 is that its sharp results are results **about the
+surplus-absorbing regime**, stated as such — not general claims carrying a caveat.
+
+Both halves are asserted in `verify_exact.py`: the knife-edge is checked to hold across
+large-FCL points *and* checked to genuinely break at the small-FCL point, so neither the
+result nor its boundary can rot silently.
 
 ## Withdrawn
 
@@ -81,6 +113,24 @@ failed to converge, and absence of a witness is not emptiness.
 
 Role 1's harness: B1/B2/B4 fixed (a crash laundered into a PASS, a PASS printed beside
 falsifying data, a hardcoded `True`); regime guard added so the large-FCL Φ raises rather
-than returning a wrong-signed value. Remaining known issues: Week-3 Theorem 1 and the Week-4
-Condition-M sweep are evaluated at artificial caps (`Kcap`, `Dbar*0.99`), so their reported
-*magnitudes* are properties of the constraint set and must not appear in the paper.
+than returning a wrong-signed value.
+
+Since then: **B6** — the knife-edge flag was computed, printed, and discarded; asserting it
+exposed the regime boundary above. **M6** — the Φ=Δ agreement was claimed at `~1e-9`; the
+measured, quadrature-limited figure is `~3e-8`, now stated. **M9** — a "✓" was printed
+unconditionally beside FOC residuals; it is now conditional. **M13** — bare `fsolve` returned
+its last iterate whatever happened, so downstream checks could run on a non-solution; all
+call sites now go through `_fsolve_checked`, which raises on `ier≠1` or residual `>1e-6`.
+**M3** — the cited 244-cell sweep ran offline and its script is not in this repo; the lab
+notebook now says so, and the reproducible evidence is the 60-point grid above.
+
+**The Week-4 Condition-M sweep was worse than "evaluated at an artificial cap."** The
+renewable barrier bound in every cell, so `K_R'(τ)=0` held trivially and Condition M was
+never actually tested. Rerun at a genuine interior optimum, it **fails** — see claim 7. The
+sweep now guards its own non-degeneracy: it asserts `K_R` is interior before drawing any
+conclusion, and it *reports* Condition M rather than asserting it, since asserting it would
+only ever pass at a barrier. What it asserts is the conclusion, `Λ<1`.
+
+Still outstanding: Week-3 Theorem 1's cap-invariance test uses a `Kcap` heuristic with magic
+constants, and reports `capped=True` in 5/5 families — the same degeneracy pattern, not yet
+rerun.

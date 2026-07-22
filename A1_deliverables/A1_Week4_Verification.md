@@ -9,7 +9,10 @@ Fresh run, **13/13 PASS** on the load-bearing checks:
 - `∂Φ/∂μ*_low < 0` and `∂Φ/∂μ°_mid > 0` (both means load-bearing).
 - Each mean **alone** flips `sign(Φ)` at the representative optimum (`Φ∈[−3.33,+0.40]` and `[−5.27,+0.49]`).
 - The per-mean **sharp iff**: `D_ℓ ⟺ (μ*_low sweep flips)` and `D_m ⟺ (μ°_mid sweep flips)`, both exact.
-- Condition M (leverage bound): `K_R` non-increasing (const 9.90), `K_F` non-decreasing (3.40→5.28), `Λ(τ) < 0` throughout.
+- Condition M (leverage bound): SUPERSEDED. `K_R` was "non-increasing" only because it sat pinned at the
+  renewable barrier (const 9.90). At a genuine interior optimum (C_R=C_M=0.5) Condition M FAILS: `K_R` rises
+  (1.753 -> 2.655) and `Λ ∈ [0.139, 0.218]` is positive, not negative. The conclusion `Λ < 1` survives, so
+  surplus-only is still carbon-optimal. See role1_week4_theory.tex, rem:condMfails.
 - Condition S (carbon boundary): `Φ(C_R)` monotone single-crossing (`+1.90 → −2.50`).
 
 ## Role 4 — the classification functional across regimes  (`role4/week4_regime_classification.py`)

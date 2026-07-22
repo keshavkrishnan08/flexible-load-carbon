@@ -64,12 +64,27 @@ def fd_hess(d,P,v,h=1e-4):
         H[:,i]=(gp-gm)/(2*h)
     return 0.5*(H+H.T)  # symmetrize
 
-def solve_with(d,P,x0): return optimize.fsolve(lambda v:grad(d,P,v),x0,xtol=1e-12)
+def _fsolve_checked(fn,x0,xtol,tag):
+    """fsolve that REFUSES to return a non-solution.  Bare fsolve returns its last
+    iterate whatever happened; every downstream 'verification' then runs on a point
+    that does not solve the FOCs.  Raise instead."""
+    sol,info,ier,msg=optimize.fsolve(fn,x0,xtol=xtol,full_output=True)
+    res=float(np.max(np.abs(np.asarray(fn(sol),dtype=float))))
+    if ier!=1 or not np.all(np.isfinite(sol)) or res>1e-6:
+        raise RuntimeError(f"{tag}: fsolve did not converge (ier={ier}, max|F|={res:.3e}): {msg.strip()}")
+    return sol
+
+def solve_with(d,P,x0):
+    return _fsolve_checked(lambda v:grad(d,P,v),x0,1e-12,'solve_with')
 
 PASS=[];
 def chk(name,a,b,tol=1e-5):
-    rel=abs(a-b)/(1+abs(b)); ok=rel<tol; PASS.append(ok)
-    print(f"  [{'PASS' if ok else 'FAIL'}] {name:42s} analytic={a:+.8g} ref={b:+.8g} rel={rel:.1e}")
+    rel=abs(a-b)/(1+abs(b)); good=rel<tol; PASS.append(good)
+    print(f"  [{'PASS' if good else 'FAIL'}] {name:42s} analytic={a:+.8g} ref={b:+.8g} rel={rel:.1e}")
+
+def ok(name,cond,detail=""):
+    cond=bool(cond); PASS.append(cond)
+    print(f"  [{'PASS' if cond else 'FAIL'}] {name:42s} {detail}")
 
 # ===================================================================
 print("="*72,"\n  CHECK 1: analytic gradients (eqs 11-15) == FD of profit\n","="*72)
@@ -127,6 +142,24 @@ for a in (1.0,0.5,2.0):
     print(f"  alpha={a}: MV(1,4,8)=({vals[0]:.6f},{vals[1]:.6f},{vals[2]:.6f}) const={const}", end="")
     if a==1.0: chk('  uniform MV vs eq:mv',vals[1],MV_formula)
     else: print()
+    # B6: 'const' was computed, printed, then silently discarded -- the knife-edge claim
+    # was never asserted.  Asserting it naively FAILS, and the failure is diagnostic:
+    # MV(1)=MV(4) exactly but MV(8) departs.  The reason is the regime boundary.  On the
+    # locus, K_M>=K_R (large-FCL, F(-K_M)=0) at K_R=1,4 but K_M=7.0<8=K_R at K_R=8.  The
+    # knife-edge therefore holds on the SAME regime that carries the Phi=Delta identity:
+    # one boundary governs both headline results.  Assert it where it is claimed to hold,
+    # and assert that it genuinely breaks outside -- so neither half can rot silently.
+    KMs=[locus(kr)[1] for kr in (1.,4.,8.)]
+    big=[i for i,kr in enumerate((1.,4.,8.)) if KMs[i]>=kr]      # large-FCL indices
+    small=[i for i,kr in enumerate((1.,4.,8.)) if KMs[i]<kr]
+    bigv=[vals[i] for i in big]
+    ok(f'  knife-edge holds on large-FCL (K_M>=K_R) at alpha={a}',
+       len(bigv)>1 and max(bigv)-min(bigv)<1e-6,
+       f'spread={max(bigv)-min(bigv):.2e} over {len(bigv)} large-FCL pts')
+    if small:
+        ok(f'  knife-edge genuinely BREAKS on small-FCL at alpha={a}',
+           max(abs(vals[i]-bigv[0]) for i in small)>1e-4,
+           f'departure={max(abs(vals[i]-bigv[0]) for i in small):.2e} (regime boundary is real)')
 
 print("\n"+"="*72,"\n  CHECK 5: cutoff probabilities (eq:cutoffs) at the optimum\n","="*72)
 dd=ScaleMix(10,2,2,2,2); star=solve_with(dd,P,[3,5,6]); KR,KF,KM=star
@@ -148,7 +181,7 @@ def solve_no(d,P,x0):
         t1=integrate.quad(lambda x:d.FKR(x,KRn),0,KFn,limit=300)[0]
         t2=integrate.quad(lambda x:d.FKR(x,KRn),KFn,d.Dbar,limit=300)[0]
         return [e1,c*t1+(b+p)*t2-CR]
-    return optimize.fsolve(foc,x0,xtol=1e-12)
+    return _fsolve_checked(foc,x0,1e-12,'solve_no')
 KRo,KFo=solve_no(dd,P,[3,6]); phio=dd.F(KFo,KRo); qo=dd.F(0,KRo)
 mu_mid=integrate.quad(lambda x:x*dd.f(x,KRo),0,KFo,limit=300)[0]/(phio-qo)
 fos_no_q=integrate.quad(lambda x:1-dd.F(x,KRo),0,KFo,limit=300)[0]
