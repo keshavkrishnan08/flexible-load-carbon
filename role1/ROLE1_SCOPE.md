@@ -131,6 +131,27 @@ sweep now guards its own non-degeneracy: it asserts `K_R` is interior before dra
 conclusion, and it *reports* Condition M rather than asserting it, since asserting it would
 only ever pass at a barrier. What it asserts is the conclusion, `Λ<1`.
 
-Still outstanding: Week-3 Theorem 1's cap-invariance test uses a `Kcap` heuristic with magic
-constants, and reports `capped=True` in 5/5 families — the same degeneracy pattern, not yet
-rerun.
+**Week-3 Theorem 1's cap** turned out to be a different animal from Condition M, and better.
+`K_R` does sit at the cap in most families (profit is still rising at `K_R=14` for symmetric,
+left-skew, and high-`C_F`), so the reported *magnitude* is a property of the constraint set.
+But the *sign* is not: swept over five families x five caps from 1.5x to 20x `K_R°`, the
+carbon saving is positive in all 25 cells. Both facts are now asserted — the second
+deliberately, as a ceiling on what may be quoted. The left-skew family alone ranges
+`+0.0019` to `+5.98` across caps, a factor of 3000, so **no magnitude from that sweep belongs
+in the paper**. Profit is also genuinely non-concave in `K_R` for left-skew (two sign changes
+of `∂Π/∂K_R` over `[2,14]`), so "the" optimum needs a stated selection rule.
+
+**A verification defect that mimicked a theorem failure.** The carbon integral masked a fixed
+grid, so a limit moving between nodes changed nothing until it crossed one, then jumped
+(~5e-3). Consequence: on a fine sweep `e(K_R)` *increased* on 60/100 steps — reading as a
+direct refutation of the monotone-fossil lemma — and the left-skew carbon saving came out
+negative (−3e-4). Both were artifacts, 3–15x smaller than the jump that caused them. With
+endpoints made exact: 0/100 increases, saving positive. The lemma's own test ran at step 0.5,
+250x coarser than the artifact, so it could never have caught it; it now runs at step 0.02.
+The lesson generalizes: **a verification grid coarser than its own noise floor reports success
+whether or not the result is true.**
+
+**Frontier saturation.** The budget family saturates once `d_τ` is limited by `K_M` rather
+than `τ` (between τ=5 and τ=15 here), so monotonicity in τ is strict only while the budget
+binds. The old "strictly increasing" assertion passed only because the pinned barrier kept
+the sweep away from saturation.

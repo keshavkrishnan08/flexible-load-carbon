@@ -455,6 +455,21 @@ $0<\Lambda<1$: fossil-running \emph{does} raise $\KR$, so part of the footprint 
 the ``financing'' story fails and carbon rises unambiguously. The result is thus a
 \emph{proved} equivalence resting on one interpretable, verified scalar---not a
 distribution-free assertion about $\KR'(\tau)$, which we do not claim.
+
+Two independent sweeps at genuine interior optima agree on the size of the offset:
+$\Lambda\in[0.218,0.301]$ here and $\Lambda\in[0.139,0.218]$ in the Week-4 calibration. So
+the renewable build-out that fossil-powered computing finances pays for something like a
+fifth to a third of its own emissions. That is the honest headline---not ``the build-out
+finances nothing,'' which is what the earlier barrier-pinned sweeps reported (the barrier artifact documented in the
+Week-4 note), and not ``it pays for itself,'' which would
+need $\Lambda\ge1$.
+
+One caveat on reading the frontier at large $\tau$. The budget family saturates: once
+$d_\tau=\min\{(-x)_++\tau,\KM,(\KF-x)_+\}$ is limited by $\KM$ rather than by $\tau$, more
+budget buys nothing, and profit, carbon, and capacities all flatten. In the sweep this
+happens between $\tau=5$ and $\tau=15$. Monotonicity in $\tau$ is therefore strict only
+while the budget binds and weak thereafter, which is what the verification now asserts.
+
 \end{remark}
 
 \begin{remark}[No free lunch, and the unification]
@@ -491,3 +506,45 @@ with blackout held equal, blackout$^{c}=$blackout$^{\circ}=1-\varphi^{\circ}$
 quadrature. As a contrast the suite also
 reports the Week-2 naive-rule fossil at the same primitives, exhibiting the floor that
 the contract removes. The suite reports a single pass count.
+
+\begin{remark}[What the numerics establish here: the sign, not the size]
+\label{r1w3-rem:capinv}
+Renewable capacity is not interior in most of these families. Profit is still rising in
+$\KR$ at $\KR=14$ for the symmetric, left-skew, and high-$\CF$ families, so the ``surplus
+optimum'' is whatever cap the solver imposes---the same bang-bang structure as the Week-1
+knife-edge, and a reason to distrust any magnitude taken from this sweep.
+
+We therefore tested what the cap does and does not decide. Across five families and caps
+from $1.5\times$ to $20\times\KR^{\circ}$, the carbon saving is positive in every one of the
+$25$ cells: the \emph{sign} is a property of the model. The \emph{size} is not. The
+left-skew family alone ranges from $+0.0019$ to $+5.98$ as the cap is relaxed---a factor of
+three thousand. Both facts are now asserted in \texttt{verify\_week3.py}, the second
+deliberately as a ceiling on what may be quoted: no magnitude from this sweep belongs in the
+paper.
+
+Profit is also genuinely non-concave in $\KR$ for the left-skew family, with two sign changes
+of $\partial\Pi/\partial\KR$ over $[2,14]$ (a local maximum just above $\KR^{\circ}$, then a
+rising branch beyond $\KR\approx8.6$). ``The'' optimum is not well defined there without
+saying which critical point, and the cap silently selects the far one.
+\end{remark}
+
+\begin{remark}[A verification defect that mimicked a theorem failure]
+\label{r1w3-rem:quadfix}
+Worth recording because the failure looked real. The carbon integral was evaluated by
+masking a fixed grid, $\{x: 0\le x\le \KF\}$, so a limit moving between nodes left the
+integral unchanged until it crossed one, and then it jumped. Measured jump: $\sim5\times
+10^{-3}$.
+
+The consequence was a false counterexample. On a fine sweep the consumer fossil integral
+$e(\KR)$ \emph{increased} on $60$ of $100$ steps, which reads as a direct refutation of the
+monotone-fossil lemma; it also produced a small negative carbon saving ($-3\times10^{-4}$)
+in the left-skew family, i.e.\ apparent carbon growth under the surplus contract. Both were
+grid artifacts, and both were three to fifteen times smaller than the jump that caused them.
+
+With the endpoints made exact the artifact disappears: $e(\KR)$ decreases on $100$ of $100$
+steps and the left-skew saving turns positive. The lemma's own test previously ran on a grid
+of step $0.5$, some $250$ times coarser than the artifact, so it could not have detected the
+problem---it now runs at step $0.02$. The general lesson is the one worth keeping: a
+verification grid coarser than its own numerical noise will report success regardless of
+whether the result is true.
+\end{remark}

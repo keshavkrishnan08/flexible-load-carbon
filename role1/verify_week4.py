@@ -137,17 +137,23 @@ def fam_black(KR,KF):
     fx=(np.where((A>0)&(A<Dbar),Dd.pdf(np.clip(A,1e-9,Dbar-1e-9)/Dbar)/Dbar,0.0)*wss[None,:]).sum(1)
     Z=np.trapz(fx,x); fx=fx/Z if Z>0 else fx
     return float(np.trapz(np.maximum(np.maximum(x,0.)-KF,0.)*fx,x))
-def fam_opt(tau,CRv,CMv,x0):
+def fam_opt(tau,CRv,CMv,x0,KRcap):
     def negp(k):
         KR,KF,KM=k
-        if min(KR,KF,KM)<1e-3 or KR>Dbar*0.99: return 1e6
+        if min(KR,KF,KM)<1e-3 or KR>KRcap: return 1e6
         rev,ff,cons=fam_stats(KR,KF,KM,tau)
         return -(p*EDm + R*rev - c*(cons+ff) - (b+p)*fam_black(KR,KF) - CF*KF - CRv*KR - CMv*KM)
     r=optimize.minimize(negp,x0,method='Nelder-Mead',options={'xatol':1e-3,'fatol':1e-4,'maxiter':4000})
     rev,ff,cons=fam_stats(*r.x,tau); return r.x,(cons+ff),ff,cons
-CRv,CMv=0.5,0.04; taus=[0.0,0.5,1.0,2.0,5.0]; KRs=[]; KFs=[]; Cs=[]; ffs=[]; cons0=None; base=(3,6,4)
+
+# Interior optimum.  The original sweep used C_M=0.04 with the barrier K_R<=0.99*Dbar; the
+# barrier BOUND in every cell, so K_R(tau) was frozen and "Condition M" held trivially.  We
+# run at C_M=0.5 with a slack barrier, where K_R is genuinely interior, and GUARD that fact.
+CRv,CMv=0.5,0.5; KRCAP=20.0   # slack: optimum sits near K_R~2.7, far below
+taus=[0.0,0.5,1.0,2.0,5.0]; KRs=[]; KFs=[]; Cs=[]; ffs=[]; cons0=None; base=(3,6,4)
 for tau in taus:
-    k,carb,ff,cons=fam_opt(tau,CRv,CMv,base); base=k; KRs.append(k[0]); KFs.append(k[1]); Cs.append(carb); ffs.append(ff)
+    k,carb,ff,cons=fam_opt(tau,CRv,CMv,base,KRCAP); base=k
+    KRs.append(k[0]); KFs.append(k[1]); Cs.append(carb); ffs.append(ff)
     if tau==0.0: cons0=cons
 lam=[]
 for i in range(1,len(taus)):
@@ -157,9 +163,22 @@ KR_mono=all(KRs[i+1]<=KRs[i]+1e-3 for i in range(len(KRs)-1))   # Condition M: K
 print("   tau:    "+"  ".join(f"{t:>6.1f}" for t in taus))
 print("   K_R:    "+"  ".join(f"{v:>6.2f}" for v in KRs))
 print("   K_F:    "+"  ".join(f"{v:>6.2f}" for v in KFs))
+print("   carbon: "+"  ".join(f"{v:>6.2f}" for v in Cs))
 print("   Lambda: "+"      "+"  ".join(f"{L:>6.3f}" for L in lam))
-ok("Thm leverage(Cond M): K_F(tau) non-decreasing", KF_mono, f"K_F: {KFs[0]:.2f}->{KFs[-1]:.2f}")
-ok("Thm leverage(Cond M): K_R(tau) non-increasing", KR_mono, f"K_R: {KRs[0]:.2f}->{KRs[-1]:.2f}")
-ok("Thm leverage: Cond M => Lambda<0<1 (proved) => surplus-only carbon-opt", (KF_mono and KR_mono and all(L<1.0 for L in lam)), f"max Lambda={max(lam):+.3f}")
+
+# GUARD: if K_R sits at either barrier the sweep is degenerate and proves nothing about M.
+interior=all(1e-2 < v < KRCAP-1e-2 for v in KRs)
+ok("Leverage sweep is non-degenerate (K_R interior, not pinned at a barrier)",
+   interior, f"K_R in [{min(KRs):.3f}, {max(KRs):.3f}], barrier {KRCAP}")
+
+# Condition M is REPORTED, not asserted: it is FALSE here, and known to be so.  Asserting it
+# would only ever pass at a barrier.  What we assert is the CONCLUSION it was invoked to reach.
+print(f"   [report] Condition M (K_R non-increasing): {KR_mono}   <- FALSE at interior optima")
+print(f"   [report] Condition M (K_F non-decreasing): {KF_mono}")
+print(f"   [report] Lambda>0 (build-out offsets part of the footprint): {all(L>0 for L in lam)}")
+ok("Thm leverage CONCLUSION: Lambda<1 => surplus-only carbon-optimal (M sufficient, not necessary)",
+   all(L<1.0 for L in lam), f"Lambda in [{min(lam):+.3f}, {max(lam):+.3f}], all < 1")
+ok("Thm leverage: carbon increasing in tau (surplus-only is the minimizer)",
+   all(Cs[i+1]>=Cs[i]-1e-3 for i in range(len(Cs)-1)), f"carbon {Cs[0]:.3f}->{Cs[-1]:.3f}")
 
 print("\n"+"="*74); print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS"); print("="*74)
