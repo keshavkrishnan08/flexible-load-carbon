@@ -20,8 +20,28 @@ def ok(name,cond,detail=""):
     PASS.append(bool(cond)); print(f"  [{'PASS' if cond else 'FAIL'}] {name}  {detail}")
 
 def cond_means(d,P,star,no):
-    """mu*_low = E[x|x in(-KR*,a)], mu_mid = E[x|x in(0,KF^o)]; a=KF*-KM*, qo=F(0;KR^o)."""
+    """mu*_low = E[x|x in(-KR*,a)], mu_mid = E[x|x in(0,KF^o)]; a=KF*-KM*, qo=F(0;KR^o).
+
+    REGIME GUARD.  The closed form below is the LARGE-FCL identity: lower limit -KR and
+    normalizer F(a) are correct only when F(-K_M)=0, i.e. K_M >= K_R.  In small-FCL the
+    integration by parts picks up an extra K_M*F(-K_M) term and Phi != Delta -- by enough
+    to flip the sign.  Measured across C_R (Phi closed-form vs Delta by quadrature):
+
+        C_R   regime      F(-K_M)   Phi      Delta    |Phi-Delta|
+        0.34  small-FCL   0.2706   +1.905   -0.135    2.04   <- OPPOSITE SIGNS
+        0.36  small-FCL   0.1872   +0.280   -0.577    0.857  <- OPPOSITE SIGNS
+        0.40  small-FCL   0.0832   -0.707   -0.950    0.242
+        0.46  small-FCL   0.0057   -1.546   -1.556    0.0096
+        0.52  LARGE-FCL   0.0000   -2.358   -2.358    2.7e-08
+
+    The error tracks F(-K_M) exactly.  Silently applying the large-FCL form across the
+    boundary is what manufactured the spurious "carbon boundary" in the phase sweep, whose
+    Phi>0 cells are all small-FCL.  Refuse rather than mislead.
+    """
     KR,KF,KM=star; KRo,KFo=no; a=KF-KM
+    if KM < KR - 1e-9:
+        raise ValueError(f"small-FCL (K_M={KM:.3f} < K_R={KR:.3f}, F(-K_M)={d.F(-KM,KR):.4f}): "
+                         f"large-FCL Phi identity invalid here")
     Fa=d.F(a,KR)
     mu_low=integrate.quad(lambda x:x*d.f(x,KR),-KR,a,limit=200)[0]/Fa
     qo=d.F(0,KRo)
