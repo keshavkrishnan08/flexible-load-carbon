@@ -1,0 +1,134 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[T1]{fontenc}\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}\usepackage{microtype}\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black]{hyperref}
+\usepackage{natbib}
+\newcommand{\CM}{C_M}\newcommand{\phio}{\varphi^{\circ}}
+\setlength{\parskip}{3pt}
+\begin{document}
+\title[Related work and positioning]{Related Work and Positioning}
+\author{Team A1 --- Role 1}
+\date{Supporting section}
+\begin{abstract}
+Where this paper sits, and---stated plainly---which of its results are already known. Two
+of our five findings have close published antecedents; one is crowded; two appear to be
+new. We say which is which here rather than let a referee discover it.
+\end{abstract}
+\maketitle
+
+\section{Curtailable load contracts}
+The instrument we study is a curtailment tariff, and the theory of selling curtailable
+service is mature. \citet{ChaoWilson1987} established that a menu of contingent curtailment
+contracts induces efficient self-selection and dominates random rationing; the market-structure
+and investment extensions are \citet{ChaoOrenSmithWilson1988}. \citet{OrenSmith1992} is the
+canonical operations treatment of designing and dispatching a curtailable-service program,
+and is the closest existing analogue to our dispatch comparison. \citet{StraussOren1993} adds
+notification lead time---relevant because we assume the load is instantaneously curtailable,
+an assumption their results show is not innocuous. \citet{KamatOren2002} price interruptible
+supply as a compound option and \citet{BaldickKolosTompaidis2006} derive a retailer's optimal
+interruption policy under stochastic prices; neither considers emissions, which is the
+opening we take. In our own venue, \citet{FattahiDasuAhmadi2023} is the current reference
+point for direct load-control contract design, and is cost-focused with no carbon analysis.
+
+Our surplus contract is a degenerate one-class priority contract, and our budget family
+$d_\tau$ is a priority-service menu. We claim no novelty in the contract form. What we add
+is the carbon ledger over that family and the instrument comparison of \S5.3.
+
+\section{Flexible computing as a grid resource}
+That computing load responds to electricity signals at all traces to \citet{Qureshi2009};
+\citet{Liu2011} showed geographic load balancing can raise renewable utilization, though
+under a fixed generation mix---the extension to endogenous renewable capacity is where our
+capacity-substitution channel lives. \citet{Wierman2014} surveys operational feasibility, and
+\citet{Radovanovic2023} documents a deployed carbon-shifting system at Google, which uses
+marginal-intensity signals rather than a surplus rule. For mining specifically,
+\citet{Menati2023aae} finds the carbon footprint of mining load varies up to 50\% from the
+system average by location, and \citet{MenatiLeeXie2023} is the reference ERCOT simulation.
+\citet{vanderJagt2024} models exactly our $K_M$ object as a ``demand sink'' and finds
+low-capital-cost sinks cut curtailment substantially; \citet{RiepinBrown2024} raises the
+additionality concern that bears on our Pareto framing.
+
+\section{What is already known, stated plainly}
+\textbf{Our negative result is not new.} \citet{KnittelSengaWang2025} find, empirically, that
+flexible data centers flatten net demand, cut system costs, and \emph{raise} emissions when
+the renewable share is low, with the sign turning favourable as penetration grows. That is
+our ``the unconstrained rule raises carbon except in a cheap-renewable corner,'' in a
+different currency. The general mechanism is older still: \citet{HollandMansur2008} showed
+that reducing demand variance raises emissions in some regions and lowers it in others. We
+therefore do not present the direction of the effect as a finding. What we contribute is the
+\emph{exact analytic boundary} in primitives, where they give regional simulations and
+reduced-form estimates.
+
+This places our result in a recognized class. \citet{CarsonNovan2013} found bulk storage
+arbitrage adds roughly $0.19$ tons CO\textsubscript{2} per MWh stored in ERCOT, and
+\citet{HittingerAzevedo2015} confirmed the sign nationally while showing it flips as
+renewable capacity rises---the empirical shadow of a classification condition.
+\citet{Ding2023} shows curtailment caps can cut renewable capacity and raise
+CO\textsubscript{2}, which is our feedback from surplus use to $K_R$ running in reverse.
+
+\textbf{Our distribution-free statement is crowded, not pre-empted.} We have found no proof
+of the Pareto claim for all $F$. But \citet{vanderJagt2024} simulates the mechanism,
+\citet{Butters2025} gives the full structural equilibrium for a flexible asset in
+\emph{Econometrica}, and \citet{HittingerAzevedo2015} documents the conditional flip. The
+honest defense is not novelty of conclusion but of scope: distribution-freeness buys
+robustness to exactly the heterogeneity that \citet{Novan2015},
+\citet{CallawayFowlieMcCormick2018}, and \citet{Menati2023aae} document empirically---
+identical resources, wildly different carbon signs by region and season.
+
+\textbf{Our fossil-minimizing dispatch result is short and, we suspect, folk knowledge.} It
+is a lemma, and we present it as one.
+
+\section{Capacity investment}
+Our three-capacity program is a peak-load-pricing and reliability-constrained capacity model
+in the tradition of \citet{CrewKleindorfer1976}, surveyed for operations by
+\citet{VanMieghem2003}. The distribution-free cutoffs are newsvendor critical fractiles:
+$\phio=(\beta+p-c-C_F)/(\beta+p-c)$ \emph{is} a critical fractile, and we frame it as one.
+\citet{Hu2015} warns that data granularity on intermittency drives renewable
+over-investment---a caution about our own coarse residual-demand primitive.
+\citet{AflakiNetessine2017} is the closest precedent for a perverse-sign result in this
+literature: carbon pricing can discourage renewable investment under intermittency. That
+paper is our evidence that ``green policy, wrong sign'' theorems publish in operations.
+\citet{KokShangYucel2018} is the nearest \emph{Management Science} paper to our object---
+pricing policy to renewable investment to emissions, with a sign that flips on market
+characteristics---and \citet{KokShangYucel2020} establishes renewable/flexible
+complementarity. \citet{PengWuSouza2024} asks our complementarity question for the
+(renewable, flexible, storage) triple; since our third asset is a flexible \emph{load}
+rather than storage, we owe a referee an explicit distinction, and the honest answer is
+that storage is absent from our model and is the first extension a reader should demand.
+\citet{SunarBirge2019} and \citet{Drake2016} set the modelling conventions we follow.
+
+\section{Distribution-free methods}
+Our ``for every $F$'' results sit in the tradition of \citet{Scarf1958} and
+\citet{GallegoMoon1993}. \citet{PerakisRoels2008} formalizes what is and is not decidable
+under partial distributional information, which is the right frame for our conditional-mean
+dependence. We deliberately do \emph{not} claim a distributionally robust optimization
+result: a referee would reasonably ask why we do not simply solve a DRO problem over $F$
+\citep{DelageYe2010,WiesemannKuhnSim2014}, and our worst-case guarantee has infimum zero,
+so the DRO vocabulary would promise more than we deliver. On detail-free design, our
+contract is simple because the designer will not commit to a distribution, in the spirit of
+\citet{Wilson1987} and \citet{BergemannMorris2005}; \citet{Carroll2015} is the model for how
+to make that argument, and we note that our setting has \emph{no private information}, so we
+avoid mechanism-design language entirely.
+
+\section{Carbon accounting}
+$\Phi$ is built on conditional means, which is marginal-emissions-factor logic done exactly;
+\citet{SilerEvans2012} established that average factors badly misestimate avoided emissions.
+Two boundaries of our accounting deserve statement. Our counterfactual is \emph{no load},
+but a curtailed miner relocates rather than vanishing, so grid-local accounting understates
+leakage \citep{Fowlie2009}; and our unconstrained-rule result is a supply-side backfire of
+the kind catalogued by \citet{GillinghamRapsonWagner2016}. \citet{BushnellNovan2021} further
+suggests our two-conditional-mean summary may be too coarse to capture ramping and start-up
+effects.
+
+\section{Summary of the contribution}
+Against this literature we claim: (i) a tractable joint capacity characterization with
+distribution-free cutoffs and a recursive-triangular uniqueness argument; (ii) an exact
+closed-form carbon ledger on the large-\textsc{fcl} regime; and (iii) the price-versus-quantity
+comparison of \S5.3---allocation equivalence at the greening thresholds, revenue divergence,
+and a strict long-run ranking---which we have not found anywhere in this literature. We do
+\emph{not} claim the direction of the naive-rule carbon effect, which is
+\citet{KnittelSengaWang2025} and \citet{HollandMansur2008}.
+
+\bibliographystyle{plainnat}
+\bibliography{a1_references}
+\end{document}
