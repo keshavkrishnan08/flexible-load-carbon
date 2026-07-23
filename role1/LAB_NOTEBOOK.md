@@ -545,6 +545,15 @@ de-fragilized this round.
 novel decoupling/separation result, an honestly-labeled backfire certificate, and a storage
 section that concedes what it must and proves what survives.
 
+**Follow-up (closing the last gap).** The exact carbon *coefficient* was then re-derived in
+the main model, not just the sign: `Phi_dm = (C_M/(R-p))(a-mu*_low) - [K_F* - K_Fo(1-phi_o) -
+(phi_o-q_o)mu_o_mid]` — the utility-operated `Phi` verbatim with the single substitution
+`C_M/(R-c) -> C_M/(R-p)`, because the coefficient is the integration-by-parts factor `F(a)`
+which free entry pins to `phi_1`. Verified `Delta=Phi_dm` to 2e-4 (`verify_double_margin.py`
+now **9/9**, `Phi_dm=-2.3749` vs `Delta=-2.3752`). So the ENTIRE capacity-and-carbon theory —
+cutoffs, decoupling, and the exact `Phi` — is now in the professor's main double-margin model;
+only §5.3 (deregulated, by design) uses a different margin.
+
 — R1
 
 ---
