@@ -287,9 +287,11 @@ $G(\KR,\KF)=\int_0^{\KF}(1-F(x;\KR))\,dx$ has $\partial G/\partial\KF=1-F(\KF)\g
 $\partial G/\partial\KR=-\int_0^{\KF}\FKR<0$. Under Condition~\textup{M},
 $\KF(\tau)\ge\KF(0)$ and $\KR(\tau)\le\KR(0)$, so $G$ moves up on both counts:
 $G(K(\tau))\ge G(K(0))$. Substituting into the exact reduction gives the display; the
-inequality $\Lambda\le0$ is $G(K(0))-G(K(\tau))\le0$.\footnote{Verified in
-\texttt{verify\_week4.py}: along $\tau$, $\KF$ is non-decreasing ($3.4\to5.3$) and $\KR$
-is non-increasing, so Condition~\textup{M} holds; $\Lambda(\tau)<0$ throughout.}
+inequality $\Lambda\le0$ is $G(K(0))-G(K(\tau))\le0$.\footnote{Condition~M was originally
+``verified'' this way in \texttt{verify\_week4.py}, but degenerately: $\KR$ sat pinned at the
+optimizer's renewable barrier, so $\KR'(\tau)=0$ held trivially. At a genuine interior
+optimum M \emph{fails}---$\KR$ rises with $\tau$ and $\Lambda\in[0.14,0.22]>0$---yet the
+conclusion $\Lambda<1$ survives. See Remark~\ref{r1w4-rem:condMfails}.}
 \end{proof}
 
 \begin{remark}[What is now proved, and what remains]
@@ -304,6 +306,43 @@ inverse Hessian (Week-2's cofactor identity), which we do not carry out. So the 
 open step is a clean, isolated comparative-statics sign, not the global optimality claim.
 \end{remark}
 
+\begin{remark}[Condition M fails at interior optima; the conclusion survives anyway]
+\label{r1w4-rem:condMfails}
+Condition~M was originally reported as holding ``throughout the scan,'' with $\Lambda<0$. That
+was an artifact: the optimizer's renewable barrier ($\KR\le0.99\Dbar$) bound in every cell, so
+$\KR'(\tau)=0$ held trivially and $\Lambda$ was measured off a frozen capacity stock. At a
+genuine interior optimum ($\CR=\CM=0.5$) the picture reverses:
+\begin{center}\small
+\begin{tabular}{lrrrrr}
+\toprule
+$\tau$ & $0.0$ & $0.5$ & $1.0$ & $2.0$ & $5.0$\\
+\midrule
+$\KR(\tau)$ & $1.753$ & $1.964$ & $2.102$ & $2.321$ & $2.655$\\
+$\Lambda(\tau)$ & --- & $0.218$ & $0.174$ & $0.140$ & $0.139$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Condition~M is \emph{false} here---the fossil budget \emph{raises} renewable capacity, the very
+channel the condition assumes away---and $\Lambda$ is \emph{positive}: the induced build-out
+offsets roughly $14$--$22\%$ of the load's footprint, not nothing. An independent Week-3 sweep
+gives $\Lambda\in[0.218,0.301]$. The conclusion is unharmed: $\Lambda<1$ at every $\tau$, so
+surplus-only stays carbon-optimal. Condition~M is thus sufficient for $\Lambda\le0$ but not
+necessary; the honest content is ``the build-out finances about a fifth, and a fifth is not
+enough.''
+\end{remark}
+
+\begin{remark}[One boundary governs two results]\label{r1w4-rem:oneboundary}
+The large-\textsc{fcl} hypothesis $\KM\ge\KR$ is not a patch on the carbon theorem---it is the
+model's single regime boundary, and it governs the Week-1 knife-edge too. Along the
+uniform/power locus the marginal value of renewable capacity is constant
+($\mathrm{MV}(1)=\mathrm{MV}(4)=0.3444$) exactly where $\KM\ge\KR$, and departs
+($\mathrm{MV}(8)=0.3174$) at the first point where $\KM<\KR$ ($F(-\KM)=0.056>0$). Same
+mechanism as $\Phi$: both rest on $F(-\KM)=0$, so the fossil integral's lower limit is the
+support endpoint; when that fails an extra $\KM F(-\KM)$ term breaks the cancellation. Verified
+in \texttt{verify\_exact.py}, which asserts the knife-edge holds on large-\textsc{fcl}
+\emph{and} genuinely breaks on small-\textsc{fcl}.
+\end{remark}
+
 %---------------------------------------------------------------------
 \section{Numerical validation}\label{r1w4-sec:num}
 
@@ -315,6 +354,8 @@ $\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$
 (Proposition~\ref{r1w4-thm:minimal}); the per-mean margins $\mathrm{D}_\ell,\mathrm{D}_m$
 ($\Phi_{\mathrm{hi}}=+0.40,+0.49>0$) and that the exact \emph{iff}
 $\mathrm{D}_\ell\Leftrightarrow$ (sweep flips) holds (Theorem~\ref{r1w4-thm:permean});
-monotonicity of $\Phi(\CR)$, Condition~S (Theorem~\ref{r1w4-prop:phase}); and Condition~M
-($\KF$ non-decreasing, $\KR$ non-increasing along $\tau$) with the resulting
-$\Lambda(\tau)<0$ (Theorem~\ref{r1w4-thm:leveragebound}). The suite reports a single pass count.
+monotonicity of $\Phi(\CR)$, Condition~S (Theorem~\ref{r1w4-prop:phase}); and---at a genuine
+interior optimum, with the renewable barrier slack---that Condition~M \emph{fails} ($\KR$
+rises, $1.753\to2.655$) while its conclusion $\Lambda(\tau)<1$ survives, $\Lambda\in[0.14,0.22]$
+positive (Theorem~\ref{r1w4-thm:leveragebound}, Remark~\ref{r1w4-rem:condMfails}). The suite
+reports a single pass count.
