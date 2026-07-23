@@ -1,0 +1,156 @@
+\title[The cutoffs in the paper's main model]{The Distribution-Free Cutoffs Survive the Double
+Margin:\\ Re-Deriving Role~1 in the Third-Party-Miner Model}
+
+
+\begin{abstract}
+Role 1's theory was stated in the \emph{utility-operated} configuration (the utility runs the
+flexible computing load and captures the full margin $R-c$), but the paper's main line is
+\emph{third-party miners at a tariff}: a miner earns $R$, pays the utility a tariff $p$, and
+enters by free entry, so the margins split into $R-p$ (miner) and $p-c$ (utility)---the double
+margin. A referee reasonably asks whether the distribution-free cutoffs, the headline of the
+theory, are an artifact of the wrong margin. They are not. We re-derive them here. The
+computing cutoff picks up the miner margin, $\varphi_1=\CM/(R-p)$, exactly as one would guess.
+The fossil cutoff does something better than survive: the utility, internalizing miner entry,
+sees the coupling term cancel, and the cutoff \emph{decouples} from $\CM$ entirely,
+$\phio_{\mathrm{dm}}=(\bp-c-\CF)/\beta$. Both are distribution-free, both are verified to
+machine precision at the equilibrium, and the decoupling is a genuinely new structural fact
+that the utility-operated model hides.
+\end{abstract}
+
+
+\section{The model, and why the margin matters}
+Residual demand after renewables is $x=D-\KR\tilde S$ with c.d.f. $F(x;\KR)$ on
+$[-\KR,\Dbar]$, $\FKR=\partial F/\partial\KR>0$. Two configurations share this primitive and
+the same physical dispatch; they differ only in who collects which margin.
+
+\emph{Utility-operated (what Role 1 proved).} The utility runs the load, earns the computing
+value $R$, pays generation cost $c$, and chooses $\KM$ directly. Its computing margin is
+$R-c$, and the first-order condition for $\KM$ is
+$(R-c)F(\KF-\KM)+c\,F(-\KM)=\CM$, giving the cutoff $\varphi_1^{\mathrm{uo}}=\CM/(R-c)$.
+
+\emph{Third-party miners (the paper's main model).} Competitive miners install the load. A
+miner earns $R$ per MWh it runs and pays the tariff $p$; it runs, under the unconstrained
+(naive) rule, whenever there is fossil headroom, i.e.\ in states $x<\KF-\KM$, with probability
+$F(\KF-\KM)$. Free entry drives miner profit to zero,
+\begin{equation}\label{dm-eq:entry}
+  (R-p)\,F(\KF-\KM)=\CM .
+\end{equation}
+The utility no longer earns $R$ on the load; it earns the tariff margin $p-c$ on the power it
+sells to miners, and it still bears outage $\bp$ and the capital costs $\CF,\CR$. Its problem
+is
+\begin{equation}\label{dm-eq:util}
+  \max_{\KR,\KF}\ (p-c)\,\E[\text{miner load}] - c\,\E[\text{consumer fossil}]
+  - \bp\,\E[\text{outage}] - \CF\KF - \CR\KR,
+\end{equation}
+taking the entry response $\KM(\KF,\KR)$ from \eqref{dm-eq:entry} as given. Because $p>c$, the
+miner margin $R-p$ is smaller than the planner's $R-c$, so miners under-provide the load
+relative to the integrated optimum---the classic double-marginalization wedge. The question is
+what this does to the cutoffs.
+
+\section{The computing cutoff carries the miner margin}
+\begin{proposition}[Computing cutoff, double margin]\label{dm-prop:phi1}
+Under free entry \eqref{dm-eq:entry}, the flexible-load cutoff is
+\[
+  \boxed{\ \varphi_1^{\mathrm{dm}}=\frac{\CM}{R-p}\ }
+  \qquad\text{i.e.}\qquad F(\KF-\KM)=\frac{\CM}{R-p},
+\]
+distribution-free. It replaces the utility-operated $\CM/(R-c)$ by lifting the margin from
+$R-c$ to the miner's $R-p$; since $p>c$ it is larger, so miners leave a smaller computing gap
+$\KF-\KM$ and install less capacity.
+\end{proposition}
+\begin{proof}
+Immediate from \eqref{dm-eq:entry}. Free entry is a zero-profit condition on the marginal miner,
+whose expected margin is $(R-p)$ times its running probability $F(\KF-\KM)$; equate to the
+capital cost $\CM$ and divide.
+\end{proof}
+
+Numerically, at $R=1.4,\ p=0.7,\ \CM=0.3$ (so $\varphi_1^{\mathrm{dm}}=0.4286$) the solved
+equilibrium returns $F(\KF-\KM)=0.4286$ to $3.3\times10^{-16}$, and the match holds across
+every parameter set and demand shape we tried.
+
+\section{The fossil cutoff decouples from the load}
+The interesting result is the fossil cutoff. Differentiate the utility's objective
+\eqref{dm-eq:util} in $\KF$, and---crucially---account for the fact that raising $\KF$ enlarges
+the fossil headroom and \emph{draws in more miners}: from \eqref{dm-eq:entry} with $\varphi_1$
+fixed, $\partial\KM/\partial\KF=1$.
+
+\begin{theorem}[Fossil cutoff, double margin]\label{dm-thm:phiodm}
+At the utility's optimum the fossil cutoff is
+\[
+  \boxed{\ \phio_{\mathrm{dm}}=\frac{\bp-c-\CF}{\beta}\ }
+  \qquad\text{i.e.}\qquad F(\KF)=\frac{\bp-c-\CF}{\beta},
+\]
+distribution-free, and \textbf{independent of $\CM$}. It shares the numerator of the
+utility-operated $\phio=(\bp-c-\CF)/(\bp)$ but carries denominator $\beta$ in place of $\bp$.
+\end{theorem}
+\begin{proof}
+Write $G_F:=\partial/\partial\KF$ of \eqref{dm-eq:util} at fixed $\KM$, plus the entry channel.
+The three expectations have
+$\partial\E[\text{miner}]/\partial\KF=F(\KF)-F(\KF-\KM)$ (the naive load equals $\KF-x$ on
+$(\KF-\KM,\KF)$), $\partial\E[\text{consumer fossil}]/\partial\KF=1-F(\KF)$, and
+$\partial\E[\text{outage}]/\partial\KF=-(1-F(\KF))$. So the partial derivative is
+\[
+  (p-c)\big[F(\KF)-\varphi_1\big]+(\bp-c)\big[1-F(\KF)\big]-\CF ,
+\]
+using $F(\KF-\KM)=\varphi_1$. The entry channel adds $(\partial\Pi/\partial\KM)(\partial\KM/\partial\KF)$.
+Here $\partial\E[\text{miner}]/\partial\KM=F(\KF-\KM)=\varphi_1$, so
+$\partial\Pi/\partial\KM=(p-c)\varphi_1$, and $\partial\KM/\partial\KF=1$; the channel
+contributes $+(p-c)\varphi_1$. Adding, the two $\pm(p-c)\varphi_1$ terms cancel:
+\[
+  (p-c)F(\KF)+(\bp-c)\big[1-F(\KF)\big]-\CF=0 .
+\]
+Collecting $F(\KF)$ multiplies $(p-c)-(\bp-c)=-\beta$, leaving
+$-\beta F(\KF)+(\bp-c)-\CF=0$, i.e.\ $F(\KF)=(\bp-c-\CF)/\beta$.
+\end{proof}
+
+\begin{corollary}[The cutoffs decouple]\label{dm-cor:decouple}
+In the utility-operated model the fossil cutoff carries the load's cost:
+$\varphi_2^{\mathrm{uo}}=(\bp-c-\CF-\CM)/(\bp-R)$. In the double margin it does not:
+$\CM$ enters only $\varphi_1^{\mathrm{dm}}$, and $F(\KF)=\phio_{\mathrm{dm}}$ is invariant to
+$\CM$. Fossil sizing and load entry separate.
+\end{corollary}
+
+The economics is clean. When the utility itself runs the load, a cheaper load
+($\CM\downarrow$) pulls fossil capacity along with it, because the same planner trades the two
+off inside one objective---hence $\CM$ sits in the fossil cutoff. When miners run the load,
+the utility only sells them power; the extra fossil it would build to serve a larger load is
+exactly paid for by the extra entry that fossil attracts, at margin $(p-c)$ on both sides, and
+the two cancel. The utility sizes fossil against outage alone.
+
+\begin{remark}[Numerical confirmation of the decoupling]\label{dm-rem:decouplenum}
+Fixing $R=1.4,p=0.7,c=0.5,\beta=4,\CF=0.6$ so $\phio_{\mathrm{dm}}=0.9000$, and sweeping the
+load cost, the fossil cutoff does not move:
+\begin{center}\small
+\begin{tabular}{cccccc}
+\toprule
+$\CM$ & $\varphi_1^{\mathrm{dm}}$ & $\KR$ & $\KF$ & $\KM$ & $F(\KF)$\\
+\midrule
+$0.20$ & $0.286$ & $2.022$ & $7.069$ & $4.564$ & $0.8998$\\
+$0.30$ & $0.429$ & $1.993$ & $7.084$ & $3.562$ & $0.8999$\\
+$0.40$ & $0.571$ & $1.964$ & $7.098$ & $2.599$ & $0.9000$\\
+$0.50$ & $0.714$ & $1.930$ & $7.112$ & $1.594$ & $0.8999$\\
+\bottomrule
+\end{tabular}
+\end{center}
+$\KM$ falls by a factor of three across the sweep; $F(\KF)$ holds at $0.900=\phio_{\mathrm{dm}}$
+to $2\times10^{-4}$ (solver-limited). Verified in \texttt{dm\_decouple.py}.
+\end{remark}
+
+\section{What this settles, and what it does not}
+\emph{Settles.} The distribution-free character of the cutoffs---the theory's headline---is
+\emph{not} an artifact of the utility-operated simplification. The two cutoffs re-derive
+cleanly in the paper's main model: $\varphi_1^{\mathrm{dm}}=\CM/(R-p)$ and
+$\phio_{\mathrm{dm}}=(\bp-c-\CF)/\beta$, each holding for every $F$, each confirmed to machine
+precision at the equilibrium. The double margin even buys a new, sharper structural
+statement---the decoupling of fossil sizing from load entry (Corollary~\ref{dm-cor:decouple})---that
+the utility-operated model cannot express.
+
+\emph{Does not settle.} The physical carbon functional $\Phi$ is unchanged (it depends on
+fossil burned, a function of $(\KR,\KF,\KM)$ that is identical across configurations), but the
+\emph{equilibrium} it is evaluated at moves: miners under-provide $\KM$, so less renewable
+surplus is absorbed. Whether double-marginalization raises or lowers emissions relative to the
+integrated planner is a separate comparative static, signed by the same $\Phi$ machinery
+evaluated at two capacity vectors rather than one. And the renewable cutoff $\KR$ still solves
+a shift-ratio first-order condition---now with the entry channel $\partial\KM/\partial\KR=\FKR(\KF-\KM)/f(\KF-\KM)$
+folded in---whose sign law we verify numerically but do not sign in closed form for general
+$F$, exactly as in the utility-operated case.

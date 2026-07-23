@@ -1,0 +1,134 @@
+\title[Storage competes for the same surplus]{Storage vs.\ the Flexible Load:\\
+The Referee's First Question, Answered}
+
+
+\begin{abstract}
+The first question a referee asks about a ``computing load absorbs renewable surplus and that
+is good for carbon'' story is: what about storage? Storage absorbs the same surplus and
+\emph{returns} it to displace fossil, whereas the load consumes it for computing and displaces
+nothing on the grid. So the ``no load'' counterfactual over-credits the load. We concede the
+point in full and then show it does not damage the paper's results, because it is aimed at a
+claim the paper does not need. Three facts, all verified: (i) for pure surplus absorption
+storage lowers grid carbon and the load does not---storage dominates the load \emph{as a
+carbon technology}; (ii) the load's carbon-relevant object is not surplus absorption but
+\emph{dispatch}, and the naive-versus-surplus-contract carbon gap is exactly invariant to how
+much storage is installed; (iii) the load is the higher-\emph{value} user of a surplus MWh
+precisely when computing value clears a sharp threshold $R>c+\eta\,[\phio c+(1-\phio)\bp]$,
+which high-value compute meets and a low-value load does not. The load is not a carbon
+mitigation technology; it is a computing demand whose dispatch is a carbon lever, and that
+lever is orthogonal to storage.
+\end{abstract}
+
+
+\section{The model with both assets}
+Keep the residual-demand primitive $x=D-\KR\tilde S$ with c.d.f.\ $F(\cdot;\KR)$. In a surplus
+state ($x<0$) the curtailable surplus is $(-x)$. Two assets can take it. Storage of capacity
+$\KS$ and round-trip efficiency $\eta\in(0,1)$ charges $\min((-x),\KS)$ and returns $\eta$ of
+it in later peak states, \emph{displacing fossil}. The flexible load of capacity $\KM$
+computes on surplus, earning the margin $R-c$ per MWh and \emph{displacing no grid fossil}.
+Storage is the fossil-displacer, so we let it charge first; the load takes the residual
+surplus $\big((-x)-\text{charge}\big)_+$. Grid carbon (fossil burned) is
+\begin{equation}\label{st-eq:carbon}
+  \E[\text{fossil}] \;=\; \underbrace{\E[\min(x_+,\KF)]}_{\text{consumer fossil}}
+  \;+\;\underbrace{\E[\text{naive load burn}]}_{=0\text{ under surplus contract}}
+  \;-\;\underbrace{\eta\,\E[\min((-x)_+,\KS)]}_{\text{storage displacement}} .
+\end{equation}
+
+\section{Storage dominates the load as a carbon technology}
+\begin{proposition}[Per-MWh carbon: the referee is right]\label{st-prop:carbon}
+A unit of surplus routed to storage lowers grid fossil by $\eta$ times the fraction it returns
+into fossil-serving states; the same unit routed to the (surplus-contracted) load lowers grid
+fossil by \emph{zero}. Storage strictly dominates the load in grid-carbon terms for surplus
+use.
+\end{proposition}
+\begin{proof}
+Immediate from \eqref{st-eq:carbon}: $\KS$ enters with a strictly negative sign, $\KM$ (surplus
+contract, naive burn $=0$) does not enter at all. The load computes; it does not return energy
+to the grid.
+\end{proof}
+Numerically, at $\KR=2,\KF=7,\eta=0.85$: installing $\KS=3$ cuts grid fossil from $3.9333$ to
+$3.9207$ ($-0.0126$); installing a surplus-contracted $\KM=3$ leaves it at $3.9333$
+($-0.0000$). \emph{The consequence is that the ``no load'' counterfactual of Week~3 overstates
+the load's carbon benefit}: the honest benchmark credits storage with the fossil it would have
+displaced, and against that benchmark the surplus load is carbon-neutral, not carbon-negative.
+
+\section{The dispatch gap is storage-invariant}
+The load's carbon-relevant object is not whether it exists but how it runs. Under the
+\emph{naive} rule it burns fossil for computing (Week~2's floor); under the \emph{surplus
+contract} it does not. That difference is what Week~3 and Week~4 are about, and it is
+untouched by storage.
+\begin{proposition}[The naive$-$surplus carbon gap does not depend on $\KS$]\label{st-prop:invariant}
+Let $\Delta_{\mathrm{disp}}(\KS)=\E[\text{fossil}\mid\text{naive},\KS]-\E[\text{fossil}\mid\text{surplus},\KS]$.
+Then $\Delta_{\mathrm{disp}}(\KS)=\E[\text{naive load burn}]$ for all $\KS$: the storage term in
+\eqref{st-eq:carbon} is common to both dispatch modes and cancels.
+\end{proposition}
+\begin{proof}
+Both modes share the same consumer fossil and the same storage displacement $-\eta\E[\min((-x)_+,\KS)]$;
+they differ only in the naive burn term, which is present under naive dispatch and zero under
+the surplus contract. Subtracting, the storage term cancels identically.
+\end{proof}
+Verified: at $\KS=0,2,4$ the gap is $+2.1291$ in every case, constant to the reported digits.
+So every carbon result the paper actually proves---the naive rule raises carbon
+(Week~4), the surplus contract is its carbon-optimal dispatch (Week~3)---holds verbatim with
+storage in the model. Storage changes the \emph{level} of carbon, not the \emph{dispatch
+comparison}.
+
+\section{Who should take the surplus: a value threshold}
+Storage wins the carbon comparison; it does not follow that storage should take all the
+surplus, because the two assets sell different products. Storage arbitrages energy; its
+expected value per charged MWh is $\eta$ times the marginal displacement price---generation
+cost $c$ in the common case, the outage price $\bp$ in the rare shortfall---so
+$v_{\mathrm{stor}}=\eta\,[\phio c+(1-\phio)\bp]$ using $F(\KF)=\phio$. The load produces
+computing at margin $R-c$.
+\begin{proposition}[The load is the higher-value surplus user iff computing clears a threshold]
+\label{st-prop:threshold}
+The flexible load is the higher-value user of a marginal surplus MWh iff
+\[
+  \boxed{\;R \;>\; c+\eta\big[\phio\,c+(1-\phio)\bp\big]\;=:\;R^{\star}.\;}
+\]
+Below $R^{\star}$ storage should take the surplus; above it the load should. Both are used at
+an interior joint optimum whenever the surplus exceeds either asset's capacity, so they are
+\emph{complements sorted by the load's value}, not pure substitutes.
+\end{proposition}
+At the calibration ($c=0.5,\eta=0.85,\phio=0.857,\bp=4.7$) the threshold is $R^{\star}=1.44$.
+A high-value load---Bitcoin or AI compute, where $R$ is well above one---clears it; a
+low-value flexible load does not, and there storage should have the surplus. The margin is
+tight and depends on how rare outage is:
+\begin{center}\small
+\begin{tabular}{cccc}
+\toprule
+$\Pr(\text{outage})=1-\phio$ & $v_{\mathrm{stor}}$ & vs $R-c=0.90$ & higher value\\
+\midrule
+$0.02$ & $0.50$ & $>$ & load\\
+$0.05$ & $0.60$ & $>$ & load\\
+$0.10$ & $0.78$ & $>$ & load\\
+$0.14$ & $0.93$ & $<$ & storage\\
+$0.20$ & $1.14$ & $<$ & storage\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{What this settles}
+\begin{remark}[The honest bottom line]
+Storage is the better carbon technology; the flexible load is not a carbon technology at all.
+Its carbon footprint in the model is a \emph{dispatch} property, and the paper's results are
+dispatch results: the naive rule raises emissions, the surplus contract is the carbon-optimal
+way to run a load that exists for computing, and that comparison is exactly invariant to
+storage (Proposition~\ref{st-prop:invariant}). What the storage counterfactual correctly kills is
+the weaker reading that a surplus-absorbing load is carbon-\emph{negative} versus doing
+nothing---against the right benchmark (storage) it is carbon-neutral, and the paper should, and
+now does, benchmark the surplus contract against the naive rule rather than against a vacuum.
+The load earns its place on private value (Proposition~\ref{st-prop:threshold}), which high-value
+compute clears; the grid should still prefer storage for the surplus when the load's computing
+is cheap. This is a cleaner and more defensible claim than ``computing greens the grid,'' and
+it is the one the model supports.
+\end{remark}
+\emph{Limits.} This is a static, expected-flow treatment of storage: it prices the returned
+energy at the expected marginal displacement, not through an explicit intertemporal
+state-of-charge process. A dynamic storage model with binding state-of-charge constraints
+would change the \emph{magnitudes} $v_{\mathrm{stor}}$ and the displacement fraction, and could
+introduce a scarcity value when storage is small; it would not change
+Proposition~\ref{st-prop:invariant} (the dispatch gap cancels the storage term whatever its size)
+nor the \emph{existence} of a value threshold in Proposition~\ref{st-prop:threshold}. The full
+dynamic (renewable, fossil, storage, flexible-load) program is the natural next model and is
+out of Role~1's scope.
