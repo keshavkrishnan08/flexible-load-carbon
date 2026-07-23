@@ -85,6 +85,35 @@ if __name__ == "__main__":
     ok("decoupling: F(KF) invariant to C_M (spread < 3e-3)",
        max(fkfs) - min(fkfs) < 3e-3, f"spread={max(fkfs)-min(fkfs):.1e} over C_M in [0.2,0.5]")
 
+    # --- carbon classification carries over: naive dispatch raises carbon in the DM model ---
+    print("\n  --- Phi=Delta carries over: naive dispatch raises carbon in the main model ---")
+    from scipy import integrate
+    Pc = dict(R=1.4, p=0.70, c=0.5, beta=4.0, CF=0.6, CR=0.5, CM=0.30, Dbar=10.0)
+    def _dens(KR):
+        import numpy as _np
+        xs = _np.linspace(-KR, Pc['Dbar'], 1200); Fx = _np.array([d.F(x, KR) for x in xs])
+        fx = _np.clip(_np.gradient(Fx, xs), 0, None); Z = _np.trapz(fx, xs)
+        return xs, (fx / Z if Z > 0 else fx)
+    def _q(fn, a, bb): return integrate.quad(fn, a, bb, limit=200)[0]
+    KRn, KFn, KMn = solve_dm(d, Pc)
+    # no-load benchmark
+    R_, p_, c_, b_, CF_, CR_ = (Pc[k] for k in ['R','p','c','beta','CF','CR'])
+    def _prof_no(k):
+        KR, KF = k
+        if KR < 0.05 or KF < 0.5 or KF > Pc['Dbar']*0.99: return 1e6
+        xs, fx = _dens(KR); xp = np.maximum(xs, 0.)
+        E = lambda v: float(np.trapz(v*fx, xs))
+        return -(-c_*E(np.minimum(xp, KF)) - (b_+p_)*E(np.maximum(xp-KF, 0.)) - CF_*KF - CR_*KR)
+    ro = optimize.minimize(_prof_no, (2., 7.), method='Nelder-Mead',
+                           options={'xatol':3e-4,'fatol':3e-5,'maxiter':2000})
+    KRo, KFo = ro.x
+    Ef_naive = _q(lambda x: 1 - d.F(x, KRn), -KMn, KFn - KMn)   # large-FCL naive fossil
+    Ef_no = _q(lambda x: 1 - d.F(x, KRo), 0, KFo)
+    Delta = Ef_no - Ef_naive
+    print(f"    DM naive eq K_R={KRn:.3f} K_F={KFn:.3f} K_M={KMn:.3f}; Delta={Delta:+.3f}")
+    ok("carbon classification carries over: naive dispatch raises carbon (Delta<0)",
+       Delta < -0.5, f"Delta={Delta:+.3f} (carbon UP in the main model too)")
+
     print("\n" + "=" * 74)
     print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS")
     print("=" * 74)
