@@ -20,10 +20,11 @@ competitive equilibrium decentralizes to exactly this integrated-planner benchma
 `P_r = R`, `P_cap = β+p`. So Role 1 characterizes the object the decentralization theorem is
 stated against.
 
-**Every sharpness statement differs between the two configurations.** The cutoffs and the Φ
-coefficient must be re-derived with `R−p` and `p−c` for Role 1's results to serve the main
-line. The two distribution-free cutoffs are now done (below, and claim 10); the Φ coefficient
-and the §5.3 thresholds in the double margin are the remaining mechanical re-derivations.
+**Every sharpness statement differs between the two configurations**, and all of Role 1's
+capacity-and-carbon results have now been re-derived with `R−p`/`p−c` (below, and claim 10):
+the two cutoffs, the decoupling, and the exact `Φ` coefficient. The only object still in a
+different margin is §5.3's deregulated prices-vs-quantities (`R−c−τ`), which is a distinct
+market structure by design, not a pending re-derivation.
 
 ### Which margin appears where, and why (read before objecting to "three margins")
 
@@ -39,14 +40,21 @@ deliverables did not say so, so this table is the reconciliation:
 
 So the three margins track three market structures, linked by §5.2's decentralization
 theorem (the deregulated equilibrium decentralizes the utility-operated planner at `P_r=R`).
-**Update (this is now done).** The theory has been re-derived in the paper's main
-double-margin model — see `role1_double_margin.tex` and `verify_double_margin.py` (7/7 PASS,
-claim 10 below). Both distribution-free cutoffs carry over: the miner cutoff becomes
-`φ₁=C_M/(R−p)`, and the fossil cutoff becomes `φ°_dm=(β+p−c−C_F)/β` (same numerator, denominator
-`β` because the utility internalizes miner entry and the coupling term cancels). The double
-margin even buys a new result the utility-operated model hides — the fossil and FCL cutoffs
-**decouple** (`C_M` enters only `φ₁`). So the three margins are not just internally consistent;
-the theory itself now exists in the main model.
+**Update (this is now done — cutoffs AND the carbon coefficient).** The *entire*
+capacity-and-carbon theory has been re-derived in the paper's main double-margin model — see
+`role1_double_margin.tex` and `verify_double_margin.py` (**9/9 PASS**, claim 10 below):
+- both distribution-free cutoffs carry over — miner `φ₁=C_M/(R−p)`, fossil
+  `φ°_dm=(β+p−c−C_F)/β` (same numerator, denominator `β` because the utility internalizes
+  miner entry and the coupling term cancels);
+- the fossil and FCL cutoffs **decouple** (`C_M` enters only `φ₁`) — a result the
+  utility-operated model hides;
+- the **exact carbon coefficient** transfers: `Φ_dm` is the utility-operated `Φ` verbatim with
+  the single substitution `C_M/(R−c) → C_M/(R−p)`; verified `Δ=Φ_dm` to 2e-4 at the DM
+  equilibrium (`Φ_dm=−2.3749` vs `Δ=−2.3752`). Not just the sign — the full closed form.
+
+The only section still in a different margin is §5.3's prices-vs-quantities, which is
+**deliberately** the deregulated market (`R−c−τ`), a distinct structure, not an inconsistency.
+So the theory now lives natively in the main model, and the margin table below is the map.
 
 ## Claims, with their hypotheses
 
@@ -61,9 +69,9 @@ the theory itself now exists in the main model.
 | 7 | Frontier identity `C(τ)−C(0)=Φ_ft(1−Λ)`; surplus-only carbon-optimal | **Condition M** (`K_R'≤0≤K_F'`) — *sufficient, not necessary, and false at interior optima* | Identity is definitional. The ranking is **proved under Condition M**. But Condition M **fails** where `K_R` is genuinely interior: `K_R` *rises* with τ (1.753→2.655) and `Λ∈[0.139,0.218]>0`. The earlier "verified numerically" was degenerate — `K_R` was pinned at the barrier, so `K_R'=0` trivially. The **conclusion** (`Λ<1`, surplus-only carbon-optimal) survives. |
 | 8 | §5.3: allocation equivalence, boundary selection, revenue divergence, long-run strict ranking | Deregulated setting; `τ̄=R−c` | **Proved.** The newest and least pre-empted work. |
 | 9 | Calibration: break-even separability; `C̄_M` insensitivity | None | **Proved**, and reproduces the Guide's coefficients (2533.0, 6181.9) and every table cell. |
-| 10 | **Double-margin cutoffs** `φ₁=C_M/(R−p)`, `φ°_dm=(β+p−c−C_F)/β`; the cutoffs decouple | Third-party miner entry (the paper's *main* model); interior optimum | **Proved and verified** (`verify_double_margin.py` 7/7, exact to 1e-16 / 1e-4). Answers the "wrong margin" objection: the distribution-free cutoffs survive the double margin, and the decoupling (`C_M` only in `φ₁`) is new. |
+| 10 | **Double-margin cutoffs** `φ₁=C_M/(R−p)`, `φ°_dm=(β+p−c−C_F)/β`; cutoffs decouple; **exact carbon coefficient** `Φ_dm` (utility-operated `Φ` with `C_M/(R−c)→C_M/(R−p)`) | Third-party miner entry (the paper's *main* model); interior optimum | **Proved and verified** (`verify_double_margin.py` **9/9**: cutoffs exact to 1e-16 / 1e-4; `Δ=Φ_dm` to 2e-4). The whole capacity-and-carbon theory now lives in the main model. Decoupling (`C_M` only in `φ₁`) is new. |
 | 11 | **Φ certifies a carbon *increase*** on its whole valid domain | Large-FCL; the naive rule | **Established** (`prop:alwaysup`). At every large-FCL optimum solved, `Δ<0`, `Δ∈[−3.249,−1.208]` bounded from zero. The "classification" is honestly a certification of backfire; decarbonization is a small-FCL corner (`Δ>0` first at `C_R=0.05`, `K_M≪K_R`). Turns the "empty branch" objection into the result. |
-| 12 | **Storage** dominates the FCL as a carbon tech, but the dispatch gap is storage-invariant; FCL is higher-*value* iff `R>c+η[φ°c+(1−φ°)(β+p)]` | Static expected-flow storage | **Proved and verified** (`verify_storage.py` 4/4). Concedes the referee's carbon point, shows the paper's dispatch results survive (gap invariant to `K_S`, spread 0.0), and locates the FCL's value. |
+| 12 | **Storage** dominates the FCL as a carbon tech, but the dispatch gap is storage-invariant (survives rivalry); FCL is higher-*value* iff `R>c+η[φ°_dm·c+(1−φ°_dm)(β+p)]` | Static expected-flow storage | **Proved and verified** (`verify_storage.py` **6/6**). Concedes the carbon point, shows the dispatch results survive (gap invariant to `K_S`; robust to rivalry, +2.129→+2.116), and the value verdict is robust — higher tariff `p` pushes it *toward* the load. |
 
 ## One regime boundary, two results
 
