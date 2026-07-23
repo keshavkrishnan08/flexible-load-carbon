@@ -470,6 +470,45 @@ verify_week3.py 37/37. PDF 7pp. Commits 20a5f10, be0dc05, a010643.
 
 ---
 
+## E25 · 2026-07-22 · Barrier-artifact audit — the leverage numbers were measured off a frozen optimizer
+
+**Objective.** Stress-test the Week-3/4 leverage results after noticing the carbon-frontier
+sweeps ran with the optimizer's renewable barrier (`K_R ≤ 0.99·Dbar`) possibly binding.
+
+**Method.** Re-solved the budget-family optimum at the standard `C_M=0.5` with a slack cap
+(20×), asserting `K_R` interior before drawing any conclusion; cross-checked against the
+Week-3 frontier and `validate_regime_crossing`.
+
+**Result.** The barrier bound in *every* cell of the old sweep, so `K_R'(τ)=0` held trivially
+and Condition M was never actually tested. At a genuine interior optimum it **fails**: `K_R`
+*rises* with τ (1.753→2.655) and the leverage is **positive**, `Λ∈[0.139,0.218]` (Week-4),
+independently `Λ∈[0.218,0.301]` (Week-3 frontier) — not the negative values reported off the
+frozen stock. ~~Λ<0, fossil-running does not even raise K_R~~ → corrected: the induced
+build-out offsets ≈ a fifth to a third of the load's footprint.
+
+**Conclusion.** The *conclusion* survives (Λ<1 ⇒ surplus-only carbon-optimal), but Condition M
+is sufficient, not necessary, and false where `K_R` is interior. Propagated to all 9 source
+sites + master. Recorded as rem:condMfails (Week 4) and the sharpened Λ remark (Week 3).
+
+**Also this session (harness hardening).**
+- **B6 → a unification.** The Week-1 knife-edge (MV constant in `K_R`) holds exactly on
+  large-FCL and *breaks* at the small-FCL crossing — the *same* boundary that carries the
+  Φ=Δ carbon identity. One regime boundary governs both headline results (rem:oneboundary).
+- **Week-3 quadrature defect.** `cons_fossil` masked a fixed grid, so a moving limit jumped
+  ~5e-3 as it crossed nodes; this faked a monotone-fossil-lemma failure (`e(K_R)` up on 60/100
+  fine steps) and a false negative carbon saving. Endpoints made exact → 0/100, saving>0. Lemma
+  test grid tightened 0.5→0.02.
+- **Cap decides size, not sign.** 5 families × 5 caps: carbon saving positive in all 25 cells;
+  magnitude swings 3000× with the cap, so no magnitude from that sweep is quotable.
+- **Checked/polishing fsolve.** Bare `fsolve` returned non-solutions silently; `_fsolve_checked`
+  now treats the residual as ground truth (not ier) and polishes stalls (B(1,3) at C_M=0.502).
+  Caught a genuine boundary non-solution at `C_M=0.30` (`K_F`≈`Dbar`).
+- Closed M3/M6/M9/M13; `verify_exact` 21/21, `verify_week3` 42/42, `verify_week4` interior-clean.
+
+— R1
+
+---
+
 ## Verification ledger
 | Date | Claim | Script | Result |
 |---|---|---|---|
