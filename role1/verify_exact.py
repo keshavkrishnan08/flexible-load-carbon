@@ -65,32 +65,37 @@ def fd_hess(d,P,v,h=1e-4):
     return 0.5*(H+H.T)  # symmetrize
 
 def _fsolve_checked(fn,x0,xtol,tag,rtol=1e-8,tries=4):
-    """fsolve that REFUSES to return a non-solution, and polishes stalls before giving up.
+    """Solve fn(x)=0, refuse to return a non-solution, and escalate through robust solvers.
 
-    Two failure modes are handled separately, because they need opposite responses:
+    Bare fsolve returns its last iterate whatever happened, so every downstream check then
+    runs on a point that does not solve the FOCs.  Two real failure modes are handled:
 
-      * fsolve reports ier=5 ("not making good progress") both when it is genuinely stuck
-        AND when it has already reached machine precision and cannot improve.  So the
-        RESIDUAL is ground truth, not ier: accept on small |F| regardless of ier.
+      * ier=5 ("not making good progress") fires both when genuinely stuck AND when already
+        at machine precision -- so the RESIDUAL is ground truth, not ier.
+      * fsolve's forward-difference Jacobian stalls at interior points with a spiky integrand
+        (D~Beta(1,3) at C_M=0.502): |F| sticks at ~1e-6.  We escalate: restart fsolve from the
+        best iterate, then fall back to Levenberg-Marquardt least_squares, which handles the
+        noisy Jacobian cleanly (verified to reach 1e-16 on exactly this stall).
 
-      * fsolve's forward-difference Jacobian can stall at a perfectly interior point that is
-        merely an awkward start -- observed on D~Beta(1,3) at C_M=0.502, where the solve
-        halts at |F|=2.3e-6 while the same point restarted converges to 1e-16.  So on a
-        residual above rtol we POLISH: restart from the stalled iterate (with a vanishing
-        jitter after the first retry to break the Jacobian symmetry) and keep the best.
-
-    Only if every attempt stays above rtol do we raise -- then it is a real non-solution."""
+    Raises only if every solver stays above rtol -- then it is a real non-solution."""
+    def res(x): return float(np.max(np.abs(np.asarray(fn(x),dtype=float))))
     best=None; bestres=np.inf; x=np.asarray(x0,dtype=float)
     for k in range(tries):
         sol,info,ier,msg=optimize.fsolve(fn,x,xtol=xtol,full_output=True)
-        res=float(np.max(np.abs(np.asarray(fn(sol),dtype=float))))
-        if res<bestres and np.all(np.isfinite(sol)): best,bestres=sol,res
+        if np.all(np.isfinite(sol)) and res(sol)<bestres: best,bestres=sol,res(sol)
         if bestres<=rtol: return best
-        # polish: restart from the best point so far, jittered after the first retry
         x=best if best is not None else x
         if k>0: x=x*(1.0+1e-7)
-    raise RuntimeError(f"{tag}: fsolve did not solve the system after {tries} attempts "
-                       f"(best max|F|={bestres:.3e} > {rtol:.0e}, last ier={ier}): {msg.strip()}")
+    # escalate to Levenberg-Marquardt from the best fsolve iterate (robust to noisy Jacobians)
+    try:
+        lm=optimize.least_squares(lambda v:np.asarray(fn(v),dtype=float),best,method='lm',
+                                  xtol=1e-14,ftol=1e-14,gtol=1e-14)
+        if np.all(np.isfinite(lm.x)) and res(lm.x)<bestres: best,bestres=lm.x,res(lm.x)
+    except Exception:
+        pass
+    if bestres<=rtol: return best
+    raise RuntimeError(f"{tag}: no solver reached the tolerance "
+                       f"(best max|F|={bestres:.3e} > {rtol:.0e}): {msg.strip()}")
 
 def solve_with(d,P,x0):
     return _fsolve_checked(lambda v:grad(d,P,v),x0,1e-12,'solve_with')
