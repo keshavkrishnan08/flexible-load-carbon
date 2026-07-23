@@ -84,7 +84,8 @@ def _fsolve_checked(fn,x0,xtol,tag,rtol=1e-8,tries=4):
                        f"(best max|F|={bestres:.3e} > {rtol:.0e}): {msg.strip()}")
 
 def solve_with(d,P,x0):
-    return _fsolve_checked(lambda v:[gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)],x0,1e-11,'solve_with')
+    return _fsolve_checked(lambda v:[gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)],x0,1e-11,
+                           'solve_with',rtol=1e-5)  # ScaleMix ns=800 residual floor
 def solve_no(d,P,x0):
     R,c,b,p,CF,CR=P['R'],P['c'],P['beta'],P['p'],P['CF'],P['CR']
     def foc(v):
@@ -93,7 +94,7 @@ def solve_no(d,P,x0):
         t1,_=integrate.quad(lambda x:d.FKR(x,KR),0,KF,limit=60)
         t2,_=integrate.quad(lambda x:d.FKR(x,KR),KF,d.Dbar,limit=60)
         return [e1,c*t1+(b+p)*t2-CR]
-    return _fsolve_checked(foc,x0,1e-11,'solve_no')
+    return _fsolve_checked(foc,x0,1e-11,'solve_no',rtol=1e-5)  # ScaleMix residual floor
 
 print("="*72)
 print("V1  Closed forms at FIXED K_R  (uniform & power-law) vs quadrature")
