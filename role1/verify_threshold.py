@@ -72,15 +72,25 @@ def Delta(d,P):
 
 def run(d,P,tag):
     print(f"\n[{tag}]  (R={P['R']},C_M={P['CM']})")
-    prev=None; crossed=None
+    prev=None; crossed=None; skipped=0
     for CR in [0.25,0.35,0.5,0.7,0.9,1.2,1.6,2.2,3.0]:
         P['CR']=CR
-        D,KR,KRn=Delta(d,P)
+        try:
+            D,KR,KRn=Delta(d,P)
+        except RuntimeError as e:
+            # no interior equilibrium at this (R,C_M,C_R) -- the checked solver refuses a
+            # non-solution rather than returning garbage (same boundary-degeneracy as the
+            # skewed families in verify.py).  Report and continue; do not crash the sweep.
+            skipped+=1
+            print(f"   C_R={CR:4.2f}  boundary-degenerate: {str(e)[:52]}")
+            continue
         tag2 = "  Delta<0" if D<0 else ""
         print(f"   C_R={CR:4.2f}  KR*={'unb' if KR>CAP else f'{KR:5.2f}':>5}  KR^o={KRn:5.2f}  Delta={D:+8.4f}{tag2}")
         if prev is not None and prev[1]>=0 and D<0: crossed=(prev[0],CR)
         prev=(CR,D)
-    print(f"   => sign change (C_R_dagger) bracketed in {crossed}" if crossed else "   => no crossing in range")
+    note=f" ({skipped} boundary-degenerate points skipped)" if skipped else ""
+    print((f"   => sign change (C_R_dagger) bracketed in {crossed}" if crossed
+           else "   => no crossing in range")+note)
 
 # favorable: high R (strong capacity substitution), C_M small, right-skew helps
 P=dict(R=1.55,c=0.5,beta=4.0,p=1.0,CF=0.6,CM=0.45,Dbar=10.0)  # R<c+CF+CM=1.55? boundary -> use 1.54
