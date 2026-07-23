@@ -134,19 +134,27 @@ print("\n"+"="*72)
 print("V2  Interior families:  K_R* vs K_R^o  and the shift-ratio law")
 print("="*72)
 def _solve_ms(d,P,starts):
-    """Multi-start solve: for right-mass densities (Beta(3,1), Beta(5,2)) the equilibrium is
-    pushed toward the boundary and fsolve from a single start lands on a spurious root
-    (KR<0, |F|=0.5).  Try several physical starts and return the first interior solution."""
-    last=None
+    """Multi-start solve.  For right-mass densities (Beta(3,1), Beta(5,2)) the equilibrium is
+    pushed to the boundary and a single start lands on a spurious root (KR<0, |F|=0.5).
+
+    Cheap probe first: a plain fsolve (no polish) from each start, keeping only points that are
+    genuinely interior (all K>0, K_F,K_M below 0.98*Dbar).  Only the best interior probe is
+    then polished by the guarded solve_with.  This avoids running the expensive fsolve/LM
+    cascade on spurious roots, so boundary-degenerate families fail fast instead of grinding
+    through the full escalation on every start."""
+    interior=lambda s: (np.all(np.isfinite(s)) and all(v>1e-3 for v in s)
+                        and s[1]<0.98*d.Dbar and s[2]<0.98*d.Dbar)
+    fn=lambda v:[gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)]
+    best=None; bestres=np.inf
     for x0 in starts:
-        try:
-            s=solve_with(d,P,x0)
-            if all(v>1e-3 for v in s) and s[2]<0.98*d.Dbar and s[1]<0.98*d.Dbar:
-                return s
-            last=s
-        except RuntimeError as e:
-            last=e
-    raise RuntimeError(f"no interior equilibrium from {len(starts)} starts (last={last})")
+        s=optimize.fsolve(fn,x0,xtol=1e-9)               # cheap probe, no cascade
+        if interior(s):
+            r=float(np.max(np.abs(fn(s))))
+            if r<bestres: best,bestres=s,r
+            if bestres<1e-4: break                       # good enough probe -> stop searching
+    if best is None:
+        raise RuntimeError(f"no interior equilibrium from {len(starts)} starts")
+    return solve_with(d,P,best)                           # polish the best interior probe
 
 _STARTS=[[3,5,6],[2,6,7],[2.5,5.5,5]]
 def study(d,P,tag,x0w,x0n):
