@@ -28,8 +28,10 @@ set is an interval under monotonicity of $\Phi(\CR)$ (Condition~S); and (c) surp
 globally carbon-optimal ($\Lambda\le1$) under a transparent capacity-monotonicity condition
 (under Condition~M, which in fact \emph{fails} at interior optima---see the leverage
 remark---though the conclusion survives regardless), which we \emph{prove}
-forces $\Lambda\le0$. Each condition holds throughout the scan. This converts three
-numerical claims into proved statements whose only ungoverned inputs are named, checkable
+forces $\Lambda\le0$. Conditions~S and the per-mean margins hold throughout the scan;
+Condition~M holds only where $\KR$ is barrier-pinned and \emph{fails} at genuine interior
+optima, though its conclusion $\Lambda<1$ survives there regardless (Remark~\ref{r1w4-rem:condMfails}).
+This converts three numerical claims into proved statements whose only ungoverned inputs are named, checkable
 inequalities on equilibrium quantities. Every identity is checked against quadrature in
 \texttt{verify\_week4.py}: $\Phi$ matches $\Delta$ to machine precision, the margins
 $\mathrm{D}_\ell,\mathrm{D}_m$ and Conditions~S,~M all hold, and the per-mean \emph{iff} is
