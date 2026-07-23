@@ -127,7 +127,7 @@ reaches tolerance. It caught a genuine boundary non-solution at `C_M=0.30` (`K_F
 notebook now says so, and the reproducible evidence is the 60-point grid above.
 
 **Tolerance vs accuracy floor.** `verify.py` evaluates FOC residuals through a ScaleMix
-(`ns=800` scale nodes) + `limit=60` quad. For skewed densities (`D~Beta(1,3)`) the `gR`
+(`ns=601` scale nodes) + `limit=60` quad. For skewed densities (`D~Beta(1,3)`) the `gR`
 residual floors at ~`1.4e-5`, *flat across quad subdivisions* — the floor is the mixture
 discretization, not the integrator. Demanding `rtol=1e-8` there asks for accuracy the script
 does not have, so `solve_with`/`solve_no` in `verify.py` accept at `1e-5` (the genuine floor);
