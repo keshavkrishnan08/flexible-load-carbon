@@ -41,20 +41,28 @@ def solve_with(d,P):
         gF=R*(Fk-Fg)-c*(1-Fg)+(b+p)*(1-Fk)-CF
         gR=R*d.intFKR(KF-KM,KF,KR)+c*d.intFKR(-KM,KF-KM,KR)+(b+p)*d.intFKR(KF,d.Dbar,KR)-CR
         return [gR,gF,gM]
+    best=None; bestres=np.inf
     for x0 in ([1.0,5.0,6.0],[0.2,4.0,5.0],[5.0,8.0,9.0]):
         s,info,ier,_=optimize.fsolve(foc,x0,full_output=True,xtol=1e-9)
-        if ier==1 and s[0]>-0.5: return np.maximum(s,[0,0,0])
-    return np.maximum(s,[0,0,0])
+        res=float(np.max(np.abs(foc(s))))
+        if res<bestres: best,bestres=s,res
+        if ier==1 and s[0]>-0.5 and res<1e-7: return np.maximum(s,[0,0,0])
+    if bestres>1e-6: raise RuntimeError(f"solve_with: no start converged (best|F|={bestres:.2e})")
+    return np.maximum(best,[0,0,0])
 def solve_no(d,P):
     R,c,b,p,CF,CR=P['R'],P['c'],P['beta'],P['p'],P['CF'],P['CR']
     def foc(v):
         KR,KF=np.maximum(v,[0,0])
         e1=d.F(KF,KR)-(b+p-c-CF)/(b+p-c)
         return [e1, c*d.intFKR(0,KF,KR)+(b+p)*d.intFKR(KF,d.Dbar,KR)-CR]
+    best=None; bestres=np.inf
     for x0 in ([0.5,6.0],[0.0,5.0],[5.0,8.0]):
         s,info,ier,_=optimize.fsolve(foc,x0,full_output=True,xtol=1e-9)
-        if ier==1 and s[0]>-0.5: return np.maximum(s,[0,0])
-    return np.maximum(s,[0,0])
+        res=float(np.max(np.abs(foc(s))))
+        if res<bestres: best,bestres=s,res
+        if ier==1 and s[0]>-0.5 and res<1e-7: return np.maximum(s,[0,0])
+    if bestres>1e-6: raise RuntimeError(f"solve_no: no start converged (best|F|={bestres:.2e})")
+    return np.maximum(best,[0,0])
 
 def Delta(d,P):
     KR,KF,KM=solve_with(d,P); KRn,KFn=solve_no(d,P)

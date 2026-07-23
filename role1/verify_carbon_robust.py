@@ -54,8 +54,13 @@ def focs_w(v):
 def focs_n(v):
     KR,KF=v
     return [d.F(KF,KR)-(b+p-c-CF)/(b+p-c), c*d.intFKR(0,KF,KR)+(b+p)*d.intFKR(KF,d.Dbar,KR)-CR]
-KR,KF,KM=optimize.fsolve(focs_w,[2.7,5.0,6.0],xtol=1e-11)   # cold start (interior)
-KRn,KFn=optimize.fsolve(focs_n,[1.8,7.0],xtol=1e-11)
+def _solved(fn,x0):
+    sol,info,ier,msg=optimize.fsolve(fn,x0,xtol=1e-11,full_output=True)
+    r=float(max(abs(v) for v in fn(sol)))
+    if r>1e-7: raise RuntimeError(f"cold-start solve did not converge (|F|={r:.2e}, ier={ier})")
+    return sol
+KR,KF,KM=_solved(focs_w,[2.7,5.0,6.0])   # cold start (interior)
+KRn,KFn=_solved(focs_n,[1.8,7.0])
 phi=(b+p-c-CF)/(b+p-c); q=d.F(0,KRn)
 mu_low=d.condmean(-KR,KF-KM,KR); mu_mid=d.condmean(0,KFn,KRn)
 Ef = (KM-KR)+d.int1mF(-KR,KF-KM,KR) if KM>KR else d.int1mF(-KM,KF-KM,KR)

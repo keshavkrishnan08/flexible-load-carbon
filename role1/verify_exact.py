@@ -64,15 +64,33 @@ def fd_hess(d,P,v,h=1e-4):
         H[:,i]=(gp-gm)/(2*h)
     return 0.5*(H+H.T)  # symmetrize
 
-def _fsolve_checked(fn,x0,xtol,tag):
-    """fsolve that REFUSES to return a non-solution.  Bare fsolve returns its last
-    iterate whatever happened; every downstream 'verification' then runs on a point
-    that does not solve the FOCs.  Raise instead."""
-    sol,info,ier,msg=optimize.fsolve(fn,x0,xtol=xtol,full_output=True)
-    res=float(np.max(np.abs(np.asarray(fn(sol),dtype=float))))
-    if ier!=1 or not np.all(np.isfinite(sol)) or res>1e-6:
-        raise RuntimeError(f"{tag}: fsolve did not converge (ier={ier}, max|F|={res:.3e}): {msg.strip()}")
-    return sol
+def _fsolve_checked(fn,x0,xtol,tag,rtol=1e-8,tries=4):
+    """fsolve that REFUSES to return a non-solution, and polishes stalls before giving up.
+
+    Two failure modes are handled separately, because they need opposite responses:
+
+      * fsolve reports ier=5 ("not making good progress") both when it is genuinely stuck
+        AND when it has already reached machine precision and cannot improve.  So the
+        RESIDUAL is ground truth, not ier: accept on small |F| regardless of ier.
+
+      * fsolve's forward-difference Jacobian can stall at a perfectly interior point that is
+        merely an awkward start -- observed on D~Beta(1,3) at C_M=0.502, where the solve
+        halts at |F|=2.3e-6 while the same point restarted converges to 1e-16.  So on a
+        residual above rtol we POLISH: restart from the stalled iterate (with a vanishing
+        jitter after the first retry to break the Jacobian symmetry) and keep the best.
+
+    Only if every attempt stays above rtol do we raise -- then it is a real non-solution."""
+    best=None; bestres=np.inf; x=np.asarray(x0,dtype=float)
+    for k in range(tries):
+        sol,info,ier,msg=optimize.fsolve(fn,x,xtol=xtol,full_output=True)
+        res=float(np.max(np.abs(np.asarray(fn(sol),dtype=float))))
+        if res<bestres and np.all(np.isfinite(sol)): best,bestres=sol,res
+        if bestres<=rtol: return best
+        # polish: restart from the best point so far, jittered after the first retry
+        x=best if best is not None else x
+        if k>0: x=x*(1.0+1e-7)
+    raise RuntimeError(f"{tag}: fsolve did not solve the system after {tries} attempts "
+                       f"(best max|F|={bestres:.3e} > {rtol:.0e}, last ier={ier}): {msg.strip()}")
 
 def solve_with(d,P,x0):
     return _fsolve_checked(lambda v:grad(d,P,v),x0,1e-12,'solve_with')
