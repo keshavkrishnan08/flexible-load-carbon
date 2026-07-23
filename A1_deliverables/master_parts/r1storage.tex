@@ -13,10 +13,11 @@ storage lowers grid carbon and the load does not---storage dominates the load \e
 carbon technology}; (ii) the load's carbon-relevant object is not surplus absorption but
 \emph{dispatch}, and the naive-versus-surplus-contract carbon gap is exactly invariant to how
 much storage is installed; (iii) the load is the higher-\emph{value} user of a surplus MWh
-precisely when computing value clears a sharp threshold $R>c+\eta\,[\phio c+(1-\phio)\bp]$,
-which high-value compute meets and a low-value load does not. The load is not a carbon
-mitigation technology; it is a computing demand whose dispatch is a carbon lever, and that
-lever is orthogonal to storage.
+precisely when computing value clears a sharp threshold $R>c+\eta\,[\phio_{\mathrm{dm}}c+(1-\phio_{\mathrm{dm}})\bp]$,
+robustly met by high-value compute---and, crucially, a \emph{higher} tariff (the empirical
+correction the calibration critics demand) only lowers storage's value and pushes the verdict
+\emph{toward} the load. The load is not a carbon mitigation technology; it is a computing
+demand whose dispatch is a carbon lever, and that lever is orthogonal to storage.
 \end{abstract}
 
 
@@ -130,6 +131,42 @@ $0.20$ & $1.14$ & $<$ & storage\\
 The main-model row ($\Pr(\text{outage})=1-\phio_{\mathrm{dm}}=0.10$) is the relevant one, and
 there the load clears; the utility-operated row ($0.14$) is the mismatched comparison that
 reverses it.
+
+\subsection*{The verdict is robust, not knife-edge: both contested inputs push toward the load}
+A fair worry is that ``the load clears'' rests on a thin margin and a disputed tariff (EIA-861
+rebuilds $p$ at \$66--90 versus the assumed \$50). Two facts dissolve the worry, and both cut
+the \emph{same} way.
+
+\emph{Higher $p$ helps the load.} Storage's value $v_{\mathrm{stor}}=\eta[\phio_{\mathrm{dm}}c+(1-\phio_{\mathrm{dm}})\bp]$
+\emph{falls} as $p$ rises, because a higher tariff pushes $\phio_{\mathrm{dm}}=(\bp-c-\CF)/\beta$
+toward one, making outages rarer and storage's outage-arbitrage premium scarcer:
+$v_{\mathrm{stor}}=0.935,\,0.782,\,0.612,\,0.425,\,0.221$ at $p=0.5,0.7,0.9,1.1,1.3$. So the
+empirical correction the calibration critics demand---a \emph{higher} tariff---moves the
+verdict \emph{toward} the load, not away from it.
+
+\emph{Only the doubly-conservative corner favors storage.} The load's surplus value $R-c$ is
+independent of $p$, so the verdict is a clean function of $(R,p)$:
+\begin{center}\small
+\begin{tabular}{c|ccccc}
+\toprule
+$R\backslash p$ & $0.5$ & $0.7$ & $0.9$ & $1.1$ & $1.3$\\
+\midrule
+$1.4$ & storage & load & load & load & load\\
+$1.8$ & load & load & load & load & load\\
+$2.5$ & load & load & load & load & load\\
+$4.0$ & load & load & load & load & load\\
+\bottomrule
+\end{tabular}
+\end{center}
+The single cell where storage wins is $R=1.4,\,p=0.5$---the lowest computing value
+\emph{and} the lowest tariff at once. Bitcoin and AI compute sit far above $R=1.4$ (that value
+is a deliberately conservative floor); for any $R\ge1.8$ the load is the higher-value surplus
+user at \emph{every} tariff in the band, clearing by a margin of $+1.06$ at $R=2.5$ and $+6.56$
+at $R=8$ against the worst-case $v_{\mathrm{stor}}$ over $p\in[0.5,1.3]$. The distance to the
+boundary grows with computing value; the verdict is a coin-flip only at the corner where the
+load is barely worth running, and there the answer rightly tips to storage. Pinning $p$
+against EIA-861 (an A2 task) sharpens the number but cannot flip a verdict that a higher $p$
+only reinforces.
 
 \section{What this settles}
 \begin{remark}[The honest bottom line]
