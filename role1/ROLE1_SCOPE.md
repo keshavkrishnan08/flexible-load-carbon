@@ -25,6 +25,25 @@ configurations. If Role 1's results are to serve the main line, cutoffs, FOCs, t
 and the Φ coefficient must be re-derived with `R−p` and `p−c`. That is mechanical but not
 trivial, and it has not been done.
 
+### Which margin appears where, and why (read before objecting to "three margins")
+
+A referee will notice that the three Role-1 sections use three different margins. They are
+not inconsistent; each is the correct margin for its section's market structure. But the
+deliverables did not say so, so this table is the reconciliation:
+
+| Section | Market structure | Margin | Why |
+|---|---|---|---|
+| Theory (Weeks 2–4): φ₁, φ₂, Φ, `thm:classify`, `thm:decarb` | Utility-operated: utility runs the FCL, captures `R`, pays `c` | **`R−c`** | The utility's own computing margin. `φ₁=C_M/(R−c)`, Φ coefficient `C_M/(R−c)`. |
+| Calibration (§7): break-even `P*`, entry threshold `C̄_M` | Third-party miner entry at tariff `p` | **`R−p`** | The *entry* question is a miner's, and a miner earns `R`, pays tariff `p`. `C̄_M=(R−p)φ°` is the miner's entry margin, not the utility's. |
+| §5.3 prices-vs-quantities | Deregulated competitive market with a per-MWh tax `τ` | **`R−c−τ`** | Competitive dispatch nets the tax off the surplus margin; `τ̄=R−c` is the greening threshold. |
+
+So the three margins track three market structures, linked by §5.2's decentralization
+theorem (the deregulated equilibrium decentralizes the utility-operated planner at `P_r=R`).
+**What is genuinely open** is not the internal consistency but the target: the paper's *main*
+model is the double-margin miner setup, and the *theory* is still stated in the
+utility-operated `R−c`. Aligning the theory to the main model (item above) remains the
+advisor decision. The calibration already speaks the miner's `R−p`; the theory does not yet.
+
 ## Claims, with their hypotheses
 
 | # | Claim | Hypotheses | Status |

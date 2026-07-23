@@ -1,7 +1,7 @@
 \documentclass[11pt,reqno]{amsart}
 \usepackage[T1]{fontenc}\usepackage{lmodern}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage[margin=1in]{geometry}\usepackage{microtype}\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}\usepackage{microtype}\usepackage{booktabs}\usepackage{xcolor}
 \usepackage[colorlinks=true,linkcolor=blue!55!black]{hyperref}
 \theoremstyle{plain}\newtheorem{proposition}{Proposition}\newtheorem{corollary}[proposition]{Corollary}
 \theoremstyle{remark}\newtheorem{remark}[proposition]{Remark}
@@ -140,6 +140,16 @@ form of $P^{*}$ and the robustness of $\CMbar$. They say nothing about the input
 In particular the tariff $p=\$50$/MWh is an assumption, not a measurement; rebuilding it
 from utility-level data moves $\CMbar=(R-p)\phio$ one-for-one and is the single most
 consequential empirical check on the entry threshold.
+\end{remark}
+
+\begin{remark}[Margin: this section is the miner's $R-p$, deliberately]
+The break-even here uses the miner margin $R-p$, whereas the capacity theory (Weeks 2--4)
+uses the utility margin $R-c$. This is intentional, not a discrepancy: entry is a
+\emph{third-party miner's} decision---a miner earns $R$ from computing and pays the tariff
+$p$---so $\CMbar=(R-p)\phio$ is the miner's entry margin, while the utility-operated capacity
+program earns $R$ and pays generation cost $c$. The two market structures, and the third
+($R-c-\tau$ in the deregulated instrument comparison of \S5.3), are reconciled in the
+project scope note; \S5.2's decentralization theorem links them.
 \end{remark}
 
 \end{document}
