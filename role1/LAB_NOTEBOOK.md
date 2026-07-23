@@ -509,6 +509,46 @@ sites + master. Recorded as rem:condMfails (Week 4) and the sharpened Λ remark 
 
 ---
 
+## E26 · 2026-07-22 · Referee-response arc — closing the three blocking issues (main model, empty Phi, storage)
+
+**Objective.** An adversarial Management-Science referee graded the A1 theory D+/Reject on
+three blocking issues: (1) the theory solves the utility-operated model, not the paper's main
+double-margin (third-party-miner) model; (2) Phi's carbon "classification" is empty on its
+valid domain (only ever "carbon rises"); (3) storage is absent though it competes for the
+same surplus. Response was iterated against re-grades until four of five dimensions reached B.
+
+**Method & result (three new deliverables, all verified).**
+- **Double margin** (`role1_double_margin.tex`, `verify_double_margin.py` 8/8). Re-derived the
+  cutoffs in the main model: miner `phi_1 = C_M/(R-p)` (exact 1e-16); fossil
+  `phi_o_dm = (b+p-c-C_F)/beta` (exact 1e-4) — same numerator as utility-operated, denominator
+  `beta`, because the utility internalizes miner entry (`dK_M/dK_F=1`) and the coupling term
+  cancels. New structural fact: the cutoffs **decouple** (`C_M` only in `phi_1`), giving a
+  **separation principle** — fossil adequacy is independent of every load characteristic. The
+  `Delta=Phi` identity is model-free and carries over (`prop:dmidentity`); the negative sign is
+  a numerical regularity there too (`Delta=-2.375`).
+- **Phi reframing** (`role1_week4_theory.tex`). `prop:alwaysup` relabeled as an `observation`
+  (Week-2 minimality forbids a distribution-free proof); title fixed ("...Raises Emissions").
+  The empty branch is owned as the certification result.
+- **Storage** (`role1_storage.tex`, `verify_storage.py` 6/6). Conceded storage dominates the
+  FCL as a carbon tech (`prop:carbon`); showed the naive-vs-surplus dispatch gap is
+  storage-invariant (`prop:invariant`) and survives rivalry (`cor:rivalry`, +2.129->+2.116).
+  Value threshold `R* = c+eta[phi_o_dm c+(1-phi_o_dm)(b+p)]` with `phi_o_dm` (fixing a margin
+  bug). **De-fragilized:** `v_stor` FALLS with the tariff `p`, so the contested-higher EIA `p`
+  pushes the verdict TOWARD the load; only the corner `R=1.4,p=0.5` favors storage, and any
+  `R>=1.8` clears at every `p`.
+
+**Grade trajectory (adversarial re-grades):** D+ -> C- -> B- -> (targeting B in all five
+dimensions). Novelty/Rigor/Honesty/Modeling reached B; Practical was the last at B- and was
+de-fragilized this round.
+
+**Conclusion.** The contribution now lives natively in the paper's main model, with a proved
+novel decoupling/separation result, an honestly-labeled backfire certificate, and a storage
+section that concedes what it must and proves what survives.
+
+— R1
+
+---
+
 ## Verification ledger
 | Date | Claim | Script | Result |
 |---|---|---|---|
