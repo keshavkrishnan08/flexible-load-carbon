@@ -145,12 +145,29 @@ precision at the equilibrium. The double margin even buys a new, sharper structu
 statement---the decoupling of fossil sizing from load entry (Corollary~\ref{dm-cor:decouple})---that
 the utility-operated model cannot express.
 
-\emph{Does not settle.} The physical carbon functional $\Phi$ is unchanged (it depends on
-fossil burned, a function of $(\KR,\KF,\KM)$ that is identical across configurations), but the
-\emph{equilibrium} it is evaluated at moves: miners under-provide $\KM$, so less renewable
-surplus is absorbed. Whether double-marginalization raises or lowers emissions relative to the
-integrated planner is a separate comparative static, signed by the same $\Phi$ machinery
-evaluated at two capacity vectors rather than one. And the renewable cutoff $\KR$ still solves
-a shift-ratio first-order condition---now with the entry channel $\partial\KM/\partial\KR=\FKR(\KF-\KM)/f(\KF-\KM)$
+\section{The carbon classification carries over}
+The physical carbon functional depends on fossil burned, a function of $(\KR,\KF,\KM)$ that is
+identical across configurations. The classification identity $\Delta=\Phi$ is therefore
+\emph{model-free}: it is the fossil-integral bookkeeping given the cutoffs, and it holds at
+whatever equilibrium the cutoffs describe. In the double margin the only change is that the
+computing cutoff $\varphi_1$ that enters $\Phi$'s coefficient is now $\CM/(R-p)$ rather than
+$\CM/(R-c)$, and the equilibrium is the double-margin one.
+\begin{proposition}[Naive dispatch raises carbon in the main model too]\label{dm-prop:dmcarbon}
+At the double-margin naive-dispatch equilibrium, $\Delta=\Phi$ with $\varphi_1=\CM/(R-p)$, and
+$\Delta<0$: carbon rises. Verified at $R=1.4,p=0.7,c=0.5,\CM=0.3$: the equilibrium is
+$(\KR,\KF,\KM)=(1.982,7.091,3.563)$, large-\textsc{fcl}, with $F(\KF-\KM)=0.4286=\CM/(R-p)$ to
+$10^{-4}$; against the no-load benchmark $(\KRo,\KFo)=(1.829,6.729)$ the carbon change is
+$\Delta=\E[\fossil^{\circ}]-\E[\fossil^{*}]=3.972-6.362=-2.390$.
+\end{proposition}
+So the certification of Section~4 of the Week-4 note---the unconstrained rule raises emissions
+on the large-\textsc{fcl} regime---holds verbatim in the paper's main model, not only in the
+utility-operated one. The double-marginalization wedge (miners install less $\KM$ because
+$R-p<R-c$) moves the \emph{magnitude} of $\Delta$, not its sign. What is \emph{not} re-derived
+in closed form is the $\Phi$ \emph{coefficient's} full dependence on the double-margin
+equilibrium capacities and the $\S5.3$ tax thresholds; those are the remaining mechanical
+substitutions, and the sign result above does not wait on them.
+
+\emph{One open piece, stated plainly.} The renewable cutoff $\KR$ still solves a shift-ratio
+first-order condition---now with the entry channel $\partial\KM/\partial\KR=\FKR(\KF-\KM)/f(\KF-\KM)$
 folded in---whose sign law we verify numerically but do not sign in closed form for general
 $F$, exactly as in the utility-operated case.
