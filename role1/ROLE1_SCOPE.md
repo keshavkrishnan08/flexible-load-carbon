@@ -120,9 +120,20 @@ exposed the regime boundary above. **M6** — the Φ=Δ agreement was claimed at
 measured, quadrature-limited figure is `~3e-8`, now stated. **M9** — a "✓" was printed
 unconditionally beside FOC residuals; it is now conditional. **M13** — bare `fsolve` returned
 its last iterate whatever happened, so downstream checks could run on a non-solution; all
-call sites now go through `_fsolve_checked`, which raises on `ier≠1` or residual `>1e-6`.
+call sites now go through `_fsolve_checked`, which treats the residual as ground truth (not
+`ier`), polishes stalls (restart, then Levenberg-Marquardt), and raises only if no solver
+reaches tolerance. It caught a genuine boundary non-solution at `C_M=0.30` (`K_F`≈`Dbar`).
 **M3** — the cited 244-cell sweep ran offline and its script is not in this repo; the lab
 notebook now says so, and the reproducible evidence is the 60-point grid above.
+
+**Tolerance vs accuracy floor.** `verify.py` evaluates FOC residuals through a ScaleMix
+(`ns=800` scale nodes) + `limit=60` quad. For skewed densities (`D~Beta(1,3)`) the `gR`
+residual floors at ~`1.4e-5`, *flat across quad subdivisions* — the floor is the mixture
+discretization, not the integrator. Demanding `rtol=1e-8` there asks for accuracy the script
+does not have, so `solve_with`/`solve_no` in `verify.py` accept at `1e-5` (the genuine floor);
+the equilibrium is independently confirmed by `validate_capacity_channel.py`, which reaches
+the same `dK_R/dC_M` via analytic `intFKR`. `verify_exact` (`1e-9..1e-16`) and
+`validate_regime_crossing` (`ns=1500`, `1e-16`) genuinely hit `1e-8` and keep it.
 
 **The Week-4 Condition-M sweep was worse than "evaluated at an artificial cap."** The
 renewable barrier bound in every cell, so `K_R'(τ)=0` held trivially and Condition M was
