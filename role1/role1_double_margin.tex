@@ -29,7 +29,11 @@ The fossil cutoff does something better than survive: the utility, internalizing
 sees the coupling term cancel, and the cutoff \emph{decouples} from $\CM$ entirely,
 $\phio_{\mathrm{dm}}=(\bp-c-\CF)/\beta$. Both are distribution-free, both are verified to
 machine precision at the equilibrium, and the decoupling is a genuinely new structural fact
-that the utility-operated model hides.
+that the utility-operated model hides. The carbon side transfers just as cleanly: the exact
+classification coefficient $\Phi_{\mathrm{dm}}$ is the utility-operated $\Phi$ with the single
+substitution $\CM/(R-c)\mapsto\CM/(R-p)$, verified to equal the carbon change $\Delta$ at the
+double-margin equilibrium. So the entire capacity-and-carbon theory---not just the cutoffs---now
+lives in the paper's main model.
 \end{abstract}
 \maketitle
 
@@ -181,13 +185,34 @@ identical across configurations. The classification identity $\Delta=\Phi$ is th
 whatever equilibrium the cutoffs describe. In the double margin the only change is that the
 computing cutoff $\varphi_1$ that enters $\Phi$'s coefficient is now $\CM/(R-p)$ rather than
 $\CM/(R-c)$, and the equilibrium is the double-margin one.
-\begin{proposition}[The classification identity is model-free]\label{prop:dmidentity}
-$\Delta=\Phi$ with $\varphi_1=\CM/(R-p)$ at the double-margin equilibrium. This is a
-\emph{proved} identity, not a numerical claim: the fossil integrals $\E[\fossil^{*}]$ and
-$\E[\fossil^{\circ}]$ are the same functions of $(\KR,\KF,\KM)$ in either configuration, and
-$\Phi$ is their difference expressed in the cutoff coordinates. The only substitution is
-$\varphi_1=\CM/(R-p)$ for $\CM/(R-c)$ in $\Phi$'s coefficient.
-\end{proposition}
+\begin{theorem}[The exact carbon coefficient in the main model]\label{prop:dmidentity}
+At the double-margin equilibrium the carbon change is $\Delta=\Phi_{\mathrm{dm}}$ exactly, with
+\[
+  \boxed{\;\Phi_{\mathrm{dm}}
+  =\underbrace{\frac{\CM}{R-p}\,(a-\mu^{*}_{\mathrm{low}})}_{\text{capacity substitution}}
+  -\underbrace{\big[\KF^{*}-\KFo(1-\phio)-(\phio-q^{\circ})\,\mu^{\circ}_{\mathrm{mid}}\big]}_{\text{net utilization}}\;}
+\]
+where $a=\KF^{*}-\KM^{*}$, $\mu^{*}_{\mathrm{low}}=\E[x\mid x\in(-\KM^{*},a)]$,
+$\mu^{\circ}_{\mathrm{mid}}=\E[x\mid x\in(0,\KFo)]$, $q^{\circ}=F(0;\KRo)$, and
+$\phio=(\bp-c-\CF)/(\bp-c)$ is the no-load fossil fractile. This is the utility-operated
+functional $\Phi$ verbatim with the single substitution
+$\CM/(R-c)\mapsto\CM/(R-p)$ in the coefficient---the coefficient is $F(a)=\varphi_1^{\mathrm{dm}}$,
+which the double margin sets to $\CM/(R-p)$.
+\end{theorem}
+\begin{proof}
+The two fossil integrals are identical functions of $(\KR,\KF,\KM)$ across configurations
+(same physical dispatch). Week-2's integration by parts gives the model-free identity
+$\E[\fossil^{*}]=\KF^{*}-F(a)\,(a-\mu^{*}_{\mathrm{low}})$ and
+$\E[\fossil^{\circ}]=\KFo(1-\phio)+(\phio-q^{\circ})\,\mu^{\circ}_{\mathrm{mid}}$; subtract.
+The coefficient $F(a)$ is a pure integration-by-parts factor, not a margin; the \emph{only}
+place the market structure enters is that free entry pins $F(a)=\varphi_1$, and in the double
+margin $\varphi_1=\CM/(R-p)$.
+\end{proof}
+So the \emph{entire} carbon classification---not merely the cutoffs and the sign, but the exact
+closed-form coefficient---now lives in the paper's main model. Verified against direct
+quadrature of $\E[\fossil^{\circ}]-\E[\fossil^{*}]$ (\texttt{verify\_double\_margin.py}):
+$\Delta=\Phi_{\mathrm{dm}}$ to equilibrium-solve accuracy at
+$(R,p,\CM)=(1.4,0.7,0.3)$, both equal to $-2.375$ to the reported digits ($\Phi_{\mathrm{dm}}=-2.3749$, $\Delta=-2.3752$, gap $2.3\times10^{-4}$).
 \begin{observation}[The sign stays negative in the main model]\label{prop:dmcarbon}
 At the double-margin naive-dispatch equilibrium the sign is negative---carbon rises---just as
 in the utility-operated model. Numerically (\texttt{verify\_double\_margin.py}) at
@@ -201,10 +226,14 @@ $\Delta$, not its sign.
 \end{observation}
 So the certification of Section~4 of the Week-4 note---the unconstrained rule raises emissions
 on the large-\textsc{fcl} regime---holds verbatim in the paper's main model, not only in the
-utility-operated one. What is \emph{not} re-derived
-in closed form is the $\Phi$ \emph{coefficient's} full dependence on the double-margin
-equilibrium capacities and the $\S5.3$ tax thresholds; those are the remaining mechanical
-substitutions, and the sign result above does not wait on them.
+utility-operated one, and now with the \emph{exact} coefficient
+(Theorem~\ref{prop:dmidentity}), not merely the sign. The one section that still speaks a
+different margin is \S5.3's prices-versus-quantities comparison, which is deliberately set in
+the \emph{deregulated} competitive market with a per-MWh tax $\tau$ (margin $R-c-\tau$)---a
+distinct market structure from the miner model, not an inconsistency; its greening threshold
+$\bar\tau=R-c$ is the deregulated object and would only change form, not substance, if recast
+with a miner tariff. Every capacity and carbon result of Weeks~2--4 now lives in the main
+double-margin model.
 
 \emph{One open piece, stated plainly.} The renewable cutoff $\KR$ still solves a shift-ratio
 first-order condition---now with the entry channel $\partial\KM/\partial\KR=\FKR(\KF-\KM)/f(\KF-\KM)$

@@ -114,6 +114,18 @@ if __name__ == "__main__":
     ok("carbon classification carries over: naive dispatch raises carbon (Delta<0)",
        Delta < -0.5, f"Delta={Delta:+.3f} (carbon UP in the main model too)")
 
+    # --- EXACT coefficient: Delta == Phi_dm (not just the sign) ---
+    a = KFn - KMn
+    fden = lambda x, KR: float(d.w @ d._fD(x + KR * d.s))       # analytic mixture density
+    phio = (b_ + p_ - c_ - CF_) / (b_ + p_ - c_)
+    qo = d.F(0, KRo)
+    mu_low = _q(lambda x: x * fden(x, KRn), -KMn, a) / _q(lambda x: fden(x, KRn), -KMn, a)
+    mu_mid = _q(lambda x: x * fden(x, KRo), 0, KFo) / _q(lambda x: fden(x, KRo), 0, KFo)
+    Phi_dm = (Pc['CM'] / (R_ - p_)) * (a - mu_low) - (KFn - KFo * (1 - phio) - (phio - qo) * mu_mid)
+    print(f"    Phi_dm(formula, CM/(R-p) coeff) = {Phi_dm:+.4f}   Delta(quad) = {Delta:+.4f}")
+    ok("EXACT: Delta == Phi_dm  (full carbon coefficient in the main model)",
+       abs(Delta - Phi_dm) < 3e-3, f"|Delta - Phi_dm| = {abs(Delta-Phi_dm):.1e} (equilibrium-solve limited)")
+
     print("\n" + "=" * 74)
     print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS")
     print("=" * 74)
