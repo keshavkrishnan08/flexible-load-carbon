@@ -5,7 +5,7 @@
 \usepackage[colorlinks=true,linkcolor=blue!55!black]{hyperref}
 \theoremstyle{plain}\newtheorem{theorem}{Theorem}\newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
-\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}\newtheorem{observation}[theorem]{Observation}
 \newcommand{\KR}{K_R}\newcommand{\KF}{K_F}\newcommand{\KM}{K_M}
 \newcommand{\CM}{C_M}\newcommand{\CF}{C_F}\newcommand{\CR}{C_R}
 \newcommand{\phio}{\varphi^{\circ}}\newcommand{\FKR}{F_{\KR}}\newcommand{\Dbar}{\bar D}
@@ -181,17 +181,27 @@ identical across configurations. The classification identity $\Delta=\Phi$ is th
 whatever equilibrium the cutoffs describe. In the double margin the only change is that the
 computing cutoff $\varphi_1$ that enters $\Phi$'s coefficient is now $\CM/(R-p)$ rather than
 $\CM/(R-c)$, and the equilibrium is the double-margin one.
-\begin{proposition}[Naive dispatch raises carbon in the main model too]\label{prop:dmcarbon}
-At the double-margin naive-dispatch equilibrium, $\Delta=\Phi$ with $\varphi_1=\CM/(R-p)$, and
-$\Delta<0$: carbon rises. Verified at $R=1.4,p=0.7,c=0.5,\CM=0.3$: the equilibrium is
-$(\KR,\KF,\KM)=(1.982,7.091,3.563)$, large-\textsc{fcl}, with $F(\KF-\KM)=0.4286=\CM/(R-p)$ to
-$10^{-4}$; against the no-load benchmark $(\KRo,\KFo)=(1.829,6.729)$ the carbon change is
-$\Delta=\E[\fossil^{\circ}]-\E[\fossil^{*}]=3.972-6.362=-2.390$.
+\begin{proposition}[The classification identity is model-free]\label{prop:dmidentity}
+$\Delta=\Phi$ with $\varphi_1=\CM/(R-p)$ at the double-margin equilibrium. This is a
+\emph{proved} identity, not a numerical claim: the fossil integrals $\E[\fossil^{*}]$ and
+$\E[\fossil^{\circ}]$ are the same functions of $(\KR,\KF,\KM)$ in either configuration, and
+$\Phi$ is their difference expressed in the cutoff coordinates. The only substitution is
+$\varphi_1=\CM/(R-p)$ for $\CM/(R-c)$ in $\Phi$'s coefficient.
 \end{proposition}
+\begin{observation}[The sign stays negative in the main model]\label{prop:dmcarbon}
+At the double-margin naive-dispatch equilibrium the sign is negative---carbon rises---just as
+in the utility-operated model. Numerically (\texttt{verify\_double\_margin.py}) at
+$R=1.4,p=0.7,c=0.5,\CM=0.3$: the equilibrium is $(\KR,\KF,\KM)=(1.993,7.084,3.562)$,
+large-\textsc{fcl}, with $F(\KF-\KM)=0.4286=\CM/(R-p)$; against the no-load benchmark the
+carbon change is $\Delta=\E[\fossil^{\circ}]-\E[\fossil^{*}]=-2.375$. As in the utility-operated
+case (Observation~[large-\textsc{fcl} never decarbonizes] of the Week-4 note), the negative
+\emph{sign} at optima is a numerical regularity, not a distribution-free theorem---Week-2
+minimality forbids the latter. The double-marginalization wedge moves the magnitude of
+$\Delta$, not its sign.
+\end{observation}
 So the certification of Section~4 of the Week-4 note---the unconstrained rule raises emissions
 on the large-\textsc{fcl} regime---holds verbatim in the paper's main model, not only in the
-utility-operated one. The double-marginalization wedge (miners install less $\KM$ because
-$R-p<R-c$) moves the \emph{magnitude} of $\Delta$, not its sign. What is \emph{not} re-derived
+utility-operated one. What is \emph{not} re-derived
 in closed form is the $\Phi$ \emph{coefficient's} full dependence on the double-margin
 equilibrium capacities and the $\S5.3$ tax thresholds; those are the remaining mechanical
 substitutions, and the sign result above does not wait on them.
