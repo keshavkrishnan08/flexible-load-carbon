@@ -34,6 +34,7 @@
 \newtheorem*{cardef}{Definition}
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}
+\theoremstyle{remark}\newtheorem{observation}{Observation}
 
 \newcommand{\KR}{K_R}\newcommand{\KF}{K_F}\newcommand{\KM}{K_M}
 \newcommand{\KRs}{K_R^{*}}\newcommand{\KFs}{K_F^{*}}\newcommand{\KMs}{K_M^{*}}
@@ -47,9 +48,9 @@
 
 \begin{document}
 
-\title[The Carbon Classification Theorem (Week 4)]
-{The Carbon Classification Theorem:\\
-An Exact Closed-Form Criterion for When a Flexible Load Reduces Emissions}
+\title[The Carbon Ledger and the Backfire Certificate (Week 4)]
+{The Exact Carbon Ledger:\\
+A Closed-Form Certificate That a Surplus-Absorbing Load Raises Emissions}
 \author{Team A1 --- Role 1 (Optimal Contract and General Carbon Theory)}
 \date{Working results, Week~4}
 
@@ -213,17 +214,28 @@ A referee will press on the word ``classification.'' A classifier earns its name
 separating both outcomes. Does $\Phi>0$ ever fire at an interior optimum on its valid domain?
 We searched hard, and the honest answer sharpens the contribution rather than weakening it.
 
-\begin{proposition}[On large-\textsc{fcl}, the unconstrained rule always raises carbon]
-\label{prop:alwaysup}
-Across every large-\textsc{fcl} interior optimum we solve---the $60$-point
-$(\CR,\CM,R)$ grid of \texttt{verify\_week2.py}~T3 ($16$ solved equilibria) and the
-distribution library of \texttt{verify\_week4.py}---$\Delta<0$: carbon rises, with
-$\Delta\in[-3.249,\,-1.208]$, bounded away from zero by more than one unit. No large-\textsc{fcl}
-optimum with $\Delta>0$ was found. Equivalently, on the domain where the identity
-$\Delta=\Phi$ holds, $\Phi<0$ throughout.
-\end{proposition}
+What is \emph{proved} here is the exact per-mean criterion of \S\ref{sec:minimal}: $\Delta<0$
+if and only if the two conditional-mean margins $\mathrm{D}_\ell,\mathrm{D}_m$ take the values
+they do. What is \emph{observed}---and we label it honestly as a regularity, not a theorem---is
+that this proved criterion always resolves the \emph{same way} at large-\textsc{fcl} optima.
 
-The mechanism is not a coincidence of the grid. Large-\textsc{fcl} means $\KM\ge\KR$, i.e.\
+\begin{observation}[Numerical regularity: large-\textsc{fcl} optima never decarbonize]
+\label{prop:alwaysup}
+Across every large-\textsc{fcl} interior optimum solved---the $60$-point $(\CR,\CM,R)$ grid of
+\texttt{verify\_week2.py}~T3 ($16$ equilibria), the distribution library of
+\texttt{verify\_week4.py}, and a shape sweep over $75$ demand/supply Beta pairs $\times$ cost
+settings---$\Delta<0$: carbon rises, $\Delta\in[-3.9,\,-1.2]$, bounded away from zero. Not one
+large-\textsc{fcl} optimum with $\Delta>0$ was found. So on the domain where $\Delta=\Phi$
+holds, the \emph{proved} sign criterion always returns $\Phi<0$. We state this as an empirical
+regularity because the Week-2 minimality result forbids a distribution-free proof: over the
+admissible-law class the sign genuinely straddles zero (Proposition~\ref{thm:minimal}), so any
+``always $\Delta<0$'' theorem would have to exploit optimum-consistency of the conditional
+means in a way we have not been able to make general. The regularity is strong, the mechanism
+is transparent, and we do not dress it as more than it is.
+\end{observation}
+
+The mechanism behind the regularity is not a coincidence of the grid. Large-\textsc{fcl} means
+$\KM\ge\KR$, i.e.\
 the load is deep enough to swallow the entire renewable surplus, $F(-\KM)=0$. A load that big
 is, under the unconstrained rule, run on \emph{fossil} in every state where computing pays
 (Week~2's floor), so it burns fossil in direct proportion to its size. The offsetting
