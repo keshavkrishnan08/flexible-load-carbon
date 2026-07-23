@@ -222,9 +222,10 @@ that this proved criterion always resolves the \emph{same way} at large-\textsc{
 \begin{observation}[Numerical regularity: large-\textsc{fcl} optima never decarbonize]
 \label{prop:alwaysup}
 Across every large-\textsc{fcl} interior optimum solved---the $60$-point $(\CR,\CM,R)$ grid of
-\texttt{verify\_week2.py}~T3 ($16$ equilibria), the distribution library of
-\texttt{verify\_week4.py}, and a shape sweep over $75$ demand/supply Beta pairs $\times$ cost
-settings---$\Delta<0$: carbon rises, $\Delta\in[-3.9,\,-1.2]$, bounded away from zero. Not one
+\texttt{verify\_week2.py}~T3 ($16$ solved equilibria), the distribution library of
+\texttt{verify\_week4.py}, the double-margin equilibrium of \texttt{verify\_double\_margin.py},
+and a set of skewed and bimodal demand/supply shapes---$\Delta<0$: carbon rises,
+$\Delta\in[-3.9,\,-1.2]$, bounded away from zero. Not one
 large-\textsc{fcl} optimum with $\Delta>0$ was found. So on the domain where $\Delta=\Phi$
 holds, the \emph{proved} sign criterion always returns $\Phi<0$. We state this as an empirical
 regularity because the Week-2 minimality result forbids a distribution-free proof: over the
