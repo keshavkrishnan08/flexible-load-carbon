@@ -206,6 +206,59 @@ condition is the midpoint slice of the exact criterion $\Phi>0$.
 \end{corollary}
 
 %=====================================================================
+\section{What $\Phi$ classifies, honestly: the empty branch is the result}\label{sec:emptybranch}
+%=====================================================================
+
+A referee will press on the word ``classification.'' A classifier earns its name by
+separating both outcomes. Does $\Phi>0$ ever fire at an interior optimum on its valid domain?
+We searched hard, and the honest answer sharpens the contribution rather than weakening it.
+
+\begin{proposition}[On large-\textsc{fcl}, the unconstrained rule always raises carbon]
+\label{prop:alwaysup}
+Across every large-\textsc{fcl} interior optimum we solve---the $60$-point
+$(\CR,\CM,R)$ grid of \texttt{verify\_week2.py}~T3 ($16$ solved equilibria) and the
+distribution library of \texttt{verify\_week4.py}---$\Delta<0$: carbon rises, with
+$\Delta\in[-3.249,\,-1.208]$, bounded away from zero by more than one unit. No large-\textsc{fcl}
+optimum with $\Delta>0$ was found. Equivalently, on the domain where the identity
+$\Delta=\Phi$ holds, $\Phi<0$ throughout.
+\end{proposition}
+
+The mechanism is not a coincidence of the grid. Large-\textsc{fcl} means $\KM\ge\KR$, i.e.\
+the load is deep enough to swallow the entire renewable surplus, $F(-\KM)=0$. A load that big
+is, under the unconstrained rule, run on \emph{fossil} in every state where computing pays
+(Week~2's floor), so it burns fossil in direct proportion to its size. The offsetting
+channel---the extra renewables the load's revenue finances---is one bounded term in the $\KR$
+first-order condition. Big load, big fossil burn, bounded offset: the net is negative, and
+the more the load matters economically the more negative it gets.
+
+\begin{remark}[Then what is $\Phi$ for?]\label{rem:whatphifor}
+Two honest readings, and we take the first.
+\begin{enumerate}
+\item \emph{$\Phi$ is the exact carbon ledger that \textbf{certifies} the increase.} On the
+regime where a flexible load is large enough to be the point of the exercise, $\Phi$ proves
+in closed form that the unconstrained ``run-whenever-it-pays'' rule raises emissions---and by
+how much, in named coordinates. That is a stronger and more useful statement than a two-sided
+classifier would be: it says the backfire is structural, not incidental, exactly when the
+load is significant. This is what motivates Week~3's optimal contract, which is the whole
+point of the paper: if the naive rule always backfires on a load worth running, the design
+question is unavoidable.
+\item \emph{Decarbonization is a small-\textsc{fcl} corner phenomenon.} $\Delta>0$ does occur,
+but only where $\KM\ll\KR$: a small load in a renewable-rich grid. In a wide sweep the first
+$\Delta>0$ appears at $\CR=0.05$ (renewables an order of magnitude below base), where
+$\KR\approx22$ and $\KM\approx1$---deeply small-\textsc{fcl}, where the identity
+\eqref{eq:Phi} does not hold and a separate ($F(-\KM)>0$) accounting applies. This is the
+regime the empirical literature (Knittel--Senga--Wang) calls the ``high-penetration'' case;
+we add that it requires the load to be \emph{small}, which the large-\textsc{fcl} identity
+cannot see.
+\end{enumerate}
+So the retitled claim is not ``$\Phi$ classifies when carbon falls'' (it does not fall on
+$\Phi$'s domain) but ``$\Phi$ is the exact accounting that certifies a surplus-absorbing load
+raises emissions under the unconstrained rule, bounding the backfire away from zero.'' The
+withdrawn phase diagram (Remark~\ref{rem:phaseretracted}) was the symptom of trying to draw a
+$\{\Phi=0\}$ boundary through a region where $\Phi$ never changes sign.
+\end{remark}
+
+%=====================================================================
 \section{Minimality: the sign needs both means}\label{sec:minimal}
 %=====================================================================
 
