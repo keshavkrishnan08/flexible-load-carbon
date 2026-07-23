@@ -117,6 +117,20 @@ the utility only sells them power; the extra fossil it would build to serve a la
 exactly paid for by the extra entry that fossil attracts, at margin $(p-c)$ on both sides, and
 the two cancel. The utility sizes fossil against outage alone.
 
+\begin{corollary}[A separation principle for the miner market]\label{dm-cor:separation}
+The decoupling is an institutional-design statement, not just an algebraic one. In the
+third-party-miner market the fossil-adequacy decision ($\KF$, set by
+$F(\KF)=\phio_{\mathrm{dm}}$) is independent of everything about the computing load---its
+capital cost $\CM$, its scale $\KM$, its value $R$. A regulator planning generation adequacy
+need not forecast the data-center build-out at all; conversely, computing-load policy (a tariff
+$p$, an entry subsidy, a curtailment mandate) can be set without re-optimizing fossil capacity.
+The two policy levers \emph{separate}. This is exactly what the utility-operated model
+denies---there $\varphi_2^{\mathrm{uo}}$ couples $\CF$, $\CM$, and $R$ in one cutoff, so fossil
+adequacy and load policy must be co-designed. The separation is a property of the market
+structure (who runs the load), not of the technology, and it is the double margin's one
+qualitative payoff.
+\end{corollary}
+
 \begin{remark}[Numerical confirmation of the decoupling]\label{dm-rem:decouplenum}
 Fixing $R=1.4,p=0.7,c=0.5,\beta=4,\CF=0.6$ so $\phio_{\mathrm{dm}}=0.9000$, and sweeping the
 load cost, the fossil cutoff does not move:
