@@ -63,11 +63,27 @@ if __name__ == "__main__":
     ok("dispatch gap invariant to K_S (spread < 1e-3)", max(gaps) - min(gaps) < 1e-3,
        f"spread={max(gaps)-min(gaps):.1e}, gap~{gaps[0]:+.3f}")
 
-    print("\n(C) value threshold R* = c + eta[phi_o c + (1-phi_o)(b+p)]")
-    phio = (b + p - c - CF) / (b + p - c)
+    print("\n(B') dispatch gap survives storage RIVALRY (FCL takes surplus first, crowds storage)")
+    xs, fx = dens(KR); xp = np.maximum(xs, 0.); surp = np.maximum(-xs, 0.)
+    Ef = lambda v: float(np.trapz(v * fx, xs))
+    KM = 3.0; rgaps = []
+    for KS in [1.0, 4.0, 10.0]:
+        naive_burn = Ef(np.minimum(np.maximum(KF - xp, 0.), KM))
+        stor_full = Ef(np.minimum(surp, KS))
+        stor_resid = Ef(np.minimum(np.maximum(surp - np.minimum(surp, KM), 0.), KS))
+        rgap = naive_burn - eta * (stor_full - stor_resid); rgaps.append(rgap)
+        print(f"    K_S={KS:.1f}: rivalry gap = {rgap:+.4f}  (crowd-out eta*{stor_full-stor_resid:.3f})")
+    ok("rivalry gap stays positive and within 1% of the no-rivalry gap",
+       all(g > 0 for g in rgaps) and (gaps[0] - min(rgaps)) / gaps[0] < 0.01,
+       f"rivalry {min(rgaps):+.3f} vs no-rivalry {gaps[0]:+.3f}")
+
+    print("\n(C) value threshold R* = c + eta[phi_o_dm c + (1-phi_o_dm)(b+p)]  (MAIN model cutoff)")
+    phio = (b + p - c - CF) / b            # double-margin (main-model) fossil cutoff
     Rstar = c + eta * (phio * c + (1 - phio) * (b + p))
     vstor = eta * (phio * c + (1 - phio) * (b + p))
-    print(f"    phi_o={phio:.3f}  v_stor={vstor:.3f}  R-c={R-c:.3f}  R*={Rstar:.3f}")
+    print(f"    phi_o_dm={phio:.3f}  v_stor={vstor:.3f}  R-c={R-c:.3f}  R*={Rstar:.3f}")
+    ok("at the calibration the LOAD clears (R-c > v_stor) under the main-model cutoff",
+       (R - c) > vstor, f"R-c={R-c:.2f} > v_stor={vstor:.2f}? {(R-c)>vstor}")
     # verify the boxed inequality is equivalent to (R-c) > v_stor
     ok("threshold: (R-c > v_stor)  <=>  (R > R*)", ((R - c > vstor) == (R > Rstar)),
        f"R-c>{vstor:.2f}? {R-c>vstor}   R>{Rstar:.2f}? {R>Rstar}")

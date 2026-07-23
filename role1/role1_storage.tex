@@ -80,32 +80,52 @@ they differ only in the naive burn term, which is present under naive dispatch a
 the surplus contract. Subtracting, the storage term cancels identically.
 \end{proof}
 Verified: at $\KS=0,2,4$ the gap is $+2.1291$ in every case, constant to the reported digits.
+
+\begin{corollary}[The gap survives storage rivalry; the crowding is second order]\label{cor:rivalry}
+Proposition~\ref{prop:invariant} lets storage charge first, so the surplus load never
+cannibalizes storage. Grant instead the load \emph{co-priority}---it takes surplus up to $\KM$
+and storage gets only the residual. Then the surplus contract does crowd out some storage
+displacement, and the gap becomes
+$\E[\text{naive burn}]-\eta\big(\E[\min((-x)_+,\KS)]-\E[\min(((-x)_+-\KM)_+,\KS)]\big)$.
+The crowding term is \emph{second order}: the avoided naive burn accrues in \emph{fossil-serving}
+states (where the naive load runs on fossil), while the crowded-out storage charge is lost in
+\emph{surplus} states---disjoint events. Numerically the gap falls only from $+2.129$ to
+$+2.116$ (a $0.6\%$ reduction) as $\KS$ ranges up to $10$: the crowded-out displacement is
+$\eta\times0.013$, two orders of magnitude below the avoided burn $2.129$. So the dispatch
+result is robust to the rivalry, not an artifact of the charging order.
+\end{corollary}
 So every carbon result the paper actually proves---the naive rule raises carbon
-(Week~4), the surplus contract is its carbon-optimal dispatch (Week~3)---holds verbatim with
-storage in the model. Storage changes the \emph{level} of carbon, not the \emph{dispatch
-comparison}.
+(Week~4), the surplus contract is its carbon-optimal dispatch (Week~3)---holds with storage in
+the model, and holds whether or not the load competes with storage for the surplus. Storage
+changes the \emph{level} of carbon, not the \emph{dispatch comparison}.
 
 \section{Who should take the surplus: a value threshold}
 Storage wins the carbon comparison; it does not follow that storage should take all the
 surplus, because the two assets sell different products. Storage arbitrages energy; its
 expected value per charged MWh is $\eta$ times the marginal displacement price---generation
 cost $c$ in the common case, the outage price $\bp$ in the rare shortfall---so
-$v_{\mathrm{stor}}=\eta\,[\phio c+(1-\phio)\bp]$ using $F(\KF)=\phio$. The load produces
-computing at margin $R-c$.
+$v_{\mathrm{stor}}=\eta\,[\phio_{\mathrm{dm}}c+(1-\phio_{\mathrm{dm}})\bp]$ using the
+\emph{main-model} fossil cutoff $F(\KF)=\phio_{\mathrm{dm}}=(\bp-c-\CF)/\beta$ of the
+double-margin note. (Using this cutoff, not the utility-operated $\phio$, is what makes the
+value comparison consistent with the paper's actual model---an inconsistency worth flagging,
+since it moves the verdict.) The load produces computing at margin $R-c$.
 \begin{proposition}[The load is the higher-value surplus user iff computing clears a threshold]
 \label{prop:threshold}
 The flexible load is the higher-value user of a marginal surplus MWh iff
 \[
-  \boxed{\;R \;>\; c+\eta\big[\phio\,c+(1-\phio)\bp\big]\;=:\;R^{\star}.\;}
+  \boxed{\;R \;>\; c+\eta\big[\phio_{\mathrm{dm}}c+(1-\phio_{\mathrm{dm}})\bp\big]\;=:\;R^{\star}.\;}
 \]
 Below $R^{\star}$ storage should take the surplus; above it the load should. Both are used at
 an interior joint optimum whenever the surplus exceeds either asset's capacity, so they are
 \emph{complements sorted by the load's value}, not pure substitutes.
 \end{proposition}
-At the calibration ($c=0.5,\eta=0.85,\phio=0.857,\bp=4.7$) the threshold is $R^{\star}=1.44$.
-A high-value load---Bitcoin or AI compute, where $R$ is well above one---clears it; a
-low-value flexible load does not, and there storage should have the surplus. The margin is
-tight and depends on how rare outage is:
+At the calibration ($c=0.5,\eta=0.85,\bp=4.7,\CF=0.6$, so $\phio_{\mathrm{dm}}=0.90$) the
+threshold is $R^{\star}=1.28$, and $v_{\mathrm{stor}}=0.782$. The paper's own $R=1.4$
+(hence $R-c=0.90>0.782$) \emph{clears} it: at the calibration the flexible load \emph{is} the
+higher-value surplus user, and storage should take the surplus only for a lower-value load.
+The verdict is margin-sensitive---plugging the utility-operated $\phio=0.857$ instead would
+give $R^{\star}=1.44$ and reverse it---which is exactly why the value comparison must be run
+in the main model. It also depends on how rare outage is:
 \begin{center}\small
 \begin{tabular}{cccc}
 \toprule
@@ -113,12 +133,15 @@ $\Pr(\text{outage})=1-\phio$ & $v_{\mathrm{stor}}$ & vs $R-c=0.90$ & higher valu
 \midrule
 $0.02$ & $0.50$ & $>$ & load\\
 $0.05$ & $0.60$ & $>$ & load\\
-$0.10$ & $0.78$ & $>$ & load\\
-$0.14$ & $0.93$ & $<$ & storage\\
+$\mathbf{0.10}$ & $\mathbf{0.78}$ & $\mathbf{>}$ & \textbf{load $\leftarrow$ main model ($\phio_{\mathrm{dm}}=0.90$)}\\
+$0.14$ & $0.93$ & $<$ & storage $\leftarrow$ utility-op ($\phio=0.857$)\\
 $0.20$ & $1.14$ & $<$ & storage\\
 \bottomrule
 \end{tabular}
 \end{center}
+The main-model row ($\Pr(\text{outage})=1-\phio_{\mathrm{dm}}=0.10$) is the relevant one, and
+there the load clears; the utility-operated row ($0.14$) is the mismatched comparison that
+reverses it.
 
 \section{What this settles}
 \begin{remark}[The honest bottom line]
