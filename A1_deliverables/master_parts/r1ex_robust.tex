@@ -1,0 +1,182 @@
+\title[Robust and Detail-Free Demand-Response Contracting]
+{Distributionally Robust and Detail-Free\\ Demand-Response Contracting}
+
+
+
+\begin{abstract}
+The emission-reduction condition depends on the residual-demand distribution,
+which a regulator never knows exactly. We turn this apparent weakness into two
+guarantees. \emph{(R1) A worst-case certificate.} Over the natural shape class of
+distributions, the \emph{uniform} is the least-favorable distribution for carbon:
+it minimizes the net emission saving. Hence the single closed-form condition
+$\CR\le\CR^{\dagger}$---derived for the uniform---certifies emission reduction for
+the entire infinite-dimensional class, a distributionally robust guarantee.
+\emph{(R2) Detail-free implementation.} Because the optimal contract's thresholds
+are pinned at \emph{distribution-free} probabilities, a single quantile-targeting
+mechanism implements the optimum for every distribution: the regulator needs no
+knowledge of, or prior over, the demand and renewable laws. Both results are
+verified numerically.
+\end{abstract}
+
+
+
+We continue the companion notes \texttt{role1\_carbon\_theory.tex} and
+\texttt{role1\_contract\_theory.tex}; notation and Assumption~1 are inherited.
+Two facts proved there drive everything here:
+the \emph{exact} net-fossil saving
+\begin{equation}\label{r1exr-eq:saving}
+  \Delta(F)\eqdef\E[\text{fossil}^{\circ}]-\E[\text{fossil}^{*}]
+  =\tfrac{\CM}{R-c}\big(\KFs-\KMs-\mu^{*}_{\mathrm{low}}\big)
+   -\Big(\KFs-\KFo(1-\varphi^{\circ})-(\varphi^{\circ}-q^{\circ})\mu^{\circ}_{\mathrm{mid}}\Big),
+\end{equation}
+and the \emph{distribution-free} cutoff probabilities
+$F(\KFs;\KRs)=\frac{\bp-c-\CF-\CM}{\bp-R}$,
+$F(\KFs-\KMs;\KRs)=\frac{\CM}{R-c}$, $F(\KFo;\KRo)=\varphi^{\circ}$,
+which hold for every $F$. In \eqref{r1exr-eq:saving} the conditional means
+$\mu^{*}_{\mathrm{low}}=\E[\tilde x\mid \tilde x\in(-\KRs,\KFs-\KMs)]$ and
+$\mu^{\circ}_{\mathrm{mid}}=\E[\tilde x\mid \tilde x\in(0,\KFo)]$ are the only
+channels through which the \emph{shape} of $F$ enters.
+
+%---------------------------------------------------------------------
+\section{A distributionally robust emission certificate}\label{r1exr-sec:robust}
+
+\begin{definition}[Shape ambiguity set]\label{r1exr-def:U}
+Let $\Ucal$ be the set of residual-demand distributions $F$ satisfying
+Assumption~1 such that the density $f(\cdot;\KRs)$ is non-increasing on the
+\textsc{fcl} dispatch zone $(-\KRs,\KFs-\KMs)$ and $f(\cdot;\KRo)$ is
+non-decreasing on the no-\textsc{fcl} fossil zone $(0,\KFo)$.
+\end{definition}
+
+Economically (companion Remark~10): $\Ucal$ collects grids whose deep-surplus
+states are more likely than mild-surplus states, and whose high-consumption hours
+are more likely than low---the empirically typical shape, with rare stress events.
+The uniform sits on the boundary of $\Ucal$ (constant density).
+
+\begin{theorem}[Least-favorable distribution; robust certificate]\label{r1exr-thm:robust}
+Holding the distribution-free cutoff probabilities fixed,
+\[
+  \min_{F\in\Ucal}\;\Delta(F)\;=\;\Delta(F_{\mathrm{unif}}),
+\]
+attained by the uniform distribution. Consequently emission reduction holds for
+\emph{every} $F\in\Ucal$ if and only if it holds for the uniform, i.e.\ iff
+\[
+  \CR\le\CR^{\dagger}
+  =\tfrac12\!\Big[c+\tfrac{(R-\CM-c)^2}{R-c}+\tfrac{(R-c-\CF-\CM)^2}{\bp-R}\Big]
+\]
+(companion Proposition on $\CR^{\dagger}$). The single closed-form condition is a
+worst-case guarantee over the infinite-dimensional class $\Ucal$.
+\end{theorem}
+
+\begin{proof}
+From \eqref{r1exr-eq:saving},
+$\partial\Delta/\partial\mu^{*}_{\mathrm{low}}=-\tfrac{\CM}{R-c}<0$ and
+$\partial\Delta/\partial\mu^{\circ}_{\mathrm{mid}}=+(\varphi^{\circ}-q^{\circ})>0$,
+the latter positive because $\varphi^{\circ}=F(\KFo;\KRo)>F(0;\KRo)=q^{\circ}$ (as
+$\KFo>0$ and $F$ is increasing in $x$),
+so $\Delta$ is minimized by the \emph{largest} feasible $\mu^{*}_{\mathrm{low}}$
+and the \emph{smallest} feasible $\mu^{\circ}_{\mathrm{mid}}$. A non-increasing
+density on an interval has conditional mean at most the interval midpoint, with
+equality iff the density is constant; a non-decreasing density has conditional
+mean at least the midpoint, with equality iff constant. Hence over $\Ucal$,
+$\sup\mu^{*}_{\mathrm{low}}$ and $\inf\mu^{\circ}_{\mathrm{mid}}$ are \emph{both}
+the respective midpoints, attained \emph{simultaneously} by the uniform. So the
+uniform jointly minimizes $\Delta$. The closed-form $\CR^{\dagger}$ is the uniform
+threshold; if it certifies $\Delta\ge0$ at the worst case, $\Delta(F)\ge0$ for all
+$F\in\Ucal$.
+\end{proof}
+
+\begin{remark}[Why this is the right robustness statement]
+Without a shape restriction the ambiguity is vacuous---an adversary placing all
+conditional mass at an interval endpoint can force $\Delta<0$, so no
+distribution-free certificate can exist (verified: unrestricted worst case is
+negative). $\Ucal$ is the minimal economically meaningful class that restores a
+certificate, and within it the certificate is \emph{exactly} the uniform
+closed form. Theorem~\ref{r1exr-thm:robust} thus identifies the uniform benchmark of the
+original paper not as a convenient special case but as the \emph{binding} worst
+case for a whole family---the strongest reading the closed form can carry.
+\end{remark}
+
+\begin{remark}[Stochastic-order reading]
+Because $\Delta$ moves with the two conditional means, and conditional means on a
+fixed interval are ordered by the dispersive/likelihood-ratio order, $\Delta$ is
+monotone along any one-parameter tilt of the density toward or away from the
+uniform. The uniform is the fixed point of this monotone family---the least
+disperse member consistent with $\Ucal$'s monotonicity.
+\end{remark}
+
+%---------------------------------------------------------------------
+\section{Detail-free implementation}\label{r1exr-sec:detailfree}
+
+A regulator does not know $F$. Remarkably, it need not.
+
+\begin{theorem}[Prior-independent optimal mechanism]\label{r1exr-thm:detailfree}
+Define the \emph{quantile-targeting mechanism}: choose capacities so that, at the
+realized residual-demand law,
+\[
+  \Pr(\tilde x\le \KF)=\frac{\bp-c-\CF-\CM}{\bp-R},\quad
+  \Pr(\tilde x\le \KF-\KM)=\frac{\CM}{R-c},\quad
+  \Pr(\tilde x\le \KFo)=\varphi^{\circ},
+\]
+and dispatch $\dstar(x)=\min\{(\KF-x)_+,\KM\}$. For \emph{every} distribution $F$
+satisfying Assumption~1, this mechanism implements the optimal contract and the
+optimal capacities. It uses no knowledge of, and no prior over, $F$: only the
+right-hand-side probabilities, which are functions of the primitives
+$(R,c,\CF,\CM,\beta,p)$ alone.
+\end{theorem}
+
+\begin{proof}
+The capacity first-order conditions (companion Lemma) equate $F$ at each threshold
+to the stated probability; these probabilities contain no distributional object.
+Targeting them therefore selects the optimal $(\KRs,\KFs,\KMs)$ whatever $F$ is,
+and Theorem~1 of the contract note makes $\dstar$ optimal given those capacities.
+A regulator can hit the targets from observed empirical quantiles of residual
+demand without estimating $F$.
+\end{proof}
+
+\begin{remark}[Wilson doctrine]
+Theorem~\ref{r1exr-thm:detailfree} is a detail-free implementation in the sense of the
+Wilson doctrine: the optimal mechanism is \emph{prior-independent}. The economic
+content of the distribution-free cutoffs (companion Lemma) is precisely this---the
+margins $R-c$, $\bp-R$, and the no-\textsc{fcl} cutoff probability $\varphi^{\circ}$
+summarize everything
+the regulator must know. Distributional detail matters for the \emph{magnitude} of
+the carbon saving (Theorem~\ref{r1exr-thm:robust}), never for \emph{how to act}.
+\end{remark}
+
+\begin{corollary}[Robust+detail-free package]
+Combining Theorems~\ref{r1exr-thm:robust}--\ref{r1exr-thm:detailfree}: the regulator implements
+the utility's \emph{profit-maximizing} demand-response contract knowing only six
+scalar primitives, and---provided the grid lies in the shape class $\Ucal$ and
+$\CR\le\CR^{\dagger}$---this privately optimal contract is \emph{guaranteed} to
+lower emissions regardless of the true demand and renewable laws. Emission
+reduction is a consequence of the profit-optimal contract under the stated
+condition, not a separate regulatory objective.
+\end{corollary}
+
+%---------------------------------------------------------------------
+\section{Numerical validation}\label{r1exr-sec:num}
+
+\texttt{verify\_robust.py}:
+\begin{itemize}[leftmargin=1.6em]
+  \item Over $3000$ random non-increasing densities on the \textsc{fcl} zone, the
+        conditional mean is $\le$ midpoint in $3000/3000$ cases, with the supremum
+        equal to the midpoint (uniform extremal); symmetrically, over $3000$ random
+        non-decreasing densities the conditional mean is $\ge$ midpoint in
+        $3000/3000$, infimum at the midpoint.
+  \item Tilting the density continuously from uniform (shape $0$) into $\Ucal$, the
+        net carbon saving $\Delta$ is \emph{minimized at the uniform}---confirming
+        the uniform is least-favorable (Theorem~\ref{r1exr-thm:robust}).
+  \item The cutoff probabilities of Theorem~\ref{r1exr-thm:detailfree} are the
+        distribution-free values verified to $10^{-16}$ on the non-uniform
+        $\mathrm{Beta}(2,2)$ scale-mixture in the companion \texttt{verify\_exact.py}.
+\end{itemize}
+
+\paragraph{Scope.} Strictly A1 (general contracting theory and numerical methods):
+the object is the utility's profit-maximizing contract under \emph{distributional}
+ambiguity (ambiguity over the demand/renewable law $F$), and its prior-independent
+implementation. This is distinct from---and does not enter---A2 (empirical
+calibration / magnitudes), B1 (reliability, welfare, and the social-vs-private
+optimum, including corrective pricing), or B2 (the flexibility continuum, storage,
+and the multi-grid / price-exogeneity / dynamics robustness-and-limitations
+discussion). The robustness here is robustness of the \emph{contract} to the
+unknown distribution, not B2's robustness of the model to market structure.

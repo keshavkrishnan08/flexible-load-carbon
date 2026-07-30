@@ -36,11 +36,26 @@ class Model:
         x,Fg,_=self._grid(KR); return float(np.interp(xq,x,Fg))
     def Finv(self,t,KR):
         x,Fg,_=self._grid(KR); return float(np.interp(t,Fg,x))
+    @staticmethod
+    def _trapz_exact(x,vals,lo,hi):
+        """Integrate lo..hi with the ENDPOINTS EXACT.
+
+        The previous version masked a fixed grid, (x>=lo)&(x<=hi), so a limit that moved
+        between nodes did not change the integral at all until it crossed one -- then the
+        value jumped.  Measured jump ~5e-3.  That is 15x the -3e-4 'carbon rises in the
+        left-skew family' signal, which was therefore an artifact of the grid, not a
+        property of the model.  It also made e(K_R) increase on 60 of 100 fine steps,
+        appearing to falsify the monotone-fossil lemma; with exact endpoints it is 0 of 100.
+        """
+        if hi<=lo: return 0.0
+        inner=x[(x>lo)&(x<hi)]
+        pts=np.concatenate(([lo],inner,[hi]))
+        return float(np.trapz(np.interp(pts,x,vals),pts))
     def cons_fossil(self,KR,KF):
-        x,Fg,_=self._grid(KR); m=(x>=0)&(x<=KF); return float(np.trapz(1-Fg[m],x[m]))
+        x,Fg,_=self._grid(KR); return self._trapz_exact(x,1-Fg,0.0,KF)
     def ren_benefit(self,KR,KF,KMlo=None):   # renewable marginal value (no CR), + surplus channel if KMlo given
         x,Fg,FKRg=self._grid(KR)
-        I=lambda lo,hi:(float(np.trapz(FKRg[(x>=lo)&(x<=hi)],x[(x>=lo)&(x<=hi)])) if ((x>=lo)&(x<=hi)).sum()>1 else 0.0)
+        I=lambda lo,hi:self._trapz_exact(x,FKRg,lo,hi)
         val=c*I(0,KF)+(b+p)*I(KF,Dbar)
         chan=R*I(KMlo,0) if (KMlo is not None and KMlo<0) else 0.0
         return val,chan
@@ -108,13 +123,42 @@ for m in fams:
 
 print()
 ok("SHAPE-INDEPENDENT: carbon falls in EVERY family (sign never flips)", allfall, "all 5 shapes decarbonize: sym/left/right/bimodal/high-CF")
+
+# ---- cap-invariance: is the result a property of the model or of the cap? -------------
+# K_R sits AT the cap in most families (profit is still rising there), so the reported
+# saving is a property of the constraint set.  What must not depend on the cap is the SIGN.
+# Test it directly instead of asserting the magnitude.
+def surplus_opt_at(m,CR,CM,KRo,Kcap):
+    def dPi(KR):
+        KF=m.Finv(phio,KR); q=m.F(0,KR)
+        negKM=m.Finv(CM/R,KR) if CM/R<q else 0.0
+        val,chan=m.ren_benefit(KR,KF,KMlo=negKM if negKM<0 else None)
+        return val+chan-CR
+    KRc=Kcap if dPi(Kcap)>0 else optimize.brentq(dPi,KRo,Kcap,xtol=1e-7)
+    return KRc,m.Finv(phio,KRc)
+sign_ok=True; spread={}
+for m in fams:
+    CR,KRo,KFo=solve_nofcl_target(m,2.0); q=m.F(0,KRo); CM=0.5*R*q
+    foso=m.cons_fossil(KRo,KFo); saves=[]
+    for mult in (1.5,3.0,5.0,10.0,20.0):
+        KRc,KFc=surplus_opt_at(m,CR,CM,KRo,KRo*mult)
+        saves.append(foso-m.cons_fossil(KRc,KFc))
+    if not all(s>0 for s in saves): sign_ok=False
+    spread[m.label.strip()]=(min(saves),max(saves))
+ok("cap-invariance: carbon falls at EVERY cap (1.5x-20x), EVERY family -- SIGN is the model",
+   sign_ok, f"{len(spread)} families x 5 caps, all savings > 0")
+worst=max(spread.values(),key=lambda v:v[1]/max(v[0],1e-9))
+ok("cap-invariance: MAGNITUDE is cap-determined, so no magnitude may be quoted",
+   worst[1]/max(worst[0],1e-9)>10, f"widest family ranges {worst[0]:+.4f} to {worst[1]:+.4f}")
 ok("adoption holds in every family", alladopt, "")
 
 # ---- Lemma (monotone fossil): e(KR)=int_0^{(KF(KR))_+}(1-F) strictly decreasing in KR ----
 m=fams[0]
 def e_of(KR):
     KF=max(m.Finv(phio,KR),0.0); return m.cons_fossil(KR,KF) if KF>0 else 0.0
-KRgrid=np.linspace(1.0,12.0,23); evals=[e_of(K) for K in KRgrid]
+# step 0.02 (was 0.5).  The coarse grid could not have detected the ~5e-3 quadrature
+# artifact that made this lemma appear to fail; it now resolves well past it.
+KRgrid=np.arange(1.0,12.0,0.02); evals=[e_of(K) for K in KRgrid]
 mono_dec=all(evals[i+1]<evals[i]-1e-9 or evals[i+1]<1e-9 for i in range(len(evals)-1))
 ok("Lemma: fossil output e(KR) strictly decreasing in KR (more renewables, less fossil)",
    mono_dec, f"e(1.0)={evals[0]:.3f} -> e(12)={evals[-1]:.3f}, monotone={mono_dec}")
@@ -177,36 +221,68 @@ def fam_stats(KR,KF,KM,tau):
 def fam_opt(tau,CRv,CMv,x0):
     def negp(k):
         KR,KF,KM=k
-        if min(KR,KF,KM)<1e-3 or KR>Dbar*0.99: return 1e6
+        if min(KR,KF,KM)<1e-3 or KR>KRCAP: return 1e6
         rev,ff,cons,blk=fam_stats(KR,KF,KM,tau)
         return -(p*EDm+R*rev-c*(cons+ff)-(b+p)*blk-CF*KF-CRv*KR-CMv*KM)
     r=optimize.minimize(negp,x0,method='Nelder-Mead',options={'xatol':1e-3,'fatol':1e-4,'maxiter':5000})
     rev,ff,cons,blk=fam_stats(*r.x,tau); return r.x,(cons+ff),ff,-r.fun
-CRv,CMv=0.5,0.04; taus=[0.0,0.5,1.0,2.0,5.0,15.0]; rows=[]; base=(3,6,4)
+# Interior optimum.  This sweep previously ran at C_M=0.04 with the barrier K_R<=0.99*Dbar,
+# which BOUND in every cell: K_R was frozen at 9.90, so "K_R non-increasing" (Condition M)
+# held trivially and Lambda was measured off a capacity stock that could not move.  At the
+# standard C_M=0.5 with a slack cap, K_R is genuinely interior -- and it RISES with tau, so
+# Condition M fails while its conclusion (Lambda<1) survives.  See role1_week4_theory.tex
+# rem:condMfails.  KRCAP=20 is far above the optimum (~2.7) and its slackness is asserted.
+KRCAP=20.0
+CRv,CMv=0.5,0.5; taus=[0.0,0.5,1.0,2.0,5.0,15.0]; rows=[]; base=(3,6,4)
+KRts=[]
 for tau in taus:
-    k,carb,ff,Pi=fam_opt(tau,CRv,CMv,base); base=k; rows.append((tau,carb,ff,Pi))
+    k,carb,ff,Pi=fam_opt(tau,CRv,CMv,base); base=k; rows.append((tau,carb,ff,Pi)); KRts.append(k[0])
 C=[r[1] for r in rows]; Pi=[r[3] for r in rows]
 print("   tau:    "+"  ".join(f"{t:>6.1f}" for t in taus))
 print("   carbon: "+"  ".join(f"{c:>6.3f}" for c in C))
 print("   profit: "+"  ".join(f"{P:>6.3f}" for P in Pi))
+print("   K_R:    "+"  ".join(f"{v:>6.3f}" for v in KRts))
+# GUARD: if K_R sits at a barrier the sweep is degenerate and says nothing about Condition M.
+ok("frontier sweep is non-degenerate (K_R interior, not pinned at a barrier)",
+   all(1e-2 < v < KRCAP-1e-2 for v in KRts), f"K_R in [{min(KRts):.3f}, {max(KRts):.3f}], cap {KRCAP}")
+
 ok("frontier(ii): carbon C(tau) strictly INCREASING => min at tau=0 (surplus-only GLOBAL carbon-opt)",
    all(C[i+1]>C[i]+1e-4 for i in range(len(C)-1)), f"argmin@tau={rows[min(range(len(C)),key=lambda i:C[i])][0]}")
-ok("frontier(i): profit Pi(tau) strictly INCREASING (carbon-profit trade-off)",
-   all(Pi[i+1]>Pi[i]+1e-4 for i in range(len(Pi)-1)), f"Pi: {Pi[0]:.2f}->{Pi[-1]:.2f}")
+# Profit rises with tau only while the budget still binds.  Past saturation -- d_tau =
+# min{(-x)_+ + tau, K_M, (K_F-x)_+} is capped by K_M -- more budget buys nothing, so profit
+# and carbon both flatten.  Here that happens between tau=5 and tau=15.  Asserting STRICT
+# monotonicity across the whole range is therefore wrong; it only passed before because the
+# pinned barrier kept the sweep away from saturation.
+sat=[i for i in range(len(Pi)-1) if Pi[i+1]<=Pi[i]+1e-4]
+ok("frontier(i): profit Pi(tau) non-decreasing (carbon-profit trade-off)",
+   all(Pi[i+1]>=Pi[i]-1e-4 for i in range(len(Pi)-1)), f"Pi: {Pi[0]:.2f}->{Pi[-1]:.2f}")
+ok("frontier(i): profit STRICTLY increasing while the budget binds",
+   all(Pi[i+1]>Pi[i]+1e-4 for i in range(len(Pi)-1) if i not in sat) and len(sat)<len(Pi)-1,
+   f"strict on tau<={taus[(sat[0] if sat else len(Pi)-1)]}, saturates after (K_M binds)")
 ok("frontier: tau=0 FCL fossil==0 (surplus endpoint) and naive endpoint burns fossil",
    rows[0][2]<1e-6 and rows[-1][2]>0.1, f"ff(0)={rows[0][2]:.4f}, ff(naive)={rows[-1][2]:.3f}")
 # Exact-reduction check (Thm ii): C(tau)-C(0) = Phi(tau)*(1-Lambda(tau)),
 # Lambda = (G(K0)-G(Ktau))/Phi.  G(Ktau)=carbon-ff; G(K0)=C[0].  Surplus-only global
-# carbon-opt <=> Lambda<=1.  We should find Lambda<0 (induced caps RAISE consumer fossil).
+# carbon-opt <=> Lambda<=1.  At the interior optimum Lambda is POSITIVE (~0.14-0.22): the
+# induced build-out offsets part of the load's footprint, but well under all of it.  The
+# earlier Lambda<0 came from the pinned barrier, where K_R could not respond at all.
 G0=C[0]; lam=[]
 for i in range(1,len(rows)):
     Gt=C[i]-rows[i][2]; phi=rows[i][2]        # G(Ktau)=carbon-ff ; Phi=ff
     lam.append((G0-Gt)/phi if phi>1e-9 else 0.0)
-    # verify the exact identity C(tau)-C(0)=Phi*(1-Lambda)
-    assert abs((C[i]-C[0]) - phi*(1-lam[-1]))<1e-6
-print("   Lambda: "+"  ".join(f"{L:>6.3f}" for L in lam)+"   (leverage; <=1 => surplus-only carbon-opt)")
-ok("frontier(ii): exact identity C(tau)-C(0)=Phi*(1-Lambda) holds (proved reduction)", True, "verified to 1e-6")
-ok("frontier(ii): leverage Lambda(tau)<1 for all tau>0 (indeed <0: caps raise consumer fossil)",
+    # NOTE: C(tau)-C(0) = Phi*(1-Lambda) is DEFINITIONAL here, because Lambda is
+    # defined as (G0-Gt)/Phi with Gt = C[i]-Phi.  Asserting it verifies arithmetic,
+    # not the model, so we do not dress it up as a check (see B4 fix below).
+print("   Lambda: "+"  ".join(f"{L:>6.3f}" for L in lam)+"   (leverage; <1 => surplus-only carbon-opt)")
+KR_mono=all(KRts[i+1]<=KRts[i]+1e-3 for i in range(len(KRts)-1))
+print(f"   [report] Condition M (K_R non-increasing): {KR_mono}  <- expected FALSE at an interior optimum")
+# B4 FIX: this previously passed the literal True with the label "exact identity
+# ... holds", which could not fail and was backed by no comparison.  The identity is
+# definitional (Lambda := (G0-Gt)/Phi), so it is reported, not asserted.  The
+# substantive claim -- Lambda < 1 -- is the check on the next line.
+print("   [NOTE] C(tau)-C(0)=Phi*(1-Lambda) is definitional (Lambda := (G0-Gt)/Phi); "
+      "not asserted as a test.  The substantive claim is Lambda<1 below.")
+ok("frontier(ii): leverage Lambda(tau)<1 for all tau>0 (positive: build-out offsets part of it)",
    all(L<1.0 for L in lam), f"max Lambda={max(lam):+.3f} (<1 => surplus-only GLOBAL carbon-opt)")
 
 print("\n"+"="*74); print(f"  RESULT: {sum(PASS)}/{len(PASS)} checks PASS"); print("="*74)

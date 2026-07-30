@@ -64,12 +64,50 @@ def fd_hess(d,P,v,h=1e-4):
         H[:,i]=(gp-gm)/(2*h)
     return 0.5*(H+H.T)  # symmetrize
 
-def solve_with(d,P,x0): return optimize.fsolve(lambda v:grad(d,P,v),x0,xtol=1e-12)
+def _fsolve_checked(fn,x0,xtol,tag,rtol=1e-8,tries=4):
+    """Solve fn(x)=0, refuse to return a non-solution, and escalate through robust solvers.
+
+    Bare fsolve returns its last iterate whatever happened, so every downstream check then
+    runs on a point that does not solve the FOCs.  Two real failure modes are handled:
+
+      * ier=5 ("not making good progress") fires both when genuinely stuck AND when already
+        at machine precision -- so the RESIDUAL is ground truth, not ier.
+      * fsolve's forward-difference Jacobian stalls at interior points with a spiky integrand
+        (D~Beta(1,3) at C_M=0.502): |F| sticks at ~1e-6.  We escalate: restart fsolve from the
+        best iterate, then fall back to Levenberg-Marquardt least_squares, which handles the
+        noisy Jacobian cleanly (verified to reach 1e-16 on exactly this stall).
+
+    Raises only if every solver stays above rtol -- then it is a real non-solution."""
+    def res(x): return float(np.max(np.abs(np.asarray(fn(x),dtype=float))))
+    best=None; bestres=np.inf; x=np.asarray(x0,dtype=float)
+    for k in range(tries):
+        sol,info,ier,msg=optimize.fsolve(fn,x,xtol=xtol,full_output=True)
+        if np.all(np.isfinite(sol)) and res(sol)<bestres: best,bestres=sol,res(sol)
+        if bestres<=rtol: return best
+        x=best if best is not None else x
+        if k>0: x=x*(1.0+1e-7)
+    # escalate to Levenberg-Marquardt from the best fsolve iterate (robust to noisy Jacobians)
+    try:
+        lm=optimize.least_squares(lambda v:np.asarray(fn(v),dtype=float),best,method='lm',
+                                  xtol=1e-14,ftol=1e-14,gtol=1e-14)
+        if np.all(np.isfinite(lm.x)) and res(lm.x)<bestres: best,bestres=lm.x,res(lm.x)
+    except Exception:
+        pass
+    if bestres<=rtol: return best
+    raise RuntimeError(f"{tag}: no solver reached the tolerance "
+                       f"(best max|F|={bestres:.3e} > {rtol:.0e}): {msg.strip()}")
+
+def solve_with(d,P,x0):
+    return _fsolve_checked(lambda v:grad(d,P,v),x0,1e-12,'solve_with')
 
 PASS=[];
 def chk(name,a,b,tol=1e-5):
-    rel=abs(a-b)/(1+abs(b)); ok=rel<tol; PASS.append(ok)
-    print(f"  [{'PASS' if ok else 'FAIL'}] {name:42s} analytic={a:+.8g} ref={b:+.8g} rel={rel:.1e}")
+    rel=abs(a-b)/(1+abs(b)); good=rel<tol; PASS.append(good)
+    print(f"  [{'PASS' if good else 'FAIL'}] {name:42s} analytic={a:+.8g} ref={b:+.8g} rel={rel:.1e}")
+
+def ok(name,cond,detail=""):
+    cond=bool(cond); PASS.append(cond)
+    print(f"  [{'PASS' if cond else 'FAIL'}] {name:42s} {detail}")
 
 # ===================================================================
 print("="*72,"\n  CHECK 1: analytic gradients (eqs 11-15) == FD of profit\n","="*72)
@@ -127,6 +165,24 @@ for a in (1.0,0.5,2.0):
     print(f"  alpha={a}: MV(1,4,8)=({vals[0]:.6f},{vals[1]:.6f},{vals[2]:.6f}) const={const}", end="")
     if a==1.0: chk('  uniform MV vs eq:mv',vals[1],MV_formula)
     else: print()
+    # B6: 'const' was computed, printed, then silently discarded -- the knife-edge claim
+    # was never asserted.  Asserting it naively FAILS, and the failure is diagnostic:
+    # MV(1)=MV(4) exactly but MV(8) departs.  The reason is the regime boundary.  On the
+    # locus, K_M>=K_R (large-FCL, F(-K_M)=0) at K_R=1,4 but K_M=7.0<8=K_R at K_R=8.  The
+    # knife-edge therefore holds on the SAME regime that carries the Phi=Delta identity:
+    # one boundary governs both headline results.  Assert it where it is claimed to hold,
+    # and assert that it genuinely breaks outside -- so neither half can rot silently.
+    KMs=[locus(kr)[1] for kr in (1.,4.,8.)]
+    big=[i for i,kr in enumerate((1.,4.,8.)) if KMs[i]>=kr]      # large-FCL indices
+    small=[i for i,kr in enumerate((1.,4.,8.)) if KMs[i]<kr]
+    bigv=[vals[i] for i in big]
+    ok(f'  knife-edge holds on large-FCL (K_M>=K_R) at alpha={a}',
+       len(bigv)>1 and max(bigv)-min(bigv)<1e-6,
+       f'spread={max(bigv)-min(bigv):.2e} over {len(bigv)} large-FCL pts')
+    if small:
+        ok(f'  knife-edge genuinely BREAKS on small-FCL at alpha={a}',
+           max(abs(vals[i]-bigv[0]) for i in small)>1e-4,
+           f'departure={max(abs(vals[i]-bigv[0]) for i in small):.2e} (regime boundary is real)')
 
 print("\n"+"="*72,"\n  CHECK 5: cutoff probabilities (eq:cutoffs) at the optimum\n","="*72)
 dd=ScaleMix(10,2,2,2,2); star=solve_with(dd,P,[3,5,6]); KR,KF,KM=star
@@ -148,7 +204,7 @@ def solve_no(d,P,x0):
         t1=integrate.quad(lambda x:d.FKR(x,KRn),0,KFn,limit=300)[0]
         t2=integrate.quad(lambda x:d.FKR(x,KRn),KFn,d.Dbar,limit=300)[0]
         return [e1,c*t1+(b+p)*t2-CR]
-    return optimize.fsolve(foc,x0,xtol=1e-12)
+    return _fsolve_checked(foc,x0,1e-12,'solve_no')
 KRo,KFo=solve_no(dd,P,[3,6]); phio=dd.F(KFo,KRo); qo=dd.F(0,KRo)
 mu_mid=integrate.quad(lambda x:x*dd.f(x,KRo),0,KFo,limit=300)[0]/(phio-qo)
 fos_no_q=integrate.quad(lambda x:1-dd.F(x,KRo),0,KFo,limit=300)[0]

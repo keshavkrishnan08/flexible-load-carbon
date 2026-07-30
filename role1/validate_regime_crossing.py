@@ -37,7 +37,41 @@ def gF(d,P,KR,KF,KM):
     R,c,b,p,CF=P['R'],P['c'],P['beta'],P['p'],P['CF']; Fk=d.F(KF,KR); Fg=d.F(KF-KM,KR)
     return R*(Fk-Fg)-c*(1-Fg)+(b+p)*(1-Fk)-CF
 def grad(d,P,v): return np.array([gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)])
-def solve_with(d,P,x0): return optimize.fsolve(lambda v:grad(d,P,v),x0,xtol=1e-11)
+def _fsolve_checked(fn,x0,xtol,tag,rtol=1e-8,tries=4):
+    """Solve fn(x)=0, refuse to return a non-solution, and escalate through robust solvers.
+
+    Bare fsolve returns its last iterate whatever happened, so every downstream check then
+    runs on a point that does not solve the FOCs.  Two real failure modes are handled:
+
+      * ier=5 ("not making good progress") fires both when genuinely stuck AND when already
+        at machine precision -- so the RESIDUAL is ground truth, not ier.
+      * fsolve's forward-difference Jacobian stalls at interior points with a spiky integrand
+        (D~Beta(1,3) at C_M=0.502): |F| sticks at ~1e-6.  We escalate: restart fsolve from the
+        best iterate, then fall back to Levenberg-Marquardt least_squares, which handles the
+        noisy Jacobian cleanly (verified to reach 1e-16 on exactly this stall).
+
+    Raises only if every solver stays above rtol -- then it is a real non-solution."""
+    def res(x): return float(np.max(np.abs(np.asarray(fn(x),dtype=float))))
+    best=None; bestres=np.inf; x=np.asarray(x0,dtype=float)
+    for k in range(tries):
+        sol,info,ier,msg=optimize.fsolve(fn,x,xtol=xtol,full_output=True)
+        if np.all(np.isfinite(sol)) and res(sol)<bestres: best,bestres=sol,res(sol)
+        if bestres<=rtol: return best
+        x=best if best is not None else x
+        if k>0: x=x*(1.0+1e-7)
+    # escalate to Levenberg-Marquardt from the best fsolve iterate (robust to noisy Jacobians)
+    try:
+        lm=optimize.least_squares(lambda v:np.asarray(fn(v),dtype=float),best,method='lm',
+                                  xtol=1e-14,ftol=1e-14,gtol=1e-14)
+        if np.all(np.isfinite(lm.x)) and res(lm.x)<bestres: best,bestres=lm.x,res(lm.x)
+    except Exception:
+        pass
+    if bestres<=rtol: return best
+    raise RuntimeError(f"{tag}: no solver reached the tolerance "
+                       f"(best max|F|={bestres:.3e} > {rtol:.0e}): {msg.strip()}")
+
+def solve_with(d,P,x0):
+    return _fsolve_checked(lambda v:grad(d,P,v),x0,1e-11,'solve_with')
 def fd_hess(d,P,v,h=1e-4):
     H=np.zeros((3,3))
     for i in range(3):
@@ -51,13 +85,29 @@ if __name__=="__main__":
     Cbar=(R-c)*(b+p-c-CF)/(b+p-c)
     print(f"C_bar_M = {Cbar:.4f}")
     print(f"{'C_M':>6} {'KR*':>7} {'KM*':>7} {'regime':>7} {'dKR/dCM':>9} {'NEGdef':>7}  eigenvalues")
+    Dbar=10.0
+    # The comparative static dKR/dCM needs an INTERIOR equilibrium.  At the low-CM end the
+    # FCL grows until fossil capacity KF saturates against the demand ceiling Dbar; past that
+    # there is no interior solution and the central difference straddles the boundary (the
+    # perturbed solve runs off to KF~1e6).  The old sweep included CM=0.30, where KF=9.986
+    # already sits within 0.2% of Dbar, and reported a dKR from a non-solution.  Guard it:
+    # solve the perturbations, and only report the derivative when BOTH stay interior.
     star=[3,5,6]
     for CM in [0.77,0.70,0.60,0.50,0.40,0.30]:
-        P=dict(R=R,c=c,beta=b,p=p,CF=CF,CR=0.5,CM=CM,Dbar=10.0)
+        P=dict(R=R,c=c,beta=b,p=p,CF=CF,CR=0.5,CM=CM,Dbar=Dbar)
         star=solve_with(dd,P,star); KR,KF,KM=star
+        interior = KF < 0.98*Dbar
         h=2e-3
-        KRp=solve_with(dd,dict(P,CM=CM+h),star)[0]; KRm=solve_with(dd,dict(P,CM=CM-h),star)[0]
-        dKR=(KRp-KRm)/(2*h)
+        if interior:
+            try:
+                KRp=solve_with(dd,dict(P,CM=CM+h),star)[0]
+                KRm=solve_with(dd,dict(P,CM=CM-h),star)[0]
+                dKR=f"{(KRp-KRm)/(2*h):9.3f}"
+            except RuntimeError:
+                interior=False; dKR="  boundary"
+        else:
+            dKR="  boundary"
         eig=np.linalg.eigvalsh(fd_hess(dd,P,star))
+        note = "" if interior else f"  <-- KF={KF:.3f} at ceiling Dbar={Dbar:.0f}: no interior comparative static"
         print(f"{CM:6.2f} {KR:7.3f} {KM:7.3f} {'large' if KM>=KR else 'small':>7} "
-              f"{dKR:9.3f} {str(bool(np.all(eig<0))):>7}  {np.round(eig,3)}")
+              f"{dKR:>9} {str(bool(np.all(eig<0))):>7}  {np.round(eig,3)}{note}")

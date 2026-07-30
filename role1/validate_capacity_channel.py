@@ -47,7 +47,8 @@ def study(d,P,tag):
     KRm=optimize.fsolve(lambda v:focs_with(d,dict(P,CM=P['CM']-h),v),[KR,KF,KM])[0]
     dKR=(KRp-KRm)/(2*h)
     B=d.FKR(KF,KR)*d.f(KF-KM,KR)-d.FKR(KF-KM,KR)*d.f(KF,KR)
-    glo=d.FKR(KF-KM,KR)/d.f(KF-KM,KR); ghi=d.FKR(KF,KR)/d.f(KF,KR)
+    eps=1e-12  # guard: f(KF)->0 at the upper endpoint for incr/left-skew densities
+    glo=d.FKR(KF-KM,KR)/(d.f(KF-KM,KR)+eps); ghi=d.FKR(KF,KR)/(d.f(KF,KR)+eps)
     ok=(dKR<=1e-4)==(B<=1e-10)
     print(f"[{tag}]\n  KR*={KR:7.4f} KR^o={KRn:7.4f}  KR*>KR^o? {KR>KRn}  (conv={conv})")
     print(f"  g(KF-KM)={glo:.5f} g(KF)={ghi:.5f}  g non-incr? {glo>=ghi-1e-9}")

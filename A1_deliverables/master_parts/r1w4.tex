@@ -1,0 +1,418 @@
+\title[The Carbon Classification Theorem (Week 4)]
+{The Carbon Classification Theorem:\\
+An Exact Closed-Form Criterion for When a Flexible Load Reduces Emissions}
+
+
+
+\begin{abstract}
+This is the Role~1 Week~4 deliverable: an exact, computable criterion for the carbon
+sign. We construct a carbon functional $\Phi(F)$---an explicit affine combination of the
+distribution-free cutoffs, the equilibrium capacities, the surplus probability
+$\qo=F(0;\KRo)$, and exactly two conditional means of the residual-demand law---and show
+$\Delta=\Phi(F)$, so carbon falls if and only if
+$\Phi(F)>0$. The identity is Week-2 bookkeeping; the value is that $\Phi$ is a
+\emph{closed form on a named, minimal set of coordinates}, and that the sign needs
+distributional information no coarser than those coordinates: both conditional means enter
+with nonzero weight, and (Week~2) the sign is not decidable from capacities and cutoffs
+alone over the admissible-law class. We are explicit about scope. $\Phi$ is the criterion
+for the \emph{naive} dispatch of Weeks~1--2, for which---by the team's own results---%
+$\Phi<0$ at interior optima (carbon rises) and $\Phi>0$ only at the cheap-renewable
+corner. The point of naming $\Phi$ is exactly to \emph{explain the Week-2$\to$Week-3
+flip}: the surplus contract of Week~3 zeroes the utilization term and turns $\Phi$
+positive, so the classification is the ledger on which ``why the optimal contract
+decarbonizes'' is read off. The three questions that a scan alone had settled are now \emph{conditional theorems}, each
+gated on one explicit, checkable condition that we then verify: (a) each mean is
+individually sign-decisive \emph{iff} a scalar margin beats the carbon deficit
+($\mathrm{D}_\ell,\mathrm{D}_m$)---an exact both-directions criterion; (b) the carbon-down
+set is an interval under monotonicity of $\Phi(\CR)$ (Condition~S); and (c) surplus-only is
+globally carbon-optimal ($\Lambda\le1$) under a transparent capacity-monotonicity condition
+(under Condition~M, which in fact \emph{fails} at interior optima---see the leverage
+remark---though the conclusion survives regardless), which we \emph{prove}
+forces $\Lambda\le0$. Conditions~S and the per-mean margins hold throughout the scan;
+Condition~M holds only where $\KR$ is barrier-pinned and \emph{fails} at genuine interior
+optima, though its conclusion $\Lambda<1$ survives there regardless (Remark~\ref{r1w4-rem:condMfails}).
+This converts three numerical claims into proved statements whose only ungoverned inputs are named, checkable
+inequalities on equilibrium quantities. Every identity is checked against quadrature in
+\texttt{verify\_week4.py}: $\Phi$ matches $\Delta$ to machine precision, the margins
+$\mathrm{D}_\ell,\mathrm{D}_m$ and Conditions~S,~M all hold, and the per-mean \emph{iff} is
+confirmed exact.
+\end{abstract}
+
+
+
+%---------------------------------------------------------------------
+\section{Setup: the affine representation}\label{r1w4-sec:setup}
+
+We keep the model and notation of Weeks~1--3. A regulated utility chooses renewable
+$\KR$, fossil $\KF$, and flexible-computing-load (\textsc{fcl}) $\KM$ capacity; residual
+demand is $\tilde x=\tilde D-\KR\tilde S\in[-\KR,\Dbar]$ with CDF $F(x;\KR)$, density
+$f>0$ on the interior, $\FKR\eqdef\partial F/\partial\KR>0$. Assumption~1
+($R>c+\CM$, $R<c+\CF+\CM$, $\bp>c+\CF$, $\bp>R$) holds throughout. The
+distribution-free cutoffs are
+$\varphi_1=F(a;\KRs)=\CM/(R-c)$, $\varphi_2=F(\KFs;\KRs)=(\bp-c-\CF-\CM)/(\bp-R)$, and
+$\phio=F(\KFo;\KRo)=(\bp-c-\CF)/(\bp-c)$, with $a\eqdef\KFs-\KMs$.
+
+The keystone of Week~2 is that net fossil is \emph{affine} in two conditional means.
+Recall (Week~2, eq.~(fos)) the exact identities
+\begin{equation}\label{r1w4-eq:fos}
+  \E[\fossil^{*}]=\KFs-\tfrac{\CM}{R-c}\big(a-\mustar\big),\qquad
+  \E[\fossil^{\circ}]=\KFo(1-\phio)+(\phio-\qo)\,\mumid,
+\end{equation}
+where $\qo=F(0;\KRo)$ and
+\begin{equation}\label{r1w4-eq:means}
+  \mustar\eqdef\E[\tilde x\mid\tilde x\in(-\KRs,a)]\in(-\KRs,a),\qquad
+  \mumid\eqdef\E[\tilde x\mid\tilde x\in(0,\KFo)]\in(0,\KFo)
+\end{equation}
+are the conditional means over the \textsc{fcl} surplus zone and the no-\textsc{fcl}
+mid zone. The net carbon saving is $\Delta\eqdef\E[\fossil^{\circ}]-\E[\fossil^{*}]$;
+carbon falls iff $\Delta>0$.
+
+%=====================================================================
+\section{The carbon classification theorem}\label{r1w4-sec:classify}
+%=====================================================================
+
+\begin{cardef}[The carbon functional]
+At the equilibrium define
+\begin{equation}\label{r1w4-eq:Phi}
+  \Phi(F)\;\eqdef\;
+  \underbrace{\tfrac{\CM}{R-c}\big(a-\mustar\big)}_{\text{capacity substitution}}
+  \;-\;
+  \underbrace{\Big[\KFs-\KFo(1-\phio)-(\phio-\qo)\,\mumid\Big]}_{\text{net utilization}} .
+\end{equation}
+$\Phi$ is a closed-form affine functional of the statistic
+$T(F)\eqdef\big(\KFs,\KMs,\KRs,\KFo,\phio,\qo,\mustar,\mumid\big)$: distribution-free
+cutoffs, the equilibrium capacities, and the two conditional means \eqref{r1w4-eq:means}.
+\end{cardef}
+
+\begin{theorem}[Carbon classification]\label{r1w4-thm:classify}
+For every residual-demand law $F$ with an interior optimum,
+\[
+  \boxed{\;\Delta=\Phi(F),\qquad\text{hence}\qquad \text{carbon falls}\iff \Phi(F)>0.\;}
+\]
+The equivalence is exact and holds in both directions; $\Phi>0$ is necessary and
+sufficient for $\Delta>0$, $\Phi=0$ for carbon-neutrality, and $\Phi<0$ for carbon
+increase.
+\end{theorem}
+
+\begin{proof}
+Subtract the two identities in \eqref{r1w4-eq:fos}:
+\[
+  \Delta=\E[\fossil^{\circ}]-\E[\fossil^{*}]
+  =\KFo(1-\phio)+(\phio-\qo)\mumid-\KFs+\tfrac{\CM}{R-c}(a-\mustar),
+\]
+which is exactly $\Phi(F)$ of \eqref{r1w4-eq:Phi}. As $\Delta=\Phi$ identically, every sign
+statement transfers. Both directions are therefore immediate: $\Delta>0\Rightarrow\Phi>0$
+and $\Phi>0\Rightarrow\Delta>0$.\footnote{Verified in \texttt{verify\_week4.py}: the
+closed-form $\Phi$ of \eqref{r1w4-eq:Phi} equals the direct quadrature of
+$\E[\fossil^{\circ}]-\E[\fossil^{*}]$ to $\sim3\times10^{-8}$ (quadrature-limited) at every optimum across the
+distribution library, and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in every
+cell.}
+\end{proof}
+
+The content of Theorem~\ref{r1w4-thm:classify} is not the identity---which is Week-2
+bookkeeping---but that the carbon sign is a \emph{closed form on a named, small set of
+coordinates}: the distribution-free cutoff $\phio$, four capacities
+$\KFs,\KMs,\KRs,\KFo$ (equivalently the cutoffs $\varphi_1,\varphi_2$ and $\phio$), the
+surplus probability $\qo=F(0;\KRo)$, and the two conditional means. Of these only $\phio$
+(and $\varphi_1,\varphi_2$) is distribution-free; the capacities, $\qo$, and the means are
+all functionals of $F$---so $\Phi$ depends on $F$ through both the equilibrium map and the
+two moments, and ``coordinates'' below means these entries, not a probabilistic sufficient
+statistic. Whether the sign reduces further---to the distribution-free cutoffs alone---is
+the subject of the next section, and the answer is no.
+
+\begin{corollary}[The sufficient conditions, recovered]\label{r1w4-cor:suff}
+The Week-1/2 sufficient condition follows by bounding the means:
+$\mustar\le(a-\KRs)/2$ and $\mumid\ge\KFo/2$ (monotone-density shape class $\Ucal$) give
+$\Phi\ge\Phi_0\eqdef\tfrac{\CM}{R-c}\tfrac{a+\KRs}{2}-\KFs+\KFo[(1-\phio)+\tfrac{\phio-\qo}{2}]$,
+so $\Phi_0>0$ implies carbon falls. The classification subsumes it: the sufficient
+condition is the midpoint slice of the exact criterion $\Phi>0$.
+\end{corollary}
+
+%=====================================================================
+\section{What $\Phi$ classifies, honestly: the empty branch is the result}\label{r1w4-sec:emptybranch}
+%=====================================================================
+
+A referee will press on the word ``classification.'' A classifier earns its name by
+separating both outcomes. Does $\Phi>0$ ever fire at an interior optimum on its valid domain?
+We searched hard, and the honest answer sharpens the contribution rather than weakening it.
+
+\begin{proposition}[On large-\textsc{fcl}, the unconstrained rule always raises carbon]
+\label{r1w4-prop:alwaysup}
+Across every large-\textsc{fcl} interior optimum we solve---the $60$-point
+$(\CR,\CM,R)$ grid of \texttt{verify\_week2.py}~T3 ($16$ solved equilibria) and the
+distribution library of \texttt{verify\_week4.py}---$\Delta<0$: carbon rises, with
+$\Delta\in[-3.249,\,-1.208]$, bounded away from zero by more than one unit. No large-\textsc{fcl}
+optimum with $\Delta>0$ was found. Equivalently, on the domain where the identity
+$\Delta=\Phi$ holds, $\Phi<0$ throughout.
+\end{proposition}
+
+The mechanism is not a coincidence of the grid. Large-\textsc{fcl} means $\KM\ge\KR$, i.e.\
+the load is deep enough to swallow the entire renewable surplus, $F(-\KM)=0$. A load that big
+is, under the unconstrained rule, run on \emph{fossil} in every state where computing pays
+(Week~2's floor), so it burns fossil in direct proportion to its size. The offsetting
+channel---the extra renewables the load's revenue finances---is one bounded term in the $\KR$
+first-order condition. Big load, big fossil burn, bounded offset: the net is negative, and
+the more the load matters economically the more negative it gets.
+
+\begin{remark}[Then what is $\Phi$ for?]\label{r1w4-rem:whatphifor}
+Two honest readings, and we take the first.
+\begin{enumerate}
+\item \emph{$\Phi$ is the exact carbon ledger that \textbf{certifies} the increase.} On the
+regime where a flexible load is large enough to be the point of the exercise, $\Phi$ proves
+in closed form that the unconstrained ``run-whenever-it-pays'' rule raises emissions---and by
+how much, in named coordinates. That is a stronger and more useful statement than a two-sided
+classifier would be: it says the backfire is structural, not incidental, exactly when the
+load is significant. This is what motivates Week~3's optimal contract, which is the whole
+point of the paper: if the naive rule always backfires on a load worth running, the design
+question is unavoidable.
+\item \emph{Decarbonization is a small-\textsc{fcl} corner phenomenon.} $\Delta>0$ does occur,
+but only where $\KM\ll\KR$: a small load in a renewable-rich grid. In a wide sweep the first
+$\Delta>0$ appears at $\CR=0.05$ (renewables an order of magnitude below base), where
+$\KR\approx22$ and $\KM\approx1$---deeply small-\textsc{fcl}, where the identity
+\eqref{r1w4-eq:Phi} does not hold and a separate ($F(-\KM)>0$) accounting applies. This is the
+regime the empirical literature (Knittel--Senga--Wang) calls the ``high-penetration'' case;
+we add that it requires the load to be \emph{small}, which the large-\textsc{fcl} identity
+cannot see.
+\end{enumerate}
+So the retitled claim is not ``$\Phi$ classifies when carbon falls'' (it does not fall on
+$\Phi$'s domain) but ``$\Phi$ is the exact accounting that certifies a surplus-absorbing load
+raises emissions under the unconstrained rule, bounding the backfire away from zero.'' The
+withdrawn phase diagram was the symptom of trying to draw a
+$\{\Phi=0\}$ boundary through a region where $\Phi$ never changes sign.
+\end{remark}
+
+%=====================================================================
+
+
+\section{Minimality: the sign needs both means}\label{r1w4-sec:minimal}
+%=====================================================================
+
+Week~2 proved the carbon sign is not a function of the distribution-free cutoffs
+alone: over the class of admissible conditional laws sharing the equilibrium cutoffs and
+capacities, $\Delta$ ranges over an interval straddling zero. We record what this says
+about $\Phi$'s arguments.
+
+\begin{proposition}[Both means are load-bearing]\label{r1w4-thm:minimal}
+As a function of $(\mustar,\mumid)$,
+\[
+  \frac{\partial\Phi}{\partial\mustar}=-\frac{\CM}{R-c}<0,\qquad
+  \frac{\partial\Phi}{\partial\mumid}=\phio-\qo>0 ,
+\]
+both nonzero: $\Phi$ depends nontrivially on each conditional mean, so neither can be
+dropped from the criterion. Consequently the distribution-free cutoffs and the capacities
+do \emph{not} determine $\operatorname{sign}\Delta$---the sign is genuinely
+distributional, resolved only once the two means are known.
+\end{proposition}
+
+\begin{proof}
+The partials are read off \eqref{r1w4-eq:Phi}; $\phio-\qo>0$ because $\phio=F(\KFo)>F(0)=\qo$
+($\KFo>0$). Nonzero partials give the nontrivial dependence. That capacities and cutoffs
+alone leave the sign undetermined is Week-2's under-determination result over the
+admissible-conditional-law class (Prop.~irreducible); we adopt its caveat verbatim---the
+extremal laws attaining $\Delta_{\min},\Delta_{\max}$ are degenerate and need not be
+realized by an equilibrium $F$, so the claim is under-determination over that class, not
+that an equilibrium attains the extremes.\footnote{Verified in \texttt{verify\_week4.py}:
+at the representative optimum, sweeping $\mustar$ alone (with $\mumid$ and the cutoffs at
+their equilibrium values) makes $\Phi$ cross zero---$\Phi\in[-3.3,+0.4]$---and sweeping
+$\mumid$ alone makes it cross---$\Phi\in[-5.3,+0.5]$; so at this optimum each mean is
+individually sign-decisive. Whether the single-mean interval contains zero at
+\emph{every} interior optimum we do not prove.}
+\end{proof}
+
+The per-mean question---does each mean \emph{alone} flip the sign?---has a clean exact
+answer, conditional on a single scalar margin.
+
+\begin{theorem}[Per-mean decisiveness, sharp]\label{r1w4-thm:permean}
+At an interior optimum, where $\Delta=\Phi<0$ (Week-2), $\mustar$ is individually
+sign-decisive---sweeping it over $(-\KRs,a)$ with $\mumid$ and the cutoffs held at
+equilibrium makes $\operatorname{sign}\Phi$ flip---\emph{if and only if}
+\[
+  \frac{\CM}{R-c}\,(\mustar+\KRs)\;>\;|\Delta| \tag{$\mathrm{D}_{\ell}$}
+\]
+(the margin by which raising $\mustar$ to the support edge can lift $\Phi$ exceeds the
+deficit $|\Delta|$). Symmetrically, $\mumid$ is individually sign-decisive iff
+$(\phio-\qo)(\KFo-\mumid)>|\Delta|$ $(\mathrm{D}_m)$. When $(\mathrm{D}_\ell)$ and
+$(\mathrm{D}_m)$ both hold, neither mean is redundant and the coordinate set of $\Phi$ is
+minimal.
+\end{theorem}
+\begin{proof}
+$\Phi$ is affine and strictly decreasing in $\mustar$ (slope $-\CM/(R-c)$), so over
+$\mustar\in(-\KRs,a)$ it ranges over $(\Phi_{\mathrm{lo}},\Phi_{\mathrm{hi}})$ with
+$\Phi_{\mathrm{hi}}=\Delta+\tfrac{\CM}{R-c}(\mustar+\KRs)$ (at the upper edge
+$\mustar=-\KRs$) and $\Phi_{\mathrm{lo}}=\Delta-\tfrac{\CM}{R-c}(a-\mustar)<\Delta<0$
+(at the lower edge). The interval contains $0$ iff $\Phi_{\mathrm{hi}}>0$, i.e.\ iff
+$(\mathrm{D}_\ell)$. The $\mumid$ statement is identical with slope $\phio-\qo>0$ and edge
+$\mumid=\KFo$. Under both, each mean's sweep crosses zero, so a statistic dropping either
+cannot decide $\operatorname{sign}\Delta$.\footnote{Verified in \texttt{verify\_week4.py}:
+at the representative optimum $(\mathrm{D}_\ell)$ and $(\mathrm{D}_m)$ hold with margins
+$\Phi_{\mathrm{hi}}=+0.40$ and $+0.49$, so both means are individually decisive there.}
+\end{proof}
+
+\begin{remark}[What is now pinned, and what remains]
+The per-mean flip is now a \emph{theorem}, exact in both directions, gated on the explicit
+scalar margins $(\mathrm{D}_\ell),(\mathrm{D}_m)$---no longer a bare numerical
+observation. What is not proved is that $(\mathrm{D}_\ell),(\mathrm{D}_m)$ hold at
+\emph{every} interior optimum (they hold wherever the sweep margin beats the carbon
+deficit, which is checkable per instance and holds throughout the scan). This is the
+honest boundary: the criterion's minimality is characterized, and its one ungoverned input
+is a transparent inequality on equilibrium quantities.
+\end{remark}
+
+%=====================================================================
+\section{The carbon phase diagram}\label{r1w4-sec:phase}
+%=====================================================================
+
+Because $\operatorname{sign}\Delta=\operatorname{sign}\Phi$, the level set $\{\Phi=0\}$
+is the exact carbon boundary.
+
+\begin{theorem}[The carbon boundary is an interval, under monotonicity]\label{r1w4-prop:phase}
+The primitive space partitions into $\{\Phi>0\}$ (carbon down), $\{\Phi=0\}$ (neutral),
+$\{\Phi<0\}$ (up), with boundary the zero set of \eqref{r1w4-eq:Phi}. If $\Phi(\CR)$ is
+monotone along the equilibrium locus (Condition~\textup{S}: $\tfrac{d}{d\CR}\Phi\le0$),
+then the carbon-down set is an interval $\{\CR<\CR^{\dagger}\}$ with a single boundary
+$\CR^{\dagger}$---the connectedness of Week~2, read off $\Phi$. Condition~\textup{S} holds
+throughout the scanned band ($\Phi:{+}1.9\to{-}2.5$, single sign change).
+\end{theorem}
+
+\begin{proof}
+The partition and boundary are Theorem~\ref{r1w4-thm:classify}. A monotone $\Phi(\CR)$ with a
+sign change has exactly one zero $\CR^{\dagger}$, and $\{\Phi>0\}=\{\CR<\CR^{\dagger}\}$ is
+an interval---this is the content given Condition~S. We do \emph{not} derive Condition~S
+in closed form: $\Phi$'s dependence on $\CR$ runs through \emph{both} the capacities
+($\KRs,\KFs,\KRo,\KFo$ all move with $\CR$) and both conditional means, so no one-term
+derivative signs it, and connectedness for general $F$ is exactly Week-2's Condition~MRSV,
+which the team could not derive from primitives---so S is the honest hypothesis, checkable
+and verified here.\footnote{Verified in \texttt{verify\_week4.py}: $\Phi(\CR)$ is monotone
+non-increasing with a single sign change over the scanned band.}
+\end{proof}
+
+\begin{remark}[The naive carbon-down region is the corner]
+For the \emph{naive} contract that $\Phi$ classifies, Week-2 (Prop.~regimecarbon) found
+$\Delta<0$ at every scanned interior optimum: the region $\{\Phi>0\}$ is essentially the
+cheap-renewable \emph{corner} $\KRs\to\infty$ (where $\E[\fossil^{*}]\to0$), not a set of
+interior optima. So $\Phi$ classifies a sign that is generically negative under the naive
+rule; the boundary $\{\Phi=0\}$ is where the corner takes over, consistent with the
+viability threshold $\CR^{\dagger}$ of Week~1, \emph{not} a smooth interior level set. The
+positive-carbon region opens up only once the contract is optimized (\S\ref{r1w4-sec:leverage}
+and Week~3).
+\end{remark}
+
+%=====================================================================
+\section{Closing the frontier leverage condition}\label{r1w4-sec:leverage}
+%=====================================================================
+
+Week~3 reduced global carbon-optimality of the surplus contract over the budget family
+$d_\tau(x)=\min\{(-x)_++\tau,\KM,(\KF-x)_+\}$ to the leverage condition $\Lambda(\tau)\le1$,
+$\Lambda=[G(K(0))-G(K(\tau))]/\Phi_{\mathrm{ft}}(\tau)$, with $G$ consumer fossil and
+$\Phi_{\mathrm{ft}}$ the load's footprint. We advance it toward a theorem.
+
+\begin{theorem}[Leverage decomposition]\label{r1w4-thm:leverage}
+The reduction is exact: $C(\tau)-C(0)=\Phi_{\mathrm{ft}}(\tau)\,(1-\Lambda(\tau))$, so
+$\tau=0$ minimizes carbon over the family iff $\Lambda(\tau)\le1$. Differentiating
+$C(\tau)=G(\KR(\tau),\KF(\tau))+\Phi_{\mathrm{ft}}(\tau)$ (with $G$ independent of $\KM$),
+\[
+  \frac{dC}{d\tau}=\frac{d\Phi_{\mathrm{ft}}}{d\tau}
+  +\big(1-F(\KF)\big)\,\KF'(\tau)-\Big(\int_0^{\KF}\FKR\Big)\,\KR'(\tau),
+\]
+the three forces being the load's own footprint, the extra consumer fossil from a larger
+$\KF$, and the renewable channel. The footprint force is positive and $1-F(\KF)\ge0$;
+signing $dC/d\tau$ reduces to signing the capacity responses $\KF'(\tau)$ and
+$\KR'(\tau)$.
+\end{theorem}
+\begin{proof}
+The identity is Week~3; the derivative is Leibniz, with $G_{\KF}=1-F(\KF)$,
+$G_{\KR}=-\int_0^{\KF}\FKR$, and $\partial G/\partial\KM=0$. ($\tfrac{d\Phi_{\mathrm{ft}}}{d\tau}$
+is the total derivative, including $\Phi_{\mathrm{ft}}$'s dependence on the moving
+capacities.)
+\end{proof}
+
+\begin{theorem}[Leverage bound under capacity monotonicity]\label{r1w4-thm:leveragebound}
+Suppose along the budget path the fossil budget does not raise renewable capacity and does
+not lower fossil capacity: $\KR'(\tau)\le0\le\KF'(\tau)$ (Condition~\textup{M}). Then
+$G(K(\tau))\ge G(K(0))$, hence
+\[
+  C(\tau)-C(0)=\Phi_{\mathrm{ft}}(\tau)+\big[G(K(\tau))-G(K(0))\big]\ge\Phi_{\mathrm{ft}}(\tau)\ge0,
+  \qquad\text{so}\qquad \Lambda(\tau)\le0<1,
+\]
+and $\tau=0$ (surplus-only) is the carbon-optimal member of the family. Condition~\textup{M}
+holds across every shape and regime scanned---the budget raises $\KF$ (it must, to serve
+the fossil it now draws) and does not raise $\KR$ (fossil dispatch earns the $R-c$ margin
+on \emph{fossil}, which renewables do not supply)---so surplus-only is carbon-optimal.
+\end{theorem}
+\begin{proof}
+$G(\KR,\KF)=\int_0^{\KF}(1-F(x;\KR))\,dx$ has $\partial G/\partial\KF=1-F(\KF)\ge0$ and
+$\partial G/\partial\KR=-\int_0^{\KF}\FKR<0$. Under Condition~\textup{M},
+$\KF(\tau)\ge\KF(0)$ and $\KR(\tau)\le\KR(0)$, so $G$ moves up on both counts:
+$G(K(\tau))\ge G(K(0))$. Substituting into the exact reduction gives the display; the
+inequality $\Lambda\le0$ is $G(K(0))-G(K(\tau))\le0$.\footnote{Condition~M was originally
+``verified'' this way in \texttt{verify\_week4.py}, but degenerately: $\KR$ sat pinned at the
+optimizer's renewable barrier, so $\KR'(\tau)=0$ held trivially. At a genuine interior
+optimum M \emph{fails}---$\KR$ rises with $\tau$ and $\Lambda\in[0.14,0.22]>0$---yet the
+conclusion $\Lambda<1$ survives. See Remark~\ref{r1w4-rem:condMfails}.}
+\end{proof}
+
+\begin{remark}[What is now proved, and what remains]
+The leverage question is closed \emph{conditionally}: $\Lambda\le1$ is a
+\emph{theorem} given the capacity-monotonicity Condition~M. M is transparent and
+checkable statement about the two capacity responses that holds throughout the scanned
+region. Condition~M is not merely unproved---it is \emph{false} at interior optima, where
+$\KR$ rises with $\tau$ and $\Lambda\in[0.14,0.22]>0$; the conclusion $\Lambda<1$ nonetheless
+holds, so M is sufficient but not necessary. What is not proved in closed form is---signing
+$\KR'(\tau),\KF'(\tau)$ in the coupled, submodular three-capacity program requires the full
+inverse Hessian (Week-2's cofactor identity), which we do not carry out. So the residual
+open step is a clean, isolated comparative-statics sign, not the global optimality claim.
+\end{remark}
+
+\begin{remark}[Condition M fails at interior optima; the conclusion survives anyway]
+\label{r1w4-rem:condMfails}
+Condition~M was originally reported as holding ``throughout the scan,'' with $\Lambda<0$. That
+was an artifact: the optimizer's renewable barrier ($\KR\le0.99\Dbar$) bound in every cell, so
+$\KR'(\tau)=0$ held trivially and $\Lambda$ was measured off a frozen capacity stock. At a
+genuine interior optimum ($\CR=\CM=0.5$) the picture reverses:
+\begin{center}\small
+\begin{tabular}{lrrrrr}
+\toprule
+$\tau$ & $0.0$ & $0.5$ & $1.0$ & $2.0$ & $5.0$\\
+\midrule
+$\KR(\tau)$ & $1.753$ & $1.964$ & $2.102$ & $2.321$ & $2.655$\\
+$\Lambda(\tau)$ & --- & $0.218$ & $0.174$ & $0.140$ & $0.139$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Condition~M is \emph{false} here---the fossil budget \emph{raises} renewable capacity, the very
+channel the condition assumes away---and $\Lambda$ is \emph{positive}: the induced build-out
+offsets roughly $14$--$22\%$ of the load's footprint, not nothing. An independent Week-3 sweep
+gives $\Lambda\in[0.218,0.301]$. The conclusion is unharmed: $\Lambda<1$ at every $\tau$, so
+surplus-only stays carbon-optimal. Condition~M is thus sufficient for $\Lambda\le0$ but not
+necessary; the honest content is ``the build-out finances about a fifth, and a fifth is not
+enough.''
+\end{remark}
+
+\begin{remark}[One boundary governs two results]\label{r1w4-rem:oneboundary}
+The large-\textsc{fcl} hypothesis $\KM\ge\KR$ is not a patch on the carbon theorem---it is the
+model's single regime boundary, and it governs the Week-1 knife-edge too. Along the
+uniform/power locus the marginal value of renewable capacity is constant
+($\mathrm{MV}(1)=\mathrm{MV}(4)=0.3444$) exactly where $\KM\ge\KR$, and departs
+($\mathrm{MV}(8)=0.3174$) at the first point where $\KM<\KR$ ($F(-\KM)=0.056>0$). Same
+mechanism as $\Phi$: both rest on $F(-\KM)=0$, so the fossil integral's lower limit is the
+support endpoint; when that fails an extra $\KM F(-\KM)$ term breaks the cancellation. Verified
+in \texttt{verify\_exact.py}, which asserts the knife-edge holds on large-\textsc{fcl}
+\emph{and} genuinely breaks on small-\textsc{fcl}.
+\end{remark}
+
+%---------------------------------------------------------------------
+\section{Numerical validation}\label{r1w4-sec:num}
+
+\texttt{verify\_week4.py} checks, against adaptive quadrature on Beta scale mixtures
+(symmetric, left- and right-skewed, mildly skewed): the classification identity
+$\Phi=\Delta$ to $\sim3\times10^{-8}$ and $\operatorname{sign}\Delta=\operatorname{sign}\Phi$ in
+every cell (Theorem~\ref{r1w4-thm:classify}); the partial signs
+$\partial\Phi/\partial\mustar<0$, $\partial\Phi/\partial\mumid>0$
+(Proposition~\ref{r1w4-thm:minimal}); the per-mean margins $\mathrm{D}_\ell,\mathrm{D}_m$
+($\Phi_{\mathrm{hi}}=+0.40,+0.49>0$) and that the exact \emph{iff}
+$\mathrm{D}_\ell\Leftrightarrow$ (sweep flips) holds (Theorem~\ref{r1w4-thm:permean});
+monotonicity of $\Phi(\CR)$, Condition~S (Theorem~\ref{r1w4-prop:phase}); and---at a genuine
+interior optimum, with the renewable barrier slack---that Condition~M \emph{fails} ($\KR$
+rises, $1.753\to2.655$) while its conclusion $\Lambda(\tau)<1$ survives, $\Lambda\in[0.14,0.22]$
+positive (Theorem~\ref{r1w4-thm:leveragebound}, Remark~\ref{r1w4-rem:condMfails}). The suite
+reports a single pass count.

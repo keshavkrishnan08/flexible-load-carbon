@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=1.4em}
+\usepackage[colorlinks=true,linkcolor=blue!55!black]{hyperref}
+\newcommand{\KR}{K_R}\newcommand{\KF}{K_F}\newcommand{\KM}{K_M}
+\newcommand{\KRs}{K_R^{*}}\newcommand{\KFs}{K_F^{*}}\newcommand{\KMs}{K_M^{*}}
+\newcommand{\KRo}{K_R^{\circ}}\newcommand{\KFo}{K_F^{\circ}}\newcommand{\KRc}{K_R^{c}}
+\newcommand{\CM}{C_M}\newcommand{\CF}{C_F}\newcommand{\CR}{C_R}\newcommand{\Dbar}{\bar D}
+\newcommand{\bp}{\beta+p}\newcommand{\E}{\mathbb{E}}\newcommand{\fs}{\mathrm{fossil}}
+\newcommand{\phio}{\varphi^{\circ}}\newcommand{\qo}{q^{\circ}}\newcommand{\CMbar}{\bar C_M}
+\newcommand{\mulow}{\mu^{*}_{\mathrm{low}}}\newcommand{\mumid}{\mu^{\circ}_{\mathrm{mid}}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}
+\begin{document}
+{\large\textbf{Team A1: Results (concise)}}\\[2pt]
+{\small Flexible computing loads, grid resilience, and carbon. General theory + numerical methods.}
+
+\textbf{Model.} A regulated utility picks renewable $\KR$, fossil $\KF$, and flexible-load
+$\KM$ capacity. Residual demand $x=\tilde D-\KR\tilde S\in[-\KR,\Dbar]$ has CDF $F(x;\KR)$,
+density $f>0$, $F_{\KR}\equiv\partial F/\partial\KR>0$. Shift ratio $g(x)=F_{\KR}(x)/f(x)$.
+
+\textbf{Distribution-free cutoffs} (pinned by the FOCs, independent of shape; $a=\KFs-\KMs$):
+\[
+  \varphi_1=\tfrac{\CM}{R-c}=F(a;\KRs),\quad
+  \varphi_2=\tfrac{\bp-c-\CF-\CM}{\bp-R}=F(\KFs;\KRs),\quad
+  \phio=\tfrac{\bp-c-\CF}{\bp-c}=F(\KFo;\KRo).
+\]
+
+\textbf{1. Optimal contract.} Total fossil is minimized at any capacities by the
+\emph{surplus contract} $d^{c}(x)=\min\{(-x)_+,\KM\}$: it runs the load only on renewable
+surplus and burns \emph{zero} fossil for the load.
+
+\textbf{2. Distribution-free decarbonization.} If the load is adopted ($\CM<R\,F(0;\KRo)$)
+and the renewable problem is single-peaked, then under $d^c$, $\KRc\ge\KRo$ and
+$\E[\fs^{c}]\le\E[\fs^{\circ}]$, both strict when adopted, \emph{for every $F$} (no shape
+condition). Relative to no load it is a Pareto improvement (profit up, carbon down, blackout
+held at $1-\phio$).
+
+\textbf{3. Carbon classification theorem.} With $\mulow=\E[x\mid x\in(-\KRs,a)]$,
+$\mumid=\E[x\mid x\in(0,\KFo)]$, $\qo=F(0;\KRo)$, define
+\[
+  \Phi(F)=\underbrace{\tfrac{\CM}{R-c}\,(a-\mulow)}_{\text{capacity substitution}}
+   -\underbrace{\big[\KFs-\KFo(1-\phio)-(\phio-\qo)\,\mumid\big]}_{\text{net utilization}}.
+\]
+Then the net saving $\Delta=\E[\fs^{\circ}]-\E[\fs^{*}]$ satisfies $\Delta=\Phi(F)$, so
+\[
+  \boxed{\ \text{carbon falls}\iff\Phi(F)>0\ }\qquad\text{(exact, both directions).}
+\]
+
+\textbf{4. Impossibility (why $\Phi$ needs moments).} $\operatorname{sign}\Delta$ is
+\emph{not} decidable from the cutoffs and capacities alone; both conditional means
+$\mulow,\mumid$ are load-bearing ($\partial\Phi/\partial\mulow=-\tfrac{\CM}{R-c}<0$,
+$\partial\Phi/\partial\mumid=\phio-\qo>0$). The carbon sign is irreducibly distributional.
+
+\textbf{5. Conditional theorems.}
+\begin{itemize}
+\item \emph{Per-mean minimality (sharp iff).} At an interior optimum ($\Delta<0$),
+  $\mulow$ alone flips $\operatorname{sign}\Phi$ iff $\tfrac{\CM}{R-c}(\mulow+\KRs)>|\Delta|$
+  ($\mathrm{D}_\ell$); symmetrically $(\phio-\qo)(\KFo-\mumid)>|\Delta|$ for $\mumid$.
+\item \emph{Carbon--profit frontier / leverage.} Budget family
+  $d_\tau=\min\{(-x)_++\tau,\KM,(\KF-x)_+\}$ gives the exact reduction
+  $C(\tau)-C(0)=\Phi_{\mathrm{ft}}(\tau)\,(1-\Lambda(\tau))$, so surplus-only ($\tau=0$)
+  is the carbon-optimal member iff $\Lambda(\tau)<1$. This holds at every interior optimum
+  we solve, with $\Lambda\in[0.14,0.30]$ \emph{positive}: the induced renewable build-out
+  offsets a fifth to a third of the load's footprint, never all of it. (Condition~M,
+  $\KR'\le0\le\KF'$, is a sufficient condition for $\Lambda\le0$; it in fact fails at
+  interior optima, where $\KR$ rises with $\tau$, but the conclusion $\Lambda<1$ survives.)
+\item \emph{Carbon boundary.} $\{\Phi=0\}$ is the boundary; under monotonicity of
+  $\Phi(\CR)$ (Condition S) the carbon-down set is an interval $\{\CR<\CR^{\dagger}\}$.
+\end{itemize}
+
+\textbf{6. Regimes.} $\Phi$ stitches continuously across the small-/large-FCL boundary:
+at $\KM=\KR$ the surplus term $c\,F(-\KR;\KR)=0$, so the small-FCL FOC
+$(R-c)F(\KF-\KM)+c\,F(-\KM)=\CM$ reduces to the large-FCL one. Adoption widens to
+$\CMbar^{b}=\CMbar+c\,\qo>\CMbar$, $\CMbar=(R-c)\phio$; the carbon-down set is the
+cheap-renewable corner in both regimes.
+
+\textbf{Verification.} $\Phi=\Delta$ to $\sim10^{-9}$ across the Beta scale-mixture library;
+per-mean iff, Conditions M/S checked; regime suite 8/8; the solver's $\Psi$ equals $\Phi$
+with $0$ sign mismatches.
+\end{document}

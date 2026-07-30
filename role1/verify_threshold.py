@@ -41,20 +41,28 @@ def solve_with(d,P):
         gF=R*(Fk-Fg)-c*(1-Fg)+(b+p)*(1-Fk)-CF
         gR=R*d.intFKR(KF-KM,KF,KR)+c*d.intFKR(-KM,KF-KM,KR)+(b+p)*d.intFKR(KF,d.Dbar,KR)-CR
         return [gR,gF,gM]
+    best=None; bestres=np.inf
     for x0 in ([1.0,5.0,6.0],[0.2,4.0,5.0],[5.0,8.0,9.0]):
         s,info,ier,_=optimize.fsolve(foc,x0,full_output=True,xtol=1e-9)
-        if ier==1 and s[0]>-0.5: return np.maximum(s,[0,0,0])
-    return np.maximum(s,[0,0,0])
+        res=float(np.max(np.abs(foc(s))))
+        if res<bestres: best,bestres=s,res
+        if ier==1 and s[0]>-0.5 and res<1e-7: return np.maximum(s,[0,0,0])
+    if bestres>1e-6: raise RuntimeError(f"solve_with: no start converged (best|F|={bestres:.2e})")
+    return np.maximum(best,[0,0,0])
 def solve_no(d,P):
     R,c,b,p,CF,CR=P['R'],P['c'],P['beta'],P['p'],P['CF'],P['CR']
     def foc(v):
         KR,KF=np.maximum(v,[0,0])
         e1=d.F(KF,KR)-(b+p-c-CF)/(b+p-c)
         return [e1, c*d.intFKR(0,KF,KR)+(b+p)*d.intFKR(KF,d.Dbar,KR)-CR]
+    best=None; bestres=np.inf
     for x0 in ([0.5,6.0],[0.0,5.0],[5.0,8.0]):
         s,info,ier,_=optimize.fsolve(foc,x0,full_output=True,xtol=1e-9)
-        if ier==1 and s[0]>-0.5: return np.maximum(s,[0,0])
-    return np.maximum(s,[0,0])
+        res=float(np.max(np.abs(foc(s))))
+        if res<bestres: best,bestres=s,res
+        if ier==1 and s[0]>-0.5 and res<1e-7: return np.maximum(s,[0,0])
+    if bestres>1e-6: raise RuntimeError(f"solve_no: no start converged (best|F|={bestres:.2e})")
+    return np.maximum(best,[0,0])
 
 def Delta(d,P):
     KR,KF,KM=solve_with(d,P); KRn,KFn=solve_no(d,P)
@@ -64,15 +72,25 @@ def Delta(d,P):
 
 def run(d,P,tag):
     print(f"\n[{tag}]  (R={P['R']},C_M={P['CM']})")
-    prev=None; crossed=None
+    prev=None; crossed=None; skipped=0
     for CR in [0.25,0.35,0.5,0.7,0.9,1.2,1.6,2.2,3.0]:
         P['CR']=CR
-        D,KR,KRn=Delta(d,P)
+        try:
+            D,KR,KRn=Delta(d,P)
+        except RuntimeError as e:
+            # no interior equilibrium at this (R,C_M,C_R) -- the checked solver refuses a
+            # non-solution rather than returning garbage (same boundary-degeneracy as the
+            # skewed families in verify.py).  Report and continue; do not crash the sweep.
+            skipped+=1
+            print(f"   C_R={CR:4.2f}  boundary-degenerate: {str(e)[:52]}")
+            continue
         tag2 = "  Delta<0" if D<0 else ""
         print(f"   C_R={CR:4.2f}  KR*={'unb' if KR>CAP else f'{KR:5.2f}':>5}  KR^o={KRn:5.2f}  Delta={D:+8.4f}{tag2}")
         if prev is not None and prev[1]>=0 and D<0: crossed=(prev[0],CR)
         prev=(CR,D)
-    print(f"   => sign change (C_R_dagger) bracketed in {crossed}" if crossed else "   => no crossing in range")
+    note=f" ({skipped} boundary-degenerate points skipped)" if skipped else ""
+    print((f"   => sign change (C_R_dagger) bracketed in {crossed}" if crossed
+           else "   => no crossing in range")+note)
 
 # favorable: high R (strong capacity substitution), C_M small, right-skew helps
 P=dict(R=1.55,c=0.5,beta=4.0,p=1.0,CF=0.6,CM=0.45,Dbar=10.0)  # R<c+CF+CM=1.55? boundary -> use 1.54

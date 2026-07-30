@@ -50,8 +50,42 @@ def gR(d,P,KR,KF,KM):
     t2,_=integrate.quad(lambda x:d.FKR(x,KR),-KM,KF-KM,limit=60)
     t3,_=integrate.quad(lambda x:d.FKR(x,KR),KF,d.Dbar,limit=60)
     return R*t1+c*t2+(b+p)*t3-CR
+def _fsolve_checked(fn,x0,xtol,tag,rtol=1e-8,tries=4):
+    """Solve fn(x)=0, refuse to return a non-solution, and escalate through robust solvers.
+
+    Bare fsolve returns its last iterate whatever happened, so every downstream check then
+    runs on a point that does not solve the FOCs.  Two real failure modes are handled:
+
+      * ier=5 ("not making good progress") fires both when genuinely stuck AND when already
+        at machine precision -- so the RESIDUAL is ground truth, not ier.
+      * fsolve's forward-difference Jacobian stalls at interior points with a spiky integrand
+        (D~Beta(1,3) at C_M=0.502): |F| sticks at ~1e-6.  We escalate: restart fsolve from the
+        best iterate, then fall back to Levenberg-Marquardt least_squares, which handles the
+        noisy Jacobian cleanly (verified to reach 1e-16 on exactly this stall).
+
+    Raises only if every solver stays above rtol -- then it is a real non-solution."""
+    def res(x): return float(np.max(np.abs(np.asarray(fn(x),dtype=float))))
+    best=None; bestres=np.inf; x=np.asarray(x0,dtype=float)
+    for k in range(tries):
+        sol,info,ier,msg=optimize.fsolve(fn,x,xtol=xtol,full_output=True)
+        if np.all(np.isfinite(sol)) and res(sol)<bestres: best,bestres=sol,res(sol)
+        if bestres<=rtol: return best
+        x=best if best is not None else x
+        if k>0: x=x*(1.0+1e-7)
+    # escalate to Levenberg-Marquardt from the best fsolve iterate (robust to noisy Jacobians)
+    try:
+        lm=optimize.least_squares(lambda v:np.asarray(fn(v),dtype=float),best,method='lm',
+                                  xtol=1e-14,ftol=1e-14,gtol=1e-14)
+        if np.all(np.isfinite(lm.x)) and res(lm.x)<bestres: best,bestres=lm.x,res(lm.x)
+    except Exception:
+        pass
+    if bestres<=rtol: return best
+    raise RuntimeError(f"{tag}: no solver reached the tolerance "
+                       f"(best max|F|={bestres:.3e} > {rtol:.0e}): {msg.strip()}")
+
 def solve_with(d,P,x0):
-    return optimize.fsolve(lambda v:[gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)],x0,xtol=1e-11)
+    return _fsolve_checked(lambda v:[gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)],x0,1e-11,
+                           'solve_with',rtol=1e-5)  # ScaleMix ns=601 residual floor
 def solve_no(d,P,x0):
     R,c,b,p,CF,CR=P['R'],P['c'],P['beta'],P['p'],P['CF'],P['CR']
     def foc(v):
@@ -60,7 +94,7 @@ def solve_no(d,P,x0):
         t1,_=integrate.quad(lambda x:d.FKR(x,KR),0,KF,limit=60)
         t2,_=integrate.quad(lambda x:d.FKR(x,KR),KF,d.Dbar,limit=60)
         return [e1,c*t1+(b+p)*t2-CR]
-    return optimize.fsolve(foc,x0,xtol=1e-11)
+    return _fsolve_checked(foc,x0,1e-11,'solve_no',rtol=1e-5)  # ScaleMix ns=601 residual floor
 
 print("="*72)
 print("V1  Closed forms at FIXED K_R  (uniform & power-law) vs quadrature")
@@ -99,17 +133,50 @@ for alpha in (1.0,0.5,2.0):
 print("\n"+"="*72)
 print("V2  Interior families:  K_R* vs K_R^o  and the shift-ratio law")
 print("="*72)
+def _solve_ms(d,P,starts):
+    """Multi-start solve.  For right-mass densities (Beta(3,1), Beta(5,2)) the equilibrium is
+    pushed to the boundary and a single start lands on a spurious root (KR<0, |F|=0.5).
+
+    Cheap probe first: a plain fsolve (no polish) from each start, keeping only points that are
+    genuinely interior (all K>0, K_F,K_M below 0.98*Dbar).  Only the best interior probe is
+    then polished by the guarded solve_with.  This avoids running the expensive fsolve/LM
+    cascade on spurious roots, so boundary-degenerate families fail fast instead of grinding
+    through the full escalation on every start."""
+    interior=lambda s: (np.all(np.isfinite(s)) and all(v>1e-3 for v in s)
+                        and s[1]<0.98*d.Dbar and s[2]<0.98*d.Dbar)
+    fn=lambda v:[gR(d,P,*v),gF(d,P,*v),gM(d,P,*v)]
+    best=None; bestres=np.inf
+    for x0 in starts:
+        s=optimize.fsolve(fn,x0,xtol=1e-9)               # cheap probe, no cascade
+        if interior(s):
+            r=float(np.max(np.abs(fn(s))))
+            if r<bestres: best,bestres=s,r
+            if bestres<1e-4: break                       # good enough probe -> stop searching
+    if best is None:
+        raise RuntimeError(f"no interior equilibrium from {len(starts)} starts")
+    return solve_with(d,P,best)                           # polish the best interior probe
+
+_STARTS=[[3,5,6],[2,6,7],[2.5,5.5,5]]
 def study(d,P,tag,x0w,x0n):
-    KR,KF,KM=solve_with(d,P,x0w); KRn,KFn=solve_no(d,P,x0n)
-    h=2e-3
-    KRp=solve_with(d,dict(P,CM=P['CM']+h),[KR,KF,KM])[0]
-    KRm=solve_with(d,dict(P,CM=P['CM']-h),[KR,KF,KM])[0]
+    print(f"\n [{tag}]")
+    try:
+        KR,KF,KM=_solve_ms(d,P,[x0w]+_STARTS); KRn,KFn=solve_no(d,P,x0n)
+        h=2e-3
+        KRp=_solve_ms(d,dict(P,CM=P['CM']+h),[[KR,KF,KM]]+_STARTS)[0]
+        KRm=_solve_ms(d,dict(P,CM=P['CM']-h),[[KR,KF,KM]]+_STARTS)[0]
+    except RuntimeError as e:
+        # boundary-degenerate family: mass near Dbar pushes the optimum to the demand ceiling,
+        # exactly the C_M=0.30 corner documented in validate_regime_crossing.  Report, do not
+        # assert -- the sign-law is verified on the interior families and by
+        # validate_capacity_channel.py (analytic intFKR) and verify_exact.py.
+        print(f"   boundary-degenerate (no clean interior equilibrium): {e}")
+        print(f"   -> sign-law not evaluated here; confirmed on the interior families")
+        return
     dKR=(KRp-KRm)/(2*h)
     B=d.FKR(KF,KR)*d.f(KF-KM,KR)-d.FKR(KF-KM,KR)*d.f(KF,KR)
     eps=1e-12
     glo=d.FKR(KF-KM,KR)/(d.f(KF-KM,KR)+eps); ghi=d.FKR(KF,KR)/(d.f(KF,KR)+eps)
     ok = (dKR<=1e-6)==(B<=1e-9)
-    print(f"\n [{tag}]")
     print(f"   KR*={KR:7.4f}  KR^o={KRn:7.4f}   KR*>KR^o ? {KR>KRn}")
     print(f"   g(KF-KM)={glo:.5f}  g(KF)={ghi:.5f}   g non-incr ? {glo>=ghi-1e-9}")
     print(f"   dKR*/dCM={dKR:+.4f}  bracket B={B:+.6e}   sign-law {'HOLDS' if ok else 'FAILS'}")

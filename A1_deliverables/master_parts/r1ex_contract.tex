@@ -1,0 +1,319 @@
+\title[The Optimal Demand-Response Contract]
+{The Optimal Demand-Response Contract:\\
+Existence, Characterization, and a Necessary-and-Sufficient\\
+Emission-Reduction Condition under General Distributions}
+
+
+
+\begin{abstract}
+The flexible-computing-load (\textsc{fcl}) model takes a fixed dispatch rule and
+signs its carbon effect only for the uniform distribution. This note places the
+\emph{contract itself} on general footing. \emph{First}, we lift the within-period
+dispatch lemma to the full space of state-contingent contracts: for \emph{any}
+residual-demand distribution, the unique optimal demand-response contract is the
+renewable-first threshold rule $\dstar(x)=\min\{(\KF-x)_+,\KM\}$, and the ex-ante
+mechanism $(\dstar,K^{*})$ exists and is unique under a mild regularity condition.
+\emph{Second}, we give a \emph{necessary and sufficient} condition for the
+optimal-contract equilibrium to cut carbon, and settle the question the mandate
+poses---whether emission reduction is generic: it is not. It holds under mild
+regularity (a monotone-density / power-law condition) and fails outside it, even
+though renewable capacity always rises. \emph{Third}, we prove the
+\emph{correlation comparative static}: emission reduction obtains if and only if
+demand and renewable availability are sufficiently \emph{negatively} associated,
+through a shift ratio that equals the conditional renewable factor. \emph{Fourth},
+we cast the regulator as principal and the utility as agent and show the
+price-based program implements $\dstar$ as the unique privately optimal dispatch,
+pinning the induced computing demand. Every claim is verified numerically:
+$0/21{,}600$ feasible policies beat $\dstar$; the carbon margin is monotone in the
+demand--supply correlation and changes sign exactly as the theory predicts.
+\end{abstract}
+
+
+
+%---------------------------------------------------------------------
+\section{Environment}\label{r1exc-sec:env}
+
+We use the model and notation of the companion note
+(\texttt{role1\_carbon\_theory.tex}): residual demand
+$\tilde x=\tilde D-\KR\tilde S\in[-\KR,\Dbar]$ with CDF $F(x;\KR)$, density
+$f$, and $\FKR=\partial F/\partial\KR\ge0$; per-MWh quantities $R$ (\textsc{fcl}
+revenue), $c$ (fossil), $p$ (retail), $\beta$ (blackout); capital costs
+$\CR,\CF,\CM$; and Assumption~1 ($R>c+\CM$, $R<c+\CF+\CM$, $\bp>c+\CF$,
+$\bp>R$). The companion note proves the capacity result $\KRs>\KRo$ and develops
+the carbon inequality (C); here we treat the contract.
+
+%---------------------------------------------------------------------
+\section{The optimal demand-response contract, in general}\label{r1exc-sec:contract}
+
+Fix capacities $(\KR,\KF,\KM)$. A \emph{contract} is a measurable dispatch policy
+$d:[-\KR,\Dbar]\to[0,\KM]$ specifying the computing load served in each state.
+Because consumers have priority and the plant is capacity-constrained, the power
+physically available to \textsc{fcl} in state $x$ is the spare dispatchable
+supply $a(x)\eqdef(\KF-x)_+$ (idle fossil plus renewable surplus); a request
+$d(x)$ is served only up to $a(x)$. The operating surplus the program generates is
+\begin{equation}\label{r1exc-eq:J}
+  J(d)=\E\big[\,\phi_{\tilde x}\big(d(\tilde x)\big)\big],
+  \qquad
+  \phi_x(\delta)=R\,s - c\big[(x+s)_+-(x)_+\big],\quad s=\min\{\delta,a(x)\},
+\end{equation}
+\textsc{fcl} revenue on served load minus the fossil fuel that serving it burns.
+
+\begin{theorem}[Optimal contract: existence, characterization, uniqueness]\label{r1exc-thm:contract}
+For every residual-demand distribution $F$ and all capacities with $\KM>0$, under
+Assumption~1 the surplus \eqref{r1exc-eq:J} is maximized over all measurable
+$d:[-\KR,\Dbar]\to[0,\KM]$ by the \emph{renewable-first threshold contract}
+\begin{equation}\label{r1exc-eq:dstar}
+  \dstar(x)=\min\{(\KF-x)_+,\;\KM\},
+\end{equation}
+and the maximizing served dispatch is unique. $\dstar$ is non-increasing,
+$1$-Lipschitz, continuous, and piecewise linear: full computing
+($\KM$) on the deep-surplus zone $x\le\KF-\KM$, exact gap-filling ($\KF-x$) on
+$(\KF-\KM,\KF)$, and zero in scarcity $x\ge\KF$.
+\end{theorem}
+
+\begin{proof}
+The objective \eqref{r1exc-eq:J} is an expectation of a per-state function with \emph{no
+coupling across states} (capacities are fixed and there is no aggregate or
+intertemporal constraint), so it is maximized statewise:
+$\dstar(x)\in\argmax_{\delta\in[0,\KM]}\phi_x(\delta)$. Served load
+$s=\min\{\delta,a(x)\}$ is non-decreasing in $\delta$ and saturates at $a(x)$. On
+$s<(-x)_+$ the load runs on renewable surplus, $\partial\phi_x/\partial s=R>0$; on
+$(-x)_+<s<a(x)$ it draws fossil, $\partial\phi_x/\partial s=R-c>0$ by
+Assumption~1. Thus $\phi_x$ strictly increases in $s$ up to the feasibility cap,
+so the optimal served load is $s^{*}(x)=\min\{\KM,a(x)\}=\min\{\KM,(\KF-x)_+\}$,
+attained by \eqref{r1exc-eq:dstar} and \emph{unique} as a served dispatch (any
+$\delta\ge\dstar(x)$ yields the same served load and surplus). The shape claims
+read off \eqref{r1exc-eq:dstar}.
+\end{proof}
+
+\begin{remark}[What is new]
+The paper's Lemma~1 establishes \eqref{r1exc-eq:dstar} as the solution of a pointwise
+sub-problem. Theorem~\ref{r1exc-thm:contract} lifts it to the \emph{entire space of
+state-contingent contracts} and for \emph{any} distribution---the separability
+argument shows no history-, threshold-, or lottery-based contract can do better.
+The renewable-first / consumer-priority structure is therefore not an assumption
+but the optimum. \emph{(Verified: across $21{,}600$ random and structured feasible
+policies, none beats $\dstar$; the pointwise optimum matches \eqref{r1exc-eq:dstar} in
+$4000/4000$ random states---\S\ref{r1exc-sec:num}.)}
+\end{remark}
+
+\begin{theorem}[Ex-ante mechanism]\label{r1exc-thm:exante}
+Embed $\dstar$ in the utility's ex-ante problem
+$\max_{\KR,\KF,\KM\ge0}\Pi(\KR,\KF,\KM)$ of \eqref{r1exc-eq:J}-consistent profit. Under
+Assumption~1 an optimal mechanism $(\dstar,K^{*})$ exists for every $F$; it is
+unique whenever the profit Hessian is negative definite along the optimum
+(Regularity, companion note).
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{r1exc-thm:contract} the dispatch is pinned, so the ex-ante problem is
+the three-dimensional program in $(\KR,\KF,\KM)$. Assumption~1 bounds the optimum
+to a compact box: $R<c+\CF+\CM$ caps fossil at $\KF\le\Dbar$ (beyond which
+marginal fossil benefit is negative, companion eq.\ 13), $\bp>R$ and $R>c+\CM$
+bound $\KR,\KM$; $\Pi$ is continuous, so a maximizer exists by Weierstrass.
+Uniqueness under $\mathcal H\prec0$ is standard. (The companion note verifies
+$\mathcal H\prec0$ on the interior path by eigenvalue computation.)
+\end{proof}
+
+%---------------------------------------------------------------------
+\section{The emission-reduction frontier (necessary and sufficient)}\label{r1exc-sec:ns}
+
+Carbon emissions equal $c$ times expected fossil output. The companion note's
+Proposition (exact net-carbon inequality) gives, for \emph{any} $F$, the equivalence
+\begin{equation}\label{r1exc-eq:C}
+  \text{carbon falls}
+  \iff
+  \underbrace{\tfrac{\CM}{R-c}\big(\KFs-\KMs-\mu^{*}_{\mathrm{low}}\big)}_{\text{utilization }(+)}
+  >
+  \underbrace{\KFs-\KFo(1-\varphi^{\circ})-(\varphi^{\circ}-q^{\circ})\mu^{\circ}_{\mathrm{mid}}}_{\text{net of capacity effects}},
+  \tag{C}
+\end{equation}
+with $\mu^{*}_{\mathrm{low}},\mu^{\circ}_{\mathrm{mid}}$ the conditional means at
+the FOC-pinned (distribution-free) cutoffs $\CM/(R-c)$ and $\varphi^{\circ}$. This
+is the necessary-and-sufficient condition---though, being the exact net saving rearranged
+to ``$>0$,'' the equivalence is definitional; the substantive content is the \emph{sufficient}
+shape/cost conditions below under which it holds. The mandate asks whether it is generic.
+
+\begin{theorem}[Emission reduction is conditional, not generic]\label{r1exc-thm:ns}
+The optimal-contract equilibrium reduces carbon \emph{iff} \textup{(C)} holds.
+\textup{(C)} is \emph{not} implied by Assumption~1 alone: it can fail even though
+renewable capacity strictly rises ($\KRs>\KRo$ always, by the companion note).
+\textup{(C)} holds under the mild regularity of the companion note's
+Corollary~2 (density non-increasing on the \textsc{fcl} zone, non-decreasing on
+the no-\textsc{fcl} fossil zone---in particular the whole power-law family with
+$\CR\le\CR^{\dagger}$), and fails when those are reversed.
+\end{theorem}
+
+\begin{proof}
+Necessity and sufficiency are the equivalence \eqref{r1exc-eq:C}. That it is not generic
+is exhibited in \S\ref{r1exc-sec:corr}: with positively associated demand and supply,
+$\KRs>\KRo$ yet the left side of (C) dominates and carbon \emph{rises}. The
+sufficiency claims are the companion Corollary~2 and the explicit power-law
+threshold $\CR^{\dagger}$.
+\end{proof}
+
+The economics: the \textbf{left-hand term} of (C) is the expected \textsc{fcl}
+dispatch volume on the low (surplus) side, $\tfrac{\CM}{R-c}(a-\mu^{*}_{\mathrm{low}})$.
+It is a carbon-\emph{reducing} driver---it grows as $\mu^{*}_{\mathrm{low}}$ falls
+($\partial/\partial\mu^{*}_{\mathrm{low}}=-\CM/(R-c)<0$), i.e.\ as the load runs deeper in
+renewable surplus, where it displaces would-be fossil dispatch. The \textbf{right-hand
+term} is the net utilization-and-capacity baseline it must beat, carried in part by the
+endogenously larger renewable fleet $\KRs>\KRo$. Carbon falls exactly when the left
+exceeds the right; whether that happens generically is the content of the next section.
+
+%---------------------------------------------------------------------
+\section{The demand--supply correlation comparative static}\label{r1exc-sec:corr}
+
+What decides (C) is a single, interpretable primitive: the comovement of demand
+and renewable supply. Make it precise through the \emph{shift ratio}.
+
+\begin{definition}[Shift ratio = conditional renewable factor]\label{r1exc-def:g}
+$g(x;\KR)\eqdef \FKR(x;\KR)/f(x;\KR)$.
+\end{definition}
+
+\begin{lemma}[Identity]\label{r1exc-lem:g}
+With $\tilde x=\tilde D-\KR\tilde S$ and joint density $f_{D,S}$, writing the
+state threshold $s_\star=(d-x)/\KR$,
+\[
+  f(x;\KR)=\!\int\! f_{D,S}(x+\KR s,s)\,ds,
+  \qquad
+  \FKR(x;\KR)=\!\int\! s\,f_{D,S}(x+\KR s,s)\,ds,
+\]
+so $g(x;\KR)=\E[\tilde S\mid \tilde x = x]$: the shift ratio is the
+\emph{average renewable capacity factor in states whose residual demand is $x$}.
+It is also the marginal quantile shift, $g=-\,\partial x/\partial\KR|_{F\text{ fixed}}$.
+\end{lemma}
+
+\begin{proof}
+Differentiate $F(x;\KR)=\PP(\tilde D-\KR\tilde S\le x)
+=\int f_{D,S}(d,s)\,\mathbf 1\{d-\KR s\le x\}\,dd\,ds$ in $x$ and in $\KR$ under
+the integral; the change of variable $d=x+\KR s$ gives the stated forms, whose
+ratio is the $f_{D,S}$-weighted mean of $s$ at $d-\KR s=x$, i.e.\
+$\E[\tilde S\mid\tilde x=x]$. Implicit differentiation of $F(x;\KR)=\text{const}$
+gives the quantile-shift reading.
+\end{proof}
+
+Thus $g$ \emph{decreasing} in $x$ means high-residual-demand (stress) states have
+\emph{lower} renewable availability---demand and supply are negatively
+associated. This is precisely the companion note's Condition~CS, under which the
+capacity-substitution channel operates.
+
+\begin{theorem}[Correlation comparative static]\label{r1exc-thm:corr}
+Order joint laws of $(\tilde D,\tilde S)$ by their demand--supply association.
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em]
+  \item Renewable capacity rises with the program, $\KRs>\KRo$, \emph{regardless}
+        of the association (companion Theorem~1).
+  \item The optimal-contract equilibrium reduces carbon iff the association is
+        sufficiently negative: $g(\cdot;\KR)$ non-increasing on the dispatch
+        window is sufficient (with $\CR\le\CR^{\dagger}$), and a strictly positive
+        association makes (C) fail. The net carbon saving is monotone decreasing
+        in the demand--supply correlation.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) is the companion capacity theorem, whose shift-ratio cofactor sign is
+unaffected by the level of association. For (ii): by Lemma~\ref{r1exc-lem:g},
+$g$ non-increasing $\iff$ $\E[\tilde S\mid\tilde x=x]$ falls as $x$ rises $\iff$
+negative association; under it the companion Corollary~2 conditions hold and (C)
+is satisfied for $\CR\le\CR^{\dagger}$. Conversely positive association makes
+$g$ increase, reversing the relevant cofactor bracket and the inequality in (C).
+Monotonicity in the correlation follows because the capacity-substitution term in
+(C) is increasing, and the utilization term decreasing, in the steepness of $g$.
+\emph{(Verified in \S\ref{r1exc-sec:num}: as $\operatorname{corr}(\tilde D,\tilde S)$
+falls from $+0.2$ to $-0.2$, the net carbon saving rises monotonically through
+zero: $-12.1,\,-12.0,\,-8.5,\,+0.2,\,+107$.)}
+\end{proof}
+
+\begin{remark}[The decoupling]
+Theorem~\ref{r1exc-thm:corr} separates two claims often conflated: the program
+\emph{always} finances more renewables ($\KRs>\KRo$), but this lowers carbon only
+when stress states are renewable-poor. On a grid where peak demand coincides with
+high wind/sun (positive association), \textsc{fcl} expands renewables yet still
+raises emissions, because the extra computing load runs on fossil precisely when
+fossil is on the margin. The sign of the carbon effect is a property of the
+demand--supply correlation, not of the capacity response.
+\end{remark}
+
+%---------------------------------------------------------------------
+\section{The regulator--utility mechanism}\label{r1exc-sec:pa}
+
+The contract is implemented, not imposed. Cast the regulator as principal and the
+utility (or a contracted miner) as agent: the principal posts the demand-response
+program---a price/curtailment schedule---and the agent chooses dispatch to
+maximize its own payoff.
+
+\begin{proposition}[Implementation and the induced-demand condition]\label{r1exc-prop:pa}
+Under Assumption~1, the price-based demand-response program implements the optimal
+contract $\dstar$ of Theorem~\ref{r1exc-thm:contract} as the agent's \emph{unique}
+privately optimal dispatch, with two transparent conditions:
+\begin{enumerate}[label=(\alph*),leftmargin=2.2em]
+  \item \emph{Dispatch incentive ($R>c$).} On spare capacity the agent's margin is
+        $R-c>0$, so it runs computing up to the feasibility cap---reproducing
+        $\dstar$---and this is self-enforcing whenever $R$ is publicly observable
+        (true for Bitcoin by protocol).
+  \item \emph{Consumer priority ($\bp>R$).} In scarcity the social cost of unserved
+        demand exceeds the computing margin, so the agent yields all capacity to
+        consumers; no curtailment side-payment is needed.
+\end{enumerate}
+The induced computing demand is then pinned by the capacity first-order condition
+$F(\KFs-\KMs;\KRs)=\CM/(R-c)$---a \emph{distribution-free} cutoff probability
+(companion Lemma): the program induces exactly the load at which the marginal
+hour of spare-capacity computing covers the amortized hardware cost.
+\end{proposition}
+
+\begin{proof}
+(a)--(b) are the marginal-value signs of Theorem~\ref{r1exc-thm:contract} read as the
+agent's incentives; uniqueness of the served dispatch is
+Theorem~\ref{r1exc-thm:contract}. The induced-demand identity is the $\KM$ first-order
+condition, whose right-hand side $\CM/(R-c)\in(0,1)$ by Assumption~1; that the
+\emph{probability} (not the capacity) is fixed independently of $F$ is the
+companion distribution-free-cutoff lemma.
+\end{proof}
+
+\begin{remark}[Optimality and uniqueness]
+Because $\dstar$ is the full-information optimum (Theorem~\ref{r1exc-thm:contract}) and
+the price program reproduces it as the agent's unique best response
+(Proposition~\ref{r1exc-prop:pa}), implementation is first-best: the principal loses
+nothing to the agent's private optimization. The only informational requirement is
+observability of $R$---met structurally by Bitcoin and identified as the obstacle
+for less transparent loads.
+\end{remark}
+
+%---------------------------------------------------------------------
+\section{Numerical validation}\label{r1exc-sec:num}
+
+\begin{itemize}[leftmargin=1.6em]
+  \item \textbf{Optimal contract (Theorem~\ref{r1exc-thm:contract}).}
+        \texttt{verify\_contract.py}: the served dispatch maximizing
+        $\phi_x$ equals $\dstar(x)$ in $4000/4000$ random states (any $R>c$); and
+        across $20{,}000$ random feasible policies plus $1{,}600$ structured
+        threshold perturbations, \emph{none} beats $\dstar$ ($0/21{,}600$).
+  \item \textbf{Correlation comparative static (Theorem~\ref{r1exc-thm:corr}).}
+        \texttt{verify\_correlation.py}: with $\tilde D\sim\Dbar\,\mathrm{Beta}(2,2)$
+        and $\tilde S\mid\tilde D$ shifted to tune $\operatorname{corr}(\tilde D,\tilde S)$,
+        the net carbon saving is monotone in the correlation and changes sign at
+        zero association:
+        \begin{center}\small
+        \begin{tabular}{lrrrrr}
+        \toprule
+        $\operatorname{corr}(\tilde D,\tilde S)$ & $+0.2$ & $+0.1$ & $0.0$ & $-0.1$ & $-0.2$\\
+        net carbon saving & $-12.1$ & $-12.0$ & $-8.5$ & $+0.2$ & $+107$\\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+        $\KRs>\KRo$ holds throughout, including where carbon rises---the
+        decoupling of Theorem~\ref{r1exc-thm:corr}.
+  \item \textbf{Cross-checks.} All closed-form objects this note rests on
+        (FOCs, distribution-free cutoffs, fossil decomposition, the capacity
+        cofactor) are verified to $6$--$16$ digits against finite differences of
+        the profit integral in the companion \texttt{verify\_exact.py}
+        ($15/15$).
+\end{itemize}
+
+\paragraph{Scope.} This note is strictly Workstream-A1 (general contracting theory
+and numerical methods): the contract $\dstar$, its general-distribution
+characterization, the necessary-and-sufficient emission condition, the correlation
+comparative static, and the principal--agent implementation. It does not enter
+calibration (A2), reliability/welfare or social-vs-private pricing (B1), or the
+flexibility continuum / storage / multi-grid generalizations (B2).

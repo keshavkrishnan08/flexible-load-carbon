@@ -1,0 +1,387 @@
+%=============================================================================
+% Role 4: Theory Hardening and Regimes
+% Self-contained LaTeX fragment (\input-ed into the master document).
+% No \documentclass, no preamble, no \begin{document}.
+%
+% Requires the master preamble to provide amsmath/amsthm and theorem-like
+% environments: proposition, lemma, remark (all standard amsthm styles).
+% Notation matches Role 1: capacities K_R, K_F, K_M; capital costs C_R, C_F,
+% C_M; per-unit R, c, beta, p; residual demand x = D - K_R S with CDF
+% F(x; K_R) and density f; no-FCL cutoff phi_o = (beta+p-c-C_F)/(beta+p-c);
+% surplus probability q_o = F(0; K_R^o).
+%=============================================================================
+
+\label{part:role4}
+
+This part audits the equilibrium theory of the FCL--carbon model against Role~2's
+numerical solver and against Role~1's derivations. Every analytical claim below is
+backed by an executable check (the Role~4 \texttt{role4/} package, \texttt{pytest
+tests/} passing); comparisons run against Role~2's solver, vendored unchanged. The
+plan is: re-verify the first-order conditions and the distribution-free cutoffs
+(Section~\ref{sec:r4-foc}); audit the three steps of Proposition~1 and honestly flag
+the one gap Role~4 found (Section~\ref{sec:r4-prop1}); complete the small-FCL regime
+of Appendix~G and confirm the widened adoption threshold
+(Section~\ref{sec:r4-smallfcl}); stitch the regime boundaries into one two-axis
+statement (Section~\ref{sec:r4-regimes}); stress-test Assumption~1
+(Section~\ref{sec:r4-assumption1}); and resolve the apparent Role~1 vs.\ Role~2
+contradiction about carbon (Section~\ref{sec:r4-reconcile}).
+
+Throughout, the interior-regime profit (the paper's eq.~(10)) is
+\begin{equation}
+\label{eq:r4-profit}
+\begin{aligned}
+\Pi \;=\; p\,\mathbb{E}[D]
+&\;+\; R\!\int_{K_F-K_M}^{K_F}\! F(x;K_R)\,dx
+\;-\; c\!\int_{-K_M}^{K_F-K_M}\!\bigl(1-F(x;K_R)\bigr)\,dx \\
+&\;-\; (\beta+p)\!\int_{K_F}^{\bar D}\!\bigl(1-F(x;K_R)\bigr)\,dx
+\;-\; C_F K_F \;-\; C_R K_R \;-\; C_M K_M .
+\end{aligned}
+\end{equation}
+
+%-----------------------------------------------------------------------------
+\section{FOC re-verification and the distribution-free cutoffs}
+\label{sec:r4-foc}
+
+Differentiating \eqref{eq:r4-profit} by Leibniz's rule reproduces the three
+first-order conditions and, crucially, the equilibrium \emph{values} of the CDF at
+the cutoffs. Those values are what the later carbon argument leans on, so pinning
+them down shape-free matters.
+
+\begin{lemma}[Distribution-free equilibrium cutoffs]
+\label{lem:r4-cutoffs}
+At an interior optimum $(K_R^*,K_F^*,K_M^*)$ of \eqref{eq:r4-profit}:
+\begin{align}
+\text{(eq.\ 11)}\quad & \frac{\partial \Pi}{\partial K_M}
+   = (R-c)\,F(K_F-K_M;K_R) - C_M, \\[2pt]
+\text{(eq.\ 12)}\quad & F(K_F^*-K_M^*;\,K_R^*) \;=\; \frac{C_M}{R-c}
+   \;=:\; \varphi_1, \\[2pt]
+\text{(eq.\ 13)}\quad & F(K_F^*;\,K_R^*) \;=\;
+   \frac{\beta+p-c-C_F-C_M}{\beta+p-R} \;=:\; \varphi_2, \\[2pt]
+\text{(eq.\ 14)}\quad & \text{blackout prob.} \;=\; 1-F(K_F^*;K_R^*)
+   \;=\; \frac{c+C_F+C_M-R}{\beta+p-R}, \\[2pt]
+\text{(eq.\ 15)}\quad & \frac{\partial \Pi}{\partial K_R}
+   = R\!\int_{K_F-K_M}^{K_F}\!\! F_{K_R}\,dx
+   + c\!\int_{-K_M}^{K_F-K_M}\!\! F_{K_R}\,dx
+   + (\beta+p)\!\int_{K_F}^{\bar D}\!\! F_{K_R}\,dx - C_R .
+\end{align}
+The no-FCL benchmark ($K_M=0$, the paper's eq.~(7)) has cutoff
+\begin{equation}
+\label{eq:r4-phio}
+F(K_F^\circ;\,K_R^\circ) \;=\; \varphi_o \;=\; \frac{\beta+p-c-C_F}{\beta+p-c},
+\qquad
+1-\varphi_o \;=\; \frac{C_F}{\beta+p-c}.
+\end{equation}
+Both interior cutoffs lie in $(0,1)$: $\varphi_1\in(0,1)$ iff $R>c+C_M$
+(Assumption~A1), and $\varphi_2\in(0,1)$ under $\beta+p>R$ and $R<c+C_F+C_M$
+(Assumptions~A4, A2) together with $\beta+p>c+C_F+C_M$ (which makes the numerator
+positive, so $\varphi_2>0$).
+\end{lemma}
+
+\begin{proof}
+Leibniz differentiation of \eqref{eq:r4-profit} in $K_M$ gives eq.~(11); the boundary
+terms cancel because the integrand of the $R$-band and the $c$-band agree in value at
+the shared limit $K_F-K_M$. Setting eq.~(11) to zero yields $\varphi_1$. For $K_F$, the
+$R$-band upper limit, the $c$-band, and the $(\beta+p)$-band lower limit all move,
+leaving $(R-c)F(K_F-K_M)+ (\beta+p-c)\,(1-F(K_F)) - \dots$; solving with eq.~(12)
+substituted gives $\varphi_2$ and eq.~(14) as its complement. Eq.~(15) is direct
+Leibniz differentiation in $K_R$, with $F_{K_R}=\partial F/\partial K_R$. Since $R>c$,
+the FCL dispatch band $(K_F-K_M,\,K_F)$ is weighted by $R$ rather than $c$; because
+$F_{K_R}\ge 0$ (more renewables shift residual demand down stochastically, so the CDF
+$F(x;K_R)$ rises pointwise), the extra $R$-weight makes $\partial\Pi/\partial K_R$
+larger with FCL than without, so $K_R^*\ge K_R^\circ$. The
+interval claims are immediate from the closed forms.
+\end{proof}
+
+\begin{remark}[Numerical confirmation]
+At Role~4's worked parameters the solver returns $F(K_F^*-K_M^*)=0.300$ and
+$F(K_F^*)=0.700$, matching $\varphi_1,\varphi_2$ to $\le 10^{-3}$
+(\texttt{tests/test\_foc.py}). This confirms Role~1's derivation of eqs.~(12),(13),(15)
+exactly, and confirms that the cutoffs are genuinely shape-free: they are ratios of
+prices and costs, with $F$ entering only through where it is evaluated.
+\end{remark}
+
+%-----------------------------------------------------------------------------
+\section{Proposition 1 audit: the triple win, and where it is only conditional}
+\label{sec:r4-prop1}
+
+Proposition~1 (Appendix~B.1) claims that the utility strictly prefers the FCL program
+iff $C_M<\bar C_M$, where the \emph{large-FCL adoption threshold} is
+\begin{equation}
+\label{eq:r4-CMbar}
+\bar C_M \;=\; (R-c)\,\varphi_o ,
+\end{equation}
+and that adoption then delivers a triple win: (i) profit rises, (ii) blackout
+probability falls, (iii) carbon \emph{may} fall. The proof runs in three steps.
+
+\begin{proposition}[Prop.~1, Steps 1--2: distribution-free]
+\label{prop:r4-steps12}
+Steps~1 and~2 hold for \emph{any} residual-demand law $F$.
+\begin{enumerate}
+\item[\textbf{(1)}] \textbf{Profit.} Revealed preference gives $\Pi^*\ge\Pi^\circ$,
+strict iff $K_M^*>0$. The marginal profit of the first FCL unit, evaluated at the
+no-FCL optimum, is
+\[
+\left.\frac{\partial\Pi}{\partial K_M}\right|_{K_M=0,\,\text{no-FCL opt.}}
+= (R-c)\,\varphi_o - C_M \;=\; \bar C_M - C_M,
+\]
+positive iff $C_M<\bar C_M$.
+\item[\textbf{(2)}] \textbf{Blackout.} The change in blackout probability
+$(1-F^*)-(1-F^\circ)$ has numerator
+\[
+C_M(\beta+p-c) - (R-c)(\beta+p-c-C_F),
+\]
+which is negative iff $C_M<\bar C_M$. So whenever the utility adopts FCL, blackouts
+strictly fall.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Step~1 is eq.~(11) at $K_M=0$ with $F(K_F^\circ;K_R^\circ)=\varphi_o$ from
+\eqref{eq:r4-phio}; the sign is immediate from \eqref{eq:r4-CMbar}. Step~2 subtracts
+eq.~(14) from $1-\varphi_o$ and clears the common positive denominators
+$(\beta+p-R)(\beta+p-c)$; the numerator factors so that its sign flips exactly at
+$C_M=\bar C_M$ (setting the numerator to zero and solving returns $C_M=(R-c)\varphi_o$).
+Both use only the cutoff \emph{values}, never the shape of $F$, hence
+distribution-free. Verified against the solver's profit and blackout outputs in
+\texttt{role4/proposition1.py::verify\_against\_backend}.
+\end{proof}
+
+\begin{proposition}[Prop.~1, Step 3: carbon, and the gap]
+\label{prop:r4-step3}
+Write expected fossil generation with FCL as the paper's eq.~(42) and without as
+eq.~(43). Their difference decomposes into two channels:
+\begin{itemize}
+\item a \textbf{utilization effect} --- adding FCL load raises fossil dispatch in
+every state --- which \emph{raises} carbon, and is signed positive
+distribution-free; and
+\item a \textbf{capacity-substitution effect} --- because $K_R^*\ge K_R^\circ$
+(Lemma~\ref{lem:r4-cutoffs}) --- which \emph{lowers} carbon.
+\end{itemize}
+The \emph{net} sign is negative when the substitution channel dominates.
+\end{proposition}
+
+\begin{remark}[Gap flagged: Step 3 is not general in B.1]
+\label{rem:r4-gap}
+This is the one place the original proof is incomplete, and Role~4 flags it honestly.
+Appendix~B.1 establishes the net carbon sign \emph{only} for the uniform family (and,
+via footnote~6, the power-law family), through its eqs.~(25)--(26). For a general $F$,
+B.1 merely \emph{asserts} that the capacity channel dominates ``when $C_R$ is
+sufficiently small''; it does not prove it. That is why part~(iii) of the triple win is
+a conditional ``may,'' not a theorem. Steps~1--2 are airtight and general; Step~3 is
+not, by design. Two later results close the gap:
+\begin{enumerate}
+\item[(a)] Role~1's shift-ratio condition --- that $g(x)=F_{K_R}(x;K_R)/f(x;K_R)$ is
+non-increasing in $x$ --- makes $K_R^*\ge K_R^\circ$ hold for general $F$, delivering
+the capacity channel without a parametric family (Role~1, Weeks~2--4).
+\item[(b)] Role~4's own regime analysis (Section~\ref{sec:r4-reconcile}) shows the
+dominance only bites once renewable buildout passes a crossover $K_R^{\mathrm{cross}}$;
+below it the utilization effect wins. So even where carbon does fall, it falls only
+in a sub-regime, not everywhere.
+\end{enumerate}
+\end{remark}
+
+%-----------------------------------------------------------------------------
+\section{The small-FCL regime (Appendix G) and the widened adoption threshold}
+\label{sec:r4-smallfcl}
+
+When $K_M<K_R$, the lower limit $-K_M$ of the $c$-band sits \emph{inside} the support
+of $F$. The integration-by-parts that simplified \eqref{eq:r4-profit} is then
+unavailable, and profit takes the un-simplified eq.~(60) form. The $K_M$ FOC picks up
+an extra term.
+
+\begin{lemma}[Small-FCL FOC, eq.~(61)]
+\label{lem:r4-eq61}
+In the small-FCL regime the $K_M$ first-order condition is
+\begin{equation}
+\label{eq:r4-eq61}
+(R-c)\,F(K_F-K_M;K_R) \;+\; c\,F(-K_M;K_R) \;=\; C_M,
+\end{equation}
+and the paired $K_F$ FOC (eq.~63) is
+\begin{equation}
+\label{eq:r4-eq63}
+-(\beta+p-R)\,F(K_F;K_R) \;-\; (R-c)\,F(K_F-K_M;K_R) \;+\; (\beta+p-c) \;-\; C_F \;=\; 0.
+\end{equation}
+The extra term $c\,F(-K_M;K_R)>0$ is the marginal \emph{pure-renewable-surplus} hour:
+in states $x\le -K_M$ no fossil runs, so the marginal FCL unit earns the full $R$, not
+the $R-c$ fossil-dispatch margin.
+\end{lemma}
+
+\begin{proposition}[Widened adoption threshold, eq.~(62)]
+\label{prop:r4-eq62}
+Evaluate the first FCL unit at the no-FCL optimum. Since $K_M\to 0<K_R^\circ$, that
+point necessarily lies in the small-FCL regime, so eq.~\eqref{eq:r4-eq61} applies. The
+adoption threshold widens from $\bar C_M$ to
+\begin{equation}
+\label{eq:r4-CMbarb}
+\boxed{\;\bar C_M^{\,b} \;=\; (R-c)\,\varphi_o \;+\; c\,F(0;K_R^\circ)
+   \;=\; \bar C_M \;+\; c\,q_o \;>\; \bar C_M,\;}
+\end{equation}
+where $q_o=F(0;K_R^\circ)$ is the no-FCL probability of renewable surplus. On the
+interval $(\bar C_M,\ \bar C_M^{\,b})$ the large-FCL analysis declares ``no adoption,''
+yet a small-FCL program is still strictly worth running.
+\end{proposition}
+
+\begin{proof}
+Set $K_M=0$ and $K_F=K_F^\circ$ in \eqref{eq:r4-eq61}: the first term is
+$(R-c)F(K_F^\circ;K_R^\circ)=(R-c)\varphi_o=\bar C_M$, and the second is
+$c\,F(0;K_R^\circ)=c\,q_o$. The marginal FCL unit pays iff its value
+$(R-c)\varphi_o+c\,q_o$ exceeds $C_M$, i.e.\ iff $C_M<\bar C_M^{\,b}$. Since $q_o>0$
+whenever the no-FCL optimum builds finite renewables, $\bar C_M^{\,b}>\bar C_M$.
+\end{proof}
+
+\begin{remark}[Confirmed numerically]
+\texttt{tests/test\_small\_fcl.py} confirms $\bar C_M^{\,b}>\bar C_M$, that the widening
+equals $c\,q_o$ exactly, and that the eq.~(61) marginal value exceeds the large-FCL one
+by precisely that surplus term. Worked instance: $\bar C_M=0.500\Rightarrow
+\bar C_M^{\,b}=0.793$, a widening of $c\,q_o=0.293$. The uniform benchmark gives the
+clean closed form $q_o=K_R^\circ/(\bar D+K_R^\circ)$.
+\end{remark}
+
+%-----------------------------------------------------------------------------
+\section{Regime unification: two axes, one map}
+\label{sec:r4-regimes}
+
+The parameter space is organized by two independent axes. A coverage axis in $C_M$
+says how much FCL is adopted; a boundedness axis in $C_R$ says whether the program has
+a finite optimum at all. Every parameter point carries one label from each axis, and
+they compose consistently (\texttt{role4/regimes.py::unified\_statement}).
+
+\begin{proposition}[Coverage axis, strictly ordered in $C_M$]
+\label{prop:r4-coverage}
+With $C_M^{\mathrm{fc}}=R-c-C_F$, the three coverage thresholds are strictly ordered,
+\begin{equation}
+\label{eq:r4-coverage-order}
+C_M^{\mathrm{fc}} \;<\; \bar C_M=(R-c)\varphi_o \;<\; \bar C_M^{\,b}=\bar C_M+c\,q_o,
+\end{equation}
+partitioning the $C_M$ line into four regimes:
+\begin{center}
+\begin{tabular}{ll}
+\hline
+\textbf{Range} & \textbf{Regime} \\
+\hline
+$C_M \le C_M^{\mathrm{fc}}$ & full coverage ($K_F\ge\bar D$, blackout $=0$) \\
+$C_M^{\mathrm{fc}} < C_M < \bar C_M$ & interior / large-FCL (main regime) \\
+$\bar C_M \le C_M < \bar C_M^{\,b}$ & small-FCL adoption (Section~\ref{sec:r4-smallfcl}) \\
+$C_M \ge \bar C_M^{\,b}$ & no adoption \\
+\hline
+\end{tabular}
+\end{center}
+\end{proposition}
+
+\begin{proof}
+$C_M^{\mathrm{fc}}<\bar C_M$: the condition $C_M\le R-c-C_F$ is equivalent to the p25
+digression $R\ge c+C_F+C_M$, under which the marginal value of fossil is $\ge 0$ even at
+$K_F=\bar D$, so the utility builds full coverage and blackout probability is $0$;
+there adoption is automatic since $C_M\le R-c-C_F<(R-c)\varphi_o=\bar C_M$ (using
+$\varphi_o>1-C_F/(R-c)$, which is Assumption~A4). The right inequality is
+\eqref{eq:r4-CMbarb}, $c\,q_o>0$. Verified in \texttt{thresholds\_ordered}.
+\end{proof}
+
+\begin{proposition}[Boundedness axis in $C_R$]
+\label{prop:r4-bounded}
+Define
+\begin{align}
+C_R^\circ &= \frac{C_F^2}{2(\beta+p-c)}, \\
+C_R^\dagger &= \tfrac12\!\left[\, c
+   + \frac{(R-C_M-c)^2}{R-c}
+   + \frac{(R-c-C_F-C_M)^2}{\beta+p-R}\,\right].
+\end{align}
+Then $C_R^\circ<C_R^\dagger$. The no-FCL program has a finite optimum iff
+$C_R>C_R^\circ$; the with-FCL program has a finite optimum iff $C_R\ge C_R^\dagger$.
+On the window $C_R^\circ\le C_R<C_R^\dagger$ the with-FCL program is \emph{unbounded}
+in $K_R$ (Role~2's ``infinite capacity''), even though the no-FCL program is finite.
+\end{proposition}
+
+\begin{remark}[Stitched map]
+The two axes are orthogonal: a point has a coverage label (full / large-FCL /
+small-FCL / none) \emph{and} a boundedness label (both finite / with-FCL unbounded /
+both unbounded). \texttt{unified\_statement} returns both, and the boundedness window
+$C_R^\circ\le C_R<C_R^\dagger$ is exactly the carbon-reduction regime of
+Section~\ref{sec:r4-reconcile}.
+\end{remark}
+
+%-----------------------------------------------------------------------------
+\section{Assumption 1 stress test}
+\label{sec:r4-assumption1}
+
+Assumption~1 bundles four inequalities. Role~4's pressure test asks, for each, what
+object it guards and what breaks if it is relaxed just past its boundary
+(\texttt{role4/assumption1.py}; each break demonstrated in
+\texttt{tests/test\_assumption1.py}).
+
+\begin{center}
+\begin{tabular}{p{0.7cm} p{3.0cm} p{4.0cm} p{5.0cm}}
+\hline
+\textbf{Cond} & \textbf{Statement} & \textbf{Guards} & \textbf{If relaxed} \\
+\hline
+A1 & $R > c + C_M$ & eq.~(12) RHS $\varphi_1=C_M/(R-c)<1$, so interior $K_M$ exists
+   & $\varphi_1\ge 1$: no FCL adoption ever (the paper's own fallback) \\[4pt]
+A2 & $R < c + C_F + C_M$ & eq.~(13) RHS $\varphi_2\in(0,1)$, interior $K_F\in(0,\bar D)$
+   & full-coverage corner ($K_F\ge\bar D$, blackout $0$); strict $\Rightarrow$ infinite
+     fossil (``dedicated provider,'' out of scope) \\[4pt]
+A3 & $\beta+p > c + C_F$ & $\varphi_o=(\beta+p-c-C_F)/(\beta+p-c)>0$, fossil backup built
+   & $\varphi_o\le 0$: no backup built; grid tolerates blackouts \\[4pt]
+A4 & $\beta+p > R$ & eq.~(13) denominator $\beta+p-R>0$, so $\varphi_2\in(0,1)$
+   & denominator $\le 0$: $\varphi_2$ ill-defined; utility curtails users to serve FCL
+     (perverse) \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{remark}[The asymmetry is the point]
+A1, A3, and A4 are genuinely \emph{necessary}: relaxing any one destroys an interior
+optimum or flips an economic sign. A2 is necessary only for the \emph{interior}
+regime --- relaxing it lands in the well-defined full-coverage regime of
+Proposition~\ref{prop:r4-coverage}, not a contradiction. That asymmetry is the precise
+content of the stress test, and it lines up with the p25 digression: full coverage is
+a legitimate, if degenerate, corner rather than a modeling failure.
+\end{remark}
+
+%-----------------------------------------------------------------------------
+\section{Reconciliation: ``carbon falls'' (Role 1) vs.\ ``carbon never falls'' (Role 2)}
+\label{sec:r4-reconcile}
+
+Role~1's theory says the FCL program can cut carbon; Role~2's numerics report that at
+interior optima carbon never falls, and the model wants infinite capacity. These are
+\emph{not} in conflict.
+
+\begin{proposition}[Consistency via the unbounded program and its crossover]
+\label{prop:r4-reconcile}
+On the power/uniform families, and on the window $C_R^\circ\le C_R<C_R^\dagger$
+(Proposition~\ref{prop:r4-bounded}), the with-FCL program is unbounded in $K_R$: the
+profit profile has slope $C_R^\dagger-C_R>0$ in $K_R$ (the eq.~(24) constant is
+$2(C_R^\dagger-C_R)$, matching Role~2's own constant). Along that unbounded ray, carbon
+first \emph{rises} above the no-FCL benchmark and then \emph{falls} below it, crossing
+at a finite buildout $K_R^{\mathrm{cross}}$:
+\begin{itemize}
+\item for $K_R<K_R^{\mathrm{cross}}$ the utilization effect dominates and carbon is
+above the benchmark (Role~2's ``never falls'' at the interior optima it samples);
+\item for $K_R>K_R^{\mathrm{cross}}$ the capacity-substitution effect dominates and
+carbon is below the benchmark (Role~1's ``carbon falls'').
+\end{itemize}
+Equivalently, carbon falls only at the cheap-renewable corner. In the worked case
+$K_R^{\mathrm{cross}}\approx 4\times$ the no-FCL renewable scale.
+\end{proposition}
+
+\begin{proof}[Sketch]
+\texttt{role4/reconcile.py} traces carbon and profit against renewable buildout using
+Role~2's constrained solver (\texttt{carbon\_vs\_buildout}), and
+\texttt{decompose} splits the carbon change at each buildout into the
+utilization effect (carbon-raising, sign-checked positive) and the
+capacity-substitution effect (carbon-lowering). Profit rises without bound while carbon
+rises then falls; the bisection in \texttt{carbon\_crossover\_KR} locates
+$K_R^{\mathrm{cross}}$ as the smallest buildout at which with-FCL fossil output drops to
+the no-FCL benchmark. Both curves come from the same solver as Role~2, so the two roles
+are reading the same object at different points along it.
+\end{proof}
+
+\begin{remark}[Hardened takeaway]
+Assumption~1 alone does \emph{not} guarantee a finite optimum; that needs
+$C_R\ge C_R^\dagger$ as well. The unboundedness on $C_R^\circ\le C_R<C_R^\dagger$ is a
+corner-at-infinity, not a local-curvature failure --- the local Hessian stays
+negative-definite throughout. So Role~2's ``infinite capacity'' is a genuine feature of
+the cheap-renewable regime, and Role~1's ``carbon falls'' is exactly what that regime
+delivers past $K_R^{\mathrm{cross}}$. One finishing item remains open: the exact closed
+form for the small-FCL boundary $K_M^*=K_R^\circ$ under a \emph{general} $F$ is located
+numerically here but not forced into a general closed form --- flagged, not asserted.
+\end{remark}

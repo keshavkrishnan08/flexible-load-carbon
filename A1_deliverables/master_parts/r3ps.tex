@@ -1,0 +1,120 @@
+\section{Model recap}
+Residual demand is
+\[
+x \;=\; D - K_R\,\eta, \qquad D\in[0,\bar D],\; \eta\in[0,1],
+\]
+with joint CDF $F(\,\cdot\,;K_R)$. The regulator chooses the mining price $P$, and capacities $(K_F,K_R,K_M)$ are chosen by the utility. Miner demand (Role 4 result, eq.~(10)) is
+\begin{equation}
+d^{\star}(P) \;=\; \Bigl(1-\tfrac{1}{n}\Bigr)\frac{R}{P},
+\qquad P\,d^{\star} \;=\; \bigl(1-\tfrac{1}{n}\bigr)R,
+\label{r3ps-eq:miner}
+\end{equation}
+so miner revenue is exogenous in $P$, and the regulator can implement any dispatch $d\in[0,K_M]$ by price.
+
+\paragraph{Assumption 1 (interior regime).}
+\[
+R>c,\qquad \beta+p>R,\qquad \beta+p>c+C_F,\qquad R<c+C_F+C_M.
+\]
+
+\section{No-FCL benchmark}
+Without FCL the planner solves
+\[
+\max_{K_F,K_R}\ p\,\mathbb E[\bar D-(x-K_F)_+]
+-c\,\mathbb E[\min(x_+,K_F)]
+-(\beta+p)\mathbb E[(x-K_F)_+]
+-C_F K_F-C_R K_R.
+\]
+First-order conditions give
+\begin{align}
+F(K_F^{\circ};K_R^{\circ}) &= 1-\frac{C_F}{\beta+p-c}, \label{r3ps-eq:KFno}\\
+\mathbb E[\eta\mid x>0]\bigl(c\,F(0)+(\beta+p)(1-F(K_F^{\circ}))\bigr) &=C_R. \label{r3ps-eq:KRno}
+\end{align}
+
+\section{Joint optimum with FCL}
+With FCL the FCL dispatch is $d(x)=\min\{(K_F-x)_+,K_M\}$. The planner's FOCs (eqs.~12,13,15 of the paper) are
+\begin{align}
+F(K_F^{\star};K_R^{\star}) &= \frac{\beta+p-c-C_F-C_M}{\beta+p-R}, \label{r3ps-eq:KF}\\
+F(K_F^{\star}-K_M^{\star};K_R^{\star}) &= \frac{C_M}{R-c}, \label{r3ps-eq:KM}
+\end{align}
+together with a renewable FOC of the same form as \eqref{r3ps-eq:KRno} but with the FCL dispatch added in the inner region.
+
+\section{Proposition 1 (distribution-free)}
+\begin{proposition}\label{r3ps-prop:1}
+Under Assumption 1 and $C_M<\bar C_M$ with
+\[
+\bar C_M \;=\; (R-c)\,\frac{\beta+p-c-C_F}{\beta+p-c},
+\]
+introducing FCL strictly increases the utility's profit and strictly decreases blackout probability, for any continuous residual-demand distribution $F$.
+\end{proposition}
+
+\begin{proof}
+\emph{Profit.} The FCL planner's program nests the no-FCL one ($K_M=0$ is feasible). Optimality therefore weakly raises profit; the strict inequality follows because at $K_M=0$ the gradient of the Lagrangian in $K_M$ equals $(R-c)\,F(K_F^{\circ})-C_M$, which (using $\varphi^{\circ}=F(K_F^{\circ})$, hence $\bar C_M=(R-c)\varphi^{\circ}=(R-c)F(K_F^{\circ})$) is positive iff $C_M<\bar C_M$, so the optimum has $K_M^{\star}>0$ and profit strictly rises.
+
+\emph{Blackout.} Comparing \eqref{r3ps-eq:KF} and \eqref{r3ps-eq:KFno}: in the interior regime $C_M<\bar C_M$ the right-hand side of \eqref{r3ps-eq:KF} exceeds that of \eqref{r3ps-eq:KFno} (the quantile inequality is equivalent to $C_M<\bar C_M$), so the target quantile is higher and $K_F^{\star}>K_F^{\circ}$ when $K_R$ is held fixed. Lemma~\ref{r3ps-lem:sub} only reinforces this through $K_R^{\star}\ge K_R^{\circ}$. Hence $\Pr(x>K_F^{\star})<\Pr(x>K_F^{\circ})$.
+\end{proof}
+
+\begin{lemma}[Capacity substitution]\label{r3ps-lem:sub}
+In the interior regime, $K_R^{\star}\ge K_R^{\circ}$, with strict inequality whenever $K_M^{\star}>0$.
+\end{lemma}
+
+\begin{proof}
+Comparing renewable FOCs: the FCL version adds a strictly positive term $(R-c)\mathbb E[\eta\,\mathbf 1\{0<x<K_F-K_M\}]$ to the marginal benefit of renewable capacity, while the blackout term is (weakly) smaller because $K_F^{\star}\ge K_F^{\circ}$. Net marginal benefit of $K_R$ rises, so the optimal $K_R$ rises.
+\end{proof}
+
+\section{Carbon decomposition (eq.~17)}
+Let fossil emissions per scenario equal $c\min(x_+,K_F)$. Then
+\begin{align}
+\Delta\text{Carbon}
+&= \underbrace{c\,\mathbb E\bigl[(x+d(x))_+ - x_+\bigr]}_{\text{Term I: fossil the FCL load adds}} \notag\\
+&\quad - \underbrace{c\bigl[\mathbb E\min(x_+^{\circ},K_F^{\circ})-\mathbb E\min(x_+^{\star},K_F^{\star})\bigr]}_{\text{Term II: utilisation \& capacity substitution}}. \label{r3ps-eq:carbon}
+\end{align}
+Term~I is the \emph{net} extra fossil the load draws, $(x+d)_+-x_+$; it vanishes on the surplus zone $x<0$ up to $d\le(-x)_+$ (there the load runs on renewables and burns no fossil), so it does not overcount emissions where dispatch is green. Term~II is non-negative when $K_R^{\star}>K_R^{\circ}$ (Lemma~\ref{r3ps-lem:sub}); the sign of $\Delta$Carbon depends on the balance with Term~I, which scales with the right tail of $F$.
+
+\section{Section 5.3 (Case C, short run)}
+\begin{corollary}\label{r3ps-cor:caseC}
+If $(K_F^{(0)},K_R^{(0)})$ are exogenously fixed and only $K_M$ optimised, then $\Delta\text{Carbon}\ge 0$ (FCL weakly increases emissions). The bound binds iff $F(K_F^{(0)};K_R^{(0)})\le C_M/(R-c)$, in which case $K_M^{\star}=0$.
+\end{corollary}
+
+\begin{proof}
+Capacities are frozen, so Term~II in \eqref{r3ps-eq:carbon} vanishes identically. Only Term~I remains, and $d\ge 0$ a.s.
+\end{proof}
+
+\section{Numerical confirmation (40\,000-sample Monte Carlo)}
+
+\paragraph{Distributions tested.}
+Uniform; Beta$(0.5,3)$, Beta$(2,5)$ (right-skewed); Beta$(2,2)$ (symmetric); Beta$(5,2)$ (left-skewed); lognormal$(\sigma{=}0.6)$; exponential$(0.3)$; Pareto$(2.5)$.
+
+\begin{table}[h]\centering
+\begin{tabular}{lcc}
+\toprule
+Quantity & Below $\bar C_M$ (16 sc.) & All (40 sc.) \\
+\midrule
+Profit improves with FCL          & 16/16 & 16/40 \\
+Blackout probability drops        & 16/16 & 16/40 \\
+Fossil utilisation rises          & --    & 30/40 \\
+Carbon drops                      & --    & 10/40 \\
+\bottomrule
+\end{tabular}
+\caption{Bullets 1--2: Proposition~\ref{r3ps-prop:1} holds in every scenario with $C_M<\bar C_M$.}
+\end{table}
+
+\begin{table}[h]\centering
+\begin{tabular}{lc}
+\toprule
+Quantity & Scenarios \\
+\midrule
+$\Delta\text{Carbon}\ge 0$ (Case C)              & 96/96 \\
+$K_R^{\star}>K_R^{\circ}$ (capacity substitution) & 32/32 \\
+$\Delta\text{Carbon}<0$ in general model          & 2/32 \\
+\bottomrule
+\end{tabular}
+\caption{Bullets 3--4: Corollary~\ref{r3ps-cor:caseC} confirmed; carbon reduction concentrates in right-skewed $F$ with low $C_R$.}
+\end{table}
+
+\section{Sync notes for Role 1}
+\begin{itemize}
+\item Profit and blackout halves of Proposition~\ref{r3ps-prop:1} verified distribution-free across 8 families whenever $C_M<\bar C_M$.
+\item Utilisation effect (Term~II of \eqref{r3ps-eq:carbon}) is non-negative in every scenario.
+\item Capacity-substitution channel $K_R^{\star}>K_R^{\circ}$ holds in 32/32 scenarios --- this is the binding driver of the carbon sign.
+\item Left-skewed $F$ with high $C_R$ reverses the carbon sign; this is the boundary region for Role~1's general statement.
+\end{itemize}

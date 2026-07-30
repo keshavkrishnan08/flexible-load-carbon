@@ -470,6 +470,94 @@ verify_week3.py 37/37. PDF 7pp. Commits 20a5f10, be0dc05, a010643.
 
 ---
 
+## E25 · 2026-07-22 · Barrier-artifact audit — the leverage numbers were measured off a frozen optimizer
+
+**Objective.** Stress-test the Week-3/4 leverage results after noticing the carbon-frontier
+sweeps ran with the optimizer's renewable barrier (`K_R ≤ 0.99·Dbar`) possibly binding.
+
+**Method.** Re-solved the budget-family optimum at the standard `C_M=0.5` with a slack cap
+(20×), asserting `K_R` interior before drawing any conclusion; cross-checked against the
+Week-3 frontier and `validate_regime_crossing`.
+
+**Result.** The barrier bound in *every* cell of the old sweep, so `K_R'(τ)=0` held trivially
+and Condition M was never actually tested. At a genuine interior optimum it **fails**: `K_R`
+*rises* with τ (1.753→2.655) and the leverage is **positive**, `Λ∈[0.139,0.218]` (Week-4),
+independently `Λ∈[0.218,0.301]` (Week-3 frontier) — not the negative values reported off the
+frozen stock. ~~Λ<0, fossil-running does not even raise K_R~~ → corrected: the induced
+build-out offsets ≈ a fifth to a third of the load's footprint.
+
+**Conclusion.** The *conclusion* survives (Λ<1 ⇒ surplus-only carbon-optimal), but Condition M
+is sufficient, not necessary, and false where `K_R` is interior. Propagated to all 9 source
+sites + master. Recorded as rem:condMfails (Week 4) and the sharpened Λ remark (Week 3).
+
+**Also this session (harness hardening).**
+- **B6 → a unification.** The Week-1 knife-edge (MV constant in `K_R`) holds exactly on
+  large-FCL and *breaks* at the small-FCL crossing — the *same* boundary that carries the
+  Φ=Δ carbon identity. One regime boundary governs both headline results (rem:oneboundary).
+- **Week-3 quadrature defect.** `cons_fossil` masked a fixed grid, so a moving limit jumped
+  ~5e-3 as it crossed nodes; this faked a monotone-fossil-lemma failure (`e(K_R)` up on 60/100
+  fine steps) and a false negative carbon saving. Endpoints made exact → 0/100, saving>0. Lemma
+  test grid tightened 0.5→0.02.
+- **Cap decides size, not sign.** 5 families × 5 caps: carbon saving positive in all 25 cells;
+  magnitude swings 3000× with the cap, so no magnitude from that sweep is quotable.
+- **Checked/polishing fsolve.** Bare `fsolve` returned non-solutions silently; `_fsolve_checked`
+  now treats the residual as ground truth (not ier) and polishes stalls (B(1,3) at C_M=0.502).
+  Caught a genuine boundary non-solution at `C_M=0.30` (`K_F`≈`Dbar`).
+- Closed M3/M6/M9/M13; `verify_exact` 21/21, `verify_week3` 42/42, `verify_week4` interior-clean.
+
+— R1
+
+---
+
+## E26 · 2026-07-22 · Referee-response arc — closing the three blocking issues (main model, empty Phi, storage)
+
+**Objective.** An adversarial Management-Science referee graded the A1 theory D+/Reject on
+three blocking issues: (1) the theory solves the utility-operated model, not the paper's main
+double-margin (third-party-miner) model; (2) Phi's carbon "classification" is empty on its
+valid domain (only ever "carbon rises"); (3) storage is absent though it competes for the
+same surplus. Response was iterated against re-grades until four of five dimensions reached B.
+
+**Method & result (three new deliverables, all verified).**
+- **Double margin** (`role1_double_margin.tex`, `verify_double_margin.py` 8/8). Re-derived the
+  cutoffs in the main model: miner `phi_1 = C_M/(R-p)` (exact 1e-16); fossil
+  `phi_o_dm = (b+p-c-C_F)/beta` (exact 1e-4) — same numerator as utility-operated, denominator
+  `beta`, because the utility internalizes miner entry (`dK_M/dK_F=1`) and the coupling term
+  cancels. New structural fact: the cutoffs **decouple** (`C_M` only in `phi_1`), giving a
+  **separation principle** — fossil adequacy is independent of every load characteristic. The
+  `Delta=Phi` identity is model-free and carries over (`prop:dmidentity`); the negative sign is
+  a numerical regularity there too (`Delta=-2.375`).
+- **Phi reframing** (`role1_week4_theory.tex`). `prop:alwaysup` relabeled as an `observation`
+  (Week-2 minimality forbids a distribution-free proof); title fixed ("...Raises Emissions").
+  The empty branch is owned as the certification result.
+- **Storage** (`role1_storage.tex`, `verify_storage.py` 6/6). Conceded storage dominates the
+  FCL as a carbon tech (`prop:carbon`); showed the naive-vs-surplus dispatch gap is
+  storage-invariant (`prop:invariant`) and survives rivalry (`cor:rivalry`, +2.129->+2.116).
+  Value threshold `R* = c+eta[phi_o_dm c+(1-phi_o_dm)(b+p)]` with `phi_o_dm` (fixing a margin
+  bug). **De-fragilized:** `v_stor` FALLS with the tariff `p`, so the contested-higher EIA `p`
+  pushes the verdict TOWARD the load; only the corner `R=1.4,p=0.5` favors storage, and any
+  `R>=1.8` clears at every `p`.
+
+**Grade trajectory (adversarial re-grades):** D+ -> C- -> B- -> (targeting B in all five
+dimensions). Novelty/Rigor/Honesty/Modeling reached B; Practical was the last at B- and was
+de-fragilized this round.
+
+**Conclusion.** The contribution now lives natively in the paper's main model, with a proved
+novel decoupling/separation result, an honestly-labeled backfire certificate, and a storage
+section that concedes what it must and proves what survives.
+
+**Follow-up (closing the last gap).** The exact carbon *coefficient* was then re-derived in
+the main model, not just the sign: `Phi_dm = (C_M/(R-p))(a-mu*_low) - [K_F* - K_Fo(1-phi_o) -
+(phi_o-q_o)mu_o_mid]` — the utility-operated `Phi` verbatim with the single substitution
+`C_M/(R-c) -> C_M/(R-p)`, because the coefficient is the integration-by-parts factor `F(a)`
+which free entry pins to `phi_1`. Verified `Delta=Phi_dm` to 2e-4 (`verify_double_margin.py`
+now **9/9**, `Phi_dm=-2.3749` vs `Delta=-2.3752`). So the ENTIRE capacity-and-carbon theory —
+cutoffs, decoupling, and the exact `Phi` — is now in the professor's main double-margin model;
+only §5.3 (deregulated, by design) uses a different margin.
+
+— R1
+
+---
+
 ## Verification ledger
 | Date | Claim | Script | Result |
 |---|---|---|---|
@@ -483,7 +571,7 @@ verify_week3.py 37/37. PDF 7pp. Commits 20a5f10, be0dc05, a010643.
 | 2026-06-24 | Correlation carbon-sign (quarantined→Role 3) | `exploratory_cross_role/verify_correlation.py` | monotone, sign-flips |
 | 2026-06-26 | **A1 Week 2** — all five tasks (T1–T5) vs quadrature of Π | `verify_week2.py` | **49/49 PASS** |
 | 2026-06-26 | Recursive-triangular uniqueness: det M closed form, Schur<0, H≺0, unique Ψ zero | `verify_week2.py` T1 | exact (≤1e-15) |
-| 2026-06-26 | Emission conjecture resolved NEGATIVE: Δ<0 at every large-FCL interior optimum | `verify_week2.py` T3 + offline ws2/ws3 (244 cells) | max Δ≈−1.40<0 |
+| 2026-06-26 | Emission conjecture resolved NEGATIVE: Δ<0 at every large-FCL interior optimum | `verify_week2.py` T3 (in repo). NOTE: the cited 244-cell ws2/ws3 sweep ran offline and its script is NOT in this repo, so that portion is not reproducible here; the reproducible evidence is the 60-point grid in ROLE1_SCOPE.md (16 solved, 0 with Δ>0). | max Δ≈−1.40<0 |
 | 2026-06-26 | Corner non-emptiness C_R°<C_R†; FTC path-integral = ΔK_R; bounds tight | `verify_week2.py` T4,T5 | 4.21≈4.13; Δmin/Δmax attained |
 
 ## Open problems / handoffs
