@@ -1,0 +1,2 @@
+n_radii,a_nominal,a_worst_at_max_r,worst_case_tail_monotone_in_r,max_price_of_robustness,max_carbon_gap_abs,K_R_nominal,K_F_nominal,K_M_nominal
+6,2.5,2.1,True,0.0,0.3299,20.0,-0.057,13.427
