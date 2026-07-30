@@ -1,6 +1,6 @@
 # CONTEXT.md — Team A1, Role 2 (Solver & Numerical Methods), Week 2
 
-> Briefing for a fresh Claude Code session. This file is the only context you start
+> Briefing for a fresh working session. This file is the only context you start
 > with, so read it top to bottom before touching code. It explains the project, what
 > already exists from Week 1, the one finding that drives everything this week, and
 > the four tasks I (Role 2) own.

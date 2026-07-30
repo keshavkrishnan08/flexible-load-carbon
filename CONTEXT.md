@@ -36,7 +36,7 @@ eqs 60-63 and eq 62 App. G; p25 full-coverage digression).
 - Reconciliation: with-FCL unbounded iff C_R < C_R†; carbon falls only past the
   buildout crossover K_R^cross. Both Role 1 and Role 2 correct.
 
-## How I want Claude Code to work
+## Working conventions
 Explain before changing; re-derive from the .txt rather than transcribe; trust
 the paper over notes and flag discrepancies; write validation as real pytest
 tests; use Role 2's solver (vendored in role4/fcl_backend) as the numerical

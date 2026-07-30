@@ -66,7 +66,7 @@ Reduction: A Tale of Bitcoin Mining and AI Training" (file: FCL_Carbon_Paper.pdf
     `∝ D̄ + [(R−c−C_F−C_M)/(β+p−R)]·(D̄+K*_R) − ½·(C_M/(R−c))²·(D̄+K*_R)`
   - Result: (26) < (25) when C_R is small enough (then eq 24 positive, K*_R = ∞,
     fossil → 0, carbon → 0).
-> Claude Code: read Section 4 (eqs 10–26), Appendix B.1 (Prop 1 proof), and the
+> Analyst: read Section 4 (eqs 10–26), Appendix B.1 (Prop 1 proof), and the
 > Section 4.3 carbon part directly from FCL_Carbon_Paper.pdf and confirm/correct all
 > of the above, especially eq 25. TRUST THE PAPER over these notes.
 
@@ -76,7 +76,7 @@ Reduction: A Tale of Bitcoin Mining and AI Training" (file: FCL_Carbon_Paper.pdf
 - Confirm Proposition 1 qualitatively: with C_M < C̄_M, FCL (i) raises profit,
   (ii) lowers blackout, (iii) can lower carbon in the right parameter range.
 
-## How I want Claude Code to work
+## Working conventions
 - **Explain changes before making them.** I'm a student and must understand every
   line — being able to explain the code is the actual assignment. Don't silently
   rewrite large chunks.
@@ -86,6 +86,6 @@ Reduction: A Tale of Bitcoin Mining and AI Training" (file: FCL_Carbon_Paper.pdf
 - If a PDF equation conflicts with my notes, trust the PDF and tell me.
 
 ## Files in this folder
-- `FCL_Carbon_Paper.pdf` — THE paper to build against. (Add it here so Claude Code
+- `FCL_Carbon_Paper.pdf` — THE paper to build against. (Add it here so the analyst
   can read it directly.)
 - `CONTEXT.md` — this file.

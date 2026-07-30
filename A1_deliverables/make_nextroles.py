@@ -3,7 +3,7 @@ headings, bold-lead bullets, no preamble). EVERY bullet is hard, load-bearing
 math / theory / experiment work, strictly in A1 scope. Outputs Word .docx and a
 Word-style (Helvetica) PDF."""
 import os
-OUT = "/Users/keshavkrishnan/Claude/ASSIPPaper/A1_deliverables"
+OUT = os.path.dirname(os.path.abspath(__file__))
 os.makedirs(OUT, exist_ok=True)
 BLUE = (0x1f, 0x56, 0x99)
 TITLE = "A1 Week 2 Plan"
