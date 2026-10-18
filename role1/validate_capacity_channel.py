@@ -19,11 +19,11 @@ class ScaleMix:
     def intFKR(self,a,b,KR,n=600):
         xs=np.linspace(a,b,n); X=xs[:,None]+KR*self.s[None,:]
         vals=(self._fD(X.ravel()).reshape(X.shape)*self.s[None,:]).dot(self.w)
-        return np.trapz(vals,xs)
+        return np.trapezoid(vals,xs)
     def intF(self,a,b,KR,n=600):
         xs=np.linspace(a,b,n); X=xs[:,None]+KR*self.s[None,:]
         vals=self._FD(X.ravel()).reshape(X.shape).dot(self.w)
-        return np.trapz(vals,xs)
+        return np.trapezoid(vals,xs)
 
 def focs_with(d,P,v):
     KR,KF,KM=v; R,c,b,p,CF,CR,CM=P['R'],P['c'],P['beta'],P['p'],P['CF'],P['CR'],P['CM']

@@ -32,12 +32,12 @@ KR, KF = 2.0, 7.0
 
 def dens(KR):
     xs = XS[XS >= -KR]; Fx = np.array([d.F(x, KR) for x in xs])
-    fx = np.clip(np.gradient(Fx, xs), 0, None); Z = np.trapz(fx, xs)
+    fx = np.clip(np.gradient(Fx, xs), 0, None); Z = np.trapezoid(fx, xs)
     return xs, (fx / Z if Z > 0 else fx)
 
 def carbon(KM_surplus=0.0, KM_naive=0.0, KS=0.0):
     xs, fx = dens(KR); xp = np.maximum(xs, 0.); surp = np.maximum(-xs, 0.)
-    E = lambda v: float(np.trapz(v * fx, xs))
+    E = lambda v: float(np.trapezoid(v * fx, xs))
     charge = np.minimum(surp, KS)
     displaced = eta * E(charge)
     base = E(np.minimum(xp, KF))
@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     print("\n(B') dispatch gap survives storage RIVALRY (FCL takes surplus first, crowds storage)")
     xs, fx = dens(KR); xp = np.maximum(xs, 0.); surp = np.maximum(-xs, 0.)
-    Ef = lambda v: float(np.trapz(v * fx, xs))
+    Ef = lambda v: float(np.trapezoid(v * fx, xs))
     KM = 3.0; rgaps = []
     for KS in [1.0, 4.0, 10.0]:
         naive_burn = Ef(np.minimum(np.maximum(KF - xp, 0.), KM))

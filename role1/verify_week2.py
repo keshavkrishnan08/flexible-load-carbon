@@ -324,7 +324,7 @@ class FastMix:
         dd=np.add.outer(np.atleast_1d(x),KR*s.s); z=np.clip(dd/10,1e-9,1-1e-9)
         return (np.where((dd>=0)&(dd<=10),s.bD.pdf(z)/10,0.)*s.s)@s.w
     def _I(s,fn,lo,hi,KR,n=120):
-        xs=np.linspace(lo,hi,n); return np.trapz(fn(xs,KR),xs)
+        xs=np.linspace(lo,hi,n); return np.trapezoid(fn(xs,KR),xs)
 def fast_solve(d,P):
     def gr(v):
         KR,KF,KM=v
@@ -484,7 +484,7 @@ pts=np.array(pts)
 # FTC: integral of -dK_R*/dC_M from C_M up to ~C_Mbar  ==  K_R*(C_M)-K_R*(top) >= 0
 CMs=pts[:,0]; dKRs=pts[:,1]; gaps=pts[:,2]
 order=np.argsort(CMs); CMs_o=CMs[order]; dKRs_o=dKRs[order]
-KRgain=np.trapz(-dKRs_o,CMs_o)
+KRgain=np.trapezoid(-dKRs_o,CMs_o)
 KR_lo=KRstar_fast(CMs_o[0]); KR_hi=KRstar_fast(CMs_o[-1])
 ok("FTC: int(-dK_R*/dC_M)dC_M == K_R*(lo)-K_R*(hi) > 0",
    KRgain>0 and abs(KRgain-(KR_lo-KR_hi))<0.2*max(KRgain,0.1),
@@ -495,7 +495,7 @@ ok("integrand -dK_R*/dC_M >= 0 pointwise (monotone-g sufficient)",
 # demonstrate the logic: K_R*>K_R° needs only the *integral* of the gap to be positive
 synthetic_gap=np.array([ -0.2, 0.1, 0.3, 0.5, 0.4 ])   # one negative point, positive mean
 ok("non-necessity: integral>0 with a negative integrand point",
-   np.trapz(synthetic_gap)>0 and np.any(synthetic_gap<0),
+   np.trapezoid(synthetic_gap)>0 and np.any(synthetic_gap<0),
    "K_R*>K_R° can hold though g not monotone everywhere")
 
 # --- tight two-sided bounds on Delta (at fixed equilibrium capacities) ---

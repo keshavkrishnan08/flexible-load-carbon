@@ -38,11 +38,11 @@ def solve_dm(d, P):
     XS = np.linspace(-Dbar, Dbar, 1400)
     def profit(KR, KF, KM):
         xs = XS[XS >= -KR]; Fx = np.array([d.F(x, KR) for x in xs])
-        fx = np.clip(np.gradient(Fx, xs), 0, None); Z = np.trapz(fx, xs); fx = fx / Z if Z > 0 else fx
+        fx = np.clip(np.gradient(Fx, xs), 0, None); Z = np.trapezoid(fx, xs); fx = fx / Z if Z > 0 else fx
         xp = np.maximum(xs, 0.)
         miner = np.minimum(np.maximum(KF - xp, 0.), KM)
         fcons = np.minimum(xp, KF); out = np.maximum(xp - KF, 0.)
-        E = lambda v: float(np.trapz(v * fx, xs))
+        E = lambda v: float(np.trapezoid(v * fx, xs))
         return (p - c) * E(miner) - c * E(fcons) - (b + p) * E(out) - CF * KF - CR * KR
     def obj(k):
         KR, KF = k
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     def _dens(KR):
         import numpy as _np
         xs = _np.linspace(-KR, Pc['Dbar'], 1200); Fx = _np.array([d.F(x, KR) for x in xs])
-        fx = _np.clip(_np.gradient(Fx, xs), 0, None); Z = _np.trapz(fx, xs)
+        fx = _np.clip(_np.gradient(Fx, xs), 0, None); Z = _np.trapezoid(fx, xs)
         return xs, (fx / Z if Z > 0 else fx)
     def _q(fn, a, bb): return integrate.quad(fn, a, bb, limit=200)[0]
     KRn, KFn, KMn = solve_dm(d, Pc)
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         KR, KF = k
         if KR < 0.05 or KF < 0.5 or KF > Pc['Dbar']*0.99: return 1e6
         xs, fx = _dens(KR); xp = np.maximum(xs, 0.)
-        E = lambda v: float(np.trapz(v*fx, xs))
+        E = lambda v: float(np.trapezoid(v*fx, xs))
         return -(-c_*E(np.minimum(xp, KF)) - (b_+p_)*E(np.maximum(xp-KF, 0.)) - CF_*KF - CR_*KR)
     ro = optimize.minimize(_prof_no, (2., 7.), method='Nelder-Mead',
                            options={'xatol':3e-4,'fatol':3e-5,'maxiter':2000})

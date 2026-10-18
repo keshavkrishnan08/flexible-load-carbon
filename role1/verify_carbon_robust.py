@@ -32,14 +32,14 @@ class ScaleMix:
     def FKR(s,x,KR):return float(s.w@(s.s*s._fD(x+KR*s.s)))
     def intFKR(s,a,b,KR,n=400):
         xs=np.linspace(a,b,n); X=xs[:,None]+KR*s.s[None,:]
-        return np.trapz((s._fD(X.ravel()).reshape(X.shape)*s.s[None,:])@s.w,xs)
+        return np.trapezoid((s._fD(X.ravel()).reshape(X.shape)*s.s[None,:])@s.w,xs)
     def int1mF(s,a,b,KR,n=400):
         xs=np.linspace(a,b,n); X=xs[:,None]+KR*s.s[None,:]
-        return np.trapz(1.0-(s._FD(X.ravel()).reshape(X.shape))@s.w,xs)
+        return np.trapezoid(1.0-(s._FD(X.ravel()).reshape(X.shape))@s.w,xs)
     def condmean(s,a,b,KR,n=400):
         xs=np.linspace(a,b,n); X=xs[:,None]+KR*s.s[None,:]
         fx=(s._fD(X.ravel()).reshape(X.shape))@s.w
-        Z=np.trapz(fx,xs); return np.trapz(xs*fx,xs)/Z if Z>0 else np.nan
+        Z=np.trapezoid(fx,xs); return np.trapezoid(xs*fx,xs)/Z if Z>0 else np.nan
 
 P=dict(R=1.4,c=0.5,beta=4.0,p=1.0,CF=0.6,CM=0.5,CR=0.5,Dbar=10.0)
 R,c,b,p,CF,CM,CR=P['R'],P['c'],P['beta'],P['p'],P['CF'],P['CM'],P['CR']
@@ -81,9 +81,9 @@ print(f"(B) bounds:  Dmin={Dmin:+.4f}  <=  Delta={Delta:+.4f}  <=  Dmax={Dmax:+.
 # (C) least-favorable: conditional mean of monotone density vs midpoint
 a1,b1=-KR,KF-KM; a2,b2=0,KFn
 def cm_noninc(a,bb,sh,n=3000):
-    t=np.linspace(a,bb,n); w=np.exp(-sh*(t-a)); w/=np.trapz(w,t); return np.trapz(w*t,t)
+    t=np.linspace(a,bb,n); w=np.exp(-sh*(t-a)); w/=np.trapezoid(w,t); return np.trapezoid(w*t,t)
 def cm_nondec(a,bb,sh,n=3000):
-    t=np.linspace(a,bb,n); w=np.exp(sh*(t-a)); w/=np.trapz(w,t); return np.trapz(w*t,t)
+    t=np.linspace(a,bb,n); w=np.exp(sh*(t-a)); w/=np.trapezoid(w,t); return np.trapezoid(w*t,t)
 ok1=all(cm_noninc(a1,b1,rng.uniform(0,3))<= (a1+b1)/2 +1e-9 for _ in range(3000))
 ok2=all(cm_nondec(a2,b2,rng.uniform(0,3))>= (a2+b2)/2 -1e-9 for _ in range(3000))
 print(f"(C) within monotone class: mu*_low<=midpoint {ok1} and mu^o_mid>=midpoint {ok2}")

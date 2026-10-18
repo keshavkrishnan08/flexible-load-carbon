@@ -50,7 +50,7 @@ class Model:
         if hi<=lo: return 0.0
         inner=x[(x>lo)&(x<hi)]
         pts=np.concatenate(([lo],inner,[hi]))
-        return float(np.trapz(np.interp(pts,x,vals),pts))
+        return float(np.trapezoid(np.interp(pts,x,vals),pts))
     def cons_fossil(self,KR,KF):
         x,Fg,_=self._grid(KR); return self._trapz_exact(x,1-Fg,0.0,KF)
     def ren_benefit(self,KR,KF,KMlo=None):   # renewable marginal value (no CR), + surplus channel if KMlo given
@@ -109,8 +109,8 @@ for m in fams:
     x,FgC,_=m._grid(KRc); x0,Fg0,_=m._grid(KRo)
     Fc=lambda xx:np.interp(xx,x,FgC); Fo=lambda xx:np.interp(xx,x0,Fg0)
     xo=np.linspace(0,KFo,4000); xc=np.linspace(0,KFc,4000); xt=np.linspace(KFc,KFo,2000)
-    foso=float(np.trapz(1-Fo(xo),xo)); fosc=float(np.trapz(1-Fc(xc),xc))
-    t1=float(np.trapz(Fc(xc)-Fo(xc),xc)); t2=float(np.trapz(1-Fo(xt),xt))
+    foso=float(np.trapezoid(1-Fo(xo),xo)); fosc=float(np.trapezoid(1-Fc(xc),xc))
+    t1=float(np.trapezoid(Fc(xc)-Fo(xc),xc)); t2=float(np.trapezoid(1-Fo(xt),xt))
     save_formula=t1+t2; save_direct=foso-fosc
     adopt=KMc>1e-6; fall=fosc<foso-1e-9
     alladopt&=adopt; allfall&=fall
@@ -214,10 +214,10 @@ gx2,gw2=np.polynomial.legendre.leggauss(40); ss=0.5*(gx2+1); wss=0.5*gw2*Sd2.pdf
 def fam_stats(KR,KF,KM,tau):
     x=np.linspace(-KR,Dbar,1000); A=x[:,None]+KR*ss[None,:]
     fxd=(np.where((A>0)&(A<Dbar),Dd2.pdf(np.clip(A,1e-9,Dbar-1e-9)/Dbar)/Dbar,0.0)*wss[None,:]).sum(1)
-    Z=np.trapz(fxd,x); fxd=fxd/Z if Z>0 else fxd
+    Z=np.trapezoid(fxd,x); fxd=fxd/Z if Z>0 else fxd
     sx=np.maximum(-x,0.); cons=np.minimum(np.maximum(x,0.),KF); head=np.maximum(KF-np.maximum(x,0.),0.)
     d=np.minimum(KM,sx+np.minimum(tau,head)); ff=np.maximum(d-sx,0.); blk=np.maximum(np.maximum(x,0.)-KF,0.)
-    E=lambda v:float(np.trapz(v*fxd,x)); return E(d),E(ff),E(cons),E(blk)
+    E=lambda v:float(np.trapezoid(v*fxd,x)); return E(d),E(ff),E(cons),E(blk)
 def fam_opt(tau,CRv,CMv,x0):
     def negp(k):
         KR,KF,KM=k

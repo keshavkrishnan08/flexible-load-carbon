@@ -29,23 +29,23 @@ def FScond(s,d,rho):
     return Beta(a,b).cdf(np.clip(s,0,1))
 
 # grid over d for quadrature
-DD=np.linspace(1e-3,Dbar-1e-3,400); wD=fD(DD); wD=wD/np.trapz(wD,DD)
+DD=np.linspace(1e-3,Dbar-1e-3,400); wD=fD(DD); wD=wD/np.trapezoid(wD,DD)
 
 def F(x,KR,rho):
-    s=np.clip((DD-x)/KR,0,1); return np.trapz(wD*(1-FScond(s,DD,rho)),DD)
+    s=np.clip((DD-x)/KR,0,1); return np.trapezoid(wD*(1-FScond(s,DD,rho)),DD)
 def fdens(x,KR,rho):
     s=(DD-x)/KR; inside=(s>=0)&(s<=1)
-    return np.trapz(wD*np.where(inside,fScond(np.clip(s,0,1),DD,rho),0.0)/KR,DD)
+    return np.trapezoid(wD*np.where(inside,fScond(np.clip(s,0,1),DD,rho),0.0)/KR,DD)
 def FKR(x,KR,rho):
     s=(DD-x)/KR; inside=(s>=0)&(s<=1)
-    return np.trapz(wD*np.where(inside,fScond(np.clip(s,0,1),DD,rho)*s/KR,0.0),DD)
+    return np.trapezoid(wD*np.where(inside,fScond(np.clip(s,0,1),DD,rho)*s/KR,0.0),DD)
 
 def gR(P,rho,KR,KF,KM):
     R,c,b,p,CR=P['R'],P['c'],P['beta'],P['p'],P['CR']
     xs1=np.linspace(KF-KM,KF,60); xs2=np.linspace(-KM,KF-KM,60); xs3=np.linspace(KF,Dbar,60)
-    t1=np.trapz([FKR(x,KR,rho) for x in xs1],xs1)
-    t2=np.trapz([FKR(x,KR,rho) for x in xs2],xs2)
-    t3=np.trapz([FKR(x,KR,rho) for x in xs3],xs3)
+    t1=np.trapezoid([FKR(x,KR,rho) for x in xs1],xs1)
+    t2=np.trapezoid([FKR(x,KR,rho) for x in xs2],xs2)
+    t3=np.trapezoid([FKR(x,KR,rho) for x in xs3],xs3)
     return R*t1+c*t2+(b+p)*t3-CR
 def gM(P,rho,KR,KF,KM): return (P['R']-P['c'])*F(KF-KM,KR,rho)+P['c']*F(-KM,KR,rho)-P['CM']
 def gF(P,rho,KR,KF,KM):
@@ -59,10 +59,10 @@ def solve_no(P,rho,x0):
         KR,KF=v
         e1=F(KF,KR,rho)-(b+p-c-CF)/(b+p-c)
         xs1=np.linspace(0,KF,60); xs2=np.linspace(KF,Dbar,60)
-        return [e1, c*np.trapz([FKR(x,KR,rho) for x in xs1],xs1)+(b+p)*np.trapz([FKR(x,KR,rho) for x in xs2],xs2)-CR]
+        return [e1, c*np.trapezoid([FKR(x,KR,rho) for x in xs1],xs1)+(b+p)*np.trapezoid([FKR(x,KR,rho) for x in xs2],xs2)-CR]
     return optimize.fsolve(foc,x0,xtol=1e-8)
 def Efossil(KR,KF,KM,rho):
-    xs=np.linspace(-KM,KF-KM,120); return np.trapz([1-F(x,KR,rho) for x in xs],xs)
+    xs=np.linspace(-KM,KF-KM,120); return np.trapezoid([1-F(x,KR,rho) for x in xs],xs)
 
 P=dict(R=1.4,c=0.5,beta=4.0,p=1.0,CF=0.6,CR=0.25,CM=0.45,Dbar=Dbar)
 print(f"{'rho':>6} {'corr(D,S)':>9} {'KR*':>7} {'KR^o':>7} {'KR*>KRo':>7} {'carbonMargin(o-*)':>17}")
@@ -72,9 +72,9 @@ for rho in [-0.4,-0.2,0.0,0.2,0.4]:
     # empirical corr(D,S)
     ds=np.random.default_rng(0).random((40000,)); # not used; compute corr analytically-ish via grid
     sgrid=np.linspace(0.01,0.99,50)
-    ED=np.trapz(wD*DD,DD);
-    EDS=np.trapz(wD*DD*mS(DD,rho),DD); ES=np.trapz(wD*mS(DD,rho),DD)
-    VD=np.trapz(wD*(DD-ED)**2,DD);
+    ED=np.trapezoid(wD*DD,DD);
+    EDS=np.trapezoid(wD*DD*mS(DD,rho),DD); ES=np.trapezoid(wD*mS(DD,rho),DD)
+    VD=np.trapezoid(wD*(DD-ED)**2,DD);
     cov=EDS-ED*ES
     # var S approx (ignore conditional var for corr sign indicator)
     corr_sign=cov

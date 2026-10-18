@@ -128,15 +128,15 @@ gx,gw=np.polynomial.legendre.leggauss(40); ss=0.5*(gx+1); wss=0.5*gw*Sd.pdf(ss)
 def fam_stats(KR,KF,KM,tau):
     x=np.linspace(-KR,Dbar,900); A=x[:,None]+KR*ss[None,:]
     fx=(np.where((A>0)&(A<Dbar),Dd.pdf(np.clip(A,1e-9,Dbar-1e-9)/Dbar)/Dbar,0.0)*wss[None,:]).sum(1)
-    Z=np.trapz(fx,x); fx=fx/Z if Z>0 else fx
+    Z=np.trapezoid(fx,x); fx=fx/Z if Z>0 else fx
     sx=np.maximum(-x,0.); cons=np.minimum(np.maximum(x,0.),KF); head=np.maximum(KF-np.maximum(x,0.),0.)
     dd=np.minimum(KM,sx+np.minimum(tau,head)); ff=np.maximum(dd-sx,0.)
-    E=lambda v:float(np.trapz(v*fx,x)); return E(dd),E(ff),E(cons)
+    E=lambda v:float(np.trapezoid(v*fx,x)); return E(dd),E(ff),E(cons)
 def fam_black(KR,KF):
     x=np.linspace(-KR,Dbar,900); A=x[:,None]+KR*ss[None,:]
     fx=(np.where((A>0)&(A<Dbar),Dd.pdf(np.clip(A,1e-9,Dbar-1e-9)/Dbar)/Dbar,0.0)*wss[None,:]).sum(1)
-    Z=np.trapz(fx,x); fx=fx/Z if Z>0 else fx
-    return float(np.trapz(np.maximum(np.maximum(x,0.)-KF,0.)*fx,x))
+    Z=np.trapezoid(fx,x); fx=fx/Z if Z>0 else fx
+    return float(np.trapezoid(np.maximum(np.maximum(x,0.)-KF,0.)*fx,x))
 def fam_opt(tau,CRv,CMv,x0,KRcap):
     def negp(k):
         KR,KF,KM=k

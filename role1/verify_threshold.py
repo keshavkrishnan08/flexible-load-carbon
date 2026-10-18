@@ -26,11 +26,11 @@ class ScaleMix:
     def F(s,x,KR):  return float(s.w@s._FD(x+KR*s.s))
     def intFKR(s,a,b,KR,n=250):
         xs=np.linspace(a,b,n); X=xs[:,None]+KR*s.s[None,:]
-        return np.trapz((s._fD(X.ravel()).reshape(X.shape)*s.s[None,:])@s.w,xs)
+        return np.trapezoid((s._fD(X.ravel()).reshape(X.shape)*s.s[None,:])@s.w,xs)
     def int1mF(s,a,b,KR,n=250):
         if b<=a: return 0.0
         xs=np.linspace(a,b,n); X=xs[:,None]+KR*s.s[None,:]
-        return np.trapz(1.0-(s._FD(X.ravel()).reshape(X.shape))@s.w,xs)
+        return np.trapezoid(1.0-(s._FD(X.ravel()).reshape(X.shape))@s.w,xs)
 
 def solve_with(d,P):
     R,c,b,p,CF,CR,CM=P['R'],P['c'],P['beta'],P['p'],P['CF'],P['CR'],P['CM']

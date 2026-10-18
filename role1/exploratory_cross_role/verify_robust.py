@@ -19,13 +19,13 @@ rng=np.random.default_rng(1)
 def cond_mean_noninc(a,b,shape):
     """E[X | X in (a,b)] for a NON-INCREASING density on (a,b), parametrized by
     f(t) prop exp(-shape*(t-a)) (shape>=0 => non-increasing; shape=0 => uniform)."""
-    t=np.linspace(a,b,4000); w=np.exp(-shape*(t-a)); w/=np.trapz(w,t)
-    return np.trapz(w*t,t)
+    t=np.linspace(a,b,4000); w=np.exp(-shape*(t-a)); w/=np.trapezoid(w,t)
+    return np.trapezoid(w*t,t)
 
 def cond_mean_nondec(a,b,shape):
     """E[X|X in (a,b)] for NON-DECREASING density f(t) prop exp(shape*(t-a))."""
-    t=np.linspace(a,b,4000); w=np.exp(shape*(t-a)); w/=np.trapz(w,t)
-    return np.trapz(w*t,t)
+    t=np.linspace(a,b,4000); w=np.exp(shape*(t-a)); w/=np.trapezoid(w,t)
+    return np.trapezoid(w*t,t)
 
 print("Thm R1 engine: uniform is extremal for the conditional means.")
 a,b=-3.0,5.0; mid=(a+b)/2
