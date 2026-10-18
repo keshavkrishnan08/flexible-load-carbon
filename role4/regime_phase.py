@@ -16,18 +16,18 @@ analytic curves partition it:
   * ADOPTION line     C_M = C̄_M^b = C̄_M + c q°  (right edge of adoption).
 
 THE STITCH (the Bullet-3 theorem). The carbon boundary C_R†(C_M) is ONE analytic
-curve — a convex parabola in C_M — defined by the SAME closed form on both sides
+curve, a convex parabola in C_M, defined by the SAME closed form on both sides
 of the regime-form line C_M^cross. It does not know about the small/large split,
 because C_R† is the with-FCL boundedness threshold read off the interior FOCs,
 whereas the regime split only changes the FORM of the K_M-FOC (Bullet 1), not the
 carbon functional's value (which is C^1 across the boundary, also Bullet 1).
 Consequently:
 
-  (i)  the carbon-DOWN region {C_R < C_R†(C_M)} is a single CONNECTED set — the
-       subgraph of a continuous function on an interval — that spans BOTH FCL
+  (i)  the carbon-DOWN region {C_R < C_R†(C_M)} is a single CONNECTED set, the
+       subgraph of a continuous function on an interval, that spans BOTH FCL
        regimes; it does not fracture at C_M^cross;
   (ii) its boundary C_R†(·) is SMOOTH across C_M^cross (an explicit quadratic,
-       so C^∞ there — no kink in the phase boundary even though the FOC surface
+       so C^∞ there, no kink in the phase boundary even though the FOC surface
        kinks); and
   (iii) the regime-form line crosses the carbon boundary TRANSVERSALLY at the
        single point (C_M^cross, C_R†(C_M^cross)).
@@ -35,7 +35,7 @@ Consequently:
 So the phase diagram over the full cost plane is genuinely stitched: one
 connected carbon-down region, one smooth boundary, crossed once by the regime
 line. The boundary is CONVEX in C_M (curvature 1/(R-c)+1/(β+p-R) > 0), with its
-minimum at C_M = C̄_M — i.e. the carbon-down window in C_R is NARROWEST exactly
+minimum at C_M = C̄_M, i.e. the carbon-down window in C_R is NARROWEST exactly
 at the adoption threshold C̄_M, and widens on either side. Convexity (not
 monotonicity) is the correct global shape; connectedness of the subgraph holds
 regardless, so the region is a clean, single, both-regime-spanning set.
@@ -117,7 +117,7 @@ def contract_form(P: Params, C_M: float) -> str:
 
 def phase_label(P: Params, C_M: float, C_R: float) -> dict:
     """Full classification of a cost-plane point: carbon sign, contract form,
-    adoption status, and boundedness — the stitched map."""
+    adoption status, and boundedness, the stitched map."""
     adopts = C_M < adoption_edge(P)
     return {
         "C_M": C_M, "C_R": C_R,
@@ -134,7 +134,7 @@ def phase_label(P: Params, C_M: float, C_R: float) -> dict:
 def boundary_smooth_across_regime_line(P: Params, h: float = 1e-4) -> dict:
     """C_R†(C_M) is smooth (C^∞) across the regime-form line C_M^cross: the
     value and both one-sided derivatives agree there (it is a single quadratic).
-    This is the phase-boundary half of the stitch — no kink in the boundary even
+    This is the phase-boundary half of the stitch, no kink in the boundary even
     though the FOC surface kinks (Bullet 1)."""
     cc = C_M_cross(P)
     v = carbon_boundary_C_R_dagger(P, cc)
@@ -154,8 +154,8 @@ def boundary_smooth_across_regime_line(P: Params, h: float = 1e-4) -> dict:
 
 def carbon_down_region_connected(P: Params, n: int = 400) -> dict:
     """The carbon-down region {C_R < C_R†(C_M)} over the adoption band is
-    CONNECTED — the subgraph of the continuous boundary, which is single-valued
-    and jump-free — and it spans both FCL regimes (the regime-form line lies
+    CONNECTED, the subgraph of the continuous boundary, which is single-valued
+    and jump-free, and it spans both FCL regimes (the regime-form line lies
     inside the band). The boundary is CONVEX (U-shaped) with its minimum at
     C̄_M, not monotone; connectedness holds regardless. Returns the max boundary
     jump (≈0 ⇒ connected), the convexity flag, and the vertex."""
@@ -182,7 +182,7 @@ def carbon_down_region_connected(P: Params, n: int = 400) -> dict:
 
 def regime_line_crosses_boundary_once(P: Params) -> dict:
     """The regime-form line C_M = C_M^cross meets the carbon boundary at exactly
-    one point (C_M^cross, C_R†(C_M^cross)) — a single transversal crossing (the
+    one point (C_M^cross, C_R†(C_M^cross)), a single transversal crossing (the
     regime line is vertical, the boundary is a graph over C_M, so they meet
     once)."""
     cc = C_M_cross(P)

@@ -1,4 +1,4 @@
-"""Week 4 Bullet 5 — Distributionally-robust characterization.
+"""Week 4 Bullet 5, Distributionally-robust characterization.
 
 Ambiguity set: Pareto(a) tail-index family on the residual-demand upper tail,
 with nominal a = a0 and a Wasserstein-1 radius r inducing an interval
@@ -6,7 +6,7 @@ with nominal a = a0 and a Wasserstein-1 radius r inducing an interval
 
 Deliverables:
   1. Worst-case distribution a_wc(r) that maximises Carbon under the
-     joint-optimum contract (K_R*, K_F*, K_M*) — heavier tail => more
+     joint-optimum contract (K_R*, K_F*, K_M*), heavier tail => more
      blackout offset => more fossil dispatch => more carbon.
   2. Robust-optimal contract re-solved on a_wc(r), and the resulting
      robust-vs-nominal carbon gap and price of robustness.

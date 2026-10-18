@@ -1,4 +1,4 @@
-# Role 3 — Week 4 Findings Memo
+# Role 3: Week 4 Findings Memo
 
 ## Bullet 1: Functional comparative statics
 Signs of dPsi/dtheta (Psi = Carbon_FCL - Carbon_noFCL, functional proxy) across 8 distributions:
@@ -42,7 +42,7 @@ Sign of dW/dtheta where W = Carbon_myopic - Carbon_optimal:
 
 ## Sync with other roles
 - Bullet 1 signs feed Role 1's classification theorem (dPsi/dtheta direction).
-- Bullet 2 wedge collapses to 0 as C_M ↑ C_M_bar — pins Role 1's leverage boundary.
+- Bullet 2 wedge collapses to 0 as C_M ↑ C_M_bar: pins Role 1's leverage boundary.
 - Bullet 3 LR-path certificate confirms Role 2's minimax=maximin numerical claim.
 - Bullet 4 fragility flip at a* ≈ 0.5 supplies Role 4's regime-boundary witness.
 - Bullet 5 Pareto closed form gives Role 1 the power-law worst-case optimum.

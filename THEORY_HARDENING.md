@@ -1,6 +1,6 @@
-# Theory Hardening and Regimes — Role 4 (Team A1)
+# Theory Hardening and Regimes: Role 4 (Team A1)
 
-Against the **FCL paper** (`FCL_Carbon_Paper.txt`, §3–4, Appendix B.1, Appendix
+Against the **FCL paper** (`FCL_Carbon_Paper.txt`, §3-4, Appendix B.1, Appendix
 G). This document is organized by the four bullets of the Role 4 task. Each
 analytical claim is backed by a check in `tests/` (run `pytest tests/ -q`, 17
 passing) and, where it's a comparison, by Role 2's solver, vendored unchanged
@@ -10,7 +10,7 @@ capital costs `C_R, C_F, C_M`.
 
 ---
 
-## Bullet 1 — Re-verify the core proofs (eqs 12, 13, 15; Prop 1 / App. B.1)
+## Bullet 1: Re-verify the core proofs (eqs 12, 13, 15; Prop 1 / App. B.1)
 
 **The three FOCs**, re-derived from the interior-regime profit (eq. 10) by
 Leibniz differentiation (`role4/foc.py`):
@@ -42,18 +42,18 @@ All three cutoffs match Role 2's solver to ≤1e-3 (`tests/test_foc.py`:
   (`K_R*>K_R°`) lowers it.
 
 **GAP FLAGGED.** Step 3's *net* sign is established in Appendix B.1 only for the
-uniform (and, via footnote 6, power-law) family, through eqs 25–26. For a
+uniform (and, via footnote 6, power-law) family, through eqs 25-26. For a
 general `F`, B.1 *asserts* the capacity channel dominates "when `C_R` is
-sufficiently small" but does not prove it — the carbon part of the triple win
+sufficiently small" but does not prove it, the carbon part of the triple win
 is the conditional "may." Two things close it: (a) Role 1's shift-ratio
 condition `g(x)=F_{K_R}/f` non-increasing makes `K_R*≥K_R°` general; (b) Role
 4's Bullet-3 analysis shows the dominance only bites once buildout passes the
-crossover `K_R^cross` (below it the utilization effect wins — see the
-reconciliation). Steps 1–2 are airtight and general; Step 3 is not, by design.
+crossover `K_R^cross` (below it the utilization effect wins, see the
+reconciliation). Steps 1-2 are airtight and general; Step 3 is not, by design.
 
 ---
 
-## Bullet 2 — Complete the small-FCL regime (Appendix G) and confirm eq (62)
+## Bullet 2: Complete the small-FCL regime (Appendix G) and confirm eq (62)
 
 In the small-FCL regime `K_M < K_R`, so `−K_M` sits inside the support and the
 eq-(10) integration-by-parts simplification is unavailable; profit is the
@@ -79,7 +79,7 @@ but a small-FCL program is still strictly worth running. Worked instance:
 
 ---
 
-## Bullet 3 — Reconcile the regime boundaries (one consistent statement)
+## Bullet 3: Reconcile the regime boundaries (one consistent statement)
 
 Two axes, stitched in `role4/regimes.py::unified_statement`.
 
@@ -89,13 +89,13 @@ Two axes, stitched in `role4/regimes.py::unified_statement`.
 
 - `C_M ≤ C_M^fc` ⇔ the **p25 digression** `R ≥ c+C_F+C_M`: marginal value of
   fossil is `≥0` even at `K_F=D̄`, so the utility builds `≥ D̄` fossil and
-  blackout prob is 0 — the **full-coverage** regime (degenerate but favorable;
+  blackout prob is 0, the **full-coverage** regime (degenerate but favorable;
   adoption `C_M < C̄_M` is automatic since `C_M ≤ R−c−C_F < C̄_M`).
 - `C_M^fc < C_M < C̄_M`: **interior / large-FCL** (the paper's main regime).
 - `C̄_M ≤ C_M < C̄_M^b`: **small-FCL adoption** (Bullet 2).
 - `C_M ≥ C̄_M^b`: **no adoption**.
 
-**Boundedness axis (in `C_R`)** — the hardening that reconciles Role 1 vs Role 2
+**Boundedness axis (in `C_R`)**: the hardening that reconciles Role 1 vs Role 2
 (next section): `C_R° = C_F²/(2(β+p−c))` (no-FCL bound) and
 `C_R† = ½[c + (R−C_M−c)²/(R−c) + (R−c−C_F−C_M)²/(β+p−R)]` (with-FCL bound),
 with `C_R° < C_R†`. The with-FCL program is finite iff `C_R ≥ C_R†`; on
@@ -106,7 +106,7 @@ a boundedness label, and `unified_statement` returns both consistently.
 
 ---
 
-## Bullet 4 — Pressure-test Assumption 1
+## Bullet 4: Pressure-test Assumption 1
 
 For each of the four conditions: the object it guards, and what breaks if
 relaxed (`role4/assumption1.py`, all verified in `tests/test_assumption1.py` by
@@ -122,7 +122,7 @@ leave its valid range).
 
 So A1, A3, A4 are genuinely *necessary* (relaxing any one breaks an interior
 optimum or flips an economic sign), while A2 is necessary only for the
-*interior* regime — relaxing it lands in the well-defined full-coverage regime,
+*interior* regime, relaxing it lands in the well-defined full-coverage regime,
 not a contradiction. That asymmetry is the precise content of the pressure
 test, and it lines up with the p25 digression.
 
@@ -140,7 +140,7 @@ case): below it the utilization effect dominates (Dhruv's 0/210); above it the
 capacity-substitution channel does (Keshav). `role4/reconcile.py` and
 `reconciliation.png` show carbon rising then falling while profit rises without
 bound. **Hardened takeaway:** Assumption 1 alone does not guarantee a finite
-optimum — it needs `C_R ≥ C_R†`; the unboundedness is a corner-at-infinity, not
+optimum, it needs `C_R ≥ C_R†`; the unboundedness is a corner-at-infinity, not
 a local-curvature failure (the local Hessian stays negative-definite).
 
 ---
@@ -149,4 +149,4 @@ a local-curvature failure (the local Hessian stays negative-definite).
 
 The exact closed form for the small-FCL boundary `K*_M = K°_R` under a *general*
 `F` (Role 1's residual) is located numerically here but not forced into a
-general closed form — flagged, not asserted.
+general closed form, flagged, not asserted.

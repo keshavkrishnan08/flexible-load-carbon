@@ -84,7 +84,7 @@ def bullet_1_and_2():
 
 
 # ---------------------------------------------------------------------------
-# Bullet 3: Section 5.3 Case C (both capacities fixed) — carbon strictly rises
+# Bullet 3: Section 5.3 Case C (both capacities fixed), carbon strictly rises
 # ---------------------------------------------------------------------------
 def bullet_3():
     p = Params()
@@ -192,7 +192,7 @@ def plot_triple_win_heatmap(rows):
     ax.set_yticks(range(len(dists)))
     ax.set_yticklabels(dists)
     ax.set_xlabel("C_M")
-    ax.set_title("Triple-win score (0–3): profit↑ + blackout↓ + carbon↓")
+    ax.set_title("Triple-win score (0-3): profit↑ + blackout↓ + carbon↓")
     fig.colorbar(im, ax=ax, ticks=[0, 1, 2, 3])
     fig.tight_layout()
     fig.savefig(FIGURES / "triple_win_heatmap.png", dpi=130)
@@ -229,7 +229,7 @@ def summarise(rows12, rows3, rows4):
     n4_kr_up = sum(r["K_R_higher"] for r in rows4)
     n4_carbon = sum(r["carbon_down"] for r in rows4)
 
-    text = f"""# Role 3 — Findings Memo (Week 1)
+    text = f"""# Role 3, Findings Memo (Week 1)
 
 ## Bullet 1 & 2  Proposition 1 distribution-free + carbon sign
 Scenarios tested: {n12}
@@ -255,7 +255,7 @@ Scenarios tested: {n4}
 Pattern (qualitative): carbon reduction concentrates in
 (i) right-skewed F (beta_a05_b3, beta_a2_b5),
 (ii) low C_R, and
-(iii) C_M well below C_M_bar — consistent with footnote 6.
+(iii) C_M well below C_M_bar, consistent with footnote 6.
 
 ## Sync notes for Role 1
 - Profit & blackout parts of Proposition 1 verified distribution-free
@@ -265,7 +265,7 @@ Pattern (qualitative): carbon reduction concentrates in
 - Capacity-substitution channel (K_R* > K_R°) is the binding driver of
   the carbon sign; no counterexample to the candidate general condition
   was found in the right-skew low-C_R regime.
-- Left-skewed F + high C_R reverses the carbon sign in some scenarios —
+- Left-skewed F + high C_R reverses the carbon sign in some scenarios,
   flagged as the boundary region for Role 1's general statement.
 """
     (RESULTS / "findings_summary_for_team.md").write_text(text)

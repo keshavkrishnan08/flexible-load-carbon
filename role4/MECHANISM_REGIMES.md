@@ -1,4 +1,4 @@
-# Mechanism Design and Regimes — Role 4 Week 2 (Team A1)
+# Mechanism Design and Regimes: Role 4 Week 2 (Team A1)
 
 Against the **FCL paper** (`FCL_Carbon_Paper.txt`, Lemma 1 / §3.3, §4.1,
 Appendix G, §8 / Remark 8). This is the **Week 2** Role 4 deliverable; it builds
@@ -11,10 +11,10 @@ capital costs `C_R, C_F, C_M`; `φ° = (β+p−c−C_F)/(β+p−c)`.
 
 ---
 
-## Bullet 1 — A single per-MWh price implements the optimum (`role4/instrument.py`)
+## Bullet 1: A single per-MWh price implements the optimum (`role4/instrument.py`)
 
 **Claim (the regulator's instrument-design problem).** A *single scalar* per-MWh
-price `R` — not a state-contingent transfer schedule `t(x)` — uniquely
+price `R`: not a state-contingent transfer schedule `t(x)`: uniquely
 implements (i) the first-best dispatch rule `d*(x)` state by state and (ii) the
 optimal capacity vector `(K_R*, K_F*, K_M*)`; and it does so **iff**
 
@@ -26,8 +26,8 @@ optimal capacity vector `(K_R*, K_F*, K_M*)`; and it does so **iff**
 
 is the unique maximizer of the per-period payoff `R·d − c·[min{K_F,(x+d)+} −
 min{K_F,x+}]` once revenue accrues only to *served* MWh `min(d,(K_F−x)+)`. The
-per-MWh margin is strictly positive on the feasible region — `R` on renewable
-surplus, `R−c` on gap-filling fossil — so the payoff strictly increases to the
+per-MWh margin is strictly positive on the feasible region, `R` on renewable
+surplus, `R−c` on gap-filling fossil, so the payoff strictly increases to the
 feasibility/cap boundary; the minimal maximizer is exactly `d*`. **Confirmed**
 independently of the rule by a fine grid search (`tests/test_instrument.py::
 test_best_response_matches_rule_pointwise`, and `::test_flat_price_induces_eq3_
@@ -52,7 +52,7 @@ single-price implementation (`::test_richness_window_and_assumption1`,
 
 **A scalar pins the 3-vector.** The capacity FOCs (eqs 12, 13, 15) are functions
 of the same `R`, so sweeping the single instrument traces a *one-parameter*
-capacity curve `(K_R*,K_F*,K_M*)(R)` — a scalar pins the vector, and the
+capacity curve `(K_R*,K_F*,K_M*)(R)`: a scalar pins the vector, and the
 attainable set under one price is a curve, not all of `R³` (the precise sense of
 "rich enough"; `::test_single_scalar_pins_capacity_vector`).
 
@@ -68,7 +68,7 @@ sharpening is Role 1's own Week-2 item, not yet pushed.
 
 ---
 
-## Bullet 2 — The unified regime theorem and the `K_M*=K_R°` crossover (`role4/unified_regime.py`)
+## Bullet 2: The unified regime theorem and the `K_M*=K_R°` crossover (`role4/unified_regime.py`)
 
 Week 1 mapped two regime axes separately and left one open finishing item: the
 small-/large-FCL boundary `K*_M = K°_R`, "located numerically … but not forced
@@ -92,14 +92,14 @@ solver to `1e-4` (`::test_K_R_circ_matches_backend`). Worked instance:
 `C_M = 0.3 < 0.354`, so **large-FCL**.
 
 **The unified regime theorem** (`unified_theorem`). Every Assumption-1 point
-carries exactly one label on each of three independent axes —
+carries exactly one label on each of three independent axes,
 
 - **coverage** (in `C_M`): full-coverage `|` interior/large-FCL `|` small-FCL
   adoption `|` no adoption, ordered `C_M^fc < C̄_M < C̄_M^b`;
 - **boundedness** (in `C_R`): both-finite `|` with-FCL-unbounded (the carbon
   window) `|` both-unbounded, split by `C_R° < C_R†`;
 - **FCL scale** relative to the renewable base: the side of `C_M^cross`
-  (`K_M* ≷ K_R°`) —
+  (`K_M* ≷ K_R°`),
 
 and the labels are mutually consistent: the two orderings always hold,
 `C_M^cross < C̄_M^b`, and the boundedness label never constrains the coverage
@@ -108,14 +108,14 @@ consistent`).
 
 ---
 
-## Bullet 3 — Necessity of Assumption 1, from pressure-test to proof (`role4/necessity.py`)
+## Bullet 3: Necessity of Assumption 1, from pressure-test to proof (`role4/necessity.py`)
 
 Week 1 demonstrated necessity by nudging each parameter past its boundary. Week 2
 upgrades each to a **proof**: every condition's guarded quantity is an explicit
 elementary function `g(s)` of the condition's *slack* `s`, strictly monotone (a
 signed closed-form derivative), hitting the boundary of its validity range
 *exactly* at `s = 0`. A strictly monotone function equal to the boundary at `s=0`
-is valid on one side only, so `s > 0` is necessary and sufficient — for **all**
+is valid on one side only, so `s > 0` is necessary and sufficient, for **all**
 parameters, not a sampled nudge.
 
 | Cond | Slack `s` | Guarded `g(s)` | `g(0)` | `g'` | Valid |
@@ -134,23 +134,23 @@ on its validity edge at slack 0 (`tests/test_necessity.py`).
   necessary* for any FCL program.
 - **A2** relaxed (`R≥c+C_F+C_M`): **full-coverage** corner, `K_F*≥D̄`, blackout 0
   (strict ⇒ the out-of-scope dedicated-provider case). *Necessary only for
-  interiority* — relaxing yields a well-defined favorable regime, not a
+  interiority*, relaxing yields a well-defined favorable regime, not a
   contradiction.
 - **A3** relaxed (`β+p≤c+C_F`): **no-backup**, `φ°≤0`, the grid tolerates
   blackout. *Strictly necessary*.
-- **A4** relaxed (`β+p≤R`): **perverse curtailment** — consumers blacked out for
+- **A4** relaxed (`β+p≤R`): **perverse curtailment**: consumers blacked out for
   FCL; `F*` leaves `(0,1)`. *Strictly necessary*.
 
 So `{A1, A3, A4}` are strictly necessary and `A2` is necessary only for the
-interior regime — the same asymmetry Week 1 flagged, now proven
+interior regime, the same asymmetry Week 1 flagged, now proven
 (`::test_strict_vs_interior_only_asymmetry`).
 
 ---
 
-## Bullet 4 — Second-best contract when the renewable factor is private (`role4/screening.py`)
+## Bullet 4: Second-best contract when the renewable factor is private (`role4/screening.py`)
 
 The paper treats residual demand as observable and dispatch as self-enforcing
-(Lemma 1, Remark 1) — true for Bitcoin because `R` is publicly verifiable.
+(Lemma 1, Remark 1), true for Bitcoin because `R` is publicly verifiable.
 Section 8 / Remark 8 flag the AI-training case, where the agent's signal is
 opaque. **We formalize exactly that gap:** the principal observes demand `D` but
 not the renewable factor `S`, so residual demand `x = D − K_R·S` is the agent's
@@ -177,13 +177,13 @@ with `E[u]>0` (`tests/test_screening.py`).
 
 **How the information rent shifts emissions vs full information:**
 
-- **Short run (fixed capacities) — utilization effect.** Fossil drawn for FCL is
+- **Short run (fixed capacities): utilization effect.** Fossil drawn for FCL is
   proportional to dispatch; `d^SB ≤ d^FB`, so the carbon-*raising* utilization
   effect is **dampened**: `E[d^SB] < E[d^FB]` (`::test_utilization_effect_
-  dampened`). Private info lowers short-run carbon — but only by running the
+  dampened`). Private info lowers short-run carbon, but only by running the
   program less, forfeiting the profit/reliability gains. Worked instance:
   `E[d^FB]=4.40 → E[d^SB]=2.55`.
-- **Long run — capacity-substitution channel.** The leaked rent lowers the
+- **Long run: capacity-substitution channel.** The leaked rent lowers the
   principal's captured FCL value to an effective revenue `R_eff < R`
   (`R_eff = 1.55 < 2.0`). The carbon-reduction window is `C_R < C_R†`, and
   `C_R†(R)` is increasing in the FCL revenue, so a lower `R_eff` lowers `C_R†`
@@ -198,7 +198,7 @@ with `E[u]>0` (`tests/test_screening.py`).
 
 **Headline.** Private information on the renewable factor introduces a rent wedge
 `R → R_eff` that (a) distorts dispatch downward (no distortion at the top) and
-(b) shrinks the carbon-reduction window — a force *against* the carbon leg of the
+(b) shrinks the carbon-reduction window, a force *against* the carbon leg of the
 triple win, absent in the transparent-`R` (Bitcoin) case. This is the Section-8
 contractibility distinction made precise.
 
@@ -206,7 +206,7 @@ contractibility distinction made precise.
 
 ## What Week 2 closes, and what remains
 
-- **Closed:** the Week-1 open finishing item — the small-/large-FCL crossover
+- **Closed:** the Week-1 open finishing item: the small-/large-FCL crossover
   `K_M*=K_R°` now has an explicit uniform closed form (Bullet 2), matched to the
   numeric locus. This is exactly Role 1's handed-off item ("small-FCL boundary
   `K*_M=K°_R` → Role 4").

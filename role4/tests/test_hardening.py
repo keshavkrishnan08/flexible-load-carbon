@@ -1,4 +1,4 @@
-"""Bullet 2: measure-theoretic scaffolding — existence, measurability, IC/IR
+"""Bullet 2: measure-theoretic scaffolding, existence, measurability, IC/IR
 constraint qualification, and the Sion minimax hypotheses for the ambiguity
 set; Assumption 1 stress-tested against each."""
 import pytest

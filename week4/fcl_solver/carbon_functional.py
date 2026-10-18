@@ -2,7 +2,7 @@
 Week 4 Task 1 (keystone): the carbon classification functional.
 
 This module implements the closed-form carbon classification functional Ψ
-derived from the FCL paper's Proposition 4 (Appendix B.1, p. 82–84). Ψ is
+derived from the FCL paper's Proposition 4 (Appendix B.1, p. 82-84). Ψ is
 the *if-and-only-if* characterization of the carbon sign:
 
     sign(carbon_no_FCL − carbon_with_FCL) = sign(Ψ)
@@ -93,7 +93,7 @@ class FunctionalResult:
     mu_circ_mid: float   # conditional mean of x in no-FCL fossil zone
 
     # ── Functional value and sign ───────────────────────────────────────
-    psi: float          # Ψ — carbon falls iff Ψ > 0
+    psi: float          # Ψ: carbon falls iff Ψ > 0
     carbon_no_fcl: float
     carbon_with_fcl: float
     carbon_delta: float          # carbon_with_fcl - carbon_no_fcl (neg = improvement)
@@ -190,7 +190,7 @@ def compute_functional(
     # where  μ*_low ≡ ∫_{-K*_R}^{K*_F-K*_M} x f(x;K*_R)dx / (C_M/(R-c)).
     #
     # BUG NOTE (caught by test_prop4_fossil_with_fcl_matches_direct): an
-    # earlier version used [K*_F-K*_M, K*_F-K*_R] — the gap-filling zone —
+    # earlier version used [K*_F-K*_M, K*_F-K*_R]: the gap-filling zone,
     # instead of the full-dispatch zone [-K*_R, K*_F-K*_M]. Those two zones
     # are DIFFERENT in general and swapping them produces a 50% error in the
     # fossil formula and a sign flip in Ψ. Derivation cross-checked against
@@ -248,7 +248,7 @@ def compute_functional(
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Decomposed expected-fossil formulas (from Prop 4 eqs 44 & 45)
-# — used to cross-validate the functional against direct carbon measurements
+# used to cross-validate the functional against direct carbon measurements
 # ─────────────────────────────────────────────────────────────────────────────
 
 def prop4_fossil_with_fcl(result: FunctionalResult, params: Params) -> float:

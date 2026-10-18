@@ -1,4 +1,4 @@
-# CONTEXT.md — Team A1, Role 4 (Theory Hardening and Regimes)
+# CONTEXT.md: Team A1, Role 4 (Theory Hardening and Regimes)
 
 ## Task (verbatim, the updated Role 4 assignment)
 Role 4 (Theory Hardening and Regimes), on the FCL paper:
@@ -19,7 +19,7 @@ disagreed on carbon: Role 1 proves it falls; Role 2 found it never does across
 theory and maps the regimes so the two reconcile.
 
 ## Source / paper
-`FCL_Carbon_Paper.txt` — "Flexible Computing Loads, Electricity Grid
+`FCL_Carbon_Paper.txt`, "Flexible Computing Loads, Electricity Grid
 Resilience, and Carbon Emission Reduction." Equation numbers in the task match
 this file (Assumption 1 §3.1; eqs 11-15 §4.1; Prop 1 + proof App. B.1; small-FCL
 eqs 60-63 and eq 62 App. G; p25 full-coverage digression).
@@ -27,7 +27,7 @@ eqs 60-63 and eq 62 App. G; p25 full-coverage digression).
 ## Key results (all verified; see THEORY_HARDENING.md)
 - FOCs 12/13/15 re-derived; cutoffs match Role 2's solver to ≤1e-3.
 - Prop 1 Steps 1-2 fully general; Step 3 (carbon) general only for uniform/
-  power — gap flagged, closed by Role 1's shift ratio + the buildout crossover.
+  power, gap flagged, closed by Role 1's shift ratio + the buildout crossover.
 - Small-FCL eq 62: C̄_M^b = C̄_M + c·q° > C̄_M (adoption widens by c·q°).
 - Regimes ordered C_M^fc < C̄_M < C̄_M^b; full-coverage = p25 digression.
 - Assumption 1: A1/A3/A4 strictly necessary (relaxing breaks an interior
@@ -44,7 +44,7 @@ backend rather than reimplementing it.
 
 ---
 
-## Week 2 — Mechanism Design and Regimes (additive)
+## Week 2: Mechanism Design and Regimes (additive)
 
 ### Task (verbatim, the Week 2 Role 4 assignment)
 1. Prove a single per-MWh price R (not a state-contingent transfer) uniquely
@@ -56,15 +56,15 @@ backend rather than reimplementing it.
 3. Upgrade the Assumption-1 pressure-test to a necessity proof for each of the
    four conditions, and characterize the regime obtained when each is relaxed.
 4. Introduce private information the principal cannot infer from observed
-   demand — the agent privately knows the renewable factor S, only D is
-   observed — and derive the second-best screening contract and how its
+   demand, the agent privately knows the renewable factor S, only D is
+   observed, and derive the second-best screening contract and how its
    information rent shifts emissions vs the full-information benchmark.
 
 ### Key results (all verified; see MECHANISM_REGIMES.md)
 - Bullet 1: flat R implements d* (Lemma 1, served-MWh payoff) and the capacity
   FOCs pin (K_R*,K_F*,K_M*); rich enough iff c < R < β+p (implied by A1 and A4);
   an unrestricted state-contingent transfer adds zero value.
-- Bullet 2: closes the Week-1 open item — C_M^cross = (R−c)[D̄(β+p−c−C_F)+
+- Bullet 2: closes the Week-1 open item: C_M^cross = (R−c)[D̄(β+p−c−C_F)+
   K_R°(R−c−C_F)]/[(D̄+K_R°)(β+p−c)] (sympy-derived, = numeric locus); three-axis
   unified theorem with consistent labels.
 - Bullet 3: each condition's guarded g(slack) is strictly monotone and hits its
@@ -86,7 +86,7 @@ backend rather than reimplementing it.
 
 ---
 
-## Week 3 — Theory Hardening and Regimes, across regimes (additive)
+## Week 3: Theory Hardening and Regimes, across regimes (additive)
 
 ### Task (verbatim, the Week 3 Role 4 assignment)
 1. Extend the contract and characterization across regimes. Carry the optimal
@@ -94,7 +94,7 @@ backend rather than reimplementing it.
    regime boundary; prove the schedule and the carbon functional stitch
    continuously, or locate and explain the discontinuity.
 2. Harden the optimality and robust proofs. Supply the measure-theoretic
-   scaffolding the variational and minimax arguments need — existence and
+   scaffolding the variational and minimax arguments need, existence and
    measurability of the optimal schedule, IC/IR constraint qualification, and a
    minimax theorem whose compactness/convexity hypotheses are verified for the
    ambiguity set. Stress-test Assumption 1 against each new result.
@@ -107,13 +107,13 @@ backend rather than reimplementing it.
 
 ### Key results (all verified; see REGIME_STITCHING.md)
 - Bullet 1: d* is regime-free; carbon functional E[fossil](K_M) is C¹ across the
-  boundary K_M=K_R; the marginal value is continuous but kinks — Π is C¹ not C²,
+  boundary K_M=K_R; the marginal value is continuous but kinks, Π is C¹ not C²,
   with ∂²Π/∂K_M² jumping by c·f(−K_R)=c/(D̄+K_R) as the small-FCL surplus term
   c·F(−K_M) switches on (F(−K_R)=0). Optimum passes through C_M^cross
   continuously; carbon does not jump at the regime change.
 - Bullet 2: existence (compact box, Weierstrass) and the Sion minimax saddle
   (U convex, Δ linear in F, least-favorable = uniform) both hold only when
-  C_R ≥ C_R† — Assumption 1 ALONE is insufficient (Week-1 corner-at-infinity now
+  C_R ≥ C_R†, Assumption 1 ALONE is insufficient (Week-1 corner-at-infinity now
   governs the robust problem too). d* is a continuous ⇒ Borel-measurable
   selection of the Carathéodory argmax; screening IC/IR CQ holds (monotone d^SB
   restores global IC, IR binds at bottom).
@@ -132,5 +132,5 @@ backend rather than reimplementing it.
 - tests/test_regime_stitch.py, tests/test_hardening.py,
   tests/test_regime_phase.py, tests/test_reconcile_week3.py
 - run_analysis_week3.py, REGIME_STITCHING.md
-- Week-3 suite: 24 passing. Full suite 66 (17 + 25 + 24) with Weeks 1–2 in place.
-  Weeks 1–2 modules untouched.
+- Week-3 suite: 24 passing. Full suite 66 (17 + 25 + 24) with Weeks 1-2 in place.
+  Weeks 1-2 modules untouched.

@@ -33,7 +33,7 @@ def main():
     for r in rows1:
         counts[r["theta"]][r["sign"]] += 1
 
-    memo_lines = ["# Role 3 — Week 4 Findings Memo", ""]
+    memo_lines = ["# Role 3, Week 4 Findings Memo", ""]
     memo_lines += ["## Bullet 1: Functional comparative statics",
                    "Signs of dPsi/dtheta (Psi = Carbon_FCL - Carbon_noFCL, functional proxy) across 8 distributions:"]
     for th in ["R", "c", "beta", "p", "C_F", "C_R", "C_M"]:
@@ -71,7 +71,7 @@ def main():
 
     memo_lines += ["", "## Sync with other roles",
                    "- Bullet 1 signs feed Role 1's classification theorem (dPsi/dtheta direction).",
-                   "- Bullet 2 wedge collapses to 0 as C_M ↑ C_M_bar — pins Role 1's leverage boundary.",
+                   "- Bullet 2 wedge collapses to 0 as C_M ↑ C_M_bar, pins Role 1's leverage boundary.",
                    "- Bullet 3 LR-path certificate confirms Role 2's minimax=maximin numerical claim.",
                    "- Bullet 4 fragility flip at a* ≈ 0.5 supplies Role 4's regime-boundary witness.",
                    "- Bullet 5 Pareto closed form gives Role 1 the power-law worst-case optimum."]

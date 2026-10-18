@@ -137,7 +137,7 @@ def bisect_psi_boundary(
 
     if np.isnan(psi_lo) or np.isnan(psi_hi):
         return None
-    if psi_lo * psi_hi > 0:  # same sign — no crossing
+    if psi_lo * psi_hi > 0:  # same sign: no crossing
         return None
 
     for _ in range(max_iter):

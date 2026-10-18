@@ -17,7 +17,7 @@ Distribution library covers:
 For each cell the sweep records:
   psi          : value of Ψ
   carbon_delta : with_FCL − no_FCL (negative = improvement)
-  sign_match   : bool — the key check
+  sign_match   : bool, the key check
   regime       : large-FCL or small-FCL
   K*/K°        : optimal capacities
   corner_fcl   : whether K_R* or K_M* hit an upper bound (unreliable solve)
@@ -180,7 +180,7 @@ def run_classification_sweep(
                         nf = solve_no_fcl(dist, params, KR_max=KR_max, KF_max=KF_max)
                         result = compute_functional(
                             dist, params,
-                            with_fcl=wf, no_fcl=nf,  # reuse — avoid double-solving
+                            with_fcl=wf, no_fcl=nf,  # reuse: avoid double-solving
                             KR_max=KR_max, KF_max=KF_max, KM_max=KM_max,
                         )
                     except Exception:
@@ -230,5 +230,5 @@ def summarize_classification(cells: list[SweepCell]) -> str:
                 f"Ψ={b.psi:+.4f}, Δcarbon={b.carbon_delta:+.4f}"
             )
     else:
-        lines.append("  No mismatches — iff claim corroborated in every interior cell.")
+        lines.append("  No mismatches, iff claim corroborated in every interior cell.")
     return "\n".join(lines)

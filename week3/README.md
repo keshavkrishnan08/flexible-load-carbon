@@ -1,11 +1,11 @@
-# FCL Solver (Team A1, Role 2) — Week 3
+# FCL Solver (Team A1, Role 2): Week 3
 
 Builds on `week2/`. The key difference: instead of asking "does carbon fall at
 the profit-maximizing (firm-optimal) capacity + greedy dispatch optimum?", Week
 3 asks a *strictly harder* question:
 
-> **Can an optimally-designed dispatch-and-curtailment contract — choosing
-> d(x) to minimize carbon rather than maximize profit — flip the carbon sign
+> **Can an optimally-designed dispatch-and-curtailment contract, choosing
+> d(x) to minimize carbon rather than maximize profit, flip the carbon sign
 > in cases where the myopic greedy rule cannot?**
 
 ## Setup
@@ -58,7 +58,7 @@ rule `d*(x) = min{max(K_F-x, 0), K_M}` exactly (validated in tests).
 **Carbon-optimal LP:** `min Σ w_i c·z_i` subject to `Σ w_i(R·d_i - c·z_i) ≥ floor`
 finds the dispatch schedule that minimizes carbon while maintaining enough profit.
 The shadow price on the profit-floor constraint is the marginal carbon cost of each
-unit of required profit — exported for Role 3's comparative-statics work.
+unit of required profit, exported for Role 3's comparative-statics work.
 
 ## Task 1 result: Lemma 1 confirmed
 
@@ -94,8 +94,8 @@ Phase sweep: 20 (dist, C_R, C_M) cells.
 
 **The optimal contract does not flip the carbon sign at the fixed (firm-optimal)
 capacities.** This is the central Week 3 finding at this stage: even replacing
-the greedy rule with the LP-optimal carbon-minimizing dispatch schedule — at
-the SAME (K_R*, K_F*, K_M*) that profit-maximization chose — carbon still does
+the greedy rule with the LP-optimal carbon-minimizing dispatch schedule, at
+the SAME (K_R*, K_F*, K_M*) that profit-maximization chose, carbon still does
 not fall below the no-FCL benchmark. This extends and sharpens Week 1/2:
 
 - Week 1: greedy dispatch at firm-optimal capacities raises carbon
@@ -127,8 +127,8 @@ the no-FCL benchmark (0/20 sign flips across 4 distributions × 5 C_R values).
 
 This extends and sharpens the Week 2 finding (carbon never fell at the
 profit-maximizing capacity optimum, even when Role 1's shift-ratio condition held):
-the question is now whether a CARBON-FOCUSED planner — accepting any feasible profit
-level — can achieve carbon below the no-FCL benchmark by jointly optimizing
+the question is now whether a CARBON-FOCUSED planner, accepting any feasible profit
+level, can achieve carbon below the no-FCL benchmark by jointly optimizing
 capacities AND the dispatch schedule.
 
 ## Cross-role handoffs
@@ -140,5 +140,5 @@ capacities AND the dispatch schedule.
 - **Role 3**: shadow prices from `lp_certificate.certify_dispatch_lp` give the
   ∂carbon/∂profit comparative static directly. See `LPCertificate.shadow_price_profit_floor`.
 - **Role 4**: the dispatch LP's regime structure (small-FCL vs large-FCL) is
-  encoded in the state-grid feasibility constraints — no if/else branch needed,
+  encoded in the state-grid feasibility constraints, no if/else branch needed,
   same as Weeks 1/2's unified CDF convention.

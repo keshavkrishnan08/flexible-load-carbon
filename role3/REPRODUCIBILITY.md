@@ -1,4 +1,4 @@
-# Role 3 — Reproducibility Report
+# Role 3: Reproducibility Report
 
 ## Environment
 - Python >= 3.10
@@ -47,11 +47,11 @@ flips only under left-skewed F + high C_R, matching footnote 6 of the
 paper.
 
 ## File map
-- `numerical_solver.py` — FOC solver for eqs (10), (12), (13), (15) and Case C (eq 30).
-- `run_all_experiments.py` — Bullets 1-4 driver; writes CSVs + figures + memo.
+- `numerical_solver.py`: FOC solver for eqs (10), (12), (13), (15) and Case C (eq 30).
+- `run_all_experiments.py`: Bullets 1-4 driver; writes CSVs + figures + memo.
 - Formal proofs (Prop 1, capacity substitution, eq 17 decomposition, Case C
   corollary) live in the assembled manuscript, which is maintained outside this
   repository; the reproducible sources are the per-week write-ups
   (`writeup_week2.tex`, `writeup_week3.tex`, `writeup_week4.tex`) at the repo root.
-- `results/` — CSV outputs + team sync memo.
-- `figures/` — heatmap and skew plot used in the writeup.
+- `results/`: CSV outputs + team sync memo.
+- `figures/`: heatmap and skew plot used in the writeup.

@@ -45,7 +45,7 @@
 
 - **Validate the characterization theorem at scale.** Evaluate the carbon functional
   across a large theory-tied distribution library (Beta scale-mixtures, bimodal,
-  heavy-tailed) and confirm the sign match in every cell — one principled sweep that
+  heavy-tailed) and confirm the sign match in every cell, one principled sweep that
   corroborates the iff or surfaces the counterexample; render the phase diagram
   numerically.
 
@@ -72,8 +72,8 @@
   deformation path so the robust verdict holds across the path, not just at the
   nominal.
 
-- **Map fragility.** Identify where the new results are knife-edge — the boundary of
-  the characterization and the saddle — and construct explicit witnesses on each side,
+- **Map fragility.** Identify where the new results are knife-edge, the boundary of
+  the characterization and the saddle, and construct explicit witnesses on each side,
   the sharpness companions to Role 1's theorems.
 
 ## Role 4 (Theory Hardening and Regimes)
@@ -84,7 +84,7 @@
   and explain the discontinuity.
 
 - **Harden the optimality and robust proofs.** Supply the measure-theoretic
-  scaffolding the variational and minimax arguments need — existence and measurability
+  scaffolding the variational and minimax arguments need, existence and measurability
   of the optimal schedule, IC/IR constraint qualification, and a minimax theorem whose
   compactness and convexity hypotheses are verified for the ambiguity set. Stress-test
   Assumption 1 against each new result.

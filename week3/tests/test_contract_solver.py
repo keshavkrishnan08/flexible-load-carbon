@@ -181,7 +181,7 @@ def test_shadow_price_profit_floor_is_positive(params, uniform):
     """Shadow price of the profit-floor constraint must be ≥ 0.
 
     Economically: relaxing the profit floor (lower floor) can only help
-    or leave unchanged the minimum achievable carbon — so the marginal
+    or leave unchanged the minimum achievable carbon, so the marginal
     value of a tighter floor is non-negative carbon cost.
     """
     K_R, K_F, K_M = 15.0, 50.0, 20.0

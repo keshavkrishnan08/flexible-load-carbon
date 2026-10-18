@@ -1,4 +1,4 @@
-"""Week 3 Bullet 3 — Value of distributional robustness.
+"""Week 3 Bullet 3, Value of distributional robustness.
 
 Ambiguity set: a Beta(a_0 + s, b_0 - s) family indexed by a Wasserstein-1
 radius r(s) = |E[F_s] - E[F_0]|. For each radius we compute the worst-case

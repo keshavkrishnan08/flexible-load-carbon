@@ -1,9 +1,9 @@
 """
 Week 3 Task 3 tests: carbon phase diagram and contract-vs-greedy comparison.
 
-These tests validate the carbon-sign-flip hypothesis — can the carbon-optimal
+These tests validate the carbon-sign-flip hypothesis, can the carbon-optimal
 contract achieve lower carbon than the no-FCL benchmark in cases where the
-greedy (firm-optimal) dispatch cannot? — and ensure the phase-diagram
+greedy (firm-optimal) dispatch cannot? and ensure the phase-diagram
 classification machinery is correct.
 """
 import warnings

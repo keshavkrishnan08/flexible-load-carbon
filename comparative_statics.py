@@ -1,5 +1,5 @@
 """
-Role 3 Week 2 — Bullet 1: Comparative statics of the carbon effect.
+Role 3 Week 2, Bullet 1: Comparative statics of the carbon effect.
 
 Signs the partial derivatives
     d(Carbon_FCL - Carbon_noFCL) / d theta     for theta in {R, beta, p, C_M}

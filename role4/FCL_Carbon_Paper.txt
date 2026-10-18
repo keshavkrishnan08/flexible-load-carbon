@@ -4,10 +4,10 @@ A Tale of Bitcoin Mining and AI Training
 
 (Extremely preliminary working draft)
 Abstract
-We develop an analytical framework for flexible computing loads (fcls)—intensive
+We develop an analytical framework for flexible computing loads (fcls), intensive
 electricity demands that can scale elastically in real time (Bitcoin mining is an archetypal fcl; AI training an imperfect alternative). In a model of an integrated grid with
 endogenous renewable and fossil capacity, we show that if the amortized capital cost of
-fcl hardware falls below a threshold—a condition currently met by Bitcoin mining—
+fcl hardware falls below a threshold, a condition currently met by Bitcoin mining,
 introducing fcls with demand response may generate a triple win: higher utility profit,
 lower blackout probability, and lower carbon emissions. This occurs as fcls (1) incentivize renewable investment by monetizing otherwise uncompensated renewable surplus
 and (2) reduce fossil usage by substituting for peak-hour fossil backups. We find these
@@ -241,9 +241,9 @@ Bitcoin mining, and more broadly proof-of-work blockchain operations, have long 
 mining’s energy use to that of a mid-sized country (Forbes, 2022), and some studies have
 made the bold claim that Bitcoin mining alone could contribute to a 2◦ C rise in global temperatures (Mora, Rollins, Taladay, Kantar, Chock, Shimada and Franklin, 2018). Some scholars
 have even pointed to their policy analyses linking Bitcoin mining to carbon emissions as a primary justification for China’s ban of Bitcoin mining in September 2021.1 Given rising Bitcoin
-prices, recent political shifts, and increasing adoption by governments and corporations—
+prices, recent political shifts, and increasing adoption by governments and corporations,
 including recent initiatives for strategic Bitcoin reserves (U.S. Senator Lummis, 2024; The
-Washington Post, 2024) and the emergence of Bitcoin treasury companies—the energy demand from Bitcoin mining is likely to grow further, making a rigorous assessment of its
+Washington Post, 2024) and the emergence of Bitcoin treasury companies, the energy demand from Bitcoin mining is likely to grow further, making a rigorous assessment of its
 environmental impact more urgent than ever.
 Meanwhile, the explosive growth of artificial intelligence has created an even larger
 class of electricity-intensive computing operations. Training a frontier AI model today can
@@ -251,11 +251,11 @@ require tens of thousands of specialized processors running continuously for wee
 energy demands rivaling those of a mid-sized data center. Like Bitcoin mining, such batch
 training workloads are elastically scalable: the GPU cluster can to a large extent be scaled
 up or down in real time without disrupting later operations, so the jobs can in principle be
-scheduled around grid conditions. This shared property—the ability to absorb or release
-electricity demand in real time without disrupting later operations—defines what we call
+scheduled around grid conditions. This shared property, the ability to absorb or release
+electricity demand in real time without disrupting later operations, defines what we call
 flexible computing loads (fcls). Bitcoin mining is the archetypal fcl; AI training is a close
-but imperfect cousin. Developing a rigorous analytical framework for fcls as a class—rather
-than treating Bitcoin mining and AI in isolation—is one of the contributions of this paper.
+but imperfect cousin. Developing a rigorous analytical framework for fcls as a class, rather
+than treating Bitcoin mining and AI in isolation, is one of the contributions of this paper.
 1
 
 Private communication.
@@ -272,12 +272,12 @@ and imperfect correlation between supply and demand. This supply-demand mismatch
 grids to rely on fossil “peaker” plants for balancing, imposing carbon costs and undermining the commercial case for renewable investment. Second, Bitcoin mining is memoryless:
 every joule of hashing contributes equally to expected rewards regardless of when it occurs,
 so miners are perfectly indifferent between running now and running later. This temporal
-flexibility—unique among large electricity consumers—makes Bitcoin mining an ideal shock
+flexibility, unique among large electricity consumers, makes Bitcoin mining an ideal shock
 absorber for intermittent renewable supply. Mining can be dialed up during renewable surplus (earning revenue on power that would otherwise be curtailed) and dialed down during
 scarcity (freeing fossil capacity for consumers), simultaneously raising the profitability of
 renewable investment and reducing the need for fossil backup.
 It is important to stress that this carbon-reduction effect is not automatic. It requires that the demand response program be appropriately designed, and it depends on key
-parameters—most importantly the amortized hardware cost of mining equipment relative
+parameters, most importantly the amortized hardware cost of mining equipment relative
 to the expected per-megawatt revenue from flexible dispatch. Our paper characterizes these
 conditions precisely. When they are satisfied, mining generates a triple win: lower carbon
 emissions, lower blackout probability, and higher utility profit. When they fail, the reverse
@@ -292,7 +292,7 @@ support this channel (Forbes, 2024). Our paper provides the analytical foundatio
 6
 
 This paper develops the first rigorous analytical framework for studying these questions.
-Unlike conventional electricity uses—heating, lighting, industrial processes—where curtailment imposes an immediate service disruption, fcls can be elastically scaled up or down in
+Unlike conventional electricity uses, heating, lighting, industrial processes, where curtailment imposes an immediate service disruption, fcls can be elastically scaled up or down in
 real time without disrupting later operations.
 Our baseline model features a regulated electricity system in which a profit-maximizing
 utility jointly decides how much renewable capacity, fossil backup capacity, and fcl capacity
@@ -319,14 +319,14 @@ why the mechanism operates, and when it does not.
 
 when both fossil and renewable capacities are fixed (Case C), the demand response program unambiguously increases carbon: FCLs dispatch on spare fossil power, raise the plant’s
 utilization rate, and no capacity substitution offsets this effect. Critics who observe high
-fossil utilization rates at mining facilities sited near gas plants are empirically correct—for
+fossil utilization rates at mining facilities sited near gas plants are empirically correct, for
 those legacy-capacity environments. Our result is that this short-run carbon cost is the flip
 side of the long-run triple win: the same FCL revenue that increases fossil utilization in
 the short run finances the renewable capacity expansion that reduces both fossil utilization
 and carbon in the long run. A renewable-only dispatch constraint (capping FCL dispatch
 at the realized renewable surplus (−x̃)+ ) eliminates even the short-run carbon cost, at the
 expense of narrowing the FCL operating window and reducing the program’s profitability.
-Second, we embed the model in the Averch–Johnson rate-of-return regulation framework,
+Second, we embed the model in the Averch-Johnson rate-of-return regulation framework,
 where the retail electricity price is determined endogenously. Under ROR regulation, mining
 revenue creates a “double win”: in addition to the standard capacity subsidy channel, it
 is passed through to consumers as a lower retail electricity price. Third, we analyze deregulated competitive electricity markets, showing that the competitive equilibrium replicates
@@ -343,7 +343,7 @@ imply that the viable range for fcl adoption is currently roughly 2.5 times wide
 8
 
 curtailable fraction θ and training revenue RAI : under plausible frontier-model assumptions
-(θ = 0.5, RAI ≈ $200–400/MWh), the threshold is comparable to or wider than Bitcoin’s
+(θ = 0.5, RAI ≈ $200-400/MWh), the threshold is comparable to or wider than Bitcoin’s
 current threshold. These quantitative assessments suggest that the carbon-reduction potential of fcls is not just a theoretical possibility but a practical reality under current market
 conditions.
 Key contributions. This paper makes three contributions to the intersection of energy
@@ -355,7 +355,7 @@ flexible computing loads can reduce carbon emissions. Previous work on demand re
 specific properties of computing loads (memoryless, globally competitive, transparent revenue), and previous work on Bitcoin mining (Halaburda and Yermack, 2023; Cong, He and
 Li, 2021) does not develop a full welfare analysis within an electricity system model.
 Second, we provide tractable comparative-static results across a wide range of market
-structures—regulated utilities, rate-of-return regulation, and competitive markets—enabling
+structures, regulated utilities, rate-of-return regulation, and competitive markets, enabling
 a unified policy analysis of fcl programs across different electricity system designs.
 Third, we identify and formalize the key differences between Bitcoin mining and AI
 training as fcl technologies, including the inference latency constraint, revenue opacity,
@@ -383,7 +383,7 @@ Research on Bitcoin mining. On the theory side, Biais, Bisiere, Bouvard and Casa
 (2019) model Bitcoin mining as a coordination game and identify the possibility of multiple
 equilibria. Cong, He and Li (2021) studies the dynamics of mining pool formation and
 shows that the rise of mining pools may lead to significant electricity consumption. Prat
-and Walter (2021) propose a model that uses the Bitcoin–USD exchange rate to predict the
+and Walter (2021) propose a model that uses the Bitcoin-USD exchange rate to predict the
 computing power of the network. Arnosti and Weinberg (2022) show that Bitcoin mining has
 a tendency toward significant centralization given even small initial differences in variable
 costs. Bertucci, Bertucci, Lasry and Lions (2024) models Bitcoin mining as a mean-field
@@ -409,11 +409,11 @@ The flexibility of Bitcoin mining at the hardware level is grounded in ASIC desi
 2022; Forbes, 2021), and technical product manuals (BITMAIN Support, 2022) confirm that
 rapid on/off cycling is a design feature. Yaish, Tochner and Zohar (2022) show that miners
 can repeatedly switch machines to manipulate difficulty in ways that increase profits, confirming that rapid cycling is economically feasible. Yaish and Zohar (2023) further document two
-firms—Layer1 Technologies (2022) and Blockstream (2022)—that designed ASICs explicitly
+firms, Layer1 Technologies (2022) and Blockstream (2022), that designed ASICs explicitly
 as grid shock absorbers, underscoring that hardware-level flexibility is an intentional design
 feature rather than an artifact. Before Bitcoin mining was banned in China, miners routinely
 migrated between hydro-rich regions as the wet and dry seasons shifted renewable availability
-(Bitcoin.comNews, 2019; decrypt, 2020; Cointelegraph, 2020)—an early large-scale demonstration of FCL demand flexibility in practice. Kawaguchi, Noda and Komiyama (2022)
+(Bitcoin.comNews, 2019; decrypt, 2020; Cointelegraph, 2020), an early large-scale demonstration of FCL demand flexibility in practice. Kawaguchi, Noda and Komiyama (2022)
 provide econometric evidence that miners adjust their electricity consumption in response
 to profitability shocks, confirming elastic demand response in the field.
 11
@@ -421,7 +421,7 @@ to profitability shocks, confirming elastic demand response in the field.
 Research on electricity markets and renewable investment. Electricity supply has
 historically been treated as a natural monopoly subject to rate-of-return (ROR) regulation,
 under which utilities recover prudently incurred costs plus a regulated return on invested
-capital (Train, 1991; Jamison, 2008). The landmark pathology of this regime is the Averch–
+capital (Train, 1991; Jamison, 2008). The landmark pathology of this regime is the Averch,
 Johnson overcapitalization effect (Averch and Johnson, 1962): because allowed profits scale
 with the rate base, regulated firms over-invest in capital relative to the social optimum.
 This observation directly informs our Section 6.1. The theoretical critique of cost-of-service
@@ -429,13 +429,13 @@ regulation motivated the development of incentive regulation mechanisms; the lan
 contribution is Laffont and Tirole (1986), which formalizes the regulator’s problem as a
 principal-agent relationship and shows that optimal contracts must trade off productive
 efficiency against information rents captured by the firm. Abito (2020) estimates structurally
-that moving to optimal incentive regulation could reduce costs by 20–30 percent for some
+that moving to optimal incentive regulation could reduce costs by 20-30 percent for some
 utilities.
 Beginning in the 1990s, dissatisfaction with ROR regulation motivated electricity sector restructuring: separating generation from transmission, introducing bid-based wholesale
 markets, and creating independent system operators (Joskow, 1997, 2003). Evidence on restructuring’s efficiency effects is largely positive (Fabrizio, Rose and Wolfram, 2007; Davis
 and Wolfram, 2012; Cicala, 2022): Cicala (2015) shows that ROR regulation inflates fuel
 procurement costs by roughly 10 percent relative to competitive procurement, and Abito,
-Han, Houde and Van Benthem (2024) identifies the specific channels—removal of cost passthrough provisions, repositioning in input markets, and unwinding of legacy contracts—
+Han, Houde and Van Benthem (2024) identifies the specific channels, removal of cost passthrough provisions, repositioning in input markets, and unwinding of legacy contracts,
 through which divestiture raised plant efficiency. Market power and its impact on electricity
 prices remain a concern, however (Wolak, 2003; Hortaçsu and Puller, 2008; Bushnell, Mansur
 and Saravia, 2008; MacKay and Mercadal, 2024).
@@ -448,7 +448,7 @@ that the massive scale of AI infrastructure is driving a shift toward third-part
 and private credit financing. Gete and Mercader (2026) document the emerging datacenter
 mortgage market and analyze originate-to-distribute incentives that arise when lenders securitize data center loans, raising questions about underwriting standards in an asset class
 whose long-run viability depends on sustained electricity availability. Satchwell, Mims Frick,
-Cappers, Sergici, Hledik, Kavlak and Oskar (2025) survey large-load tariffs—real-time pricing, demand charges, and interruptible service agreements—through which utilities manage
+Cappers, Sergici, Hledik, Kavlak and Oskar (2025) survey large-load tariffs, real-time pricing, demand charges, and interruptible service agreements, through which utilities manage
 financially and operationally challenging loads; the NARUC rate design primer (Abal, Hedman, Butterworth and Kneeland, 2021) provides the foundational cost-allocation framework
 underpinning these instruments and is directly relevant for fcl program design.
 Among academic work on renewable investment, Aflaki and Netessine (2017) show that
@@ -471,14 +471,14 @@ develop a long-term power generation expansion model that factors in short-term 
 response. Agrawal and Yücel (2022) investigate the role of baseline adjustments in demandresponse programs. Together, these studies highlight the importance of demand response
 in balancing supply and demand, improving grid stability, and reducing costs. However,
 none examines how such programs can leverage the specific properties of computing loads
-to facilitate renewable investment—the central contribution of this paper.
+to facilitate renewable investment, the central contribution of this paper.
 Research on carbon pricing and externalities. Our analysis of carbon taxes and
 fcl programs as complementary instruments (Section 6.2) connects to the canonical literature on environmental externalities. The Pigouvian case for carbon taxation dates to
 Pigou (1920); its application to electricity markets was formalized in Baumol and Oates
 (1988) and extended to intermittent renewables by Fischer and Newell (2008), who show
 that renewable portfolio standards and carbon taxes interact non-trivially when generation
 is stochastic. Acemoglu, Aghion, Bursztyn and Hemous (2012) study directed technical
-change under environmental constraints, showing that carbon taxes can tilt innovation toward clean technologies—a mechanism that parallels the fcl investment channel we model.
+change under environmental constraints, showing that carbon taxes can tilt innovation toward clean technologies, a mechanism that parallels the fcl investment channel we model.
 Ambec and Crampes (2012) analyze the complementarity between renewable energy and
 flexible backup generation, providing theoretical foundations closely related to our capacity
 substitution result. The empirical evidence on carbon pricing is reviewed in Goulder and
@@ -489,19 +489,19 @@ fcl demand response as one such second-best instrument, characterizing precisely
 
 14
 
-substitutes for—and when it complements—explicit carbon pricing.
+substitutes for, and when it complements, explicit carbon pricing.
 Research on AI, data centers, and electricity. The electricity demands of artificial intelligence have received growing attention. Electric Power Research Institute (2024) project
-that U.S. data centers will require 90–100 GW of additional generation capacity by 2030,
+that U.S. data centers will require 90-100 GW of additional generation capacity by 2030,
 placing AI on a scale comparable to current Bitcoin mining. International Energy Agency
 (2024) document that global data centers consumed approximately 415 TWh in 2024, and
 project this to exceed 800 TWh by 2030 under a high-growth scenario. Feher, GarciaAppendini and Mihet (2025) provide evidence that U.S. data center development has been
 substantially subsidized by public resources, raising questions about efficient capacity allocation and the distributional implications of concentrating energy-intensive compute in specific
 localities. Gargano and Giacoletti (2026) document the scope of U.S. state tax incentives for
 data center siting, finding that interstate competition has generated large public subsidies
-for an industry whose energy demands are increasingly material to grid planning—a policy
+for an industry whose energy demands are increasingly material to grid planning, a policy
 context directly relevant to the demand response programs we analyze.
 The flexibility of AI training loads has attracted emerging interest. Modern distributed
-training frameworks support checkpointing—pausing mid-run without losing progress—which
+training frameworks support checkpointing, pausing mid-run without losing progress, which
 is directly analogous to Bitcoin miners powering down ASICs and restarting (Jiang, Lin
 et al., 2024). Hyperscalers (Google, Microsoft, Amazon) have begun using temporal flexibility to reduce energy costs and participate in demand response programs (Acun et al., 2023;
 Radovanović, Koningstein et al., 2023). The feasibility of demand-response participation by
@@ -523,8 +523,8 @@ Model
 This section presents the overall model setup, which captures a regulated electricity system with stochastic renewable generation, fossil backup, and an optional demand response
 program that integrates flexible computing loads.
 Our baseline model has one strategic decision maker: a regulated utility. The utility
-chooses three capacity levels—renewable capacity KR , fossil backup capacity KF , and flexible computing load capacity KM (subscripts R, F , M denote renewable, fossil, and mining,
-respectively)—to maximize expected profit. The utility’s profit is then obtained from revenues from consumer electricity sales and computing revenue, minus variable fossil costs,
+chooses three capacity levels, renewable capacity KR , fossil backup capacity KF , and flexible computing load capacity KM (subscripts R, F , M denote renewable, fossil, and mining,
+respectively), to maximize expected profit. The utility’s profit is then obtained from revenues from consumer electricity sales and computing revenue, minus variable fossil costs,
 blackout penalties (which the regulator requires it to internalize), and capital costs for all
 three capacity types. In the baseline model the utility sets KM directly (in practice, KM
 may be implemented through a demand response program that contracts with third-party
@@ -676,9 +676,9 @@ KF
 x (residual demand)
 
 Figure 1: FCL dispatch rule d(x) = min{max{KF − x, 0}, KM } as a function of residual
-demand x. Blue region: renewable surplus or deep spare-fossil zone—FCL runs at full
-capacity KM . Orange region: gap-filling zone (x ∈ (KF − KM , KF ))—FCL absorbs the
-exact capacity gap KF − x, running on fossil power. Scarcity region: x > KF —FCL shuts
+demand x. Blue region: renewable surplus or deep spare-fossil zone, FCL runs at full
+capacity KM . Orange region: gap-filling zone (x ∈ (KF − KM , KF )), FCL absorbs the
+exact capacity gap KF − x, running on fossil power. Scarcity region: x > KF, FCL shuts
 down, all dispatchable capacity serves consumers; at the social optimum KF∗ is chosen so
 that this region has zero residual-demand probability, and it therefore appears as an empty
 (degenerate) zone in the figure. Lemma 1 establishes that this piecewise-linear rule is the
@@ -725,15 +725,15 @@ from Assumption 1: R > c (FCL is always worth dispatching on spare fossil capaci
 real time requires that R be publicly observable. Bitcoin mining satisfies this transparency
 requirement by construction: R equals the block reward value divided by global network
 energy per block, both of which are published continuously by the Bitcoin protocol. The
-dispatch rule is therefore self-enforcing—both the utility and the miner can independently
+dispatch rule is therefore self-enforcing, both the utility and the miner can independently
 verify that the margin is positive, eliminating the need for costly monitoring or revelation
 mechanisms. AI training lacks a transparent real-time analogue of R, complicating the design
 of an incentive-compatible dispatch contract (see Section 8).
 21
 
 Throughout the analysis we treat the per-MWh mining revenue R as exogenous, which
-is appropriate for any price-taking regional grid. The full discussion of grid scope—including
-the endogenous-R case, Tullock mining competition, and multi-grid coordination externalities—
+is appropriate for any price-taking regional grid. The full discussion of grid scope, including
+the endogenous-R case, Tullock mining competition, and multi-grid coordination externalities,
 is deferred to Section 7.
 
 3.4
@@ -1051,7 +1051,7 @@ positive when R > c + CF + CM ) even at KF = D̄. Therefore, in case R = c + CF 
 the utility builds at least D̄ fossil capacity, which is just enough to cover the maximum
 possible consumer demand, and is indifferent about building more to serve fcl; In case
 R > c + CF + CM , the utility would like to build an infinite amount of fossil capacity to
-serve fcl – in this case the utility effectively acts as a dedicated computing provider—a
+serve fcl, in this case the utility effectively acts as a dedicated computing provider, a
 qualitatively different market structure that lies outside the present model’s scope and is
 not analyzed further. In both subcases, the utility builds so much fossil capacity that the
 blackout probability is zero.
@@ -1059,7 +1059,7 @@ F
 In the full-coverage regime the fcl adoption condition CM < C̄M ≡ (R − c) β+p−c−C
 β+p−c
 
-is automatically satisfied—anticipating the formal result in Proposition 1, which shows that
+is automatically satisfied, anticipating the formal result in Proposition 1, which shows that
 CM < C̄M is necessary and sufficient for the triple win (lower blackouts, lower carbon, and
 higher profit). To see this, note that CM ≤ R − c − CF (the condition R ≥ c + CF + CM
 rearranged) and R − c − CF < C̄M whenever β + p > R (Assumption 1). Hence the fullcoverage regime is a degenerate but favorable special case in which zero blackouts, lower
@@ -1447,7 +1447,7 @@ CM < C̄M =
 where C̄M is the adoption threshold introduced in Section 4.1. When CM < C̄M , allowing the
 fcl program simultaneously (i) increases utility profit, (ii) lowers the equilibrium blackout
 probability, and (iii) may reduce carbon emissions (for example when x̃ follows a uniform
-distribution and the fixed cost of renewables CR is sufficiently low) —a triple win. Parts (i)
+distribution and the fixed cost of renewables CR is sufficiently low), a triple win. Parts (i)
 and (ii) hold for any residual-demand distribution satisfying Assumption 1. When CM > C̄M ,
 no fcl capacity is optimal within the large-FCL regime maintained in this section, and the
 outcome coincides with banning fcl; Appendix G shows that allowing small-FCL programs
@@ -1485,7 +1485,7 @@ Timing Variations: Pre-Installed Capacity
 The analysis in Section 4 assumes that the utility can simultaneously adjust fossil, renewables, and fcl capacity. In practice, however, capacity decisions are often made at different
 points in time. Many grids have legacy fossil fleets or existing renewable plants (e.g., a hydro
 dam) that cannot be freely adjusted in the short or medium run. This section accommodates
-this possibility and analyzes three cases of pre-existing (sunk) capacity—pre-installed fossil only (Case A), pre-installed renewables only (Case B), and both capacities pre-installed
+this possibility and analyzes three cases of pre-existing (sunk) capacity, pre-installed fossil only (Case A), pre-installed renewables only (Case B), and both capacities pre-installed
 (Case C). We thus demonstrate how the triple-win results of Section 4 change as the capacity
 substitution channel is progressively constrained.
 
@@ -1537,7 +1537,7 @@ in current markets), this condition is readily satisfied.
 Key insight. Carbon improvement requires that the additional renewable investment induced by computing revenue generates enough surplus hours to offset the higher fossil uti(0)
 
 lization. Grids that are already heavily renewable (large KR ) have many surplus hours
-where fcls run on clean power at zero carbon cost—making the net effect unambiguously
+where fcls run on clean power at zero carbon cost, making the net effect unambiguously
 positive in such cases.
 
 5.2
@@ -1788,15 +1788,15 @@ GenX capacity expansion model to study data center temporal flexibility across t
 
 > CR
 
-regions. In Texas—where projected 2030 renewables supply 54% of generation (39% wind,
-15% solar)—full flexibility reduces CO2 emissions by up to 40%, consistent with our long-run
-triple-win regime. In the Mid-Atlantic—where renewables supply only 22% of generation—
+regions. In Texas, where projected 2030 renewables supply 54% of generation (39% wind,
+15% solar), full flexibility reduces CO2 emissions by up to 40%, consistent with our long-run
+triple-win regime. In the Mid-Atlantic, where renewables supply only 22% of generation,
 the same flexibility raises system-wide emissions by up to 3%, because insufficient renewable
 capacity means shifted load is absorbed by baseload coal operating more uniformly (higher
 utilization, lower ramping). This is precisely our Case C logic: when endogenous capacity
 substitution is absent or limited by the existing generation mix, the demand response program dispatches on spare fossil power and increases carbon. Knittel, Senga and Wang (2025)
-also confirm that flexibility always lowers total system costs regardless of region—consistent
-with our result that the utility’s profit rises whenever it adopts the program—and that cost
+also confirm that flexibility always lowers total system costs regardless of region, consistent
+with our result that the utility’s profit rises whenever it adopts the program, and that cost
 savings are primarily constrained by the share of flexible workload rather than the shifting
 horizon, a finding that maps to the role of KM in our model.
 The more freely capacity can be adjusted, the more powerful the mechanism.
@@ -1875,7 +1875,7 @@ effect (Averch and Johnson, 1962). Both forces lead to high capital investment, 
 introduction of fcl leads to higher profit, lower blackout probability (zero more precisely),
 and lower carbon emissions.8
 Two forces that strengthen the baseline triple win The price pass-through in (32)
-implies that FCL adoption delivers two distinct benefits under ROR regulation—not just
+implies that FCL adoption delivers two distinct benefits under ROR regulation, not just
 = E[D−R
 < 0.
 the capacity benefit of the baseline: ∂ ∂p
@@ -1886,8 +1886,8 @@ B, extending the AJ over-investment distortion to mining hardware and inducing t
 utility to over-invest in all three capacity types.
 2. Price benefit (new under ROR): every MWh of FCL output reduces the regulated
 consumer price by R/E[Dserved ]. At calibrated values (R ≈ $109/MWh, computing
-≈ 10% of grid output), this implies a retail price reduction of roughly $11/MWh—
-material in markets where regulated prices average $50–120/MWh.
+≈ 10% of grid output), this implies a retail price reduction of roughly $11/MWh,
+material in markets where regulated prices average $50-120/MWh.
 Together, the two benefits strengthen the welfare case for allowing regulated utilities to
 participate in FCL programs, and suggest that the socially optimal FCL investment exceeds
 8
@@ -1903,7 +1903,7 @@ AJ triple-win threshold. FCL adoption (KM
 
 FCL hardware is included in the rate base. This follows directly from the AJ profit formula:
 ∂ΠAJ /∂KM = r̄CM > 0 regardless of KM , so the utility strictly prefers any positive FCL
-capacity to none. The cost threshold C̄M from the unregulated baseline disappears entirely—
+capacity to none. The cost threshold C̄M from the unregulated baseline disappears entirely,
 the AJ rate-base return guarantees FCL adoption without any cost-benefit condition on CM .
 Rate-base classification of FCL hardware A key open regulatory question is whether
 FCL hardware (ASICs, GPU clusters) qualifies as rate base. Rate base traditionally covers
@@ -2003,8 +2003,8 @@ Pcap − c
 
 (35)
 
-The equilibrium blackout probability is thus pinned entirely by the cost structure—it equals
-the ratio of the capacity cost to the scarcity rent per unit—and is independent of the demand
+The equilibrium blackout probability is thus pinned entirely by the cost structure, it equals
+the ratio of the capacity cost to the scarcity rent per unit, and is independent of the demand
 distribution. This is structurally identical to the regulated FOC (7) with Pcap playing the
 role of β + p, confirming that the competitive equilibrium replicates the regulated outcome
 when Pcap = β + p, i.e., when the price cap reflects the full social cost of lost load.
@@ -2017,8 +2017,8 @@ partition demand states as follows:
 Deregulated electricity markets vary in how they compensate generators for fixed costs. Some markets,
 such as PJM (covering the mid-Atlantic and Midwest United States), operate a capacity market alongside the
 spot energy market (which runs on a day-ahead or hour-ahead basis with real-time adjustment). In capacity
-markets, generators bid for compensation paid years in advance — traditionally three years, though there is
-a trend toward shorter intervals given rapidly changing market conditions — simply for committing to have
+markets, generators bid for compensation paid years in advance, traditionally three years, though there is
+a trend toward shorter intervals given rapidly changing market conditions, simply for committing to have
 capacity available when needed, providing a revenue stream separate from energy sales. Texas (ERCOT), by
 contrast, operates an energy-only market with no capacity payments; generators must recover all fixed costs
 through spot-market revenues alone, which requires allowing very high prices Pcap during scarcity events.
@@ -2123,7 +2123,7 @@ Carbon taxes and FCL programs as complements
 
 Despite potential carbon reduction benefits from increased renewable capacity buildup, our
 analysis above also shows that fcl programs directly increases fossil dispatch during sparecapacity hours. The standard policy instrument for internalizing this externality is a carbon
-tax on fossil output. Because fcl profitability depends on the spot price during fossildispatch hours, a carbon tax interacts directly with the FCL participation decision—raising
+tax on fossil output. Because fcl profitability depends on the spot price during fossildispatch hours, a carbon tax interacts directly with the FCL participation decision, raising
 the effective cost of electricity for fcl operators and potentially pushing computing toward
 zero-carbon hours. We now examine how this interaction shapes the joint design of carbon
 pricing and fcl programs.
@@ -2145,12 +2145,12 @@ Carbon taxes and fcl demand response programs are therefore complementary instru
 a sufficiently high τ pushes computing exclusively onto renewable surplus, while tax revenues
 can fund renewable capacity subsidies. Note, however, that for τ ≥ τ̄ = R − c, fcl operates
 only at price 0 (during renewable surplus) and no longer keeps fossil dispatched during
-formerly zero-price hours. The renewable missing money channel identified above—whereby
-fcl demand converts surplus hours into fossil-marginal hours at price c, inducing KR∗ > KR◦ —
+formerly zero-price hours. The renewable missing money channel identified above, whereby
+fcl demand converts surplus hours into fossil-marginal hours at price c, inducing KR∗ > KR◦,
 is therefore eliminated, and equilibrium renewable investment KR∗ reverts toward KR◦ .
 The following proposition formalizes this complementarity and characterizes the threshold carbon tax that maximally leverages fcl programs for carbon reduction.
 Proposition 2 (Pigou tax and FCL complementarity). Let τ̄ = R − c denote the critical
-carbon tax. The cases (i)–(iii) below characterize the regulated baseline of Section 4 under
+carbon tax. The cases (i)-(iii) below characterize the regulated baseline of Section 4 under
 a per-MWh carbon levy τ on fossil output; the qualitative conclusions carry over to the
 deregulated setting.
 (i) For τ < τ̄ : fcls operate during both fossil-dispatch and renewable-surplus hours. The
@@ -2198,12 +2198,12 @@ $109/MWh, c = $45/MWh), the critical carbon tax is τ̄ = R−c = $64/MWh. Conve
 47
 
 per-tonne CO2 at natural gas emissions intensity (≈ 0.43 tonne CO2 /MWh), this corresponds
-to approximately $149/tonne CO2 —far above current U.S. carbon prices. The U.S. has no
+to approximately $149/tonne CO2, far above current U.S. carbon prices. The U.S. has no
 federal carbon price; regional programs (RGGI, California cap-and-trade) currently imply
-allowance prices of roughly $10–50/tonne CO2 (≈ $4–21/MWh), placing them well below τ̄ .
+allowance prices of roughly $10-50/tonne CO2 (≈ $4-21/MWh), placing them well below τ̄ .
 Two implications follow. First, in current U.S. markets, carbon pricing alone will not confine FCL operation to renewable-surplus hours: even with existing cap-and-trade programs,
-the FCL margin during fossil-dispatch hours remains positive and FCLs will continue to dispatch on spare fossil capacity. Second, renewable-only dispatch requirements—contractual
-provisions capping FCL dispatch at the realized renewable surplus (−x̃)+ —achieve the same
+the FCL margin during fossil-dispatch hours remains positive and FCLs will continue to dispatch on spare fossil capacity. Second, renewable-only dispatch requirements, contractual
+provisions capping FCL dispatch at the realized renewable surplus (−x̃)+, achieve the same
 zero-carbon computing outcome as τ = τ̄ without requiring federal carbon pricing. In the
 near term, such contractual provisions are a more practically achievable path to zero-carbon
 FCL operation than waiting for carbon prices to reach τ̄ .
@@ -2226,7 +2226,7 @@ that a Pigouvian levy at τ̄ = R − c decarbonizes computing by confining fcl 
 Table 2: Regulated versus Deregulated Markets: FCL Equilibrium Conditions
 Feature
 
-Regulated (§4–§6)
+Regulated (§4-§6)
 
 Deregulated (§6.2)
 
@@ -2284,7 +2284,7 @@ Carbon tax can substitute for Carbon tax tilts FCL toward
 ROR price floor
 renewable surplus
 
-This table compares equilibrium conditions and FCL effects across the regulated (Sections 4–6.1) and
+This table compares equilibrium conditions and FCL effects across the regulated (Sections 4-6.1) and
 deregulated competitive (Section 6.2) market structures. In the regulated case, β is the value-of-lost-load
 penalty and p is the exogenous retail price; in the deregulated case, Pcap is the competitive scarcity
 price cap (or capacity payment). Results are structurally isomorphic: replacing β + p with Pcap maps all
@@ -2314,16 +2314,16 @@ far above current U.S. carbon prices.
 
 Grid Scope: Local versus Global Mining
 
-Throughout Sections 4–6.2, we have treated the per-MWh mining revenue R as exogenous
+Throughout Sections 4-6.2, we have treated the per-MWh mining revenue R as exogenous
 to the grid operator. This is reasonable: electricity utilities serve geographically distinct
-regions, while Bitcoin mining revenue is determined by the global hash rate—an aggregate
+regions, while Bitcoin mining revenue is determined by the global hash rate, an aggregate
 of computing loads across thousands of independent grids worldwide. For any single utility,
 changes in its fcl program have negligible effect on R: a 100 MW program represents
 roughly 0.6% of the ∼16 GW global mining fleet as of 2025 (and even a 1 GW program only
 ∼6%).
 This section asks what changes as the scope of adoption grows. Section 7.1 considers the
 polar extreme: a single utility that serves all miners worldwide, so that R is fully endogenous
-to its choices. The fcl program collapses in that case—expanding capacity merely dilutes
+to its choices. The fcl program collapses in that case, expanding capacity merely dilutes
 the per-unit reward proportionally, leaving total mining revenue unchanged. Section 7.2
 analyzes the intermediate case of N regional utilities each adopting independently: each
 individually remains too small to affect R, so the baseline analysis applies utility by utility,
@@ -2383,11 +2383,11 @@ so total miner expenditure P d = n−1
 n
 competitive limit n → ∞, expenditure converges to R, still independent of P . Aggregate
 miner demand thus falls smoothly in the electricity price, with total expenditure invariant to
-P ; the bang-bang dispatch rule—run when R > P , shut down when R < P —emerges as the
+P ; the bang-bang dispatch rule, run when R > P , shut down when R < P, emerges as the
 behavior of price-taking miners (n → ∞) facing a common per-MWh revenue R. The key
-property used in our analysis—that miners willingly absorb electricity whenever R exceeds
-its price—is therefore robust to the competitive structure of the mining industry.
-Remark 8 (Observability and contractibility of R). In practice, R fluctuates with the Bitcoin price, the block-subsidy schedule, and transaction fees—but all of these inputs are observable in real time via the public Bitcoin protocol (as noted in Remark 1). For the Demand
+property used in our analysis, that miners willingly absorb electricity whenever R exceeds
+its price, is therefore robust to the competitive structure of the mining industry.
+Remark 8 (Observability and contractibility of R). In practice, R fluctuates with the Bitcoin price, the block-subsidy schedule, and transaction fees, but all of these inputs are observable in real time via the public Bitcoin protocol (as noted in Remark 1). For the Demand
 Response Program, R can be updated at the dispatch-contract frequency (e.g., hourly), so
 the condition R > c can be verified and enforced by both the utility and the miner without
 51
@@ -2405,12 +2405,12 @@ Multi-grid coordination and the mining commons
 
 Now suppose there are N regional utilities, each a local monopoly in its own market, that
 independently operate fcl programs. Each utility is small enough relative to the global
-fleet that it reasonably treats R as exogenous—the baseline assumption remains valid at
+fleet that it reasonably treats R as exogenous, the baseline assumption remains valid at
 the individual level. Yet when many grids adopt simultaneously, their aggregate computing
 load raises global hash rate; because Bitcoin’s difficulty adjustment targets a fixed block
 production rate, this proportionally reduces the per-MWh revenue R for every participant.
 Each grid’s fcl expansion thus imposes a negative externality on all other grids through the
-shared global R—a “mining commons” problem that no individual utility has incentive to
+shared global R, a “mining commons” problem that no individual utility has incentive to
 internalize.
 With N grids each running programs of size δi :
 
@@ -2435,7 +2435,7 @@ as of 2024, North American grids acting in concert would have significant market
 
 Appendix C formalizes the Nash equilibrium across grid operators and characterizes the coordination failure. In that equilibrium, each grid’s adoption is individually rational (since
 R is approximately exogenous to any single grid) but collectively excessive relative to the
-social optimum—a classic commons problem. From the perspective of the triple-win threshold, this means C̄M = (R − c)ϕ◦ is the relevant benchmark for any grid acting alone today;
+social optimum, a classic commons problem. From the perspective of the triple-win threshold, this means C̄M = (R − c)ϕ◦ is the relevant benchmark for any grid acting alone today;
 as aggregate fcl adoption grows globally, the effective R will decline and the threshold will
 narrow, eventually requiring higher-quality renewable capacity or lower hardware costs to
 sustain the triple win.
@@ -2444,13 +2444,13 @@ local carbon reductions may be illusory: if a grid’s fcl program attracts mine
 or worse. Three features of the Section 4 analysis address this concern. First, the carbon
 reduction operates through the capacity substitution channel: the utility builds more renewables because fcl revenue raises their shadow value (Proposition 1, Step 3). This investment
 is a local, durable decision that reduces the grid’s carbon intensity regardless of where miners
-eventually locate. Second, once renewable capacity is installed it is sunk—subsequent miner
+eventually locate. Second, once renewable capacity is installed it is sunk, subsequent miner
 relocation does not reverse it. Third, the carbon benefit is largest in grids with high existing
 renewable penetration (Section 5.2), precisely the grids most likely to attract renewableseeking miners, so the relocation effect reinforces rather than undermines the carbon case.
 No cross-jurisdictional coordination is required; the mechanism is self-contained within a
 single grid’s investment decision.
-The two polar cases—price-taking local grid and a single global grid operating all
-mining—bracket the range of realistic scenarios, with the multi-grid Nash equilibrium falling
+The two polar cases, price-taking local grid and a single global grid operating all
+mining, bracket the range of realistic scenarios, with the multi-grid Nash equilibrium falling
 in between: individually rational adoption that is collectively excessive. Our baseline analysis
 covers the price-taking case; the global grid case is analyzed in Appendix C.
 
@@ -2505,15 +2505,15 @@ AI training as an emerging FCL
 
 We now analyze AI training as a potential fcl, in comparison to Bitcoin mining.
 Similarities. Large-language-model (LLM) training runs last days to weeks and support
-checkpointing: pausing mid-run without losing progress, then resuming— analogous to powering down ASICs and restarting. A 50-hour annual curtailment (Duke Energy’s estimated
+checkpointing: pausing mid-run without losing progress, then resuming, analogous to powering down ASICs and restarting. A 50-hour annual curtailment (Duke Energy’s estimated
 threshold for accommodating large data center loads without new generation) is imperceptible in a three-week training run. Hyperscalers (Google, Microsoft, Amazon) can also reroute
 training workloads across data centers in different grid regions, providing spatial demand
 response unavailable to geographically fixed Bitcoin miners.
 At scale, AI compute is comparable to Bitcoin mining: global data centers consumed
-approximately 415 TWh in 2024, projected to exceed 800 TWh by 2030 (IEA). U.S. AIfocused data centers alone are forecast to require 90–100 GW of additional capacity by 2030,
+approximately 415 TWh in 2024, projected to exceed 800 TWh by 2030 (IEA). U.S. AIfocused data centers alone are forecast to require 90-100 GW of additional capacity by 2030,
 comparable to Bitcoin’s current 16 GW continuous draw.13
 The inference latency constraint. The most important structural difference between AI
-and Bitcoin mining is the inference workload. AI inference—serving live queries to products
+and Bitcoin mining is the inference workload. AI inference, serving live queries to products
 13
 
 As Van Nieuwerburgh (2026) observes, the financing of these assets is becoming increasingly
@@ -2521,15 +2521,15 @@ As Van Nieuwerburgh (2026) observes, the financing of these assets is becoming i
 
 55
 
-like ChatGPT, Claude, and Gemini—is latency-constrained: users expect responses within
+like ChatGPT, Claude, and Gemini, is latency-constrained: users expect responses within
 seconds, making inference non-curtailable. As inference increasingly dominates AI electricity
-consumption (already the majority in 2024–2025), the fraction of AI demand that is truly
+consumption (already the majority in 2024-2025), the fraction of AI demand that is truly
 curtailable shrinks. Bitcoin mining has no latency constraint whatsoever.
 Revenue opacity. Bitcoin mining revenue R is transparent, real-time, and market-determined.
-AI training revenue is the expected future commercial value of the model being trained—
+AI training revenue is the expected future commercial value of the model being trained,
 speculative, internal, and unverifiable by a grid operator or regulator. There is no direct
 observable per-MWh analogue of R for AI training, complicating Demand Response Program contract design.
-Power surge behavior. GPU clusters exhibit rapid power fluctuations: as GPUs transition between compute phases, power draw can surge or drop 30–60% within milliseconds
+Power surge behavior. GPU clusters exhibit rapid power fluctuations: as GPUs transition between compute phases, power draw can surge or drop 30-60% within milliseconds
 (IEA 2024 data center report). This creates frequency stability challenges absent from
 Bitcoin mining’s near-constant ASIC power draw, and imposes additional costs on grid operators.
 
@@ -2558,9 +2558,9 @@ dAI (x) = min max{KF − x, 0}, KM
 where KM
 is enrolled AI data center capacity (MW). Because only the curtailable workload
 
-share θ generates dispatch-contingent compute value—the committed share’s value does
+share θ generates dispatch-contingent compute value, the committed share’s value does
 not depend on when or where it runs (it is rerouted or rescheduled when local power is
-curtailed)—each dispatched MWh carries an effective dispatch-contingent revenue of θRAI ,
+curtailed), each dispatched MWh carries an effective dispatch-contingent revenue of θRAI ,
 giving an effective net margin of θRAI − c per MWh of dispatch. The following proposition
 formalizes the AI triple-win condition.
 Proposition 3 (AI triple-win threshold). Suppose the AI data center’s curtailable fraction
@@ -2599,7 +2599,7 @@ baseline rule (3) with KM = KM
 
 (5) with R → θRAI . The Assumption 1 conditions become: θRAI > c (AI dispatch profitable
 on spare fossil capacity); β + p > θRAI (consumer welfare exceeds effective AI computing
-revenue per MWh—this must be imposed as a separate condition for the AI setting, since
+revenue per MWh, this must be imposed as a separate condition for the AI setting, since
 θRAI need not be bounded by the Bitcoin R); and β + p > c + CF (unchanged). Applying
 57
 
@@ -2607,17 +2607,17 @@ revenue per MWh—this must be imposed as a separate condition for the AI settin
 Proposition 1 with these substitutions yields the threshold C̄M
 = (θRAI − c)ϕ◦ , and parts
 
-(i)–(iii) follow from the same three-step argument.
+(i)-(iii) follow from the same three-step argument.
 Corollary 1 (AI vs. Bitcoin triple-win comparison). The AI program has a wider viable
 AI
 hardware cost range (C̄M
 > C̄M ) if and only if θRAI > R. At current calibration (R ≈
 
-$109/MWh), AI training must satisfy RAI > Rθ : at θ = 0.5, this requires RAI > $218/MWh—
+$109/MWh), AI training must satisfy RAI > Rθ : at θ = 0.5, this requires RAI > $218/MWh,
 a threshold plausibly met by frontier model training but not by general-purpose inference
 AI
-≈ $51–145/MWh,
-workloads. For AI programs with θ = 0.5 and RAI ≈ $200–400/MWh, C̄M
+≈ $51-145/MWh,
+workloads. For AI programs with θ = 0.5 and RAI ≈ $200-400/MWh, C̄M
 
 bracketing the Bitcoin threshold C̄M ≈ $60/MWh.
 Grids with 50% inference workloads (θ = 0.5) obtain roughly half the dispatch-contingent
@@ -2626,7 +2626,7 @@ equal.
 Comparison. The structural comparison reveals that Bitcoin mining dominates AI training as an fcl on three dimensions (temporal flexibility, revenue transparency, hardware
 modularity), while AI training potentially dominates on two dimensions (spatial flexibility
 via rerouting, and scale of available capacity if RAI is high). The latter advantage is heavily
-conditioned on whether training revenue RAI can be contracted and verified—a practical
+conditioned on whether training revenue RAI can be contracted and verified, a practical
 obstacle that does not apply to Bitcoin.
 A grid operator choosing between Bitcoin mining and AI training as Demand Response
 Program participants should prefer Bitcoin mining when transparency and contract verifiability are paramount (regulated utilities, public interest programs), and may prefer AI if
@@ -2672,7 +2672,7 @@ Revenue transparency
 
 Real-time, publicly verifi-
 
-Internal, unverifiable—no
+Internal, unverifiable, no
 
 able via Bitcoin network
 
@@ -2707,7 +2707,7 @@ exhibit
 
 (∼3 kW) to 500 MW
 
-30–60%
+30-60%
 
 power
 
@@ -2759,13 +2759,13 @@ c
 
 tion)
 
-θ = 0.5, RAI = $200–
+θ = 0.5, RAI = $200,
 
 ∼
 
 Conditional on AI
 
-$55–155/MWh at
+$55-155/MWh at
 
 400/MWh
 “Advantage” indicates which technology performs better on each dimension for Demand Response Program participation. BTC dominates on the three dimensions critical for contract design under current
@@ -2775,13 +2775,13 @@ data center deployments.
 59
 
 Life-cycle hardware emissions: a caveat. The model’s capital cost parameter CM
-captures the amortized financial cost of fcl hardware but not its embodied carbon. Manufacturing Bitcoin ASICs (primarily 5–7nm semiconductor processes) and GPU servers each
-generates significant upstream CO2 emissions: estimates range from 0.1–0.3 tonne CO2 equivalent per device, or roughly 5–20 kg CO2 -eq/MWh over the hardware lifetime at typical
+captures the amortized financial cost of fcl hardware but not its embodied carbon. Manufacturing Bitcoin ASICs (primarily 5-7nm semiconductor processes) and GPU servers each
+generates significant upstream CO2 emissions: estimates range from 0.1-0.3 tonne CO2 equivalent per device, or roughly 5-20 kg CO2 -eq/MWh over the hardware lifetime at typical
 utilization rates. This embodied carbon is a one-time, stock cost (incurred at manufacturing, not during operation) and is therefore orthogonal to the flow carbon comparison in
 our model, which compares steady-state fossil MWh with and without an FCL program.
 Nonetheless, three observations are worth noting. First, the one-time hardware carbon cost
-is amortized over 2–5 years of operation: for a miner operating 8,760 hours/year, even a 20 kg
-CO2 -eq/MWh lifetime carbon cost corresponds to ∼4–10 kg CO2 -eq/MWh annually—an order of magnitude smaller than the ∼400 kg CO2 -eq/MWh from natural gas combustion the
+is amortized over 2-5 years of operation: for a miner operating 8,760 hours/year, even a 20 kg
+CO2 -eq/MWh lifetime carbon cost corresponds to ∼4-10 kg CO2 -eq/MWh annually, an order of magnitude smaller than the ∼400 kg CO2 -eq/MWh from natural gas combustion the
 FCL displaces. Second, GPU servers used for AI training have higher embodied carbon per
 MW than ASICs (due to larger die areas and more complex packaging), modestly increasing
 the life-cycle carbon cost of AI-based FCL programs relative to Bitcoin mining. Third, and
@@ -2825,21 +2825,21 @@ $22,000
 
 ≈$95,000
 3.125 BTC
-∼800–976 EH/s
+∼800-976 EH/s
 ≈2,700 MWh
-≈$100–157
+≈$100-157
 
 This table presents the key revenue parameter R (mining income per MWh of electricity consumed)
 under current (2026) market conditions. R is computed as block reward value divided by global energy
 consumed per block: at $95,000 × 3.125 BTC per block and global mining power of approximately
-16,300 MW, a 10-minute block consumes ∼2,717 MWh, giving R ≈ $109/MWh—the model’s calibrated
+16,300 MW, a 10-minute block consumes ∼2,717 MWh, giving R ≈ $109/MWh, the model’s calibrated
 central value.
 
 Calculation. With global mining power approximately 16,300 MW (143 TWh/year), a 10≈ 2,717 MWh. At the stated BTC price of $95,000:
 minute block consumes 16,300×600
 3600
 R = $95,000×3.125
-≈ $109/MWh—the calibrated central value, roughly 55% above the 2022
+≈ $109/MWh, the calibrated central value, roughly 55% above the 2022
 2,717
 estimate of $70/MWh.
 
@@ -2848,11 +2848,11 @@ estimate of $70/MWh.
 Viability threshold C̄M
 
 Table 5 shows how the viability threshold scales with the updated mining margin R − c.
-Current Antminer S21+ machines (16.5 J/TH efficiency) cost $25–35/TH, or approximately $2,500–3,500/MW of compute.
+Current Antminer S21+ machines (16.5 J/TH efficiency) cost $25-35/TH, or approximately $2,500-3,500/MW of compute.
 
-Amortized over a 2–3 year hardware lifecycle,
+Amortized over a 2-3 year hardware lifecycle,
 
-CM ≈ $1,000–1,750/MW-year—well within the calibrated threshold, confirming strong current viability.
+CM ≈ $1,000-1,750/MW-year, well within the calibrated threshold, confirming strong current viability.
 
 61
 
@@ -2893,7 +2893,7 @@ ERCOT); we use a conservative value because C̄M is insensitive to β +p once β
 Renewable and fossil capacity costs
 
 Table 6 presents renewable and fossil capital cost data. Renewable CapEx has fallen roughly
-40–50% since 2020, reducing the parameter CR in the model and shifting the jointly optimal
+40-50% since 2020, reducing the parameter CR in the model and shifting the jointly optimal
 renewable capacity KR∗ sharply upward. This implies more surplus hours, more zero-carbon
 computing, and a stronger capacity substitution effect.
 
@@ -2907,34 +2907,34 @@ cost range C̄M by roughly 2.5-fold. Second, renewable CapEx CR has fallen rough
 making high-KR∗ scenarios economically realistic and dramatically increasing surplus hours.
 Third, ASIC efficiency has improved approximately 12% per year (J/TH), reducing effective
 CM . Together, the model’s calibrated carbon reduction estimates likely understate current
-potential by a factor of 2–3.
+potential by a factor of 2-3.
 A cross-sectional observation from the calibration exercise is also worth noting. The
 62
 
-Table 6: Renewable and Fossil Capacity Costs: 2020 versus 2025–26
+Table 6: Renewable and Fossil Capacity Costs: 2020 versus 2025-26
 Parameter
 
 Typical 2020
 
-Solar PV CapEx (utility scale) $800–1,200/kW
+Solar PV CapEx (utility scale) $800-1,200/kW
 Onshore wind CapEx
-$1,200–1,600/kW
+$1,200-1,600/kW
 CCGT gas CapEx
-$1,000–1,200/kW
+$1,000-1,200/kW
 Solar LCOE
-$40–60/MWh
+$40-60/MWh
 Onshore wind LCOE
-$35–55/MWh
+$35-55/MWh
 
-Current (2025–26)
-$388–600/kW
-$850–1,000/kW
-$800–1,000/kW
-$28–66/MWh
-$25–70/MWh
+Current (2025-26)
+$388-600/kW
+$850-1,000/kW
+$800-1,000/kW
+$28-66/MWh
+$25-70/MWh
 
 This table presents representative capital expenditure (CapEx) ranges and levelized cost of energy
-(LCOE) for utility-scale solar PV, onshore wind, and combined-cycle gas turbines (CCGT), comparing 2020 benchmarks to current (2025–26) values. Renewable CapEx has declined approximately 40–50%
+(LCOE) for utility-scale solar PV, onshore wind, and combined-cycle gas turbines (CCGT), comparing 2020 benchmarks to current (2025-26) values. Renewable CapEx has declined approximately 40-50%
 since 2020, corresponding to a fall in the model parameter CR (renewable capital cost per MW). A lower
 ∗
 upward, increasing surplus hours and strengthening
@@ -2945,7 +2945,7 @@ quantitative benefit of FCL adoption scales with the variance of residual demand
 regions where renewable supply and consumer demand are poorly synchronized, the shockabsorbing role of mining is more valuable and the carbon reduction larger. Conversely, in
 grids where supply and demand move closely together, the FCL mechanism adds less value.
 This suggests that FCL programs will be most impactful in grids with volatile, intermittent
-renewables—precisely the environments where fossil backup costs are highest.
+renewables, precisely the environments where fossil backup costs are highest.
 
 9.5
 
@@ -3003,8 +3003,8 @@ $172
 +$93
 +$127
 
-—
-—
+,
+,
 0.11
 0.38
 0.64
@@ -3046,16 +3046,16 @@ c · Eblock
 b
 3.125
 
-Below this threshold, the FCL dispatch rule never activates—mining on spare fossil capacity
-is unprofitable—and all model results collapse to the no-FCL benchmark. At 2024–2026 BTC
-prices (roughly $50,000–$100,000), the mining margin is positive throughout, confirming that
+Below this threshold, the FCL dispatch rule never activates, mining on spare fossil capacity
+is unprofitable, and all model results collapse to the no-FCL benchmark. At 2024-2026 BTC
+prices (roughly $50,000-$100,000), the mining margin is positive throughout, confirming that
 the calibrated viability range is not a knife-edge result.
 Endogenous hash rate as a stabilizer. Table 7 understates the resilience of R to price
 declines, because hash rate responds endogenously to BTC price: when prices fall, less
 efficient miners exit, reducing global energy consumption per block and thereby raising
 R relative to the fixed-hash-rate calculation. In bear markets, network difficulty adjusts
 downward within two weeks, partially offsetting the price decline in R. Empirically, R has
-historically exhibited a coefficient of variation roughly 40–50% lower than the BTC price
+historically exhibited a coefficient of variation roughly 40-50% lower than the BTC price
 64
 
 itself over multi-month horizons, making the mining margin R − c considerably more stable
@@ -3063,9 +3063,9 @@ than raw price volatility would suggest.
 Implications for triple-win robustness. Three conclusions follow from this sensitivity
 analysis. First, the model’s qualitative predictions are robust for any BTC price above
 roughly $45,000 (post-halving): the triple-win threshold C̄M is positive, and current ASIC
-hardware costs (CM ≈ $1,000–1,750/MW-year) fall well within the viable range. Second,
+hardware costs (CM ≈ $1,000-1,750/MW-year) fall well within the viable range. Second,
 the quantitative size of C̄M scales roughly linearly with the mining margin R − c, so the
-welfare gains from FCL adoption grow as BTC prices rise—meaning the program is selfreinforcing in bull markets. Third, bear-market periods (BTC below $45,000) represent
+welfare gains from FCL adoption grow as BTC prices rise, meaning the program is selfreinforcing in bull markets. Third, bear-market periods (BTC below $45,000) represent
 a genuine sustainability concern: FCL operators would halt voluntary curtailment since
 dispatching on fossil reduces their margins, weakening the demand response channel. A
 well-designed FCL contract should therefore include price floors that guarantee a minimum
@@ -3078,7 +3078,7 @@ Implications for AI data center loads
 
 For AI training with curtailable fraction θ = 0.5 and training-compute revenue RAI =
 $200/MWh (reflecting the commercial value of frontier model training), the effective margin
-is θRAI − c = 0.5 × 200 − 45 = $55/MWh—roughly comparable to the current Bitcoin mining
+is θRAI − c = 0.5 × 200 − 45 = $55/MWh, roughly comparable to the current Bitcoin mining
 margin. However, at current inferred RAI values the opacity problem means this revenue
 cannot be directly contracted, making practical Demand Response Program implementation
 with AI training loads substantially more challenging than with Bitcoin mining.
@@ -3092,7 +3092,7 @@ Conclusion
 This paper has developed and analyzed an analytical model of flexible computing loads
 (FCLs) as a mechanism for reducing carbon emissions through demand response in electricity markets. The core result is that, under economically plausible conditions, integrating
 FCLs via a demand response program simultaneously increases utility profit, reduces carbon
-emissions, and enables more renewable capacity investment—a triple win that critically relies
+emissions, and enables more renewable capacity investment, a triple win that critically relies
 on the capacity substitution channel.
 In sum, our main analytical results can be summarized as follows.
 In the baseline simultaneous optimization, the mining preference condition CM < C̄M =
@@ -3123,19 +3123,19 @@ that raises fossil utilization today also finances renewable expansion tomorrow.
 
 66
 
-therefore record a carbon cost, not a carbon benefit—a point that should be made explicit
+therefore record a carbon cost, not a carbon benefit, a point that should be made explicit
 in any policy discussion of demand response programs for computing loads. Where shortrun carbon neutrality is required (e.g., interim emissions targets), a renewable-only dispatch
-requirement—capping FCL dispatch at the realized renewable surplus (−x̃)+ —eliminates the
+requirement, capping FCL dispatch at the realized renewable surplus (−x̃)+, eliminates the
 short-run carbon cost, though it narrows the FCL operating window and reduces program
 profitability.
 Rate-of-return regulation introduces a double win: computing revenue reduces the required retail electricity price under ROR pass-through, benefiting consumers directly in
-addition to subsidizing renewable capacity. The Averch–Johnson over-investment in capital
+addition to subsidizing renewable capacity. The Averch-Johnson over-investment in capital
 inadvertently benefits consumers through higher reliability, and computing revenue amplifies
 this effect.
 Deregulated competitive markets replicate the regulated outcomes with the market’s
 scarcity price replacing the regulatory penalty. Computing loads alleviate the missing money
-problem facing renewable generators—by converting zero-price surplus hours into fossilmarginal hours at price c, they raise renewable revenue and attract additional renewable
-investment—and are complementary to carbon taxes, which endogenously tilt computing
+problem facing renewable generators, by converting zero-price surplus hours into fossilmarginal hours at price c, they raise renewable revenue and attract additional renewable
+investment, and are complementary to carbon taxes, which endogenously tilt computing
 toward zero-carbon hours.
 Comparing Bitcoin mining and AI training, Bitcoin mining dominates on the three
 key flexibility dimensions: temporal flexibility (memoryless hashing), revenue transparency
@@ -3158,8 +3158,8 @@ AI training revenues, blockchain-based computing (Bitcoin mining or similar tran
 Limitations and future research. Several important extensions remain. First, stochastic BTC prices (correlated or uncorrelated with electricity prices) introduce real-options
 considerations in both the fcl investment decision and the renewable capacity choice. Second, multi-grid competition with endogenous hash-rate pricing creates a strategic interaction
 not captured in the price-taking model. Third, a continuous-time model with capital adjustment costs and learning curves would capture the dynamic aspects of the renewable
-transition. Fourth, empirical validation—particularly using ERCOT panel data on Bitcoin
-miners’ curtailment behavior and grid outcomes—would provide direct tests of the model’s
+transition. Fourth, empirical validation, particularly using ERCOT panel data on Bitcoin
+miners’ curtailment behavior and grid outcomes, would provide direct tests of the model’s
 comparative-static predictions.
 
 References
@@ -3169,32 +3169,32 @@ Utility Commissioners (NARUC). Prepared by The Cadmus Group for USAID.
 
 68
 
-Abito, Jose Miguel. 2020. “Measuring the Welfare Gains from Optimal Incentive Regulation.” Review of Economic Studies, 87(5): 2019–2048.
+Abito, Jose Miguel. 2020. “Measuring the Welfare Gains from Optimal Incentive Regulation.” Review of Economic Studies, 87(5): 2019-2048.
 Abito, Jose Miguel, Jin Soo Han, Jean-François Houde, and Arthur A. Van Benthem. 2024. “Agency Frictions and Procurement: New Evidence from U.S. Electricity
 Restructuring.” Journal of Industrial Economics, 72(1).
 Acemoglu, Daron, Philippe Aghion, Leonardo Bursztyn, and David Hemous.
 2012. “The Environment and Directed Technical Change.” American Economic Review,
-102(1): 131–166.
+102(1): 131-166.
 Acun, Bilge, et al. 2023. “Carbon-aware computing for AI training.” arXiv preprint
 arXiv:2302.08437.
 Aflaki, Sam, and Serguei Netessine. 2017. “Strategic Investment in Renewable Energy
 Sources: The Effect of Supply Intermittency.” Manufacturing Service Oper. Management,
-19(3): 489–507.
+19(3): 489-507.
 Agrawal, Vishal V, and Şafak Yücel. 2022. “Design of Electricity Demand-Response
-Programs.” Management Sci., 68(10): 7441–7456.
+Programs.” Management Sci., 68(10): 7441-7456.
 Aïd, René, Dylan Possamaï, and Nizar Touzi. 2022. “Optimal Electricity Demand
-Response Contracting with Responsiveness Incentives.” Math. Oper. Res., 47(3): 2112–
+Response Contracting with Responsiveness Incentives.” Math. Oper. Res., 47(3): 2112,
 2137.
 Ambec, Stefan, and Claude Crampes. 2012. “Electricity Provision with Intermittent
-Sources of Energy.” Resource and Energy Economics, 34(3): 319–336.
+Sources of Energy.” Resource and Energy Economics, 34(3): 319-336.
 Andonov, Aleksandar, and Joshua Rauh. 2024. “The Shifting Finance of Electricity
 Generation.” National Bureau of Economic Research Working Paper 32733.
 
 69
 
-Arnosti, Nick, and S Matthew Weinberg. 2022. “Bitcoin: A natural oligopoly.” Management Sci., 68(7): 4755–4771.
+Arnosti, Nick, and S Matthew Weinberg. 2022. “Bitcoin: A natural oligopoly.” Management Sci., 68(7): 4755-4771.
 Averch, Harvey, and Leland L. Johnson. 1962. “Behavior of the Firm Under Regulatory
-Constraint.” American Economic Review, 52(5): 1052–1069.
+Constraint.” American Economic Review, 52(5): 1052-1069.
 Bai, Xuanyu, and Youchang Wu. 2023. “Private Equity and Gas Emissions: Evidence
 from Electric Power Plants.” Working paper, Lundquist College of Business, University of
 Oregon.
@@ -3204,9 +3204,9 @@ Benetton, Matteo, Giovanni Compiani, and Adair Morse. 2023. “When Cryptomining
 Bureau of Economic Research.
 Bertucci, Charles, Louis Bertucci, Jean-Michel Lasry, and Pierre-Louis Lions.
 2024. “A Mean Field Game Approach to Bitcoin Mining.” SIAM J. Financial Math.,
-15(3): 960–987.
+15(3): 960-987.
 Biais, Bruno, Christophe Bisiere, Matthieu Bouvard, and Catherine Casamatta.
-2019. “The blockchain folk theorem.” Rev. Financ. Stud., 32(5): 1662–1715.
+2019. “The blockchain folk theorem.” Rev. Financ. Stud., 32(5): 1662-1715.
 Bitcoin.comNews. 2019. “Chinese Bitcoin Miners Migrate North After Wet Season.” https: // web. archive. org/ web/ 20220427014036/ https: // news. bitcoin.
 com/ chinese-bitcoin-miners-migrate-north-after-wet-season/ , Accessed on 10
 February 2025.
@@ -3282,10 +3282,10 @@ Accessed
 
 on 10 February 2025.
 Bushnell, James B., Erin T. Mansur, and Celeste Saravia. 2008. “Vertical Arrangements, Market Structure, and Competition: An Analysis of Restructured US Electricity
-Markets.” American Economic Review, 98(1): 237–266.
-Cicala, Steve. 2015. “When Does Regulation Distort Costs? Lessons from Fuel Procurement in US Electricity Generation.” American Economic Review, 105(1): 411–444.
+Markets.” American Economic Review, 98(1): 237-266.
+Cicala, Steve. 2015. “When Does Regulation Distort Costs? Lessons from Fuel Procurement in US Electricity Generation.” American Economic Review, 105(1): 411-444.
 Cicala, Steve. 2022. “Imperfect Markets versus Imperfect Regulation in US Electricity
-Generation.” American Economic Review, 112(2): 409–441.
+Generation.” American Economic Review, 112(2): 409-441.
 CNBC.
 
 2022.
@@ -3353,10 +3353,10 @@ btc-hash-rate-slumps-amid-seasonal-miner-migration-in-china ,
 Accessed
 
 on 10 February 2025.
-Cong, Lin William, Zhiguo He, and Jiasun Li. 2021. “Decentralized mining in centralized pools.” Rev. Financ. Stud., 34(3): 1191–1235.
+Cong, Lin William, Zhiguo He, and Jiasun Li. 2021. “Decentralized mining in centralized pools.” Rev. Financ. Stud., 34(3): 1191-1235.
 Darmouni, Olivier, Clemens Lehrer, and Parinitha Sastry. 2025. “Financing Investment in Electricity.”
 Davis, Lucas W., and Catherine Wolfram. 2012. “Deregulation, Consolidation, and
-Efficiency: Evidence from US Nuclear Power.” American Economic Journal: Applied Economics, 4(4): 194–225.
+Efficiency: Evidence from US Nuclear Power.” American Economic Journal: Applied Economics, 4(4): 194-225.
 decrypt. 2020. “Bitcoin’s Hash Rate Drops As China’s Rainy Season Ends.”
 https: // web. archive. org/ web/ 20211117210216/ https: // decrypt. co/ 46601/
 bitcoin-hash-rate-drop-attributed-to-chinese-rainy-season , Accessed on 10
@@ -3364,16 +3364,16 @@ February 2025.
 Electric Power Research Institute. 2024. “Powering Data Centers: U.S. Energy System and Emissions Impacts of Growing Loads.” Electric Power Research Institute (EPRI)
 White Paper.
 Fabrizio, Kira R., Nancy L. Rose, and Catherine D. Wolfram. 2007. “Do Markets Reduce Costs? Assessing the Impact of Regulatory Restructuring on US Electric
-Generation Efficiency.” American Economic Review, 97(4): 1250–1277.
+Generation Efficiency.” American Economic Review, 97(4): 1250-1277.
 72
 
 Fattahi, Ali, Sriram Dasu, and Reza Ahmadi. 2023. “Peak-Load Energy Management
-by Direct Load Control Contracts.” Management Sci., 69(5): 2788–2813.
+by Direct Load Control Contracts.” Management Sci., 69(5): 2788-2813.
 Feher, Adam, Emilia Garcia-Appendini, and Roxana Mihet. 2025. “Is AI Trained
 on Public Money? Evidence from U.S. Data Centers.” Working paper.
 Fischer, Carolyn, and Richard G. Newell. 2008. “Environmental and Technology
 Policies for Climate Mitigation.” Journal of Environmental Economics and Management,
-55(2): 142–162.
+55(2): 142-162.
 Forbes.
 
 2021.
@@ -3454,7 +3454,7 @@ Halaburda, Hanna, and David Yermack. 2023. “Bitcoin Mining Meets Wall Street:
 A Study of Publicly Traded Crypto Mining Companies.” National Bureau of Economic
 Research.
 Hortaçsu, Ali, and Steven L. Puller. 2008. “Understanding Strategic Bidding in MultiUnit Auctions: A Case Study of the Texas Electricity Spot Market.” RAND Journal of
-Economics, 39(1): 86–114.
+Economics, 39(1): 86-114.
 Ibañez, Juan Ignacio, and Alexander Freier. 2023. “Bitcoin’s Carbon Footprint Revisited: Proof of Work Mining for Renewable Energy Expansion.” J. Chall., 14(3): 35.
 International Energy Agency. 2024. “Electricity 2024: Analysis and forecast to 2026.”
 IEA. See also the follow-up special report: Energy and AI (2024).
@@ -3463,16 +3463,16 @@ Florida.
 Jiang, Ziheng, Haibin Lin, et al. 2024. “MegaScale: Scaling Large Language Model
 Training to More Than 10,000 GPUs.”
 Joskow, Paul L. 1997. “Restructuring, Competition and Regulatory Reform in the U.S.
-Electricity Sector.” Journal of Economic Perspectives, 11(3): 119–138.
+Electricity Sector.” Journal of Economic Perspectives, 11(3): 119-138.
 Joskow, Paul L. 2003. “Electricity Sector Restructuring and Competition: Lessons
-Learned.” Cuadernos de Economía, 40(121): 548–558.
+Learned.” Cuadernos de Economía, 40(121): 548-558.
 
 74
 
-Joskow, Paul L. 2007. “Regulation of Natural Monopoly.” In Handbook of Law and Economics. Vol. 2, , ed. A. Mitchell Polinsky and Steven Shavell, Chapter 16, 1227–1348.
+Joskow, Paul L. 2007. “Regulation of Natural Monopoly.” In Handbook of Law and Economics. Vol. 2, , ed. A. Mitchell Polinsky and Steven Shavell, Chapter 16, 1227-1348.
 Elsevier.
 Joskow, Paul L. 2008. “Capacity payments in imperfect electricity markets: Need and
-design.” Utilities Policy, 16(3): 159–170.
+design.” Utilities Policy, 16(3): 159-170.
 Kawaguchi, Kohei, Shunya Noda, and Junpei Komiyama. 2022. “Miners’ Reward
 Elasticity and Stability of Competing Proof-of-Work Cryptocurrencies.” Center for Open
 Science.
@@ -3480,12 +3480,12 @@ Knittel, Christopher R., Juan Ramon L. Senga, and Shen Wang. 2025. “Flexible D
 Economic Research Working Paper 34065.
 Kök, A Gürhan, Kevin Shang, and Şafak Yücel. 2018. “Impact of Electricity Pricing
 Policies on Renewable Energy Investments and Carbon Emissions.” Management Sci.,
-64(1): 131–148.
+64(1): 131-148.
 Kök, A Gürhan, Kevin Shang, and Şafak Yücel. 2020. “Investments in Renewable
 and Conventional Energy: The Role of Operational Flexibility.” Manufacturing Service
-Oper. Management, 22(5): 925–941.
+Oper. Management, 22(5): 925-941.
 Laffont, Jean-Jacques, and Jean Tirole. 1986. “Using Cost Observation to Regulate
-Firms.” Journal of Political Economy, 94(3): 614–641.
+Firms.” Journal of Political Economy, 94(3): 614-641.
 Layer1 Technologies. 2022. “Building Bitcoin Batteries.” https: // web. archive. org/
 web/ 20220401125045/ https: // layer1. com/ , Accessed on 1 April 2022.
 
@@ -3493,21 +3493,21 @@ web/ 20220401125045/ https: // layer1. com/ , Accessed on 1 April 2022.
 
 Lohmann, Timo, and Steffen Rebennack. 2017. “Tailored Benders Decomposition for
 a Long-Term Power Expansion Model with Short-Term Demand Response.” Management
-Sci., 63(6): 2027–2048.
+Sci., 63(6): 2027-2048.
 MacKay, Alexander, and Ignacia Mercadal. 2024. “Do Markets Reduce Prices? Evidence from the U.S. Electricity Sector.” Harvard Business School Working Paper, 21(095).
 Working Paper.
 Mora, Camilo, Randi L Rollins, Katie Taladay, Michael B Kantar, Mason K
 Chock, Mio Shimada, and Erik C Franklin. 2018. “Bitcoin emissions alone could
-push global warming above 2 C.” Nature Climate Change, 8(11): 931–933.
+push global warming above 2 C.” Nature Climate Change, 8(11): 931-933.
 Peng, Xiaoshan, Owen Q Wu, and Gilvan C Souza. 2024. “Renewable, Flexible,
 and Storage Capacities: Friends or Foes?” Manufacturing Service Oper. Management,
-26(5): 1730–1749.
+26(5): 1730-1749.
 Peura, Heikki, and Derek W Bunn. 2015. “Dynamic Pricing of Peak Production.” Oper.
-Res., 63(6): 1262–1279.
+Res., 63(6): 1262-1279.
 Pigou, Arthur C. 1920. The Economics of Welfare. London:Macmillan.
 Prat, Julien, and Benjamin Walter. 2021. “An equilibrium model of the market for
-bitcoin mining.” J. of Political Econom., 129(8): 2415–2452.
-Radovanović, Ana, Ross Koningstein, et al. 2023. “Carbon-aware computing for datacenters.” IEEE Transactions on Power Systems, 38(2): 1270–1281.
+bitcoin mining.” J. of Political Econom., 129(8): 2415-2452.
+Radovanović, Ana, Ross Koningstein, et al. 2023. “Carbon-aware computing for datacenters.” IEEE Transactions on Power Systems, 38(2): 1270-1281.
 Sachs, Goldman. 2024. “Generational Growth: AI, Data Centers and the Coming US
 Power Demand Surge.” Goldman Sachs Research.
 Satchwell, Andrew, Natalie Mims Frick, Peter Cappers, Sanem Sergici, Ryan
@@ -3559,11 +3559,11 @@ on
 10 February 2025.
 Van Nieuwerburgh, Stijn. 2026. “Financing the AI Buildout.” Columbia Business School
 Working Paper Working Paper.
-Wolak, Frank A. 2003. “Measuring Unilateral Market Power in Wholesale Electricity Markets: The California Market, 1998–2000.” American Economic Review, 93(2): 425–430.
+Wolak, Frank A. 2003. “Measuring Unilateral Market Power in Wholesale Electricity Markets: The California Market, 1998-2000.” American Economic Review, 93(2): 425-430.
 Yaish, Aviv, and Aviv Zohar. 2023. “Correct Cryptocurrency ASIC Pricing: Are Miners
 Overpaying?” Schloss Dagstuhl-Leibniz-Zentrum für Informatik.
 Yaish, Aviv, Saar Tochner, and Aviv Zohar. 2022. “Blockchain Stretching & Squeezing:
-Manipulating Time for your Best Interest.” 65–88.
+Manipulating Time for your Best Interest.” 65-88.
 
 A
 
@@ -3620,7 +3620,7 @@ Pre-installed (legacy) capacity level
 
 AJ
 
-Averch–Johnson regulated optimum
+Averch-Johnson regulated optimum
 
 NE
 
@@ -3707,7 +3707,7 @@ Critical carbon tax threshold (τ̄ = R − c)
 
 r̄
 
-Allowed rate of return (Averch–Johnson regulation)
+Allowed rate of return (Averch-Johnson regulation)
 
 (F) Distribution functions and reliability
 F (x; KR )
@@ -3732,7 +3732,7 @@ Reliability at the no-FCL benchmark
 
 ϕAJ
 
-Reliability at the Averch–Johnson optimum
+Reliability at the Averch-Johnson optimum
 
 (G) Profit and welfare
 Π
@@ -3794,7 +3794,7 @@ Threshold FCL capital cost for adoption (C̄M = (R − c)ϕ◦ )
 AJ
 C̄M
 
-FCL adoption threshold under Averch–Johnson regulation
+FCL adoption threshold under Averch-Johnson regulation
 
 B
 
@@ -3939,17 +3939,17 @@ change compares (42) at (KR∗ , KF∗ , KM
 
 renewable capacity (15) assigns a higher shadow value (R vs. c) to each MW of renewable
 investment in the FCL dispatch region, pushing toward KR∗ > KR◦ . This additional renewable
-capacity is the capacity-substitution channel. The quantitative comparison — showing that
-the capacity-substitution channel dominates when CR is sufficiently small — is established
-in Section 4.3 via (25)–(26).
+capacity is the capacity-substitution channel. The quantitative comparison, showing that
+the capacity-substitution channel dominates when CR is sufficiently small, is established
+in Section 4.3 via (25)-(26).
 
 □
 
 Remark 9 (Scope of distributional assumptions in Proposition 1). Steps 1 and 2 of the proof
 (profit and blackout comparisons) are entirely distribution-free: they rely only on the equilibrium CDF values F (KF∗ ; KR∗ ) and F (KF◦ ; KR◦ ), which are determined by the FOCs independently of the distributional shape. Step 3 (carbon) decomposes into two parts. The utilization
-effect—the carbon-increasing force from higher fossil utilization at fixed capacities—is also
-distribution-free, as shown above. The capacity substitution effect—the carbon-decreasing
-force from the endogenous increase in renewable capacity KR∗ > KR◦ —uses the uniform distribution to evaluate the relevant integrals in closed form (Section 4.3). The triple-win
+effect, the carbon-increasing force from higher fossil utilization at fixed capacities, is also
+distribution-free, as shown above. The capacity substitution effect, the carbon-decreasing
+force from the endogenous increase in renewable capacity KR∗ > KR◦, uses the uniform distribution to evaluate the relevant integrals in closed form (Section 4.3). The triple-win
 threshold C̄M = (R−c)ϕ◦ is itself distribution-free (it depends only on the equilibrium reliability ϕ◦ ); what the uniform distribution provides is a tractable closed-form setting in which
 the net carbon comparison can be signed when CR is sufficiently low. Proposition 4 below
 characterizes exactly which distributional properties drive the carbon result.
@@ -4140,8 +4140,8 @@ i δi + m, where m is the mining power of out-of-grid miners.
 
 P
 
-Since rewards are shared in proportion to hash rate—hence, for given hardware efficiency, in
-proportion to power—every miner earns a common per-MWh revenue
+Since rewards are shared in proportion to hash rate, hence, for given hardware efficiency, in
+proportion to power, every miner earns a common per-MWh revenue
 R0
 ,
 i δi + m
@@ -4192,7 +4192,7 @@ SP
 dilution of R), yet larger than the coordinated optimum KM
 that internalizes the cross-grid
 
-revenue externality—adoption is individually rational but collectively excessive.
+revenue externality, adoption is individually rational but collectively excessive.
 ∗
 Proof of Proposition 5. Existence. Define the symmetric best-response function KM
 (Z− ) as
@@ -4417,7 +4417,7 @@ KM
 (49)
 
 Grid i ignores this externality in the Nash equilibrium: its FOC equates the private marginal
-value of FCL capacity to CM , whereas the planner’s FOC equates it to CM +E—the hardware
+value of FCL capacity to CM , whereas the planner’s FOC equates it to CM +E, the hardware
 cost plus the revenue dilution imposed on other grids. The planner therefore stops expanding
 SP
 NE
@@ -4549,8 +4549,8 @@ G
 Remark 12. With KM
 = 0, the global monopolist’s capacity choices (KRG , KFG ) revert to
 
-the no-FCL benchmark (Appendix I.1). All three outcomes—blackout probability, carbon
-emissions, and utility profit—equal their no-FCL levels, and the “triple win” of Proposition 1
+the no-FCL benchmark (Appendix I.1). All three outcomes, blackout probability, carbon
+emissions, and utility profit, equal their no-FCL levels, and the “triple win” of Proposition 1
 is never achieved.
 Propositions 5 and 6 together characterize the full range: the FCL program is largest
 ∗
@@ -4572,7 +4572,7 @@ C.5
 
 Partial miner coverage: mixed in-grid and out-of-grid miners
 
-An intermediate case—between the price-taking benchmark and the global monopolist—
+An intermediate case, between the price-taking benchmark and the global monopolist,
 arises when a grid serves n in-grid miners competing against m out-of-grid miners who face
 an exogenous electricity price Po . Let N and M denote the in-grid and out-of-grid miner
 sets, respectively. Each in-grid miner i solves
@@ -4673,8 +4673,8 @@ focal grid is not negligible (finite m
 ), total miner revenue P d is no longer independent of P ,
 n
 so the simplification that mining revenue is exogenous to grid decisions fails. The main-text
-results remain valid whenever the grid is small relative to the global fleet—the empirically
-relevant case today—but equation (52) characterizes the correction term for intermediate
+results remain valid whenever the grid is small relative to the global fleet, the empirically
+relevant case today, but equation (52) characterizes the correction term for intermediate
 cases and clarifies the need for multi-grid coordination as FCL programs proliferate.
 
 C.6
@@ -4737,8 +4737,8 @@ Alternative Setup: Utility Serving Third-Party FCL
 
 The baseline model assumes the utility directly operates the fcl program and captures R
 per MWh of computing output. This appendix develops the alternative in which the utility
-sells electricity to third-party mining operators at the regulated retail tariff p per MWh—the
-same rate charged to ordinary consumers—and administers fcl curtailment via a Demand
+sells electricity to third-party mining operators at the regulated retail tariff p per MWh, the
+same rate charged to ordinary consumers, and administers fcl curtailment via a Demand
 Response Program contract, without owning mining hardware.
 
 E.1
@@ -4749,7 +4749,7 @@ Two strategic agents determine capacity in this alternative:
 1. Utility: chooses KR and KF to maximize profit. Does not own mining hardware;
 KM is not a choice variable and does not enter the rate base (KM ∈
 / B). Charges all
-electricity customers—including miners—the regulated tariff p per MWh. Operates
+electricity customers, including miners, the regulated tariff p per MWh. Operates
 the fcl curtailment rule (3).
 2. Miners: invest in computing hardware of capacity KM at annualized capital cost CM
 per MW. Purchase electricity at price p and earn R per MWh of computing output.
@@ -4986,7 +4986,7 @@ binds, the shadow value of computing revenue enters the regulator’s choice of 
 to the profit-maximization FOC (13). Hence the blackout-minimizing optimum satisfies the
 same condition CM < C̄M for a reliability improvement, as in Proposition 1.
 The result confirms that the triple win (profit, carbon, reliability) survives even when
-reliability is the primary objective—as long as the profit constraint remains binding.
+reliability is the primary objective, as long as the profit constraint remains binding.
 
 98
 
@@ -5006,7 +5006,7 @@ r̄ B + c · E[fossil] − R · E[d]
 E[Dserved ]
 
 Minimizing p subject to the rate-base constraint gives the regulator an incentive to maximize
-R · E[d]—the total computing revenue the utility earns. This creates a direct regulatory
+R · E[d], the total computing revenue the utility earns. This creates a direct regulatory
 preference for larger FCL programs, since each additional MWh of computing revenue is
 directly passed through to consumers.
 Proposition 8 (Price-minimizing objective under ROR). Under a price-minimizing ROR
@@ -5103,7 +5103,7 @@ per MWh but pay only p; the utility does not capture this surplus.
 2. Blackout externality gap (VOLL − β − p) E[(x̃ − KF )+ ] ≥ 0: for each MWh of un100
 
 served demand the utility forgoes revenue p and bears the penalty β as a real cost
-paid to no one (a deadweight loss—e.g., equipment damage, liability, and regulatory
+paid to no one (a deadweight loss, e.g., equipment damage, liability, and regulatory
 consequences), so it internalizes β + p of the total social cost VOLL; the residual
 VOLL − β − p ≥ 0 is a negative externality borne by consumers.
 3. Carbon externality σ E[fossil] > 0: each MWh of fossil output imposes social cost σ
@@ -5115,7 +5115,7 @@ Then the utility’s profit-maximization problem (2) coincides with the social w
 tion problem (59): every equilibrium capacity triple (KR∗ , KF∗ , KM
 ) and every proposition in
 
-Sections 4–6.2 characterizes the socially optimal allocation. In particular, the triple-win
+Sections 4-6.2 characterizes the socially optimal allocation. In particular, the triple-win
 condition CM < C̄M is also the condition under which the FCL program improves social
 welfare.
 Proof. Under condition (i), β + p = VOLL, so the blackout externality gap in (59) is zero.
@@ -5325,7 +5325,7 @@ Analytical solutions under uniform demand Under the uniform distribution F (x; K
 x+KR
 D̄+KR
 
-on [−KR , D̄], the three FOCs (61)–(65) reduce to the system:
+on [−KR , D̄], the three FOCs (61)-(65) reduce to the system:
 ∗
 (R − c) KF∗ + R (KR∗ − KM
 ) = CM (D̄ + KR∗ ),
@@ -5370,7 +5370,7 @@ K∗
 (69)
 
 ∗
-Equations (67)–(68) are linear in (KF∗ , KM
+Equations (67)-(68) are linear in (KF∗ , KM
 ) given KR∗ . We thus have:
 
 h
@@ -5407,7 +5407,7 @@ c(R − c) + R(β + p − R)
 .
 
 (71)
-Substituting (70)–(71) into (69), and solving for KR∗ (which is nonnegative) gives
+Substituting (70)-(71) into (69), and solving for KR∗ (which is nonnegative) gives
 s
 ∗
 KR
@@ -5654,7 +5654,7 @@ The small-FCL regime applies when KM
 
 (R − c) KF∗ ≤ CM (D̄ + KR∗ ).
 Because KF∗ is increasing in scarcity costs β + p, the small-FCL regime is relevant when FCL
-hardware is cheap and scarcity costs are moderate—the utility builds a large FCL relative to
+hardware is cheap and scarcity costs are moderate, the utility builds a large FCL relative to
 its renewable fleet. The large-FCL regime (the main-text regime) applies when KF∗ is large,
 corresponding to high scarcity costs or high ASIC cost. Which regime applies for a given grid
 depends on its parameters; since the small-FCL regime features a lower blackout probability
@@ -5889,7 +5889,7 @@ F (x; KR ) dx−c
 1−F (x; KR ) dx−CF KF −CR KR −CM KM .
 (92)
 
-FOCs (89)–(91) continue to hold with the (β + p) integral set to zero.
+FOCs (89)-(91) continue to hold with the (β + p) integral set to zero.
 
 Large-FCL regime, interior blackout
 Parameter requirements:
@@ -5972,7 +5972,7 @@ F (x; KR ) dx−c(KM −KR )−c
 Section 4.2 identifies the boundary KF = D̄ (R = c + CF + CM ) as the relevant sub-case
 within this regime.
 
-Very-large-FCL regime (KM > KF + KR ) — never optimal
+Very-large-FCL regime (KM > KF + KR ), never optimal
 Parameter requirements: KM > KF + KR .
 When KM > KF + KR , the full-capacity dispatch region {x < KF − KM } lies entirely
 below the support, so the FCL never reaches full capacity. Both IR and IC are independent
@@ -6038,7 +6038,7 @@ I
 
 Comprehensive Summary of Results
 
-This appendix consolidates all major analytical results—optimal capacity allocations, blackout probabilities, and carbon comparisons—across every scenario combination analyzed in
+This appendix consolidates all major analytical results, optimal capacity allocations, blackout probabilities, and carbon comparisons, across every scenario combination analyzed in
 x+KR
 the paper. Closed-form expressions assume the uniform distribution F (x; KR ) = D̄+K
 R
@@ -6178,7 +6178,7 @@ I.5
 Rate-of-Return Regulation (Section 6.1)
 
 Under ROR regulation the regulated price p is replaced by an endogenously determined price
-that allows the utility to earn a fair return r̄ on rate base. The Averch–Johnson (AJ) overinvestment effect raises the optimal KF above the unregulated level. Table 15 summarizes
+that allows the utility to earn a fair return r̄ on rate base. The Averch-Johnson (AJ) overinvestment effect raises the optimal KF above the unregulated level. Table 15 summarizes
 how regulation affects the key first-order conditions, the triple-win threshold, and carbon
 114
 
@@ -6491,7 +6491,7 @@ C̄M as KR → 0 (less renewable capacity makes adoption harder).
 117
 
 emissions.
-Table 15: Rate-of-Return (Averch–Johnson) Regulation: Key Results
+Table 15: Rate-of-Return (Averch-Johnson) Regulation: Key Results
 Quantity
 
 Without FCL
@@ -6564,7 +6564,7 @@ net
 
 effect as in Section 4.3
 
-This table summarizes optimal allocations and comparisons under rate-of-return (ROR) regulation following the Averch–Johnson (AJ) framework (Section 6.1). The allowed rate of return r̄ satisfies r̄ ≥ ρ
+This table summarizes optimal allocations and comparisons under rate-of-return (ROR) regulation following the Averch-Johnson (AJ) framework (Section 6.1). The allowed rate of return r̄ satisfies r̄ ≥ ρ
 where ρ is the utility’s cost of capital; when r̄ > 0, the utility earns a margin on every rate-base dollar,
 inducing over-investment in all rate-base-eligible capacity. If FCL hardware qualifies as rate base, FCL
 adoption is unconditional and the cost threshold disappears; if excluded, the baseline threshold C̄M applies (Section 6.1). Compare with the unregulated baseline (Table 11).
@@ -6672,7 +6672,7 @@ Single local grid
 
 R
 
-Sections 4–6.2 apply unchanged
+Sections 4-6.2 apply unchanged
 
 exogenous
 
@@ -6759,8 +6759,8 @@ J
 Corrected Quantitative Assessment (Revised Section 9)
 
 Note: This appendix is a complete corrected version of Section 9 for comparison purposes.
-The only substantive changes are in the hardware-cost calibration (replacing $2,500–3,500/MW
-with $1.5–2.1M/MW), the amortized-CM calculation, and the viability conclusions that follow from it. All other text is reproduced without change.
+The only substantive changes are in the hardware-cost calibration (replacing $2,500-3,500/MW
+with $1.5-2.1M/MW), the amortized-CM calculation, and the viability conclusions that follow from it. All other text is reproduced without change.
 
 J.1
 
@@ -6770,7 +6770,7 @@ Table 19 presents the mining revenue calibration.
 Calculation. With global mining power approximately 16,300 MW (143 TWh/year), a 10minute block consumes 16,300×600
 ≈ 2,717 MWh. At the stated BTC price of $95,000:
 3600
-≈ $109/MWh—the calibrated central value, roughly 55% above the 2022
+≈ $109/MWh, the calibrated central value, roughly 55% above the 2022
 R = $95,000×3.125
 2,717
 estimate of $70/MWh.
@@ -6781,7 +6781,7 @@ Viability threshold C̄M
 
 Table 20 shows how the viability threshold scales with the updated mining margin R − c.
 Corrected hardware-cost calibration. Current Antminer S21+ machines (16.5 J/TH
-efficiency) cost $25–35/TH. The correct conversion to $/MW of installed electrical capacity
+efficiency) cost $25-35/TH. The correct conversion to $/MW of installed electrical capacity
 
 121
 
@@ -7010,14 +7010,14 @@ $22,000
 
 ≈$95,000
 3.125 BTC
-∼800–976 EH/s
+∼800-976 EH/s
 ≈2,700 MWh
-≈$100–157
+≈$100-157
 
 This table presents the key revenue parameter R (mining income per MWh of electricity consumed)
 under current (2026) market conditions. R is computed as block reward value divided by global energy
 consumed per block: at $95,000 × 3.125 BTC per block and global mining power of approximately
-16,300 MW, a 10-minute block consumes ∼2,717 MWh, giving R ≈ $109/MWh—the model’s calibrated
+16,300 MW, a 10-minute block consumes ∼2,717 MWh, giving R ≈ $109/MWh, the model’s calibrated
 central value.
 
 Table 20: Triple-Win Threshold C̄M : 2022 versus 2026 Calibration (corrected appendix)
@@ -7061,15 +7061,15 @@ net margin threshold.
 so that
 Hardware cost per MW =
 
-$25–35
+$25-35
 TH
 × 60,606
-≈ $1.5–2.1M/MW.
+≈ $1.5-2.1M/MW.
 TH
 MW
 
 Premium or flagship-generation ASICs (e.g., Antminer S21 XP at ≈ $40/TH) can reach
-approximately $2.4M/MW; the range $1.5–2.5M/MW brackets current market conditions.
+approximately $2.4M/MW; the range $1.5-2.5M/MW brackets current market conditions.
 The model parameter CM is the amortized capital cost per MWh of operating time (the
 KM FOC equates CM to a flow payoff in $/MWh). For a hardware lifecycle of T years:
 CM =
@@ -7081,10 +7081,10 @@ T × 8,760 h/year
 Table 21 reports CM across hardware costs and lifecycle assumptions and compares each to
 the calibrated threshold C̄M ≈ $60/MWh.
 These numbers imply a near-threshold rather than clearly comfortable viability. At current
-market prices and a 3-year lifecycle—the commonly assumed depreciation horizon—the lower
+market prices and a 3-year lifecycle, the commonly assumed depreciation horizon, the lower
 bound ($1.5M/MW) just clears the threshold (CM ≈ $57/MWh < C̄M ≈ $60/MWh), while
 the midpoint and upper end exceed it. Viability is therefore sensitive to three parameters that
-are trending favorably: ASIC prices (declining roughly 15–20% annually as manufacturing
+are trending favorably: ASIC prices (declining roughly 15-20% annually as manufacturing
 scales), ASIC efficiency (improving ≈12% per year in J/TH, raising TH per MW), and the
 mining margin R − c (which at $95,000 BTC is 2.5× its 2022 level).
 
@@ -7128,8 +7128,8 @@ $57.1
 
 Threshold: C̄M ≈ $60/MWh
 Entries are CM = hardware cost/(T × 8,760), rounded to one decimal place. Shaded cells (where
-CM < C̄M ) indicate parameter combinations consistent with the triple-win. Hardware cost range $1.5–
-2.5M/MW corresponds to $25–40/TH at 16.5 J/TH efficiency. The lifecycle column reports the minimum
+CM < C̄M ) indicate parameter combinations consistent with the triple-win. Hardware cost range $1.5,
+2.5M/MW corresponds to $25-40/TH at 16.5 J/TH efficiency. The lifecycle column reports the minimum
 years required for CM < C̄M ≈ $60/MWh.
 
 J.3
@@ -7137,7 +7137,7 @@ J.3
 Renewable and fossil capacity costs
 
 Table 22 presents renewable and fossil capital cost data. Renewable CapEx has fallen roughly
-40–50% since 2020, reducing the parameter CR in the model and shifting the jointly optimal
+40-50% since 2020, reducing the parameter CR in the model and shifting the jointly optimal
 renewable capacity KR∗ sharply upward. This implies more surplus hours, more zero-carbon
 computing, and a stronger capacity substitution effect.
 
@@ -7151,34 +7151,34 @@ revenue R has risen roughly 55% (from $70 to $109/MWh), expanding the viable ASI
 capital cost range C̄M by roughly 2.5-fold relative to 2022 conditions. Second, renewable
 CapEx CR has fallen roughly 40%, making high-KR∗ scenarios economically realistic and
 dramatically increasing surplus hours. Third, ASIC efficiency has improved approximately
-12% per year (J/TH), raising TH/s per MW of electrical draw and directly reducing CM —a
+12% per year (J/TH), raising TH/s per MW of electrical draw and directly reducing CM, a
 
 125
 
-Table 22: Renewable and Fossil Capacity Costs: 2020 versus 2025–26 (corrected appendix)
+Table 22: Renewable and Fossil Capacity Costs: 2020 versus 2025-26 (corrected appendix)
 Parameter
 
 Typical 2020
 
-Solar PV CapEx (utility scale) $800–1,200/kW
+Solar PV CapEx (utility scale) $800-1,200/kW
 Onshore wind CapEx
-$1,200–1,600/kW
+$1,200-1,600/kW
 CCGT gas CapEx
-$1,000–1,200/kW
+$1,000-1,200/kW
 Solar LCOE
-$40–60/MWh
+$40-60/MWh
 Onshore wind LCOE
-$35–55/MWh
+$35-55/MWh
 
-Current (2025–26)
-$388–600/kW
-$850–1,000/kW
-$800–1,000/kW
-$28–66/MWh
-$25–70/MWh
+Current (2025-26)
+$388-600/kW
+$850-1,000/kW
+$800-1,000/kW
+$28-66/MWh
+$25-70/MWh
 
 This table presents representative capital expenditure (CapEx) ranges and levelized cost of energy
-(LCOE) for utility-scale solar PV, onshore wind, and combined-cycle gas turbines (CCGT), comparing 2020 benchmarks to current (2025–26) values. Renewable CapEx has declined approximately 40–50%
+(LCOE) for utility-scale solar PV, onshore wind, and combined-cycle gas turbines (CCGT), comparing 2020 benchmarks to current (2025-26) values. Renewable CapEx has declined approximately 40-50%
 since 2020, corresponding to a fall in the model parameter CR (renewable capital cost per MW). A lower
 ∗
 upward, increasing surplus hours and strengthening
@@ -7195,7 +7195,7 @@ quantitative benefit of FCL adoption scales with the variance of residual demand
 regions where renewable supply and consumer demand are poorly synchronized, the shockabsorbing role of mining is more valuable and the carbon reduction larger. Conversely, in
 grids where supply and demand move closely together, the FCL mechanism adds less value.
 This suggests that FCL programs will be most impactful in grids with volatile, intermittent
-renewables—precisely the environments where fossil backup costs are highest.
+renewables, precisely the environments where fossil backup costs are highest.
 
 126
 
@@ -7252,8 +7252,8 @@ $172
 +$93
 +$127
 
-—
-—
+,
+,
 0.11
 0.38
 0.64
@@ -7296,18 +7296,18 @@ c · Eblock
 b
 3.125
 
-Below this threshold, the FCL dispatch rule never activates—mining on spare fossil capacity
-is unprofitable—and all model results collapse to the no-FCL benchmark. At 2024–2026 BTC
+Below this threshold, the FCL dispatch rule never activates, mining on spare fossil capacity
+is unprofitable, and all model results collapse to the no-FCL benchmark. At 2024-2026 BTC
 127
 
-prices (roughly $50,000–$100,000), the mining margin is positive throughout, confirming that
+prices (roughly $50,000-$100,000), the mining margin is positive throughout, confirming that
 the calibrated viability range is not a knife-edge result.
 Endogenous hash rate as a stabilizer. Table 23 understates the resilience of R to
 price declines, because hash rate responds endogenously to BTC price: when prices fall,
 less efficient miners exit, reducing global energy consumption per block and thereby raising
 R relative to the fixed-hash-rate calculation. In bear markets, network difficulty adjusts
 downward within two weeks, partially offsetting the price decline in R. Empirically, R has
-historically exhibited a coefficient of variation roughly 40–50% lower than the BTC price
+historically exhibited a coefficient of variation roughly 40-50% lower than the BTC price
 itself over multi-month horizons, making the mining margin R − c considerably more stable
 than raw price volatility would suggest.
 Implications for triple-win robustness (corrected). Three conclusions follow from
@@ -7318,9 +7318,9 @@ hardware price: at $1.5M/MW and a 3-year lifecycle, CM ≈ $57/MWh just clears t
 $60/MWh threshold; at $2.1M/MW the same lifecycle gives CM ≈ $80/MWh, requiring
 either a longer depreciation horizon (≥ 4 years) or lower hardware prices to satisfy CM <
 C̄M . Second, the quantitative size of C̄M scales roughly linearly with the mining margin
-R − c, so the welfare gains from FCL adoption grow as BTC prices rise—meaning the
+R − c, so the welfare gains from FCL adoption grow as BTC prices rise, meaning the
 program is self-reinforcing in bull markets. At BTC above $120,000 (C̄M ≈ $87/MWh), even
-the $2.5M/MW–3-year scenario is clearly viable. Third, bear-market periods (BTC below
+the $2.5M/MW-3-year scenario is clearly viable. Third, bear-market periods (BTC below
 $45,000) represent a genuine sustainability concern: FCL operators would halt voluntary
 curtailment since dispatching on fossil reduces their margins, weakening the demand response
 channel. A well-designed FCL contract should therefore include price floors that guarantee
@@ -7335,7 +7335,7 @@ Implications for AI data center loads
 
 For AI training with curtailable fraction θ = 0.5 and training-compute revenue RAI =
 $200/MWh (reflecting the commercial value of frontier model training), the effective margin
-is θRAI − c = 0.5 × 200 − 45 = $55/MWh—roughly comparable to the current Bitcoin mining
+is θRAI − c = 0.5 × 200 − 45 = $55/MWh, roughly comparable to the current Bitcoin mining
 margin and similarly near the threshold under the corrected hardware calibration. However,
 at current inferred RAI values the opacity problem means this revenue cannot be directly
 contracted, making practical Demand Response Program implementation with AI training

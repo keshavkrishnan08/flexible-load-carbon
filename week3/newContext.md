@@ -1,4 +1,4 @@
-# CONTEXT.md — Team A1, Role 2 (Solver & Numerical Validation)
+# CONTEXT.md: Team A1, Role 2 (Solver & Numerical Validation)
 
 ## Who / what
 - ASSIP research project. I am **Role 2** on **Team A1** (team of 4).
@@ -13,7 +13,7 @@ The current Week 1 plan targets the **FCL paper**:
 Reduction: A Tale of Bitcoin Mining and AI Training" (file: FCL_Carbon_Paper.pdf).
 
 > There is also an EARLIER, simpler "cost-minimization" paper (one variable k,
-> Section 3.5, eqs 11-13/48/60). That paper is NOT this week's target — it is
+> Section 3.5, eqs 11-13/48/60). That paper is NOT this week's target, it is
 > background only. All Role 2 references below are to the FCL paper.
 
 
@@ -40,11 +40,11 @@ Reduction: A Tale of Bitcoin Mining and AI Training" (file: FCL_Carbon_Paper.pdf
 4. **Map where the result holds vs breaks.** Sweep parameters; chart which regions
    keep carbon down (rough is fine).
 
-## Key equations to target (FCL paper — verified against the PDF)
+## Key equations to target (FCL paper: verified against the PDF)
 - **Eq 10 (profit, large-FCL regime K_M>K_R):**
   `Π = p·E[D̃] + R∫_{K_F−K_M}^{K_F} F(x;K_R)dx − c·(K_F − ∫_{K_F−K_M}^{−K_R} F dx)`
   `    − (β+p)∫_{K_F}^{D̄}(1−F)dx − C_F·K_F − C_R·K_R − C_M·K_M`
-  (Equivalent primitive form, valid both regimes — fossil cost = c·E[fossil],
+  (Equivalent primitive form, valid both regimes, fossil cost = c·E[fossil],
   with E[fossil] = ∫_{−K_M}^{K_F−K_M}(1−F)dx per Remark 2.)
 - **Eq 12 (FCL FOC):**     `F(K_F − K_M; K_R) = C_M / (R − c)`
 - **Eq 13 (fossil FOC):**  `F(K_F; K_R) = (β + p − c − C_F − C_M) / (β + p − R)`
@@ -61,12 +61,12 @@ Reduction: A Tale of Bitcoin Mining and AI Training" (file: FCL_Carbon_Paper.pdf
       nice interior value. The numeric optimizer hitting the bound or sitting at 0 is
       CORRECT, not a bug. For an interior-K*_R test, use a non-uniform distribution.
   - **Eq 25 (carbon WITHOUT FCL, uniform):** messy closed form in C_R, C_F, c, β, p, D̄.
-    READ FROM PDF — my transcription is unreliable. Structure: ∝ D̄ × (expression).
+    READ FROM PDF, my transcription is unreliable. Structure: ∝ D̄ × (expression).
   - **Eq 26 (carbon WITH FCL, uniform):**
     `∝ D̄ + [(R−c−C_F−C_M)/(β+p−R)]·(D̄+K*_R) − ½·(C_M/(R−c))²·(D̄+K*_R)`
   - Result: (26) < (25) when C_R is small enough (then eq 24 positive, K*_R = ∞,
     fossil → 0, carbon → 0).
-> Analyst: read Section 4 (eqs 10–26), Appendix B.1 (Prop 1 proof), and the
+> Analyst: read Section 4 (eqs 10-26), Appendix B.1 (Prop 1 proof), and the
 > Section 4.3 carbon part directly from FCL_Carbon_Paper.pdf and confirm/correct all
 > of the above, especially eq 25. TRUST THE PAPER over these notes.
 
@@ -78,7 +78,7 @@ Reduction: A Tale of Bitcoin Mining and AI Training" (file: FCL_Carbon_Paper.pdf
 
 ## Working conventions
 - **Explain changes before making them.** I'm a student and must understand every
-  line — being able to explain the code is the actual assignment. Don't silently
+  line, being able to explain the code is the actual assignment. Don't silently
   rewrite large chunks.
 - Build incrementally: confirm FOCs/closed forms one at a time; add eq 25/26 carbon
   checks; then a non-uniform distribution; then the parameter sweep.
@@ -86,6 +86,6 @@ Reduction: A Tale of Bitcoin Mining and AI Training" (file: FCL_Carbon_Paper.pdf
 - If a PDF equation conflicts with my notes, trust the PDF and tell me.
 
 ## Files in this folder
-- `FCL_Carbon_Paper.pdf` — THE paper to build against. (Add it here so the analyst
+- `FCL_Carbon_Paper.pdf`: THE paper to build against. (Add it here so the analyst
   can read it directly.)
-- `CONTEXT.md` — this file.
+- `CONTEXT.md`: this file.

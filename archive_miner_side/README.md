@@ -1,4 +1,4 @@
-# Archive — original Role 4 (miner-side theory, old Bitcoin paper)
+# Archive: original Role 4 (miner-side theory, old Bitcoin paper)
 
 This folder is the *earlier* Role 4 deliverable, built before the task was
 updated to "Theory Hardening and Regimes." It covers the miner oligopoly on the

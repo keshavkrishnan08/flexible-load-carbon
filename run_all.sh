@@ -22,4 +22,4 @@ run "role4 pytest" "cd '$ROOT/role4' && python3 -m pytest tests/ -q -p no:cachep
 
 echo ""
 echo "== SUMMARY: $pass passed, $fail failed =="
-[ "$fail" -eq 0 ] && echo "ALL A1 DELIVERABLES REPRODUCE." || echo "Some checks failed — see /tmp/r*.txt"
+[ "$fail" -eq 0 ] && echo "ALL A1 DELIVERABLES REPRODUCE." || echo "Some checks failed, see /tmp/r*.txt"

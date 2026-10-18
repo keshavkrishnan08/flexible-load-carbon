@@ -1,5 +1,5 @@
 """
-Week-3 Bullet 2: harden the optimality and robust proofs — supply the
+Week-3 Bullet 2: harden the optimality and robust proofs, supply the
 measure-theoretic scaffolding the variational (optimal-contract) and minimax
 (distributionally-robust) arguments need, and stress-test Assumption 1 against
 each new object.
@@ -10,7 +10,7 @@ Four pieces of scaffolding, each with the hypothesis it certifies:
     Role 1's ex-ante theorem (role1_contract_theory.tex, Thm 2) claims a
     maximizer exists because Assumption 1 confines the optimum to a compact box
     and Π is continuous. We make the box explicit and *verify* the optimum lies
-    strictly inside it — BUT only when C_R >= C_R†. On the carbon window
+    strictly inside it, BUT only when C_R >= C_R†. On the carbon window
     C_R < C_R† the K_R face is at infinity (Week-1 corner-at-infinity), so the
     box is non-compact and Weierstrass does not apply. Assumption 1 alone is
     therefore NOT sufficient for existence; it needs C_R >= C_R†.
@@ -22,7 +22,7 @@ Four pieces of scaffolding, each with the hypothesis it certifies:
     correspondence is measurable and admits the explicit CONTINUOUS selection
     d*(x) = min{(K_F-x)_+, K_M} (measurable-maximum theorem / a continuous
     selection is a fortiori Borel-measurable). So the optimal contract exists as
-    a measurable — indeed continuous, 1-Lipschitz — function, grounding Role 1's
+    a measurable, indeed continuous, 1-Lipschitz, function, grounding Role 1's
     Thm 1 in measure theory rather than a pointwise assertion.
     (`optimal_schedule_measurable`.)
 
@@ -46,12 +46,12 @@ Four pieces of scaffolding, each with the hypothesis it certifies:
         non-increasing (checked on random members).
       * Δ is LINEAR in F through the two conditional means (Role 1's saving eq),
         hence quasi-convex and quasi-concave in F.
-      * The relevant capacity set is the COMPACT box of (A) — again only when
+      * The relevant capacity set is the COMPACT box of (A), again only when
         C_R >= C_R†.
     Then min-max = max-min and both are attained at the least-favorable uniform
     (Role 1 Thm robust). We confirm the saddle numerically where the box is
     compact, and record that on the carbon window the minimax is ILL-POSED
-    (non-compact K_R), inheriting Week-1's corner-at-infinity — the central
+    (non-compact K_R), inheriting Week-1's corner-at-infinity, the central
     caveat Role 4 hands the integrated paper.
     (`ambiguity_set_convex`, `minimax_saddle`.)
 
@@ -247,7 +247,7 @@ def ambiguity_set_convex(P: Params, trials: int = 200, m: int = 24) -> dict:
         if not is_nonincreasing(mix):
             convex_ok = False
         # conditional mean E[x] under (normalized) mix is affine in the mixing:
-        # E_mix should lie between E_f1 and E_f2 weighted by mass — check the
+        # E_mix should lie between E_f1 and E_f2 weighted by mass, check the
         # UNNORMALIZED linear functionals ∫x f and ∫f mix linearly.
         def lin(v, g):
             return sum(g(x) * vk for x, vk in zip(xs, v))
@@ -277,7 +277,7 @@ def minimax_saddle(P: Params, n_K: int = 60, n_s: int = 40) -> dict:
     """Verify the Sion saddle where the box is compact: min_F max_K = max_K
     min_F, both attained at the least-favorable uniform (shape=0). On the carbon
     window (box non-compact) the max over K_R is +∞, so the minimax is
-    ill-posed — recorded, not silently 'passed'."""
+    ill-posed, recorded, not silently 'passed'."""
     box = capacity_box(P)
     if not box["compact"]:
         return {"well_posed": False,
@@ -309,7 +309,7 @@ def minimax_saddle(P: Params, n_K: int = 60, n_s: int = 40) -> dict:
 
 def assumption1_stress(P: Params) -> dict:
     """For each Week-3 object, which Assumption-1 condition(s) it leans on and
-    whether Assumption 1 ALONE suffices — the honest hardening verdict.
+    whether Assumption 1 ALONE suffices, the honest hardening verdict.
 
       existence (A)  : needs A2 (K_F face) AND C_R>=C_R† (K_R face). A1 alone NO.
       measurability(B): needs R>c (φ_x increasing on fossil) = A1's core. YES.

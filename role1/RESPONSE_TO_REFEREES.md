@@ -1,4 +1,4 @@
-# Response to Referees — `role1_carbon_theory.tex`
+# Response to Referees: `role1_carbon_theory.tex`
 
 The Role 1 carbon paper was put through an adversarial peer review by **three
 independent referees** (2026-06-24): a proof-checker (R1), a counterexample
@@ -7,7 +7,7 @@ experiments), and an overclaim/scope auditor (R3, who ran all five verification
 scripts and compared every cited number to actual output).
 
 **Consensus verdict:** the conclusions are *true* (R2 found **no genuine
-counterexample** — every failure coincided with a violated hypothesis), and the
+counterexample**, every failure coincided with a violated hypothesis), and the
 exact-algebra core is *honestly verified*; but several **proofs and statements
 over-reached** and needed repair or hedging. This document lists each finding and
 the change made. All are now in the revised PDF (11 pp).
@@ -33,7 +33,7 @@ the change made. All are now in the revised PDF (11 pp).
    `F(−K_M)≠0`. → **Lemma 2 restated**: the no-FCL cutoff is general; the two FCL
    cutoffs are distribution-free *in the large-FCL regime*; small-FCL explicitly
    excluded. **Prop (regime map)** corrected: the distribution-free profit/blackout
-   claim now covers only regions (II)–(III); region (I) deferred to Role 4.
+   claim now covers only regions (II)-(III); region (I) deferred to Role 4.
 
 4. **Threshold theorem `C_R†` over-claimed "for every F"** (R1, R3). Only the
    large-cost anchor is general; the strict-fall window relies on the knife-edge
@@ -42,7 +42,7 @@ the change made. All are now in the revised PDF (11 pp).
    on non-rigorous "pointwise dominance." → **Retitled** *"Viability threshold:
    general anchor, explicit window."* Part (i) general & rigorous; part (ii) under
    the stated knife-edge hypothesis with the gap proved via the explicit constant
-   marginal values (not pointwise dominance); part (iii) honest — general-F nonempty
+   marginal values (not pointwise dominance); part (iii) honest, general-F nonempty
    window marked **conjectural**. The §gap item and abstract match.
 
 5. **Theorem 1 small-FCL cofactor cited the wrong matrix entry** (R1-MAJOR). The
@@ -57,7 +57,7 @@ the change made. All are now in the revised PDF (11 pp).
 
 ## Calibration / overclaim fixes (R3)
 
-7. **"machine precision" → "6–16 digits."** Internal inconsistency with §6 (several
+7. **"machine precision" → "6-16 digits."** Internal inconsistency with §6 (several
    formulas at 1e-4 to 1e-7). Fixed in abstract and the uniform-lemma proof; kept
    only where ≤1e-15 actually holds (eqs 25, 45, cutoffs).
 
@@ -94,10 +94,10 @@ the change made. All are now in the revised PDF (11 pp).
 
 ## Not changed (defended)
 - Exact identities (cutoffs 5/9, 17/18; gradients; fossil decomposition; magnitude
-  bounds −6.43≤−2.17≤+3.23) — all three referees confirmed these are correct and
+  bounds −6.43≤−2.17≤+3.23), all three referees confirmed these are correct and
   honestly verified.
-- `K_R*>K°_R` (Theorem 1 core) — R2 could not break it even at corr +0.95; robust.
-- Condition 2's numerical-only status and its knife-edge lapse — R3 judged it
+- `K_R*>K°_R` (Theorem 1 core): R2 could not break it even at corr +0.95; robust.
+- Condition 2's numerical-only status and its knife-edge lapse: R3 judged it
   "explicitly and fairly hedged"; unchanged.
 
 **Net effect:** no theorem was retracted, but two were **downgraded to their honest

@@ -1,16 +1,16 @@
 # A1 Integration & Consistency Check
 
 This document certifies that the four A1 role deliverables form **one coherent,
-mutually consistent body of work** — shared notation, shared closed forms, no
+mutually consistent body of work**, shared notation, shared closed forms, no
 contradictions, and every numerical claim reproducible. Run `bash run_all.sh`.
 
 ## 1. Reproducibility (all suites green)
 | Role | Check | Result |
 |---|---|---|
-| Role 1 | `verify_exact.py` — 15 analytical formulas vs finite differences of Π | **15/15**, 6–16 digits |
-| Role 2 | `pytest` — solver vs closed forms / FOCs / knife-edge / sweep | **36 passed** |
-| Role 3 | `run_all_experiments.py` — Prop-1, carbon map, §5.3, Role-1 stress test | **reproduces** (CSVs + figures) |
-| Role 4 | `pytest tests/` — FOCs, Prop 1, small-FCL, regimes, Assumption 1 | **17 passed** |
+| Role 1 | `verify_exact.py`, 15 analytical formulas vs finite differences of Π | **15/15**, 6-16 digits |
+| Role 2 | `pytest`: solver vs closed forms / FOCs / knife-edge / sweep | **36 passed** |
+| Role 3 | `run_all_experiments.py`, Prop-1, carbon map, §5.3, Role-1 stress test | **reproduces** (CSVs + figures) |
+| Role 4 | `pytest tests/`, FOCs, Prop 1, small-FCL, regimes, Assumption 1 | **17 passed** |
 
 ## 2. Shared notation (identical across roles)
 Residual demand `x̃ = D̃ − K_R·S̃` on `[−K_R, D̄]`, CDF `F(x;K_R)`, density `f`,
@@ -50,7 +50,7 @@ these formulas character-for-character; Role 4's `reconcile.py` confirms
 - **Eqs 25/26 corrections** (factor `c`; large-FCL flat term; eq-24 = `2×`grad):
   *found* by R1, *independently confirmed* by R2's solver.
 
-## 5. Shared open item (flagged identically by all roles — no overclaim)
+## 5. Shared open item (flagged identically by all roles: no overclaim)
 The general-`F` **net-carbon Step 3** is conditional: proven for the
 uniform/power-law family and signed by Role 1's shift-ratio condition, but the
 fully general "carbon falls" is the paper's conditional "may." R1
@@ -60,8 +60,8 @@ single largest target for the next round (see `NEXT_ROLES_A1.pdf`).
 
 ## 6. No contradictions found
 A line-by-line reconciliation surfaced **zero** numerical or notational
-conflicts between roles. The one apparent tension — R1 "carbon can fall" vs R2
-"never falls in the sweep" — is resolved in R4 §"reconciliation": R2's sweep sat
+conflicts between roles. The one apparent tension, R1 "carbon can fall" vs R2
+"never falls in the sweep", is resolved in R4 §"reconciliation": R2's sweep sat
 above the buildout crossover, where the utilization effect dominates; R1's
 reduction obtains below `C_R†` where `K_R*` is unbounded. Both are correct.
 

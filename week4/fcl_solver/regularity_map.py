@@ -2,7 +2,7 @@
 Week 4 Task 4: regularity-region map.
 
 The classification functional Ψ is derived under the regularity conditions:
-  (a) The with-FCL profit problem has a genuine INTERIOR optimum — not a
+  (a) The with-FCL profit problem has a genuine INTERIOR optimum, not a
       corner solution (K_R* at a bound) and not the degenerate "runaway" case.
   (b) The no-FCL profit problem has a genuine interior optimum (which is
       always satisfied under Assumption 1 per the no-FCL FOC, eq. 7).
@@ -13,12 +13,12 @@ We map where (a)/(c) hold / fail across the (C_R, distribution-shape) plane,
 reusing the Week 2 hessian.certify_negative_definite machinery.
 
 Regularity outcomes:
-  "regular"          — interior optimum, Hessian neg-def
-  "corner_KR"        — K*_R hit its upper bound (unbounded problem)
-  "corner_KM"        — K*_M hit its upper bound
-  "corner_zero"      — K*_R collapsed to 0 (renewable too expensive)
-  "saddle"           — interior critical point but Hessian NOT neg-def
-  "solver_failed"    — optimizer did not converge or LP was infeasible
+  "regular", interior optimum, Hessian neg-def
+  "corner_KR", K*_R hit its upper bound (unbounded problem)
+  "corner_KM", K*_M hit its upper bound
+  "corner_zero", K*_R collapsed to 0 (renewable too expensive)
+  "saddle", interior critical point but Hessian NOT neg-def
+  "solver_failed", optimizer did not converge or LP was infeasible
 """
 from __future__ import annotations
 

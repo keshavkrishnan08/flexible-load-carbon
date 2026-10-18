@@ -13,7 +13,7 @@ def main() -> None:
     b3 = out["regime_map_classification"]
     b4 = out["reconcile_team"]
 
-    print("=== Role 4 Week 4 — Theory Hardening and Regimes ===")
+    print("=== Role 4 Week 4, Theory Hardening and Regimes ===")
     print("Bullet 1: functional sign = %s; carbon C1 across regime = %s; kink located in %s"
           % (b1["functional_sign"], b1["carbon_integral_C1"], b1["located_discontinuity"]))
     print("Bullet 2: measurable extremal schedule = %s; Sion saddle when compact = %s; carbon-window ill-posed = %s"

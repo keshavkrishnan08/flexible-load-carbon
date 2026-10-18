@@ -1,5 +1,5 @@
 """
-Role 4 Week 3 entry point (Theory Hardening and Regimes — across regimes).
+Role 4 Week 3 entry point (Theory Hardening and Regimes, across regimes).
 Produces:
   regime_stitch.png   the K_M marginal value across K_M=K_R (continuous, kinked)
                       and the carbon functional (C^1) across the boundary
@@ -86,9 +86,9 @@ def phase_figure(P):
 
 
 def summary(P):
-    print("\n=== Role 4 Week 3 — Theory Hardening and Regimes (across regimes) ===\n")
+    print("\n=== Role 4 Week 3, Theory Hardening and Regimes (across regimes) ===\n")
 
-    print("BULLET 1 — contract & carbon functional stitch across K_M=K_R")
+    print("BULLET 1, contract & carbon functional stitch across K_M=K_R")
     st = rs.stitch_report(P)
     print(f"  contract regime-free ............ {st['contract_regime_free']}")
     print(f"  carbon functional C^1 ........... {st['carbon_functional']['C1']} "
@@ -99,7 +99,7 @@ def summary(P):
           f"= c·f(-K_R) predicted {pk['predicted_jump']:.4f} [{pk['matches']}]")
     print(f"  optimum continuous thru crossover {st['optimum_continuity']['continuous']}")
 
-    print("\nBULLET 2 — measure-theoretic hardening")
+    print("\nBULLET 2, measure-theoretic hardening")
     box = hd.capacity_box(P)
     print(f"  capacity box compact here ....... {box['compact']} "
           f"(C_R={box['C_R']:.2f} vs C_R†={box['C_R_dagger']:.3f})")
@@ -116,7 +116,7 @@ def summary(P):
     print(f"  minimax on carbon window ........ "
           f"ill-posed [{not hd.minimax_saddle(P)['well_posed']}] (corner-at-∞)")
 
-    print("\nBULLET 3 — stitched carbon phase diagram")
+    print("\nBULLET 3, stitched carbon phase diagram")
     pr = rp.phase_report(P)
     print(f"  boundary smooth across regime ... {pr['boundary_smooth_across_regime']['smooth']}")
     cd = pr["carbon_down_connected"]
@@ -130,7 +130,7 @@ def summary(P):
     print(f"  ordering C_M^fc<C_M^cross<C̄_M<C̄_M^b: "
           f"{o['C_M_fc']:.3f} < {o['C_M_cross']:.3f} < {o['C_M_bar']:.3f} < {o['C_M_bar_b']:.3f}")
 
-    print("\nBULLET 4 — reconcile the team")
+    print("\nBULLET 4, reconcile the team")
     rec = rc.reconcile(P)
     so = rec["shared_objects"]
     print(f"  contract  == backend ............ {so['contract']['consistent']} "

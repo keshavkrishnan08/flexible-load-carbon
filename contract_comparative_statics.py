@@ -1,10 +1,10 @@
-"""Week 3 Bullet 2 — Optimal-contract comparative statics.
+"""Week 3 Bullet 2, Optimal-contract comparative statics.
 
 We compare two dispatch contracts on the same (K_R, K_F, K_M):
 
   Myopic (firm-optimal):  d_M(x) = min(max(K_F - x, 0), K_M)
   Carbon-optimal:         d_C(x) = min(max(x, 0), K_M)   (dispatch when any
-                          fossil is about to run — max fossil substitution)
+                          fossil is about to run, max fossil substitution)
 
 The wedge W(C_M, C_R) = Carbon_M - Carbon_C  ≥ 0 measures how much a
 socially-set contract could remove vs the myopic rule. Signs of dW/dC_M

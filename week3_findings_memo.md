@@ -1,4 +1,4 @@
-# Role 3 — Week 3 Findings Memo
+# Role 3: Week 3 Findings Memo
 
 ## Bullet 1: Characterization comparative statics
 Signs of dJ/dtheta (J = Carbon_FCL - Carbon_noFCL) across 8 distributions:
@@ -38,7 +38,7 @@ Endpoint condition g(a) >= g(K_F*), a = K_F* - K_M*:
 
 ## Sync with Role 1
 - Every distribution-free sign in Bullet 1 is a candidate for Role 1's characterization theorem.
-- The wedge W collapses to 0 as C_M ↑ C_M_bar and grows in C_R — consistent with the contract characterization.
+- The wedge W collapses to 0 as C_M ↑ C_M_bar and grows in C_R: consistent with the contract characterization.
 - Robust-nominal carbon gap is monotone in the ambiguity radius; the LR-path certificate matches Role 1's minimax statement.
 - The endpoint condition g(a) >= g(K_F*) holds across the whole Beta(a, 5-a) family;
   the genuine regime boundary for Role 4 is the adoption knife-edge C_M = C_M_bar.

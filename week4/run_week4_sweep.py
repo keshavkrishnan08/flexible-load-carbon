@@ -96,7 +96,7 @@ def main(fast: bool = False):
     ax.set_xlabel("C_R (renewable capital cost)")
     ax.set_ylabel("C_M (FCL hardware cost)")
     ax.set_title(
-        "Classification functional Ψ — Uniform distribution\n"
+        "Classification functional Ψ, Uniform distribution\n"
         "Green (Ψ>0) = carbon improves; Red (Ψ<0) = carbon worsens\n"
         "White = carbon-neutral boundary (Ψ=0)"
     )

@@ -1,5 +1,5 @@
 """
-Role 3 Week 2 — Bullet 2: Cross-distribution robust certificate.
+Role 3 Week 2, Bullet 2: Cross-distribution robust certificate.
 
 One-parameter MLR-monotone deformation within Beta family:
   F_t(x) = Beta(alpha(t), beta(t)) * D_bar,   t in [0, 1]

@@ -76,7 +76,7 @@ def test_cheap_cr_uniform_is_leveraged(lev_cheap):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def test_regularity_cheap_cr_is_corner(reg_cheap):
-    """C_R=8 is in the runaway regime — regularity should be corner_KR or similar."""
+    """C_R=8 is in the runaway regime, regularity should be corner_KR or similar."""
     outcome, wf, neg_def, min_eig = reg_cheap
     assert outcome in ("corner_KR", "corner_KM", "regular"), (
         f"Unexpected outcome: {outcome}"

@@ -1,4 +1,4 @@
-# Lab Notebook — Team A1, Role 1 (General Carbon Theory)
+# Lab Notebook: Team A1, Role 1 (General Carbon Theory)
 
 **Keeper:** Role 1 (R1).  **Opened:** 2026-06-22 (A1 Week 1 Plan).
 
@@ -12,30 +12,30 @@
 - **Traceable.** Claims cite the verifier script and digit-level agreement in
   brackets; artifacts and commits are named. New results are also recorded in
   `CONTRIBUTIONS.md`.
-- **Signed.** Each entry ends `— R1`.
+- **Signed.** Each entry ends `, R1`.
 
-**Role 1 mandate (A1 Week 1 Plan).** General Carbon Theory — four tasks:
+**Role 1 mandate (A1 Week 1 Plan).** General Carbon Theory, four tasks:
 (1) re-derive eqs 25/26 as ground truth; (2) generalize the net carbon-reduction
 result (the general condition where capacity-substitution beats utilization);
 (3) prove `K*_R > K°_R` in general; (4) draft result + gap memo.
 
-> **Scope correction (2026-06-24).** Entries E1–E6 (+E10) are the Role 1
-> deliverable. Entries E8–E9 were built under a broader "general contracting"
+> **Scope correction (2026-06-24).** Entries E1-E6 (+E10) are the Role 1
+> deliverable. Entries E8-E9 were built under a broader "general contracting"
 > framing and overlap Role 3 / Role 4; they were **quarantined** to
 > `exploratory_cross_role/` and are *not* the Role 1 deliverable. The earlier
 > notebook header ("General Contracting Theory") was corrected to "General Carbon
 > Theory" on this date.
 
 **Scope guards (hard walls).** Do **not** enter:
-- **A2** — empirical calibration, real-data magnitudes, grid-type illustrations.
-- **B1** — reliability, blackout-vs-emission tradeoff, welfare, social-vs-private
+- **A2**: empirical calibration, real-data magnitudes, grid-type illustrations.
+- **B1**: reliability, blackout-vs-emission tradeoff, welfare, social-vs-private
   optimum, corrective pricing.
-- **B2** — flexibility continuum, AI/storage, multi-grid, price exogeneity, dynamics.
+- **B2**: flexibility continuum, AI/storage, multi-grid, price exogeneity, dynamics.
 Anything touching those is logged as "dropped (out of scope)".
 
 > **Scope note (post-review).** The Role 1 deliverable is the *General Carbon
-> Theory* — entries **E1–E6** (`role1_carbon_theory.tex` + `gap_memo.md`).
-> Entries **E8–E10** (optimal-contract, correlation comparative static, robust /
+> Theory*, entries **E1-E6** (`role1_carbon_theory.tex` + `gap_memo.md`).
+> Entries **E8-E10** (optimal-contract, correlation comparative static, robust /
 > detail-free) were built under a broader "general contracting" framing; on
 > re-reading the A1 Week 1 Plan they overlap **Role 3** (carbon sign across
 > distributions) and **Role 4** (core-proof generalization, regimes), so they have
@@ -45,9 +45,9 @@ Anything touching those is logged as "dropped (out of scope)".
 ---
 
 ## E1 · 2026-06-24 · Ground truth: re-derive the uniform closed forms
-Goal: reproduce paper eqs 18–26 by hand from the FOCs before generalizing.
-- Re-derived no-FCL `K°_F, K°_R` (eqs 20–21) and with-FCL `K*_F, K*_F−K*_M`
-  (eqs 22–23) from the cutoff FOCs under `F=(x+K_R)/(D̄+K_R)`.
+Goal: reproduce paper eqs 18-26 by hand from the FOCs before generalizing.
+- Re-derived no-FCL `K°_F, K°_R` (eqs 20-21) and with-FCL `K*_F, K*_F−K*_M`
+  (eqs 22-23) from the cutoff FOCs under `F=(x+K_R)/(D̄+K_R)`.
 - Carbon eqs 25/26: confirmed they are expected fossil **output** (the constant
   `c` is dropped); the large-FCL form needs the flat term `(K_M−K_R)` because the
   integration range protrudes below `−K_R`.
@@ -57,7 +57,7 @@ Goal: reproduce paper eqs 18–26 by hand from the FOCs before generalizing.
   along the locus is constant in `K_R` ⇒ corner solution. Re-derived the
   threshold and found it equals **exactly** the printed eq-24 bracket; clarified
   eq 24 = `2·∂Π/∂K_R` (sign-correct; the factor-2 is a grouping artifact, not a
-  bug — reconciles Role 2's note).
+  bug, reconciles Role 2's note).
 
 ## E2 · 2026-06-24 · The capacity channel `K*_R > K°_R`, general
 - Computed the cross-partials of `Π`. Found the obstruction: `Π` is **submodular**
@@ -79,7 +79,7 @@ Goal: reproduce paper eqs 18–26 by hand from the FOCs before generalizing.
   `E[fossil*]`, `E[fossil°]` in terms of conditional means at the cutoffs ⇒
   inequality **(C)**, decomposed into utilization (distribution-free) vs
   capacity-substitution.
-- Sufficient distributional conditions (concave/convex density) — uniform is the
+- Sufficient distributional conditions (concave/convex density), uniform is the
   boundary.
 - `C_R†` made explicit for power-law: `C_R† = ½[c+(R−C_M−c)²/(R−c)+(R−c−C_F−C_M)²/(β+p−R)]`,
   with no-FCL threshold `C_R° = C_F²/2(β+p−c)`; proved `C_R°<C_R†` (window where
@@ -87,7 +87,7 @@ Goal: reproduce paper eqs 18–26 by hand from the FOCs before generalizing.
 
 ## E4 · 2026-06-24 · Adversarial exactness audit (the catch)
 Built `verify_exact.py`: every analytical formula vs finite differences of the
-profit integral. **15/15 PASS** to 6–16 digits — BUT it caught a real defect:
+profit integral. **15/15 PASS** to 6-16 digits, BUT it caught a real defect:
 - **Theorem 1 sign typo.** The cofactor coefficient was written `(β+p−R)`; the
   algebra gives `(R−β−p)`. Magnitude and conclusion were already right and
   numerically confirmed; only the intermediate coefficient/label was wrong. Fixed.
@@ -129,7 +129,7 @@ this entered the paper. *(Kept the script in scratch only.)*
   `d*(x)=min{(K_F−x)_+,K_M}`. Lifts paper Lemma 1 from a pointwise sub-problem to
   the whole contract space.
 - **Caught two TEST bugs** (theorem was fine): (i) let dispatch exceed available
-  power `K_F−x` (revenue `Rδ` rose unboundedly) — fixed by capping served load by
+  power `K_F−x` (revenue `Rδ` rose unboundedly), fixed by capping served load by
   availability; (ii) structured perturbations let `δ>K_M` (infeasible). After both
   fixes: **0/4000** pointwise mismatches, **0/21,600** feasible policies beat `d*`
   [`verify_contract.py`].
@@ -138,9 +138,9 @@ this entered the paper. *(Kept the script in scratch only.)*
 
 ## E9 · 2026-06-24 · Extension I: N&S emission + correlation comparative static
 - **N&S.** Carbon falls iff (C); settled the mandate's "mild vs restrictive": it is
-  **not generic** — positive demand-supply association makes it fail even with
+  **not generic**: positive demand-supply association makes it fail even with
   `K*_R>K°_R`.
-- **Correlation comparative static.** Proved `g(x)=F_{K_R}/f = E[S̃ | x̃=x]` — the
+- **Correlation comparative static.** Proved `g(x)=F_{K_R}/f = E[S̃ | x̃=x]`: the
   shift ratio *is* the conditional renewable factor (Lemma, via the joint density).
   So: carbon falls **iff demand and renewable supply are sufficiently negatively
   correlated.** Built a joint `(D,S)` model with tunable corr
@@ -165,7 +165,7 @@ this entered the paper. *(Kept the script in scratch only.)*
   3000/3000 (uniform extremal); `Δ` minimized at the uniform.
 - **Thm R2 (detail-free / Wilson doctrine).** Because the optimal cutoffs are
   distribution-free, a single **quantile-targeting** mechanism implements the
-  optimum for **every** `F` — the regulator needs no prior over demand/renewables,
+  optimum for **every** `F`: the regulator needs no prior over demand/renewables,
   only six scalar primitives. Distribution matters for the *magnitude* of the
   saving (R1), never for *how to act*.
 - **Scope re-checked** after a user flag: removed "carbon-optimal contract"
@@ -175,7 +175,7 @@ this entered the paper. *(Kept the script in scratch only.)*
   robustness (A1) from B2's market-structure robustness discussion.
 
 ## E11 · 2026-06-24 · Capstone (in-scope): distribution-free reading of the carbon effect
-New section in `role1_carbon_theory.tex` — strictly General Carbon Theory:
+New section in `role1_carbon_theory.tex`: strictly General Carbon Theory:
 - **Two-moment sufficient statistic.** From the exact identity (E3), the carbon
   saving `Δ(F)` depends on `F` only through `(μ*_low, μ°_mid)` at the
   distribution-free cutoffs. **Verified** [`verify_carbon_robust.py`]: 6e-7.
@@ -185,31 +185,31 @@ New section in `role1_carbon_theory.tex` — strictly General Carbon Theory:
   **minimizes** `Δ` ⇒ the closed-form condition is a worst-case carbon certificate
   over an infinite ambiguity set. **Verified** 3000/3000.
 - ~~Attempted a general monotone-threshold theorem: `Δ(C_R)` non-increasing ⇒
-  carbon region `[0,C_R†(F)]` for all `F`.~~ **Correction (2026-06-24):** dropped —
+  carbon region `[0,C_R†(F)]` for all `F`.~~ **Correction (2026-06-24):** dropped,
   numerics blow up at the unbounded-renewables knife-edge (`K*_R→∞`, values 1e5),
   so the claim is not cleanly supported. Theorem 2 stays heuristic. *(Honest.)*
-— R1
+R1
 
 ## E12 · 2026-06-24 · Adversarial peer review (3 referees) + honesty revision
 Subjected the paper to three independent adversarial referees: a proof-checker, a
 counterexample hunter (rebuilt the model from scratch with a Gaussian copula, 70+
 runs), and an overclaim auditor (ran all 5 scripts vs cited numbers).
-- **No genuine counterexample found** — every failure coincided with a violated
+- **No genuine counterexample found**: every failure coincided with a violated
   hypothesis (sharpness confirmed). Core results (K*_R>K°_R, cutoffs, bounds,
   threshold anchor) robust.
 - But several statements over-reached. **Fixed:** ~~"two-moment sufficient
   statistic"~~ → affine representation *at fixed capacities* (the means aren't a
-  sufficient statistic across F — capacities & q° move with F); ~~"uniform
+  sufficient statistic across F, capacities & q° move with F); ~~"uniform
   least-favorable, robust certificate for every F∈U"~~ → least-favorable
   *conditional shape* (cross-F covariation open); distribution-free cutoffs Lemma
   → *large-FCL only*; ~~C_R† "for every F"~~ → general upper anchor + explicit
   power-law window (general window conjectural); Thm 1 small-FCL cofactor sentence
   cited wrong matrix entry (H_MM→H_FF); Prop-regime "a fortiori in (I)" dropped
-  (backwards); "machine precision"→"6–16 digits"; MV "{1,5,9}"→{1,4,5} large-FCL;
+  (backwards); "machine precision"→"6-16 digits"; MV "{1,5,9}"→{1,4,5} large-FCL;
   −108→−92.1; "all four closed"→three+one crossover open.
 - Full point-by-point in `RESPONSE_TO_REFEREES.md`. No theorem retracted; two
   downgraded to honest conditional form, one rescoped. PDF 11pp.
-— R1
+R1
 
 ## E13 · 2026-06-25 · Self-audit: sign defect in Thm 6/7 proofs (referees missed it)
 Re-auditing for "make it perfect," caught a genuine sign error the 3 referees did
@@ -223,16 +223,16 @@ proofs (Δ decreasing in μ*_low, increasing in μ°_mid); added a tilt check to
 s=[0,.2,.5,1,2,4]: −1.69,−0.64,+0.59,+1.67,+2.36,+2.71 → min at s=0). PDF 11pp.
 
 Also reviewed team updates: Role-3 (now complete, validates K*_R>K°_R 32/32, carbon
-rare at low-C_R — confirms my threshold thm) and Role-4 (rebuilt to FCL mandate, 17
+rare at low-C_R, confirms my threshold thm) and Role-4 (rebuilt to FCL mandate, 17
 tests pass, adopts my C_R†/C_R°/C̄_M^b closed forms + eq24=2(C_R†−C_R)). Role-2 36
 tests pass. main still un-integrated.
-— R1
+R1
 
 ---
 
-## A1 Week 2 (2026-06-26) — Optimal Contract and General Carbon Theory
+## A1 Week 2 (2026-06-26): Optimal Contract and General Carbon Theory
 
-Mandate (A1 Week 2 Plan, Role 1): five tasks — existence/uniqueness/contract
+Mandate (A1 Week 2 Plan, Role 1): five tasks, existence/uniqueness/contract
 optimality; shift-ratio uniform along the homotopy; emission keystone for general
 F; connectedness of the carbon-reduction set; sharp channel condition + tight
 bounds. Deliverable: `role1_week2_theory.tex` (+pdf), verified `verify_week2.py`.
@@ -252,35 +252,35 @@ dispatch, without assuming concavity (Π is submodular in (K_R,K_F)).
 - **Verified** [`verify_week2.py` T1]: dispatch argmax = formula on a grid;
   coercivity; `det M` closed form; eig(M)<0; Schur<0; `Ψ(K_R)` strictly
   decreasing with unique zero = solved K_R*; eig(H)<0. Beta(2,2),Beta(2,3).
-— R1
+R1
 
 ## E15 · 2026-06-26 · Shift-ratio condition uniform along the homotopy (Lemma 4)
 Goal: prove the realized two-point endpoint inequality holds at every C_M from a
 static hypothesis. Result: **support-wide** monotone `g=F_{K_R}/f` (for each K_R)
 ⇒ `g(a)≥g(K_F*)` uniformly along the whole C_M-homotopy; endpoints stay strictly
 interior (cutoffs in (0,1)) and ordered (K_M*>0). This is the exact content the
-Week-1 "integrate downward" step needs — the moving-window condition is *implied*
+Week-1 "integrate downward" step needs, the moving-window condition is *implied*
 by the static one. **Verified** [T2]: 12-node homotopy, min endpoint gap ≥0 and
 dK_R*/dC_M ≤0 at every node; g non-increasing on the full support for all K_R.
-— R1
+R1
 
-## E16 · 2026-06-26 · Emission keystone for general F (Thm 2 + Prop 3) — conjecture resolved NEGATIVE
-Goal: close the Week-1 conjecture — does carbon fall at a finite interior
+## E16 · 2026-06-26 · Emission keystone for general F (Thm 2 + Prop 3): conjecture resolved NEGATIVE
+Goal: close the Week-1 conjecture, does carbon fall at a finite interior
 (large-FCL) optimum for a non-power-law F? **Answer: no.**
-- Endogenous condition: substitute K*(C_R) into (C) — exact, proved.
+- Endogenous condition: substitute K*(C_R) into (C): exact, proved.
 - **Primitive sufficient condition:** endpoint shift-ratio (⇒ K_R*>K_R°) + a
-  two-zone tail/skew bound — (a) `f(·;K_R*)` non-increasing on the FCL zone,
-  (b) `f(·;K_R°)` non-decreasing on the no-FCL zone — gives a closed-form
+  two-zone tail/skew bound, (a) `f(·;K_R*)` non-increasing on the FCL zone,
+  (b) `f(·;K_R°)` non-decreasing on the no-FCL zone, gives a closed-form
   `Δ ≥ Δ_LB`; carbon would fall when `Δ_LB>0`. Proved + the μ-bound algebra
   verified at the representative optimum.
 - **Resolution (the real result):** I set out to *exhibit* a witness and could
-  not — because none exists. Two independent vectorized searches (ws2, ws3) plus a
+  not, because none exists. Two independent vectorized searches (ws2, ws3) plus a
   precise adaptive-quad scan in `verify_week2.py` (T3) over Beta scale-mixtures
   (demand skew α, supply mean E[S]∈{.5,…,.8}, full C_R×C_M grids) return **Δ<0 at
   every large-FCL interior optimum** (max Δ ≈ −1.4 < 0 (least-negative observed; all scanned negative)). So the sufficient bound never certifies a fall (`Δ_LB ≯ 0`) at any large-FCL
   interior optimum, and realized `Δ<0` throughout.
 - **Mechanism (why it's structural, not a search miss):** under the model's
-  dispatch, FCL on renewable-surplus states is fossil-served — the *verified*
+  dispatch, FCL on renewable-surplus states is fossil-served, the *verified*
   flat term `(K_M*−K_R*)` in `E[fossil*]=∫_{-K_M}^{a}(1−F)`. A finite program adds
   fossil at rate ~K_M* while the channel subtracts only at the renewable-shift
   rate; utilization wins at every finite interior optimum. Carbon falls **only**
@@ -290,8 +290,8 @@ Goal: close the Week-1 conjecture — does carbon fall at a finite interior
 - **Honesty note:** the task asked to exhibit a positive witness; the math says no
   large-FCL interior optimum reduces carbon. I report the truth and do NOT fabricate a Δ>0 point. The
   keystone's value is converting a vague conjecture into a sharp falsifiable
-  inequality — falsified in the carbon-rising direction. **Verified** [T3].
-— R1
+  inequality, falsified in the carbon-rising direction. **Verified** [T3].
+R1
 
 ## E17 · 2026-06-26 · Connectedness of {C_R : Δ≥0} (Thm 3)
 Goal: single-interval carbon-reduction set. Bounded above (Week-1 anchor
@@ -300,7 +300,7 @@ monotone-renewable-shadow-value condition stated as a **strict down-crossing**
 `Δ'(C_R)<0` at every zero; convexity by an IVT contradiction (a re-crossing
 upward would need `Δ'≥0` at a zero). **Verified** [T4]: C_R sweep has exactly one
 sign change (+→−), Δ non-increasing where Δ≥0, Δ<0 at the largest C_R.
-— R1
+R1
 
 ## E18 · 2026-06-26 · Sharp channel condition + tight bounds (Thm 4, Thm 5)
 Goal: the N&S channel condition and tightness of the magnitude bounds.
@@ -311,9 +311,9 @@ Goal: the N&S channel condition and tightness of the magnitude bounds.
 - **Tight bounds:** `Δ_min ≤ Δ ≤ Δ_max` attained by degenerate conditional laws
   concentrating at the interval endpoints; checked `Δ(a,0)=Δ_min`,
   `Δ(−K_R,K_F°)=Δ_max` exactly, realized Δ strictly inside. **Verified** [T5].
-— R1
+R1
 
-## E19 · 2026-06-26 · Deep re-audit of T3 (mechanism fix + both regimes) — negative confirmed
+## E19 · 2026-06-26 · Deep re-audit of T3 (mechanism fix + both regimes): negative confirmed
 Prompted to re-examine the T3 negative finding. Built a **direct state-by-state
 fossil simulator** with explicit renewable-surplus absorption (FCL served from
 surplus first). Two findings:
@@ -322,32 +322,32 @@ surplus first). Two findings:
   the closed form `∫_{-K_M}^{a}(1−F)` to 7 digits (6.1833 both). So the formula
   already credits surplus absorption. The correct mechanism is the **irreducible
   floor** `(K_M−K_R)_+`: max surplus in any state is `≤K_R`, so a large-FCL
-  program (`K_M>K_R`) can't be fully surplus-powered — it burns ≥`K_M−K_R` fossil
+  program (`K_M>K_R`) can't be fully surplus-powered, it burns ≥`K_M−K_R` fossil
   at deepest surplus. Floor vanishes iff `K_M≤K_R` (small-FCL).
 - **Both regimes checked → still negative.** Searched small-FCL interior optima
   (profit-maximization, robust to the FOC-solve instability at small `C_R`).
-  Result: Δ≤0 there too, for a *different* reason — small-FCL is optimal only at
+  Result: Δ≤0 there too, for a *different* reason, small-FCL is optimal only at
   small `C_R`, where the **no-FCL** grid already drives `K_F°→0`
   (`E[fossil°]→0`), leaving nothing to save; the channel even *reverses*
   (`K_R*≤K_R°`, FCL's flexibility lets you build slightly fewer renewables).
   Representative: `CR=0.10` → no-FCL `(K_R°,K_F°)=(14.4,0.0)`, with-FCL
   `(14.0,1.6,2.1)`, Δ=−0.21.
 - **Conclusion (sharper than E16).** Carbon falls at **no** finite interior
-  optimum — large-FCL (floor) nor small-FCL (baseline already decarbonized) —
+  optimum, large-FCL (floor) nor small-FCL (baseline already decarbonized),
   only at the cheap-renewable corner `K_R*→∞`. This is *consistent* with Role-3's
   "carbon rare at low C_R." Did NOT fabricate a positive witness; reported the
   true two-regime negative. → Rewrote Prop 3 (now Prop "no finite interior
   optimum reduces carbon"), fixed the abstract + mechanism, added direct-simulator
   + floor + small-C_R checks to `verify_week2.py`.
-— R1
+R1
 
 ## E20 · 2026-06-26 · Hardening pass: T3 made rigorous, conditions primitivized, scope tightened
 Second hostile-referee pass flagged T3 as a scan dressed as a theorem, plus
-condition/scope issues. Closed them (no math errors — honesty/rigor):
+condition/scope issues. Closed them (no math errors, honesty/rigor):
 - **T3 → real results.** (1) **Floor lemma** (PROVED): `E[fossil*] ≥ K_F*(1−φ1)`
   and `≥ K_M*−K_R*` from the cutoffs. (2) **Irreducibility theorem** (PROVED):
   Δ is affine in the two conditional means, which the distribution-free cutoffs do
-  NOT pin ⇒ *no* cutoff-only inequality can sign Δ — so Week-1's conjecture has no
+  NOT pin ⇒ *no* cutoff-only inequality can sign Δ, so Week-1's conjecture has no
   distribution-free proof (a genuine obstruction, not lack of effort). (3) Residual
   question = sign of the cutoff-computable **uniform-shape benchmark Δ0** + a tilt;
   numerically **Δ0<0 (max −1.17)** and Δ<0 (max −1.4) at every scanned interior
@@ -365,7 +365,7 @@ condition/scope issues. Closed them (no math errors — honesty/rigor):
   the general-F packaging (≈ its own conclusion; σ*>σ° and C¹-ness left open).
 - Abstract rewritten to "four proved + one (T3) = floor+impossibility proved,
   residual numerical." PDF 9pp.
-— R1
+R1
 
 ## E21 · 2026-06-27 · "Make it perfect": close the open items (C¹, T4, T3 framing)
 Pushed the three remaining open items as far as they go in-scope.
@@ -378,7 +378,7 @@ Pushed the three remaining open items as far as they go in-scope.
   theorem (i)+(ii), unconditional, with strict-fall core (C_R°,C_R†) distinguished
   from the Δ=0 flat. MRSV/(iii) demoted to an optional general-F extension, vacuous
   in the scanned family.
-- **σ*>σ° gloss was FALSE — corrected.** The suite caught it: σ*=0.297 < σ°=0.425.
+- **σ*>σ° gloss was FALSE: corrected.** The suite caught it: σ*=0.297 < σ°=0.425.
   So the MRSV "shadow-value ordering" economic justification is wrong (no-FCL
   renewables carry the larger marginal fossil impact). Removed the false claim;
   MRSV is now stated as a bare hypothesis, openly not derivable, and MOOT (the
@@ -389,9 +389,9 @@ Pushed the three remaining open items as far as they go in-scope.
   impossibility forbids a distribution-free proof), backed by >250 cells (offline
   ws2/ws3 + in-suite scan), Δ0<0 everywhere. Disclosed Δ_LB ≡ Δ0.
 - Third hostile-referee pass ("qualified yes") items all fixed. PDF 10pp.
-— R1
+R1
 
-## E22 · 2026-06-30 · 4th + 5th referee passes — 5 real defects fixed, then math re-derived clean
+## E22 · 2026-06-30 · 4th + 5th referee passes: 5 real defects fixed, then math re-derived clean
 **4th pass (hostile MS referee)** found genuine errors (not nitpicks); all fixed,
 no headline claim changed.
 - **M1 dispatch lemma was WRONG.** Feasible set `s+d<=K_F` banned renewable surplus
@@ -412,14 +412,14 @@ no headline claim changed.
   cites; Delta0=-1.09. Commit 4162f04.
 
 **5th pass (pure-math re-derivation, every identity from scratch):** ALL 10 items
-CORRECT — gradients, block Hessian, cofactor (Cramer index + sign), N(gamma)
+CORRECT, gradients, block Hessian, cofactor (Cramer index + sign), N(gamma)
 coercivity, keystone bound, D0=Delta_LB, floor, q°-fixed tight bounds, det M limit,
 all numbers consistent. **Zero genuine errors.** Only 2 cosmetic wording fixes
-(keystone coefficient phrasing; lambda-continuity rests on |detH|=|detM*Psi'|) —
+(keystone coefficient phrasing; lambda-continuity rests on |detH|=|detM*Psi'|),
 both applied. Suite 61/61, PDF 11pp.
-— R1
+R1
 
-## E23 · 2026-06-30 · A1 Week 3 — the optimal contract decarbonizes (positive resolution)
+## E23 · 2026-06-30 · A1 Week 3: the optimal contract decarbonizes (positive resolution)
 Built the Week-3 Role-1 deliverable: `role1_week3_theory.tex` + `verify_week3.py`.
 **The result.** Week-2's negative (naive rule -> fossil floor -> carbon sign
 irreducibly distributional) is a property of the CONTRACT, not the technology. The
@@ -429,21 +429,21 @@ surplus contract d^c(x)=min{(-x)+,KM} runs the FCL only on renewable surplus:
   (or KRc at the renewable cap), KFc<=KFo, carbon STRICTLY falls. Needs NO condition on
   the SHAPE of F (only single-peakedness + adoption + F_KR>0 support). Resolves Week-2's
   shape-dependence positively.
-- Cor 1: PARETO improvement — profit UP, carbon DOWN, blackout HELD at 1-phio.
+- Cor 1: PARETO improvement: profit UP, carbon DOWN, blackout HELD at 1-phio.
 - Prop 2: exact saving; contract pulls KR up, to full decarbonization in the cheap-ren limit.
 **How I got here honestly.** First tried to flip Week-2's INTERIOR result; the
 surplus contract kept driving KR to the corner, so no clean new-interior witness exists
 (I did NOT fabricate one). The real, provable positive is the shape-independent
 decarbonization above. Numerics: 33/33 across sym/left/right/bimodal/high-CF shapes.
-**Referee gauntlet.** Hostile MS referee found 1 blocker + 4 majors + minors — ALL
+**Referee gauntlet.** Hostile MS referee found 1 blocker + 4 majors + minors, ALL
 real, ALL fixed: B1 blackout was NOT lower (held equal, 1-phio both) -> Pareto framing;
 "distribution-free" overclaim -> "no shape condition" w/ explicit hypotheses;
 "carbon-optimal contract" -> "fossil-minimizing dispatch" (no bilevel claim); interior
 KRc -> corner case handled; F_KR>0 needed in BOTH regions -> stated; Prop 2 monotonicity
 -> derivative proof; non-IC dispatch disclosed. Commits 9625f86, 3b35597, dc4ebbd.
-— R1
+R1
 
-## E24 · 2026-06-30 · Week-3 0-1 extension — the optimal-contract family + carbon-profit frontier
+## E24 · 2026-06-30 · Week-3 0-1 extension: the optimal-contract family + carbon-profit frontier
 Massive in-scope extension (optimal contract + carbon only). Unifies Weeks 2 & 3.
 **The leap.** Naive (Wk2) and surplus-only (Wk3) were isolated contracts. New Sec
 embeds them in ONE one-parameter family: budget contract d_tau=min{(-x)+ + tau, KM,
@@ -466,11 +466,11 @@ KF-dependent decomposition (was e(KR), now G(KR,KF), missing Leibniz term added)
 global-as-proved -> numerically-established; KR'(tau) sign honestly left numerical;
 (iii) uniqueness -> inf-def; abstract/remark de-claimed + scoped to family.
 verify_week3.py 37/37. PDF 7pp. Commits 20a5f10, be0dc05, a010643.
-— R1
+R1
 
 ---
 
-## E25 · 2026-07-22 · Barrier-artifact audit — the leverage numbers were measured off a frozen optimizer
+## E25 · 2026-07-22 · Barrier-artifact audit: the leverage numbers were measured off a frozen optimizer
 
 **Objective.** Stress-test the Week-3/4 leverage results after noticing the carbon-frontier
 sweeps ran with the optimizer's renewable barrier (`K_R ≤ 0.99·Dbar`) possibly binding.
@@ -482,7 +482,7 @@ Week-3 frontier and `validate_regime_crossing`.
 **Result.** The barrier bound in *every* cell of the old sweep, so `K_R'(τ)=0` held trivially
 and Condition M was never actually tested. At a genuine interior optimum it **fails**: `K_R`
 *rises* with τ (1.753→2.655) and the leverage is **positive**, `Λ∈[0.139,0.218]` (Week-4),
-independently `Λ∈[0.218,0.301]` (Week-3 frontier) — not the negative values reported off the
+independently `Λ∈[0.218,0.301]` (Week-3 frontier), not the negative values reported off the
 frozen stock. ~~Λ<0, fossil-running does not even raise K_R~~ → corrected: the induced
 build-out offsets ≈ a fifth to a third of the load's footprint.
 
@@ -492,7 +492,7 @@ sites + master. Recorded as rem:condMfails (Week 4) and the sharpened Λ remark 
 
 **Also this session (harness hardening).**
 - **B6 → a unification.** The Week-1 knife-edge (MV constant in `K_R`) holds exactly on
-  large-FCL and *breaks* at the small-FCL crossing — the *same* boundary that carries the
+  large-FCL and *breaks* at the small-FCL crossing, the *same* boundary that carries the
   Φ=Δ carbon identity. One regime boundary governs both headline results (rem:oneboundary).
 - **Week-3 quadrature defect.** `cons_fossil` masked a fixed grid, so a moving limit jumped
   ~5e-3 as it crossed nodes; this faked a monotone-fossil-lemma failure (`e(K_R)` up on 60/100
@@ -505,11 +505,11 @@ sites + master. Recorded as rem:condMfails (Week 4) and the sharpened Λ remark 
   Caught a genuine boundary non-solution at `C_M=0.30` (`K_F`≈`Dbar`).
 - Closed M3/M6/M9/M13; `verify_exact` 21/21, `verify_week3` 42/42, `verify_week4` interior-clean.
 
-— R1
+R1
 
 ---
 
-## E26 · 2026-07-22 · Referee-response arc — closing the three blocking issues (main model, empty Phi, storage)
+## E26 · 2026-07-22 · Referee-response arc: closing the three blocking issues (main model, empty Phi, storage)
 
 **Objective.** An adversarial Management-Science referee graded the A1 theory D+/Reject on
 three blocking issues: (1) the theory solves the utility-operated model, not the paper's main
@@ -520,10 +520,10 @@ same surplus. Response was iterated against re-grades until four of five dimensi
 **Method & result (three new deliverables, all verified).**
 - **Double margin** (`role1_double_margin.tex`, `verify_double_margin.py` 8/8). Re-derived the
   cutoffs in the main model: miner `phi_1 = C_M/(R-p)` (exact 1e-16); fossil
-  `phi_o_dm = (b+p-c-C_F)/beta` (exact 1e-4) — same numerator as utility-operated, denominator
+  `phi_o_dm = (b+p-c-C_F)/beta` (exact 1e-4), same numerator as utility-operated, denominator
   `beta`, because the utility internalizes miner entry (`dK_M/dK_F=1`) and the coupling term
   cancels. New structural fact: the cutoffs **decouple** (`C_M` only in `phi_1`), giving a
-  **separation principle** — fossil adequacy is independent of every load characteristic. The
+  **separation principle**: fossil adequacy is independent of every load characteristic. The
   `Delta=Phi` identity is model-free and carries over (`prop:dmidentity`); the negative sign is
   a numerical regularity there too (`Delta=-2.375`).
 - **Phi reframing** (`role1_week4_theory.tex`). `prop:alwaysup` relabeled as an `observation`
@@ -547,14 +547,14 @@ section that concedes what it must and proves what survives.
 
 **Follow-up (closing the last gap).** The exact carbon *coefficient* was then re-derived in
 the main model, not just the sign: `Phi_dm = (C_M/(R-p))(a-mu*_low) - [K_F* - K_Fo(1-phi_o) -
-(phi_o-q_o)mu_o_mid]` — the utility-operated `Phi` verbatim with the single substitution
+(phi_o-q_o)mu_o_mid]`, the utility-operated `Phi` verbatim with the single substitution
 `C_M/(R-c) -> C_M/(R-p)`, because the coefficient is the integration-by-parts factor `F(a)`
 which free entry pins to `phi_1`. Verified `Delta=Phi_dm` to 2e-4 (`verify_double_margin.py`
-now **9/9**, `Phi_dm=-2.3749` vs `Delta=-2.3752`). So the ENTIRE capacity-and-carbon theory —
-cutoffs, decoupling, and the exact `Phi` — is now in the professor's main double-margin model;
+now **9/9**, `Phi_dm=-2.3749` vs `Delta=-2.3752`). So the ENTIRE capacity-and-carbon theory,
+cutoffs, decoupling, and the exact `Phi`: is now in the professor's main double-margin model;
 only §5.3 (deregulated, by design) uses a different margin.
 
-— R1
+R1
 
 ---
 
@@ -563,23 +563,23 @@ only §5.3 (deregulated, by design) uses a different margin.
 |---|---|---|---|
 | 2026-06-24 | Uniform closed forms eqs 25/26 | `verify.py` | ≤6e-10 |
 | 2026-06-24 | Knife-edge MV constant; = eq 24 | `verify.py`, `verify_exact.py` | 4e-10 |
-| 2026-06-24 | All 15 analytical formulas vs FD of Π | `verify_exact.py` | **15/15**, 6–16 digits |
+| 2026-06-24 | All 15 analytical formulas vs FD of Π | `verify_exact.py` | **15/15**, 6-16 digits |
 | 2026-06-24 | `K*_R>K°_R`, shift-ratio sign-law | `validate_capacity_channel.py` | holds, 4 families |
 | 2026-06-24 | Regime crossing + `H≺0` | `validate_regime_crossing.py` | both regimes; eig<0 interior |
 | 2026-06-24 | Sufficient stat + bounds + least-favorable | `verify_carbon_robust.py` | 6e-7; inside; 3000/3000 |
 | 2026-06-24 | Optimal contract `d*` (quarantined) | `exploratory_cross_role/verify_contract.py` | 0/4000, 0/21,600 |
 | 2026-06-24 | Correlation carbon-sign (quarantined→Role 3) | `exploratory_cross_role/verify_correlation.py` | monotone, sign-flips |
-| 2026-06-26 | **A1 Week 2** — all five tasks (T1–T5) vs quadrature of Π | `verify_week2.py` | **49/49 PASS** |
+| 2026-06-26 | **A1 Week 2**: all five tasks (T1-T5) vs quadrature of Π | `verify_week2.py` | **49/49 PASS** |
 | 2026-06-26 | Recursive-triangular uniqueness: det M closed form, Schur<0, H≺0, unique Ψ zero | `verify_week2.py` T1 | exact (≤1e-15) |
 | 2026-06-26 | Emission conjecture resolved NEGATIVE: Δ<0 at every large-FCL interior optimum | `verify_week2.py` T3 (in repo). NOTE: the cited 244-cell ws2/ws3 sweep ran offline and its script is NOT in this repo, so that portion is not reproducible here; the reproducible evidence is the 60-point grid in ROLE1_SCOPE.md (16 solved, 0 with Δ>0). | max Δ≈−1.40<0 |
 | 2026-06-26 | Corner non-emptiness C_R°<C_R†; FTC path-integral = ΔK_R; bounds tight | `verify_week2.py` T4,T5 | 4.21≈4.13; Δmin/Δmax attained |
 
 ## Open problems / handoffs
-- **Theorem 2 (general `C_R†` existence)** — still heuristic ("the two curves
+- **Theorem 2 (general `C_R†` existence)**: still heuristic ("the two curves
   cross") for arbitrary `F`; explicit only for power-law. *(A1, future.)*
-- **Correlation `K*_R` levels** — need a stabler solver for the joint-corr model to
+- **Correlation `K*_R` levels**: need a stabler solver for the joint-corr model to
   get a clean `dK*_R/dρ` curve (the carbon-sign result is already clean). *(A1 /
   numerical methods.)*
 - Small-FCL boundary `K*_M=K°_R`, full regime stitching → **not A1** (regimes).
-- Building the shared `d*(x)`/`k*` solver for the group is A1 task (4) — partially
+- Building the shared `d*(x)`/`k*` solver for the group is A1 task (4), partially
   served by the verifiers here; a packaged solver is the next deliverable.

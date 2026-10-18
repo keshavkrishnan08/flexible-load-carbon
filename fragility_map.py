@@ -1,4 +1,4 @@
-"""Week 3 Bullet 4 — Fragility map / knife-edge witnesses.
+"""Week 3 Bullet 4, Fragility map / knife-edge witnesses.
 
 We locate two boundaries and produce explicit witnesses on both sides:
 

@@ -1,5 +1,5 @@
 """
-Role 1 (General Carbon Theory) — numerical ground-truth validation.
+Role 1 (General Carbon Theory), numerical ground-truth validation.
 
  (V1) Uniform/power-law closed forms (eqs 18-23, 25, 26) verified at a FIXED
       K_R against direct quadrature of the unified profit integral (eq 5).

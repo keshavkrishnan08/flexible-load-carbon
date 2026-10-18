@@ -1,5 +1,5 @@
 """
-Role 3 Week 2 — Bullet 4: Limit-interchange / dominated convergence check.
+Role 3 Week 2, Bullet 4: Limit-interchange / dominated convergence check.
 
 Week-1 threshold proof used an a.s.-corner argument: as C_M -> C_M_bar^-,
 K_M* -> 0, then "expected fossil dispatch -> 0". Week 2 replaces this with a

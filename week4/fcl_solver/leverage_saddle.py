@@ -131,7 +131,7 @@ def map_leverage_boundary(
 class SaddleCertificate:
     minimax: float        # min_{K} max_{F∈Γ} carbon(F; K)
     maximin: float        # max_{F∈Γ} min_{K} carbon(F; K)
-    gap: float            # |minimax - maximin| — should be ~0 at a saddle
+    gap: float            # |minimax - maximin|: should be ~0 at a saddle
     saddle_certified: bool
     worst_case_dist_name: str
     note: str

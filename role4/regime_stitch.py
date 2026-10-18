@@ -233,7 +233,7 @@ def small_fcl_KM_at_base(P: Params, C_M: float) -> float:
 
 def optimum_varies_continuously(P: Params, n: int = 200) -> dict:
     """Sweep C_M across the crossover C_M^cross (where K_M* = K_R°, the regime
-    boundary) and confirm K_M*(C_M) has no jump — the optimum passes from large-
+    boundary) and confirm K_M*(C_M) has no jump, the optimum passes from large-
     to small-FCL continuously, so carbon does not jump at the regime change."""
     KR0 = _K_R_circ(P)
     lo, hi = 0.05, 0.9 * ((P.R - P.c) * (P.bp - P.c - P.CF) / (P.bp - P.c))

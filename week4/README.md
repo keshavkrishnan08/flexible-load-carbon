@@ -1,4 +1,4 @@
-# FCL Solver (Team A1, Role 2) — Week 4
+# FCL Solver (Team A1, Role 2): Week 4
 
 Builds on `week3/`. Week 4's central deliverable is the **carbon
 classification functional Ψ**, which provides an if-and-only-if
@@ -7,7 +7,7 @@ characterization of the carbon sign derived from the paper's Proposition 4.
 ## Week 3 confirmed status (before starting Week 4)
 
 All 22 tests pass. Central finding: **0/20 sign flips** in the dispatch-phase
-sweep — even the LP-optimal (carbon-minimizing) dispatch at firm-optimal
+sweep, even the LP-optimal (carbon-minimizing) dispatch at firm-optimal
 capacities fails to flip the carbon sign. This extends Week 1/2's findings.
 
 ## Setup
@@ -27,7 +27,7 @@ fcl_solver/
                           compute_functional() → FunctionalResult.
                           Bug caught during dev: integration limits for
                           μ*_low were wrong (gap-filling zone instead of
-                          full-dispatch zone) — fixed and documented.
+                          full-dispatch zone) - fixed and documented.
   classification_sweep.py  Sweeps the full 15-distribution library.
   phase_diagram_w4.py    Level-set phase diagram via Ψ, bisection boundary.
   leverage_saddle.py     Leverage condition + robust saddle certificate.
@@ -39,7 +39,7 @@ tests/
 
 ## The Classification Functional (Task 1, keystone)
 
-From the paper's **Proposition 4** (Appendix B.1, p. 82–84), in the
+From the paper's **Proposition 4** (Appendix B.1, p. 82-84), in the
 large-FCL regime (K*_M > K*_R):
 
 ```
@@ -89,7 +89,7 @@ lognormal_sig=0.6     30   -24.09     +1083.89    True
 ```
 
 Ψ is **negative in every interior cell** (carbon always rose), matching
-the consistent Week 1–3 finding. The iff claim is corroborated — no cell
+the consistent Week 1-3 finding. The iff claim is corroborated, no cell
 found where sign(Ψ) ≠ sign(Δcarbon). Note: **carbon improvement (Ψ > 0)
 is not observed** in any cell, which is itself the central finding of this
 project: the FCL program, as parameterized, consistently raises rather than

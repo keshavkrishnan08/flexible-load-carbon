@@ -41,7 +41,7 @@ def main():
 
     n_li = len(li); n_dom = sum(r["dominated_pointwise"] for r in li)
 
-    memo = f"""# Role 3 — Week 2 Findings Memo
+    memo = f"""# Role 3, Week 2 Findings Memo
 
 ## Bullet 1: Comparative statics of the carbon effect
 Central-difference signs of d(Carbon_FCL - Carbon_noFCL)/dθ
@@ -87,7 +87,7 @@ Envelope test along C_M ↑ C_M_bar across 8 distributions:
   every interior scenario; the bimodal attempt did not break it.
 - Comparative-statics signs match the Hessian-cofactor prediction in 100% of
   scenarios for ∂/∂C_M (adoption margin) and ∂/∂R; ∂/∂β and ∂/∂p flip sign
-  in the small-FCL corner — flagged for Role 1's sharp condition.
+  in the small-FCL corner, flagged for Role 1's sharp condition.
 - C_R^† certified along the LR path → robust carbon-down certificate.
 """
     (RES / "week2_findings_memo.md").write_text(memo)

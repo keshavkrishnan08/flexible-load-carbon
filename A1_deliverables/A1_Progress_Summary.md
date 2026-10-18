@@ -1,4 +1,4 @@
-# Team A1 — Progress Summary
+# Team A1: Progress Summary
 
 Workstream A1: general theory and numerical methods for flexible computing loads, grid resilience, and carbon.
 

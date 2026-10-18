@@ -1,4 +1,4 @@
-"""Week 3 Bullet 1 — Sign the characterization comparative statics.
+"""Week 3 Bullet 1, Sign the characterization comparative statics.
 
 For each primitive theta in {R, c, beta, p, C_F, C_R, C_M} we compute the
 central-difference derivative of the carbon *functional* J(theta) at the

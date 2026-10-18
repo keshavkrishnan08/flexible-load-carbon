@@ -1,5 +1,5 @@
 """
-Week-3 Bullet 4: reconcile the team — integrate the four roles' Week-3 outputs
+Week-3 Bullet 4: reconcile the team, integrate the four roles' Week-3 outputs
 into one coherent statement, cross-check every SHARED OBJECT for consistency,
 and flag divergence before it reaches the integrated paper.
 
@@ -23,7 +23,7 @@ to Role 4) and (b) Role 2's vendored solver backend, the common numerical truth.
      Role 1 Thm robust (role1_robust_contract.tex): the uniform minimizes the
      net saving over the shape class U. Role 4's `hardening.minimax_saddle`
      confirms the Sion saddle and that the least-favorable shape is the uniform
-     — WHERE the capacity box is compact (C_R >= C_R†). On the carbon window
+, WHERE the capacity box is compact (C_R >= C_R†). On the carbon window
      the robust *capacity* problem is ill-posed (Week-1 corner-at-infinity):
      this is the one DIVERGENCE Role 4 flags for the integrated paper.
 
@@ -31,8 +31,8 @@ HONEST SCOPE (mirrors Week-2's "awaiting push"). Roles 2 and 3 have not yet
 pushed their Week-3 deliverables (the optimal-contract solver, the DRO solver,
 the characterization-at-scale sweep, and the comparative statics). Cross-checks
 against those are deferred; everything here is verified against what IS
-available — Role 1's pushed exploratory contract/robust theory and Role 2's
-vendored solver — exactly as Week 2 did. A full Week-3 INTEGRATION pass should
+available, Role 1's pushed exploratory contract/robust theory and Role 2's
+vendored solver, exactly as Week 2 did. A full Week-3 INTEGRATION pass should
 follow once Roles 2/3 land.
 
 `reconcile()` returns the consistency table; `divergences()` returns the flagged
@@ -148,7 +148,7 @@ def divergences(P: Params) -> dict:
         "robust_capacity_ill_posed_on_carbon_window": {
             "where": "C_R < C_R† (the carbon-reduction window)",
             "what": ("the distributionally-robust CAPACITY problem has no finite "
-                     "saddle there — K_R runs to the corner-at-infinity (Week 1). "
+                     "saddle there, K_R runs to the corner-at-infinity (Week 1). "
                      "The robust certificate must be read at FIXED capacities "
                      "(Role 1's framing) or restricted to C_R >= C_R†."),
             "active_here": P.CR < C_R_dagger(P),
@@ -156,7 +156,7 @@ def divergences(P: Params) -> dict:
         "general_F_step3_still_conditional": {
             "what": ("the general-F net-carbon Step 3 remains conditional "
                      "(proven for uniform/power-law; Role 1's shift-ratio gives "
-                     "the capacity channel, not the full net sign) — unchanged "
+                     "the capacity channel, not the full net sign), unchanged "
                      "by design."),
         },
         "awaiting_roles_2_3_week3_push": {

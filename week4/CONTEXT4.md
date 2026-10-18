@@ -1,12 +1,12 @@
-# CONTEXT.md — Team A1, Role 2 (Solver & Numerical Methods), Week 4
+# CONTEXT.md: Team A1, Role 2 (Solver & Numerical Methods), Week 4
 
 > Session context with **Week 3 status confirmed** from the actual repo.
-> Read Sections 1–4 before touching code.
+> Read Sections 1-4 before touching code.
 
 ## 0. Week 3 confirmed status (as of handoff)
 
 Week 3's 22/22 tests pass. Central finding: 0/20 sign flips in the dispatch-
-phase sweep — even the LP-optimal (carbon-minimizing) dispatch at the firm-
+phase sweep, even the LP-optimal (carbon-minimizing) dispatch at the firm-
 optimal capacities fails to flip the carbon sign. This sharpens Weeks 1/2:
 not only does greedy dispatch not help, but the *best possible* dispatch also
 doesn't help at those capacities. The joint capacity+contract optimization
@@ -35,13 +35,13 @@ The headline result is a closed-form **classification functional Ψ** such that:
     sign(carbon_no_FCL − carbon_with_FCL) = sign(Ψ)
 
 This is an if-and-only-if (not just sufficient), derived from the paper's
-**Proposition 4** (Appendix B.1, p. 82–84). The functional lives in the
+**Proposition 4** (Appendix B.1, p. 82-84). The functional lives in the
 conditional-moment space; its zero level set is the exact carbon-neutral
 boundary.
 
 ## 4. Your Week 4 tasks
 
-### Task 1 — Classification-functional sweep (keystone)
+### Task 1: Classification-functional sweep (keystone)
 
 The functional Ψ from Proposition 4 (large-FCL regime K*_M > K*_R):
 
@@ -59,20 +59,20 @@ Sweep across the full distribution library (Uniform, Power, Beta mixtures,
 bimodal, lognormal-primitive) and confirm sign(Ψ) = sign(carbon_change) in
 every cell.
 
-### Task 4 — Regularity-region map
+### Task 4: Regularity-region map
 
 Map where (a) a genuine interior optimum exists and (b) the Hessian is
 negative-definite, using the Week 2 analytic Hessian machinery reused in
 regularity_map.py. Outcomes: regular / corner_KR / corner_KM / corner_zero /
 saddle / solver_failed.
 
-### Task 3 — Leverage condition + robust saddle
+### Task 3: Leverage condition + robust saddle
 
 Leverage ratio λ = (surplus dispatch revenue) / (renewable capex). Map λ
 across C_R for a given distribution. Separately, certify the distributionally-
 robust saddle using a finite perturbation grid (exact spec pending Role 3).
 
-### Task 2 — Phase diagram from Ψ
+### Task 2: Phase diagram from Ψ
 
 Trace the zero level set of Ψ over the (C_R, C_M) plane. Bisect Ψ=0 for
 machine-precision boundary locations. Render as a heatmap of Ψ's sign with

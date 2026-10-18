@@ -30,7 +30,7 @@ def main():
     for r in rows1:
         counts[r["theta"]][r["sign"]] += 1
 
-    memo_lines = ["# Role 3 — Week 3 Findings Memo", ""]
+    memo_lines = ["# Role 3, Week 3 Findings Memo", ""]
     memo_lines += ["## Bullet 1: Characterization comparative statics",
                    "Signs of dJ/dtheta (J = Carbon_FCL - Carbon_noFCL) across 8 distributions:"]
     for th in ["R", "c", "beta", "p", "C_F", "C_R", "C_M"]:
@@ -66,7 +66,7 @@ def main():
 
     memo_lines += ["", "## Sync with Role 1",
                    "- Every distribution-free sign in Bullet 1 is a candidate for Role 1's characterization theorem.",
-                   "- The wedge W collapses to 0 as C_M ↑ C_M_bar and grows in C_R — consistent with the contract characterization.",
+                   "- The wedge W collapses to 0 as C_M ↑ C_M_bar and grows in C_R, consistent with the contract characterization.",
                    "- Robust-nominal carbon gap is monotone in the ambiguity radius; the LR-path certificate matches Role 1's minimax statement.",
                    "- The endpoint condition g(a) >= g(K_F*) holds across the whole Beta(a, 5-a) family;",
                    "  the genuine regime boundary for Role 4 is the adoption knife-edge C_M = C_M_bar."]

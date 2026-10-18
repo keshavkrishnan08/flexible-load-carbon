@@ -42,7 +42,7 @@ Franklin (2018) made the bold claim that Bitcoin mining alone could contribute t
 in global temperatures, while some scholars brag about their policy report associating Bitcoin
 mining and carbon emission as a major reason that led to China’s ban of Bitcoin mining
 in September 2021.1 Given the recent political shifts, rising Bitcoin prices, and increasing
-adoption by governments and corporations—including recent initiatives for “strategic Bitcoin
+adoption by governments and corporations, including recent initiatives for “strategic Bitcoin
 reserves” (U.S. Senator Lummis, 2024; The Washington Post, 2024) and the emergence of
 Bitcoin treasury companies (see e.g., an explanation and a list), the energy demand from
 Bitcoin mining is likely to grow further. All these forces make it even more urgent than ever
@@ -62,7 +62,7 @@ Private communication. On China’s ban, see e.g. https://www.reuters.com/world/
 2
 
 Texas Tribune (2024). This ongoing debate highlights the urgent need for rigorous, neutral
-academic analysis—yet, formal studies remain scarce.
+academic analysis, yet, formal studies remain scarce.
 To address this gap, our paper develops an analytical model to formally evaluate whether
 Bitcoin mining can reduce carbon emissions and, if so, what policy interventions might be
 necessary to facilitate this outcome. Specifically, we explore how electricity grid regulators
@@ -96,7 +96,7 @@ widespread adoption of renewables despite their long-term environmental benefits
 Bitcoin Mining Characteristics. Bitcoin mining effectively addresses both of the previously mentioned challenges due to its two key characteristics: (4) it consumes a large amount
 of electricity, creating substantial and predictable demand, and (5) it is memoryless,
 as it relies solely on brute-force hash operations and can be scaled up or down almost
-instantly by adjusting the number of active mining machines. This flexibility allows mining operations to endure disruptions at extremely high frequencies—mining chips, such as
+instantly by adjusting the number of active mining machines. This flexibility allows mining operations to endure disruptions at extremely high frequencies, mining chips, such as
 those in the Antminer S19 ASIC rig, operate at cycle times of approximately 10−15 seconds,
 making such adjustments seamless.
 The high electricity demand of Bitcoin mining helps renewable energy providers overcome
@@ -104,7 +104,7 @@ the barrier of high fixed costs by ensuring a steady demand for electricity, par
 during periods of low household and industrial consumption. At the same time, its flexibility
 allows mining to be temporarily curtailed during peak demand periods, prioritizing essential
 electricity needs. This curtailment can be effectively managed through demand response
-programs that adjust electricity prices for miners based on real—time grid conditions—an
+programs that adjust electricity prices for miners based on real, time grid conditions, an
 approach already implemented by many power grids, such as ERCOT, the operator of the
 Texas electrical grid.
 In short, Bitcoin mining’s combination of large and flexible electricity demand supports
@@ -148,7 +148,7 @@ may also serve as a sandbox for AI in the future.
 mining on carbon emissions. First, we demonstrate that the introduction of Bitcoin mining
 consistently leads to higher investment in renewable energy capacity. Second, under fairly
 general conditions, we show that well-designed electricity pricing policies (demand response
-programs) can enable Bitcoin mining to reduce carbon emissions—an outcome that may
+programs) can enable Bitcoin mining to reduce carbon emissions, an outcome that may
 initially seem counterintuitive. We also characterize the conditions under which this carbon
 reduction effect holds and demonstrate that the profit-maximizing utility operator earns
 higher profits under carbon-reducing pricing policies than in a scenario where Bitcoin mining
@@ -263,7 +263,7 @@ special events, see for example media reports at CNBC (2022a) and Forbes (2021).
 From a technology perspective, since electrical equipment tends to be sensitive, mining
 ASICs needs to be designed so that they can be rapidly switched on and off (i.e., this is
 a design consideration rather than an artifact). This is indeed in line with the reality. In
-fact, miners have been reported to switch “at a minute’s notice” or “in real time” — see
+fact, miners have been reported to switch “at a minute’s notice” or “in real time”, see
 for example numerous mainstream news articles such as Bloomberg (2021), CNBC (2022b),
 and Forbes (2021). Also, see technical contents from BITMAIN Support (2022) and product manuals such as BITMAIN Support (2024) of mining equipment manufacturers. For
 completely different purposes, Yaish, Tochner and Zohar (2022) show that miners can repeatedly switch their machines on and off to manipulate mining difficulty in a way that can
@@ -353,7 +353,7 @@ company, who decides on how much renewable capacity to install and operates to s
 6
 
 The time period could be over months, years, or even decades. We are deliberately vague on the time
-period thanks to the flexibility of our model — more comments later.
+period thanks to the flexibility of our model, more comments later.
 
 13
 
@@ -454,10 +454,10 @@ in accordance with only the imbalance between regular electricity demand and ren
 8
 
 Exogenously set price is common in reality. For example, in some states, public service (utility) commissions fully regulate prices, and other states have a combination of unregulated prices (for generators)
-and regulated prices (for transmission and distribution) — see U.S. Energy Information Administration
+and regulated prices (for transmission and distribution), see U.S. Energy Information Administration
 (2025b). Our model corresponds to a regulated market where the utility company vertically integrates power
 generation and transmission. Alternatively, the utility company can buy electricity from retail market at
-competitive price and transmit customers — we discuss this case in Section ??.
+competitive price and transmit customers, we discuss this case in Section ??.
 9
 Transaction fees may be affected by transaction frequencies or the introduction of new features such as
 Bitcoin NFT protocols like Ordinal Theory Handbook (2025).
@@ -511,7 +511,7 @@ industry anyway.
 
 Environmentally-aware regulator
 
-We assume that the regulator is environmentally-aware — in that it aims to reduce total
+We assume that the regulator is environmentally-aware, in that it aims to reduce total
 emission. Then with the understanding of the utility company’s profit-maximization problem
 (6), the regulator’s problem is given by (note the remark by end of the previous section):
 h
@@ -542,7 +542,7 @@ order to minimize emission (which is proportional to the total excess electricit
 supply from renewal sources, or what is often called residual demand in the energy economics
 literature, if any), subject to the utility company’s optimal decision over renewable capacity
 k (recall that since we assume the regulator specify p > c, the utility company always serves
-all electricity demand — the only variable for the utility company to optimize over is k).
+all electricity demand, the only variable for the utility company to optimize over is k).
 Assuming that the regulator aims to reduce emission is innocuous, because it also coincides with other objectives typically assumed of public utility regulators. For example, if the
 regulator is concerned with grid resilience, it would aim to lower peak electricity demand,
 which will in turn be monotonic in the objective of (7).11 In other words, (7) captures the
@@ -709,8 +709,8 @@ able to directly control the mining intensity through the demand response progra
 then for simplicity always use on the utility company’s cost-minimization problem instead
 of its profit-maximization problem in all remaining discussions unless otherwise specified.
 To state the utility company’s cost minimization problem, we have the regulator to
-stipulate the quantity of electricity demand d from bitcoin mining as a function of household/industry electricity demand D — the realization of D̃ , the renewable supply factor S
-— realization of S̃, the cost of fuel c, and existing renewable capacity k.
+stipulate the quantity of electricity demand d from bitcoin mining as a function of household/industry electricity demand D, the realization of D̃ , the renewable supply factor S
+, realization of S̃, the cost of fuel c, and existing renewable capacity k.
 With the regulator’s ability to control the quantity of electricity demand from bitcoin
 mining and the optimal decision to fulfill all electricity demands from household/industry
 electricity needs and Bitcoin mining (because recall the implication of p > c), the utility
@@ -727,7 +727,7 @@ k
 (11)
 
 Notice that Equation (11) is the flip coin of the cost terms in the utility company’s profitmaximization problem (6).
-Consider our focal demand response program—d(D̃, S̃) = S̃ · k − D̃ if S̃ k̇ ≥ D̃; d = δ > 0
+Consider our focal demand response program, d(D̃, S̃) = S̃ · k − D̃ if S̃ k̇ ≥ D̃; d = δ > 0
 if S̃ · k < D̃. Here, δ > 0 is our demand response program, while δ = 0 is the no bitcoin
 mining benchmark.
 In sum, we can summarize the regulator’s problem as
@@ -2785,30 +2785,30 @@ Finally, our results could also leverage the potentials of other computing uses 
 References
 Aflaki, Sam, and Serguei Netessine. 2017. “Strategic Investment in Renewable Energy
 Sources: The Effect of Supply Intermittency.” Manufacturing Service Oper. Management,
-19(3): 489–507. 11
+19(3): 489-507. 11
 Agrawal, Vishal V, and Şafak Yücel. 2022. “Design of Electricity Demand-Response
-Programs.” Management Sci., 68(10): 7441–7456. 10
+Programs.” Management Sci., 68(10): 7441-7456. 10
 Aı̈d, René, Dylan Possamaı̈, and Nizar Touzi. 2022. “Optimal Electricity Demand
-Response Contracting with Responsiveness Incentives.” Math. Oper. Res., 47(3): 2112–
+Response Contracting with Responsiveness Incentives.” Math. Oper. Res., 47(3): 2112,
 2137. 10
 Alizamir, Saed, Foad Iravani, and Şafak Yücel. 2021. “Investment in Wind Energy: The Role of Subsidies.” Georgetown McDonough School of Business Research Paper:
 https: // papers. ssrn. com/ sol3/ papers. cfm? abstract_ id= 3868573 . 12
 Alizamir, Saed, Francis de Véricourt, and Peng Sun. 2016. “Efficient Feed-in-Tariff
-Policies for Renewable Energy Technologies.” Oper. Res., 64(1): 52–66. 12
-Arnosti, Nick, and S Matthew Weinberg. 2022. “Bitcoin: A natural oligopoly.” Management Sci., 68(7): 4755–4771. 8, 20
+Policies for Renewable Energy Technologies.” Oper. Res., 64(1): 52-66. 12
+Arnosti, Nick, and S Matthew Weinberg. 2022. “Bitcoin: A natural oligopoly.” Management Sci., 68(7): 4755-4771. 8, 20
 Babich, Volodymyr, Ruben Lobel, and Şafak Yücel. 2020. “Promoting Solar Panel
-Investments: Feed-in-Tariff vs. Tax-Rebate Policies.” Manufacturing Service Oper. Management, 22(6): 1148–1164. 12
+Investments: Feed-in-Tariff vs. Tax-Rebate Policies.” Manufacturing Service Oper. Management, 22(6): 1148-1164. 12
 
 45
 
 Benetton, Matteo, Giovanni Compiani, and Adair Morse. 2023. “When Cryptomining Comes to Town: High Electricity-Use Spillovers to the Local Economy.” National
 Bureau of Economic Research. 9
-Bernheim, B Douglas, and Michael D Whinston. 1986. “Common agency.” Econometrica: Journal of the Econometric Society, 923–942. 13
+Bernheim, B Douglas, and Michael D Whinston. 1986. “Common agency.” Econometrica: Journal of the Econometric Society, 923-942. 13
 Bertucci, Charles, Louis Bertucci, Jean-Michel Lasry, and Pierre-Louis Lions.
 2024. “A Mean Field Game Approach to Bitcoin Mining.” SIAM J. Financial Math.,
-15(3): 960–987. 8
+15(3): 960-987. 8
 Biais, Bruno, Christophe Bisiere, Matthieu Bouvard, and Catherine Casamatta.
-2019. “The blockchain folk theorem.” Rev. Financ. Stud., 32(5): 1662–1715. 8
+2019. “The blockchain folk theorem.” Rev. Financ. Stud., 32(5): 1662-1715. 8
 Bitcoin.comNews. 2019. “Chinese Bitcoin Miners Migrate North After Wet Season.” https: // web. archive. org/ web/ 20220427014036/ https: // news. bitcoin.
 com/ chinese-bitcoin-miners-migrate-north-after-wet-season/ , Accessed on 10
 February 2025. 9
@@ -2887,7 +2887,7 @@ Bolton, Patrick, and Mathias Dewatripont. 2004. Contract theory. MIT press. 12
 Borrero, Miguel, Gautam Gowrisankaran, and Ashley Langer. 2024. Ramping costs
 and coal generator exit. Department of Economics, University of Arizona. 18
 Chatzigiannis, Panagiotis, Foteini Baldimtsi, Igor Griva, and Jiasun Li. 2022. “Diversification Across Mining Pools: Optimal Mining Strategies Under Pow.” J. Cybersecur.,
-8(1): 1–15. 8
+8(1): 1-15. 8
 CNBC.
 
 2022a.
@@ -2984,7 +2984,7 @@ btc-hash-rate-slumps-amid-seasonal-miner-migration-in-china ,
 Accessed
 
 on 10 February 2025. 9
-Cong, Lin William, Zhiguo He, and Jiasun Li. 2021. “Decentralized mining in centralized pools.” Rev. Financ. Stud., 34(3): 1191–1235. 8, 20
+Cong, Lin William, Zhiguo He, and Jiasun Li. 2021. “Decentralized mining in centralized pools.” Rev. Financ. Stud., 34(3): 1191-1235. 8, 20
 decrypt. 2020. “Bitcoin’s Hash Rate Drops As China’s Rainy Season Ends.”
 https: // web. archive. org/ web/ 20211117210216/ https: // decrypt. co/ 46601/
 bitcoin-hash-rate-drop-attributed-to-chinese-rainy-season , Accessed on 10
@@ -2992,9 +2992,9 @@ February 2025. 9
 EnergyBot. 2025. “Electricity Rates for Every State in The U.S.” https: // www.
 energybot. com/ electricity-rates/ , Accessed on 10 February 2025. 42
 Fattahi, Ali, Sriram Dasu, and Reza Ahmadi. 2023. “Peak-Load Energy Management
-by Direct Load Control Contracts.” Management Sci., 69(5): 2788–2813. 10
+by Direct Load Control Contracts.” Management Sci., 69(5): 2788-2813. 10
 Fiat, Amos, Anna Karlin, Elias Koutsoupias, and Christos Papadimitriou. 2019.
-“Energy equilibria in proof-of-work mining.” 489–502. 8
+“Energy equilibria in proof-of-work mining.” 489-502. 8
 Forbes.
 
 2021.
@@ -3066,37 +3066,37 @@ on
 
 10 February 2025. 2
 Gill, Maximilian, Jona Stinner, and Marcel Tyrell. 2024. “Economic Limits of Bitcoin’s Environmental Promises: Pathway or Pitfall for the Green Transformation?” 7
-Goren, Guy, and Alexander Spiegelman. 2019. “Mind the mining.” 475–487. 8
-Green, Jerry R, and Nancy L Stokey. 1983. “A comparison of tournaments and contracts.” Journal of Political Economy, 91(3): 349–364. 13
+Goren, Guy, and Alexander Spiegelman. 2019. “Mind the mining.” 475-487. 8
+Green, Jerry R, and Nancy L Stokey. 1983. “A comparison of tournaments and contracts.” Journal of Political Economy, 91(3): 349-364. 13
 Grossman, Sanford J, and Oliver D Hart. 1983. “AN ANALYSIS OF THE
 PRINCIPAL-AGENT PROBLEM.” Econometrica, 51(1). 12
 Halaburda, Hanna, and David Yermack. 2023. “Bitcoin Mining Meets Wall Street:
 A Study of Publicly Traded Crypto Mining Companies.” National Bureau of Economic
 Research. 8
-Holmström, Bengt. 1982. “Moral hazard in teams.” Bell Journal of Economics, 324–340.
+Holmström, Bengt. 1982. “Moral hazard in teams.” Bell Journal of Economics, 324-340.
 13
 Hu, Shanshan, Gilvan C Souza, Mark E Ferguson, and Wenbin Wang. 2015.
 “Capacity Investment in Renewable Energy Technology with Supply Intermittency: Data
-Granularity Matters!” Manufacturing Service Oper. Management, 17(4): 480–494. 12
+Granularity Matters!” Manufacturing Service Oper. Management, 17(4): 480-494. 12
 
 49
 
 Ibañez, Juan Ignacio, and Alexander Freier. 2023. “Bitcoin’s Carbon Footprint Revisited: Proof of Work Mining for Renewable Energy Expansion.” J. Chall., 14(3): 35.
 9
 Itoh, Hideshi. 1991. “Incentives to help in multi-agent situations.” Econometrica: Journal
-of the Econometric Society, 611–636. 13
+of the Econometric Society, 611-636. 13
 Kaps, Christian, Simone Marinesi, and Serguei Netessine. 2023. “When Should
 the Off-Grid Sun Shine at Night? Optimum Renewable Generation and Energy Storage
-Investments.” Management Sci., 69(12): 7633–7650. 12
+Investments.” Management Sci., 69(12): 7633-7650. 12
 Kawaguchi, Kohei, Shunya Noda, and Junpei Komiyama. 2022. “Miners’ Reward
 Elasticity and Stability of Competing Proof-of-Work Cryptocurrencies.” Center for Open
 Science. 19
 Kök, A Gürhan, Kevin Shang, and Şafak Yücel. 2018. “Impact of Electricity Pricing
 Policies on Renewable Energy Investments and Carbon Emissions.” Management Sci.,
-64(1): 131–148. 11
+64(1): 131-148. 11
 Kök, A Gürhan, Kevin Shang, and Şafak Yücel. 2020. “Investments in Renewable
 and Conventional Energy: The Role of Operational Flexibility.” Manufacturing Service
-Oper. Management, 22(5): 925–941. 12
+Oper. Management, 22(5): 925-941. 12
 Lanteri, Andrea, and Adriano A Rampini. 2025. “Financing the adoption of clean
 technology.” National Bureau of Economic Research. 11
 Layer1 Technologies. 2022. “Building Bitcoin Batteries.” https: // web. archive. org/
@@ -3106,25 +3106,25 @@ web/ 20220401125045/ https: // layer1. com/ , Accessed on 1 April 2022. 9
 
 Lohmann, Timo, and Steffen Rebennack. 2017. “Tailored Benders Decomposition for
 a Long-Term Power Expansion Model with Short-Term Demand Response.” Management
-Sci., 63(6): 2027–2048. 10
+Sci., 63(6): 2027-2048. 10
 Mahmood, Anzar, Nadeem Javaid, Muhammad Asghar Khan, and Sohail Razzaq. 2015. “An Overview of Load management Techniques in Smart Grid.” Int. J. Energy
-Res., 39(11): 1437–1450. 11
-Martimort, David, and Lars Stole. 2009. “Market participation in delegated and intrinsic common-agency games.” RAND Journal of Economics, 40(1): 78–102. 13
+Res., 39(11): 1437-1450. 11
+Martimort, David, and Lars Stole. 2009. “Market participation in delegated and intrinsic common-agency games.” RAND Journal of Economics, 40(1): 78-102. 13
 Mora, Camilo, Randi L Rollins, Katie Taladay, Michael B Kantar, Mason K
 Chock, Mio Shimada, and Erik C Franklin. 2018. “Bitcoin emissions alone could
-push global warming above 2 C.” Nature Climate Change, 8(11): 931–933. 2
+push global warming above 2 C.” Nature Climate Change, 8(11): 931-933. 2
 Noda, Shunya, Kyohei Okumura, and Yoshinori Hashimoto. 2020. “An Economic
 Analysis of Difficulty Adjustment Algorithms in Proof-of-Work Blockchain Systems.” EC,
-20: 13–17. 8
+20: 13-17. 8
 Ordinal Theory Handbook. 2025. “Runes.” https: // docs. ordinals. com/ runes.
 html , Accessed on 10 February 2025. 16
 Peng, Xiaoshan, Owen Q Wu, and Gilvan C Souza. 2024. “Renewable, Flexible,
 and Storage Capacities: Friends or Foes?” Manufacturing Service Oper. Management,
-26(5): 1730–1749. 12
+26(5): 1730-1749. 12
 Peura, Heikki, and Derek W Bunn. 2015. “Dynamic Pricing of Peak Production.” Oper.
-Res., 63(6): 1262–1279. 10
+Res., 63(6): 1262-1279. 10
 Prat, Julien, and Benjamin Walter. 2021. “An equilibrium model of the market for
-bitcoin mining.” J. of Political Econom., 129(8): 2415–2452. 8
+bitcoin mining.” J. of Political Econom., 129(8): 2415-2452. 8
 51
 
 Rana, Vishrut, Christian Kaps, and Serguei Netessine. 2025. “When Where Watt:
@@ -3132,7 +3132,7 @@ Harnessing the Value of Time and Location for Renewable Electricity Generation.�
 Available at SSRN: https: // papers. ssrn. com/ sol3/ papers. cfm? abstract_ id=
 5103344 . 12
 Ross, Stephen A. 1973. “The economic theory of agency: The principal’s problem.” The
-American economic review, 63(2): 134–139. 12
+American economic review, 63(2): 134-139. 12
 Salanié, Bernard. 2005. The economics of contracts: a primer. MIT Press. 12
 Texas
 
@@ -3205,13 +3205,13 @@ on
 
 10 February 2025. 2
 Vardakas, John S, Nizar Zorba, and Christos V Verikoukis. 2014. “A Survey on
-Demand Response Programs in Smart Grids: Pricing Methods and Optimization Algorithms.” IEEE Communications Surveys & Tutorials, 17(1): 152–178. 11
+Demand Response Programs in Smart Grids: Pricing Methods and Optimization Algorithms.” IEEE Communications Surveys & Tutorials, 17(1): 152-178. 11
 Wikipedia. 2025. “Capacity Factor.” https: // en. wikipedia. org/ wiki/ Capacity_
 factor , Accessed on 10 February 2025. 43
 Yaish, Aviv, and Aviv Zohar. 2023. “Correct Cryptocurrency ASIC Pricing: Are Miners
 Overpaying?” Schloss Dagstuhl-Leibniz-Zentrum für Informatik. 9
 Yaish, Aviv, Saar Tochner, and Aviv Zohar. 2022. “Blockchain Stretching & Squeezing:
-Manipulating Time for your Best Interest.” 65–88. 10
+Manipulating Time for your Best Interest.” 65-88. 10
 
 53
 
@@ -3409,7 +3409,7 @@ Po
 Po
 Po
 
-Note that d ≥ 0 iff P ≤ Po . We assume this holds—otherwise miners will not mine in our
+Note that d ≥ 0 iff P ≤ Po . We assume this holds, otherwise miners will not mine in our
 focal grid.
 We use uniform and independent demand and supply defined as in §3.6.2 and derive
 equilibrium emissions with bitcoin mining under demand response program given by (49);
@@ -3449,10 +3449,10 @@ if S · k − D < 0,
 where d ≤ nR/Po . When Sk ≥ D, i.e., renewable electricity supply exceeds standalone
 demand, excess capacity no larger than nR/(2Po ) is used for mining. Any additional capacity
 is not used for mining because grid revenue decreases in P ≥ Po /2 and d = nR/(2Po ) at
-P = Po /2—even if regulator does not limit excess capacity for mining, grid will set P to
+P = Po /2, even if regulator does not limit excess capacity for mining, grid will set P to
 induce d at most equal to nR/(2Po ).
 Remark: Why not use min{S · k − D, nR/Po }? Because that way we are penalizing k
-investment—when nR/(2Po ) < S · k − D < nR/Po , a higher k reduces grid’s mining revenue
+investment, when nR/(2Po ) < S · k − D < nR/Po , a higher k reduces grid’s mining revenue
 P d which is decreasing in P > Po /2.
 Under the demand response program, the grid’s problem is:
 Z D̄ Z
@@ -4202,7 +4202,7 @@ nR
 
 Define
 
-Then for a given D the upper limit in the S–integral is
+Then for a given D the upper limit in the S-integral is
 
 (
 min

@@ -1,4 +1,4 @@
-"""Bullet 3: the stitched carbon phase diagram over the full cost plane — one
+"""Bullet 3: the stitched carbon phase diagram over the full cost plane, one
 connected carbon-down region spanning both FCL regimes, smooth boundary crossed
 once by the regime-form line."""
 import pytest
@@ -13,8 +13,8 @@ def test_boundary_convex_in_C_M(P):
 
 
 def test_boundary_smooth_across_regime_line(P):
-    """The carbon boundary is smooth across the regime-form line C_M^cross — one
-    quadratic, no kink — even though the FOC surface kinks (Bullet 1)."""
+    """The carbon boundary is smooth across the regime-form line C_M^cross, one
+    quadratic, no kink, even though the FOC surface kinks (Bullet 1)."""
     r = rp.boundary_smooth_across_regime_line(P)
     assert r["smooth"]
     assert r["deriv_numeric"] == pytest.approx(r["deriv_closed_form"], abs=1e-4)

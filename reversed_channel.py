@@ -1,5 +1,5 @@
 """
-Role 3 Week 2 — Bullet 3: Attempted reversed-channel construction.
+Role 3 Week 2, Bullet 3: Attempted reversed-channel construction.
 
 Correct endpoint shift-ratio condition (Role 1, verified):
     g(K_F* - K_M*) >= g(K_F*),      i.e.   g(a) >= g(K_F*),  a = K_F* - K_M*,

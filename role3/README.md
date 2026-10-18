@@ -1,4 +1,4 @@
-# Role 3 — Results
+# Role 3: Results
 
 Outputs of `python run_all_experiments.py` (seed = 7, 40k Monte-Carlo samples).
 All numbers reproduce bit-for-bit from a clean checkout.
@@ -14,9 +14,9 @@ All numbers reproduce bit-for-bit from a clean checkout.
 
 ## Sync points (for Role 1)
 
-1. Proposition 1 parts (i)–(ii) are **distribution-free** in every test whenever `C_M < C̄_M` — the proof's claim is numerically airtight.
+1. Proposition 1 parts (i)-(ii) are **distribution-free** in every test whenever `C_M < C̄_M`: the proof's claim is numerically airtight.
 2. Term II of the carbon decomposition (eq. 17, utilisation effect) is non-negative in 30/40 scenarios; flips sign only in the left-skew + high-`C_R` corner.
-3. Candidate general carbon condition needs the qualifier *"under right-skewed F or sufficiently low `C_R`"* — matches Role 2's 210-scenario null and Role 4's partial-grid null.
+3. Candidate general carbon condition needs the qualifier *"under right-skewed F or sufficiently low `C_R`"*, matches Role 2's 210-scenario null and Role 4's partial-grid null.
 
 ## Regenerating
 

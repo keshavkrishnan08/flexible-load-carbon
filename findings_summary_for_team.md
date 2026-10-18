@@ -1,4 +1,4 @@
-# Role 3 — Findings Memo (Week 1)
+# Role 3: Findings Memo (Week 1)
 
 ## Bullet 1 & 2  Proposition 1 distribution-free + carbon sign
 Scenarios tested: 40
@@ -24,7 +24,7 @@ Scenarios tested: 32
 Pattern (qualitative): carbon reduction concentrates in
 (i) right-skewed F (beta_a05_b3, beta_a2_b5),
 (ii) low C_R, and
-(iii) C_M well below C_M_bar — consistent with footnote 6.
+(iii) C_M well below C_M_bar, consistent with footnote 6.
 
 ## Sync notes for Role 1
 - Profit & blackout parts of Proposition 1 verified distribution-free
@@ -34,5 +34,5 @@ Pattern (qualitative): carbon reduction concentrates in
 - Capacity-substitution channel (K_R* > K_R°) is the binding driver of
   the carbon sign; no counterexample to the candidate general condition
   was found in the right-skew low-C_R regime.
-- Left-skewed F + high C_R reverses the carbon sign in some scenarios —
+- Left-skewed F + high C_R reverses the carbon sign in some scenarios,
   flagged as the boundary region for Role 1's general statement.

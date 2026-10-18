@@ -2,7 +2,7 @@
 
 Team A1, Role 4. Built against `Bitcoin_Mining_for_Carbon_Emission_Reduction.txt`
 (Li, Ren, Bellos; the authored Feb 28 2026 draft). Every result below is
-also checked numerically in `miner_demand/` + `tests/` — the test name that
+also checked numerically in `miner_demand/` + `tests/`: the test name that
 guards each is noted in brackets.
 
 Notation follows the paper: `R` total dollar block reward in a period, `n`
@@ -11,7 +11,7 @@ in-grid mining demand, `m` out-of-grid miners at price `Po`.
 
 ---
 
-## Lemma 1 (equilibrium mining demand, Task 1 / eqs 9–10)
+## Lemma 1 (equilibrium mining demand, Task 1 / eqs 9-10)
 
 **Claim.** With `n ≥ 2` symmetric miners each solving eq. (9),
 `max_{d_i} R d_i/(d_i + Σ_{j≠i} d_j) − d_i P`, the unique interior Nash
@@ -58,26 +58,26 @@ constant and profit-maximization collapses to the cost-minimization problem
 of Section 3.5.
 
 **Proof.** Multiply eq. (10) by `P`: `P d = (1 − 1/n)R`. `R` is fixed by
-Bitcoin's protocol and price (the `ξ` of eqs 6–7), and `n` is market
+Bitcoin's protocol and price (the `ξ` of eqs 6-7), and `n` is market
 structure; neither responds to the utility's choices, and `P` has cancelled.
 Substituting a constant into the `argmax` over `k` leaves the maximizer
-unchanged, so only the cost terms remain — the Section 3.5 problem. ∎
+unchanged, so only the cost terms remain, the Section 3.5 problem. ∎
 
 **Where it breaks (the boundary, as the plan asks).**
-1. *Grid large enough to move the global game* — if the focal grid's price
+1. *Grid large enough to move the global game*: if the focal grid's price
    shifts total hashrate or the Bitcoin price, `R` is no longer exogenous to
    `P` and the cancellation fails. Exogeneity is a small-open-grid assumption.
-2. *Mobile miners* — Proposition 3 below: once miners can leave for `Po`,
+2. *Mobile miners*: Proposition 3 below: once miners can leave for `Po`,
    `P d` is no longer constant.
-3. *Endogenous entry* — if `n` responds to `P`, the `(1 − 1/n)` factor moves.
+3. *Endogenous entry*: if `n` responds to `P`, the `(1 − 1/n)` factor moves.
 [`test_exogeneity.py` (all three tests)]
 
 ---
 
-## Proposition 3 (partial grid, Task 3 / Appendix A eqs 61–68)
+## Proposition 3 (partial grid, Task 3 / Appendix A eqs 61-68)
 
 **Setup.** `n` in-grid miners pay `P`, `m` out-of-grid miners pay `Po`, all
-`n + m` split the same `R` (eqs 61–62).
+`n + m` split the same `R` (eqs 61-62).
 
 **Claim (eq. 68).** In-grid aggregate demand is
 
@@ -99,7 +99,7 @@ is `nT − Σ_N`; then `R(nT − Σ_N)/T² = nP` gives
 **Corollary 3b (exogeneity breaks).** `P d` in Cor. 3a is a concave parabola
 in `P`, **not** a constant. It is maximized at `P = Po/2` with value
 `nR/4`. Hence:
-- the duality of Prop. 2 fails — profit-max ≠ cost-min in the partial grid;
+- the duality of Prop. 2 fails: profit-max ≠ cost-min in the partial grid;
 - demand is non-negative iff `P ≤ Po` (else miners leave);
 - the largest inducible demand is `nR/Po` (at `P → 0`), but a profit-seeking
   grid never sets `P < Po/2`, so **usable** inducement is capped at
@@ -118,7 +118,7 @@ itself. Worth confirming with the authors.
 
 ---
 
-## Proposition 4 (emissions under the adapted program — probe, for Role 1 sync)
+## Proposition 4 (emissions under the adapted program: probe, for Role 1 sync)
 
 Under the uniform case (Section 3.6.2) with the adapted program eq. (69) and
 shortfall floor `d_floor`, fossil output is
@@ -130,7 +130,7 @@ minimizing utility picks `k` to minimize `c·E[fossil] + C·k`.
 adapted program never fall below the no-mining benchmark. The reason is
 Prop. 3: in the partial grid the surplus-absorbing channel is *bounded*
 (`≤ nR/(2Po)`), so it cannot do the heavy lifting, while the only other
-lever — the fossil-fed floor — adds emissions directly and only weakly
+lever, the fossil-fed floor, adds emissions directly and only weakly
 induces extra renewable capacity. **This does not contradict the paper:** the
 paper's Appendix-A reduction is derived from the grid's *profit* problem
 (eq. 70), not cost-minimization, precisely because Prop. 3 says cost-min is

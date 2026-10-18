@@ -48,7 +48,7 @@ _POW20 = PowerResidual(_D_BAR, alpha=2.0)
 def _solve(dist, params):
     return compute_functional(dist, params, KR_max=500, KF_max=300, KM_max=300)
 
-# Pre-compute four reference results — one each-way solver call per fixture
+# Pre-compute four reference results: one each-way solver call per fixture
 _RES_UNI_25   = None   # lazily populated below to avoid import-time cost
 _RES_LN06_26  = None
 _RES_POW05_25 = None
